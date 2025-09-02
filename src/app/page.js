@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Button,
   Modal,
@@ -10,6 +10,7 @@ import {
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const sliderRef = useRef(null);
 
   const slideData = [
     {
@@ -43,29 +44,45 @@ export default function Home() {
       {/* Modal with Slider */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 relative">
-            {/* Close Button */}
+          {/* Close Button outside the card */}
+          <button
+            onClick={handleCloseModal}
+            className="absolute top-6 right-6 text-white hover:text-gray-200 text-3xl font-bold"
+            aria-label="Close"
+          >
+            ×
+          </button>
+          {/* Outer layer with left/right buttons positioned outside the card */}
+          <div className="flex items-center gap-4 w-full max-w-3xl px-4">
+            {/* Prev button - outside card */}
             <button
-              onClick={handleCloseModal}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              onClick={() => sliderRef.current?.prev?.()}
+              className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg"
+              aria-label="Previous"
             >
-              ×
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
+
+            {/* Modal card */}
+            <div className="bg-white rounded-lg p-6 flex-1 relative">
             
-            {/* Modal Header */}
-            <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-              Information Slider
-            </h2>
             
             {/* Slider Component */}
-            <Slider slides={slideData} />
-            
-            {/* Modal Footer */}
-            <div className="flex justify-center mt-6">
-              <Button onClick={handleCloseModal}>
-                Close
-              </Button>
+              <Slider ref={sliderRef} slides={slideData} />
             </div>
+
+            {/* Next button - outside card */}
+            <button
+              onClick={() => sliderRef.current?.next?.()}
+              className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg"
+              aria-label="Next"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
       )}
