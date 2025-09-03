@@ -1,5 +1,7 @@
 "use client";
 
+import HomePage from "@/components/pages/home/Home";
+import { Footer } from "@/components/ui";
 import { useRef, useState } from "react";
 import {
   Button,
@@ -87,7 +89,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Footer */}
+      <HomePage />
       <Footer />
     </main>
   );
