@@ -79,9 +79,7 @@ export default function ImpressumModal() {
           </div>
         )}
 
-        <DialogBody
-          className="overflow-auto px-[60px] py-[30px] flex-1"
-        >
+        <DialogBody className="overflow-auto px-[60px] py-[30px] flex-1">
           {showDetails ? (
             <Indetails title={selectedTitle} onBack={handleBackToMenu} />
           ) : (
