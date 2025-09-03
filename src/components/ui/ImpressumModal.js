@@ -7,7 +7,18 @@ import Indetails from "../pages/home/Indetails";
 
 export default function ImpressumModal() {
   const [open, setOpen] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState("");
   const handleOpen = () => setOpen(!open);
+
+  const handleShowDetails = (title) => {
+    setSelectedTitle(title);
+    setShowDetails(true);
+  };
+
+  const handleBackToMenu = () => {
+    setShowDetails(false);
+  };
 
   return (
     <>
@@ -70,10 +81,12 @@ export default function ImpressumModal() {
 
         <DialogBody
           className="overflow-auto px-[60px] py-[30px] flex-1"
-          // style={{ padding: "30px 60px" }}
         >
-          {/* <Indetails/> */}
-          <SubMenu />
+          {showDetails ? (
+            <Indetails title={selectedTitle} onBack={handleBackToMenu} />
+          ) : (
+            <SubMenu onTitleClick={handleShowDetails} />
+          )}
         </DialogBody>
       </Dialog>
     </>

@@ -1,12 +1,31 @@
 import { fakeData } from "@/lib/utils/utils";
-import {
-  Typography,
-} from "@material-tailwind/react";
-const Indetails = () => {
+import { Typography } from "@material-tailwind/react";
+const Indetails = ({ title, onBack }) => {
   return (
     <div>
+      <button
+        onClick={onBack}
+        className="absolute top-0 left-0 flex items-center text-blue-600 hover:text-blue-800 font-medium"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back to menu
+      </button>
+
       {/* Title + Icon */}
-      <div className="flex items-start justify-start mb-6">
+      <div className="flex pt-10 items-start justify-start mb-6">
         <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
           <div
             className="w-full h-full"
