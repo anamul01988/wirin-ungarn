@@ -1,6 +1,6 @@
 import { fakeData } from "@/lib/utils/utils";
 import { Typography } from "@material-tailwind/react";
-const Indetails = ({ title, onBack }) => {
+const Indetails = ({ title, onBack, onOpenWissenswert }) => {
   return (
     <div>
       <button
@@ -28,7 +28,7 @@ const Indetails = ({ title, onBack }) => {
       <div className="flex pt-10 items-start justify-start mb-6">
         <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
           <div
-            className="w-full h-full"
+            className="w-full h-full cursor-pointer"
             style={{
               background: "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
             }}
@@ -42,6 +42,7 @@ const Indetails = ({ title, onBack }) => {
             variant="h5"
             color="blue-gray"
             className="font-bold leading-snug mb-3"
+            onClick={onOpenWissenswert}
           >
             {fakeData.title}
           </Typography>

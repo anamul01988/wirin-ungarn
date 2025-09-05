@@ -4,11 +4,13 @@ import { useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import SubMenu from "../pages/home/SubMenu";
 import Indetails from "../pages/home/Indetails";
+import Wissenswert from "@/app/wissenswert/page";
 
 export default function ImpressumModal() {
   const [open, setOpen] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedTitle, setSelectedTitle] = useState("");
+  const [showWissenswert, setShowWissenswert] = useState(false);
   const handleOpen = () => setOpen(!open);
 
   const handleShowDetails = (title) => {
@@ -19,6 +21,10 @@ export default function ImpressumModal() {
   const handleBackToMenu = () => {
     setShowDetails(false);
   };
+
+  const handleWin=()=>{
+     setShowWissenswert(true) 
+  }
 
   return (
     <>
@@ -80,8 +86,14 @@ export default function ImpressumModal() {
         )}
 
         <DialogBody className="overflow-auto px-[60px] py-[30px] flex-1">
-          {showDetails ? (
-            <Indetails title={selectedTitle} onBack={handleBackToMenu} />
+          {showWissenswert ? (
+            <Wissenswert/>
+          ) : showDetails ? (
+            <Indetails
+              title={selectedTitle}
+              onBack={handleBackToMenu}
+              onOpenWissenswert={handleWin}
+            />
           ) : (
             <SubMenu onTitleClick={handleShowDetails} />
           )}
