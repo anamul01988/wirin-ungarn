@@ -22,9 +22,9 @@ export default function ImpressumModal() {
     setShowDetails(false);
   };
 
-  const handleWin=()=>{
-     setShowWissenswert(true) 
-  }
+  const handleWin = () => {
+    setShowWissenswert(true);
+  };
 
   return (
     <>
@@ -103,9 +103,28 @@ export default function ImpressumModal() {
             </button>
           </>
         )}
+        {/* {showWissenswert ? (
+          <Wissenswert />
+        ) : showDetails ? (
+          <Indetails
+            title={selectedTitle}
+            onBack={handleBackToMenu}
+            onOpenWissenswert={handleWin}
+          />
+        ) : (
+          <SubMenu onTitleClick={handleShowDetails} />
+        )} */}
         {showDetails ? (
           <DialogBody className="overflow-auto px-[60px] py-[30px] flex-1">
-            <Indetails title={selectedTitle} onBack={handleBackToMenu} />
+            {showWissenswert ? (
+              <Wissenswert />
+            ) : (
+              <Indetails
+                title={selectedTitle}
+                onBack={handleBackToMenu}
+                onOpenWissenswert={handleWin}
+              />
+            )}
           </DialogBody>
         ) : (
           <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
