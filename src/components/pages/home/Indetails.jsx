@@ -5,23 +5,23 @@ const Indetails = ({ title, onBack, onOpenWissenswert }) => {
     <div>
       <button
         onClick={onBack}
-        className="absolute top-0 left-0 flex items-center text-blue-600 hover:text-blue-800 font-medium"
+        className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
+        aria-label="Back"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 mr-1"
+          className="h-5 w-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
+          strokeWidth={2}
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}
             d="M15 19l-7-7 7-7"
           />
         </svg>
-        Back to menu
       </button>
 
       {/* Title + Icon */}
