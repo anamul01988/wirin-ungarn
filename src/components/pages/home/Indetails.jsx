@@ -1,10 +1,10 @@
 import { fakeData } from "@/lib/utils/utils";
 import { Typography } from "@material-tailwind/react";
-const Indetails = ({ title, onBack, onOpenWissenswert }) => {
+const Indetails = ({setShowWissenswert, onOpenWissenswert }) => {
   return (
     <div>
       <button
-        onClick={onBack}
+        onClick={() => setShowWissenswert(false)}
         className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
         aria-label="Back"
       >

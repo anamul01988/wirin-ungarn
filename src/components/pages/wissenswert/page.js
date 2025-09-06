@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import { articles } from "@/lib/utils/utils";
-import ArticleCard from "@/components/ui/ArticleCard"; // Ensure the correct path
+import ArticleCard from "@/components/ui/ArticleCard";
 
-export default function Wissenswert({ setShowWissenswert }) {
+export default function Wissenswert({ onBack, onOpenWissenswert }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -12,7 +12,7 @@ export default function Wissenswert({ setShowWissenswert }) {
     <>
       <div className="mb-4">
         <button
-          onClick={() => setShowWissenswert(false)}
+          onClick={onBack}
           className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
           aria-label="Back"
         >
@@ -92,6 +92,7 @@ export default function Wissenswert({ setShowWissenswert }) {
               image={item.image}
               title={item.title}
               description={item.description}
+              onOpenWissenswert={onOpenWissenswert}
             />
             {/* Divider except last */}
             {idx < articles.length - 1 && (

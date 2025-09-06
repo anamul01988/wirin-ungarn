@@ -2,7 +2,7 @@
 
 import { Typography } from "@material-tailwind/react";
 
-const ArticleCard = ({ image, title, description }) => {
+const ArticleCard = ({ image, title, description,onOpenWissenswert }) => {
   return (
     <div className="flex flex-col md:flex-row gap-4 pb-6">
       {/* Left Image */}
@@ -16,7 +16,7 @@ const ArticleCard = ({ image, title, description }) => {
 
       {/* Right Content */}
       <div className="flex-1">
-        <Typography variant="h6" color="blue-gray" className="font-semibold mb-2">
+        <Typography onClick={onOpenWissenswert} variant="h6" color="blue-gray" className="font-semibold mb-2">
           {title}
         </Typography>
         <Typography

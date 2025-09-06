@@ -125,10 +125,12 @@ export default function WissenswertModal() {
         {showDetails ? (
           <DialogBody className="overflow-auto px-[60px] py-[30px] flex-1">
             {showWissenswert ? (
-              <Wissenswert setShowWissenswert={setShowWissenswert} />
-            ) : (
               <Indetails
                 title={selectedTitle}
+                setShowWissenswert={setShowWissenswert}
+              />
+            ) : (
+              <Wissenswert
                 onBack={handleBackToMenu}
                 onOpenWissenswert={handleWin}
               />
