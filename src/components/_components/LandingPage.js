@@ -1,43 +1,17 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import "./style.css";
-// import { useRouter } from "next/navigation";
 import ImpressumtModal from "../ui/ImpressumModal";
 
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
   const [allowImpressumModal, setAllowImpressumModal] = useState(false);
   const [open, setOpen] = useState(false);
-  //   const route = useRouter();
   const handleOpen = () => setOpen(!open);
   const routerServerGlobal = () => {
     setAllowImpressumModal(true);
     handleOpen();
-    // return <ImpressumtModal />;
   };
-  //   // Load from localStorage when component mounts
-  //   useEffect(() => {
-  //     const closed = localStorage.getItem("tickerClosed");
-  //     if (closed === "true") {
-  //       setTickerClosed(true);
-  //     }
-
-  //     // Reset ticker visibility daily
-  //     const today = new Date().toDateString();
-  //     const lastReset = localStorage.getItem("tickerLastReset");
-  //     if (lastReset !== today) {
-  //       localStorage.removeItem("tickerClosed");
-  //       localStorage.setItem("tickerLastReset", today);
-  //       setTickerClosed(false);
-  //     }
-  //   }, []);
-
-  //   const handleCloseTicker = () => {
-  //     setTickerClosed(true);
-  //     localStorage.setItem("tickerClosed", "true");
-  //   };
-  // //   ---------------------------
 
   useEffect(() => {
     setTickerClosed(false);
@@ -47,32 +21,10 @@ const LandingPage = () => {
     setTickerClosed(true);
   };
 
-  // Function to render ticker items
-  //   const renderNewsItems = (keyPrefix) => {
-  //     const newsList = [
-  //       "Neue Soros-Netzwerk Enthüllungen",
-  //       "300% Preisunterschied: Warenkorb im Europa-Vergleich",
-  //       "Streit um Smalltalk: Was Ungarn wirklich denken",
-  //       "EU-Kommission kritisiert ungarische Mediengesetze",
-  //       "Budapest: Neue Entwicklungen am Immobilienmarkt",
-  //     ];
-
-  //     return newsList.map((news, i, arr) => (
-  //       <React.Fragment key={`${keyPrefix}-${i}`}>
-  //         <span className="ticker-item">
-  //           <a href="#" className="news-link">
-  //             {news}
-  //           </a>
-  //         </span>
-  //         {i < arr.length - 1 && <span className="ticker-separator">|</span>}
-  //       </React.Fragment>
-  //     ));
-  //   };
-
   return (
     <div className="landing-page__container">
       {/* Header */}
-      <header className="header">
+      {/* <header className="header">
         <nav className="header-buttons">
           <button className="header-btn">
             <span className="ht_text">Währungsrechner</span> EUR ⇔ HUF
@@ -92,7 +44,7 @@ const LandingPage = () => {
             <span className="ht_text">Anmelden</span>
           </button>
         </nav>
-      </header>
+      </header> */}
 
       {/* Sidebar */}
       <nav className="sidebar">
