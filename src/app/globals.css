@@ -76,6 +76,7 @@ body {
 .header-buttons {
   display: flex;
   gap: 45px;
+  margin-left: 50px;
 }
 
 .header-btn {

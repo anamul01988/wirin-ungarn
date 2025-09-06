@@ -2,15 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import "./style.css";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import ImpressumtModal from "../ui/ImpressumModal";
-import HomePage from "../pages/home/Home";
 
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
   const [allowImpressumModal, setAllowImpressumModal] = useState(false);
   const [open, setOpen] = useState(false);
-  const route = useRouter();
+  //   const route = useRouter();
   const handleOpen = () => setOpen(!open);
   const routerServerGlobal = () => {
     setAllowImpressumModal(true);
@@ -49,26 +48,26 @@ const LandingPage = () => {
   };
 
   // Function to render ticker items
-  const renderNewsItems = (keyPrefix) => {
-    const newsList = [
-      "Neue Soros-Netzwerk Enthüllungen",
-      "300% Preisunterschied: Warenkorb im Europa-Vergleich",
-      "Streit um Smalltalk: Was Ungarn wirklich denken",
-      "EU-Kommission kritisiert ungarische Mediengesetze",
-      "Budapest: Neue Entwicklungen am Immobilienmarkt",
-    ];
+  //   const renderNewsItems = (keyPrefix) => {
+  //     const newsList = [
+  //       "Neue Soros-Netzwerk Enthüllungen",
+  //       "300% Preisunterschied: Warenkorb im Europa-Vergleich",
+  //       "Streit um Smalltalk: Was Ungarn wirklich denken",
+  //       "EU-Kommission kritisiert ungarische Mediengesetze",
+  //       "Budapest: Neue Entwicklungen am Immobilienmarkt",
+  //     ];
 
-    return newsList.map((news, i, arr) => (
-      <React.Fragment key={`${keyPrefix}-${i}`}>
-        <span className="ticker-item">
-          <a href="#" className="news-link">
-            {news}
-          </a>
-        </span>
-        {i < arr.length - 1 && <span className="ticker-separator">|</span>}
-      </React.Fragment>
-    ));
-  };
+  //     return newsList.map((news, i, arr) => (
+  //       <React.Fragment key={`${keyPrefix}-${i}`}>
+  //         <span className="ticker-item">
+  //           <a href="#" className="news-link">
+  //             {news}
+  //           </a>
+  //         </span>
+  //         {i < arr.length - 1 && <span className="ticker-separator">|</span>}
+  //       </React.Fragment>
+  //     ));
+  //   };
 
   return (
     <div className="landing-page__container">
@@ -120,7 +119,7 @@ const LandingPage = () => {
       </nav>
 
       <div>
-        <div className="cards" onClick={routerServerGlobal}>
+        <div className="cards cursor-pointer" onClick={routerServerGlobal}>
           Cards will go here...
         </div>
       </div>

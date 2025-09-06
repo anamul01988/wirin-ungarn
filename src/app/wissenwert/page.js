@@ -33,7 +33,7 @@ export default function WissenswertModal() {
           enabled: false,
         }}
         handler={handleOpen}
-        size={"md"}
+        size={"lg"}
         className="bg-white relative border-4 border-green-700 rounded-2xl max-h-[90vh] h-[80vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
