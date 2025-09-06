@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import { useRouter } from "next/navigation";
 import ImpressumtModal from "../ui/ImpressumModal";
+import HomePage from "../pages/home/Home";
 
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
