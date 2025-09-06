@@ -1,29 +1,3 @@
-// "use client";
-
-// import { Button } from "@material-tailwind/react";
-// import { useRouter } from "next/navigation";
-
-// export default function ImpressumModal() {
-//   const route = useRouter();
-//   const routerServerGlobal = () => {
-//     route.push("/wissenwert");
-//   };
-//   // const handleOpen = () => routerServerGlobal();
-
-//   return (
-//     <>
-//       <Button
-//         onClick={routerServerGlobal}
-//         color="blue"
-//         size="lg"
-//         className="px-6 py-3 capitalize"
-//       >
-//         Impressum
-//       </Button>
-//     </>
-//   );
-// }
-
 "use client";
 
 import { useState } from "react";
@@ -31,9 +5,9 @@ import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import SubMenu from "../pages/home/SubMenu";
 
-export default function ImpressumtModal() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
+export default function ImpressumtModal({ open, setOpen, handleOpen }) {
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => setOpen(!open);
   const route = useRouter();
   const handleShowDetails = (title) => {
     // setSelectedTitle(title);
@@ -41,10 +15,10 @@ export default function ImpressumtModal() {
     route.push("/wissenwert");
   };
 
-  const navigateToHome = () => {
-    handleOpen();
-    // route.push("/");
-  };
+  // const navigateToHome = () => {
+  //   handleOpen();
+  //   // route.push("/");
+  // };
 
   return (
     <>
@@ -116,7 +90,7 @@ export default function ImpressumtModal() {
           <SubMenu onTitleClick={handleShowDetails} />
         </DialogBody>
       </Dialog>
-      <div className="min-h-screen flex items-center justify-center">
+      {/* <div className="min-h-screen flex items-center justify-center">
         <Button
           onClick={navigateToHome}
           color="blue"
@@ -125,7 +99,7 @@ export default function ImpressumtModal() {
         >
           Impressum
         </Button>
-      </div>
+      </div> */}
     </>
   );
 }

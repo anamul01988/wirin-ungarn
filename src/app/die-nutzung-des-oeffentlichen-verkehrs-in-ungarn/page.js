@@ -15,7 +15,7 @@ export default function WissenswertModal() {
   };
   const handleClose = () => {
     setOpen(false);
-    route.navigate("/");
+    route.push("/");
   };
 
   useEffect(() => {
