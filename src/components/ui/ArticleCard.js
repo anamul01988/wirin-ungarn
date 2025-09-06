@@ -1,8 +1,13 @@
 "use client";
 
 import { Typography } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
 
 const ArticleCard = ({ image, title, description }) => {
+  const route = useRouter();
+  const handleDetails = () => {
+    route.push("die-nutzung-des-oeffentlichen-verkehrs-in-ungarn");
+  };
   return (
     <div className="flex flex-col md:flex-row gap-4 pb-6">
       {/* Left Image */}
@@ -16,7 +21,12 @@ const ArticleCard = ({ image, title, description }) => {
 
       {/* Right Content */}
       <div className="flex-1">
-        <Typography variant="h6" color="blue-gray" className="font-semibold mb-2">
+        <Typography
+          variant="h6"
+          color="blue-gray"
+          className="font-semibold mb-2 cursor-pointer"
+          onClick={handleDetails}
+        >
           {title}
         </Typography>
         <Typography

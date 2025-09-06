@@ -1,6 +1,6 @@
 import { fakeData } from "@/lib/utils/utils";
 import { Typography } from "@material-tailwind/react";
-const Indetails = ({ title, onBack, onOpenWissenswert }) => {
+const Indetails = ({ onBack }) => {
   return (
     <div>
       <button
@@ -42,7 +42,7 @@ const Indetails = ({ title, onBack, onOpenWissenswert }) => {
             variant="h5"
             color="blue-gray"
             className="font-bold leading-snug mb-3 cursor-pointer"
-            onClick={onOpenWissenswert}
+            // onClick={onOpenWissenswert}
           >
             {fakeData.title}
           </Typography>

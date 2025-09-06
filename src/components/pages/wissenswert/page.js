@@ -3,16 +3,17 @@ import { useState } from "react";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import { articles } from "@/lib/utils/utils";
 import ArticleCard from "@/components/ui/ArticleCard"; // Ensure the correct path
+import { useRouter } from "next/navigation";
 
-export default function Wissenswert({ setShowWissenswert }) {
+export default function Wissenswert() {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
-
+  const route = useRouter();
   return (
     <>
       <div className="mb-4">
         <button
-          onClick={() => setShowWissenswert(false)}
+          onClick={() => route.push("/")}
           className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
           aria-label="Back"
         >
