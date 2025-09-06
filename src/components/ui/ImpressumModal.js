@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import SubMenu from "../pages/home/SubMenu";
 import Indetails from "../pages/home/Indetails";
-import Wissenswert from "@/app/wissenswert/page";
+import Wissenswert from "../pages/wissenswert/page";
 
 export default function ImpressumModal() {
   const [open, setOpen] = useState(false);
@@ -117,7 +117,7 @@ export default function ImpressumModal() {
         {showDetails ? (
           <DialogBody className="overflow-auto px-[60px] py-[30px] flex-1">
             {showWissenswert ? (
-              <Wissenswert />
+              <Wissenswert setShowWissenswert={setShowWissenswert} />
             ) : (
               <Indetails
                 title={selectedTitle}

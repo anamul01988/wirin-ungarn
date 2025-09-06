@@ -41,7 +41,7 @@ const Indetails = ({ title, onBack, onOpenWissenswert }) => {
           <Typography
             variant="h5"
             color="blue-gray"
-            className="font-bold leading-snug mb-3"
+            className="font-bold leading-snug mb-3 cursor-pointer"
             onClick={onOpenWissenswert}
           >
             {fakeData.title}

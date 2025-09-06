@@ -4,12 +4,34 @@ import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import { articles } from "@/lib/utils/utils";
 import ArticleCard from "@/components/ui/ArticleCard"; // Ensure the correct path
 
-export default function Wissenswert() {
+export default function Wissenswert({ setShowWissenswert }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
 
   return (
     <>
+      <div className="mb-4">
+        <button
+          onClick={() => setShowWissenswert(false)}
+          className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
+          aria-label="Back"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+      </div>
       {/* Header */}
       <div className="bg-red-600 text-white py-3 px-4 mb-6">
         <Typography variant="h5" className="font-bold text-center">
@@ -52,10 +74,7 @@ export default function Wissenswert() {
             onChange={(e) => setSearch(e.target.value)}
             crossOrigin={undefined}
           />
-          <Button
-            color="red"
-            onClick={() => alert(`Searching for: ${search}`)}
-          >
+          <Button color="red" onClick={() => alert(`Searching for: ${search}`)}>
             SUCHE
           </Button>
         </div>
