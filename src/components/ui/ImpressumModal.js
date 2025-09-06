@@ -117,13 +117,13 @@ export default function ImpressumModal() {
         {showDetails ? (
           <DialogBody className="overflow-auto px-[60px] py-[30px] flex-1">
             {showWissenswert ? (
-              <Wissenswert setShowWissenswert={setShowWissenswert} />
-            ) : (
-              <Indetails
+             <Indetails
                 title={selectedTitle}
                 onBack={handleBackToMenu}
                 onOpenWissenswert={handleWin}
               />
+            ) : (
+              <Wissenswert setShowWissenswert={setShowWissenswert} />
             )}
           </DialogBody>
         ) : (

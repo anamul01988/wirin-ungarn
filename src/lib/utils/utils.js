@@ -65,21 +65,21 @@ export const slideData = [
 export const articles = [
   {
     id: 1,
-    image: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Volanbusz_bus.jpg",
+    image: "https://wir-in-ungarn.hu/wiucontent/uploads/2024/03/BLBUS-Busverkehr-in-Ungarn-2-240x180.jpg",
     title: "Die Nutzung öffentlicher Verkehrsmittel",
     description:
       "Der öffentliche Nahverkehr in Ungarn bietet eine umfassende und effiziente Infrastruktur, die es Reisenden ermöglicht im gesamten Land problemlos zu navigieren. Das ungarische Verkehrssystem wird von mehreren zentralen Akteuren gesteuert...",
   },
   {
     id: 2,
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6b/Hungarian_ID_Card.jpg",
+    image: "https://wir-in-ungarn.hu/wiucontent/uploads/2024/04/BLLCK-Lakcim-Kartya-240x180.jpg",
     title: "Dein Wegweiser zur Lakcímkártya – So beantragst du deine Wohnkarte",
     description:
       "Die Lakcímkártya, direkt übersetzt „Wohnadressen-Karte“, ist ein offizielles Dokument, das deine Wohnadresse in Ungarn bestätigt. Sie ist wichtig für viele administrative Angelegenheiten wie die Eröffnung eines Bankkontos, die Anmeldung bei der Krankenversicherung oder dem Anmelden eines...",
   },
   {
     id: 3,
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6b/Hungarian_ID_Card.jpg",
+    image: "https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/SHTHK-Tipps-fuer-den-Hauskauf-in-Ungarn-240x180.jpg",
     title: "Dein Wegweiser zur Lakcímkártya – So beantragst du deine Wohnkarte",
     description:
       "Die Lakcímkártya, direkt übersetzt „Wohnadressen-Karte“, ist ein offizielles Dokument, das deine Wohnadresse in Ungarn bestätigt. Sie ist wichtig für viele administrative Angelegenheiten wie die Eröffnung eines Bankkontos, die Anmeldung bei der Krankenversicherung oder dem Anmelden eines...",

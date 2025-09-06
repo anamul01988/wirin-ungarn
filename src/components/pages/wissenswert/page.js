@@ -66,7 +66,7 @@ export default function Wissenswert({ setShowWissenswert }) {
         <Typography variant="small" className="font-medium mb-2">
           Diese Seite durchsuchen
         </Typography>
-        <div className="flex gap-5">
+        <div className="flex lg:flex-nowrap md:flex-wrap gap-5">
           <Input
             type="text"
             label="Suche..."
