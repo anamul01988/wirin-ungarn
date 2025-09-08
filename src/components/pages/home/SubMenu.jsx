@@ -22,7 +22,7 @@ const SubMenu = ({ onTitleClick }) => {
           typeof s === "object" && s?.content ? s.content : String(s);
 
         return (
-          <div key={idx} className="w-full text-center overflow-auto">
+          <div key={idx} className="w-full overflow-auto">
             <h3
               className="text-xl font-semibold mb-3 text-gray-800 cursor-pointer hover:text-blue-600"
               onClick={() => onTitleClick(title)}

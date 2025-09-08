@@ -1,11 +1,12 @@
 import React from "react";
+import { FaHeart, FaComment } from "react-icons/fa";
 
 const NewsCard = () => {
   return (
-    <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row">
+    <div className="max-w-xl mx-auto bg-white rounded-lg shadow-lg flex flex-col md:flex-row">
       {/* Left side content */}
-      <div className="flex flex-col md:flex-row items-start space-y-4 md:space-x-6 md:space-y-0">
-        <div className="flex-none w-[75px] flex flex-col justify-between items-center relative">
+      <div className="flex  md:flex-row items-start space-y-4 md:space-x-4 md:space-y-0">
+        <div className="flex-none flex flex-col justify-between items-center relative">
           <span className="text-base uppercase mb-0.5 text-[#436f4d] leading-[14px]">
             Sep
           </span>
@@ -44,37 +45,61 @@ const NewsCard = () => {
           </div>
         </div>
 
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800">
-            INTELLIGENTE AUTOBAN M1: ENDE DER STAU IN SICHT?
-          </h2>
-          <p className="text-gray-600 mt-2">
-            Ungarn investiert massiv in seine wichtigste Verkehrsader. Der
-            M1-Ausbau bringt nicht nur mehr Spuren, sondern auch modernisierte
-            Rastplätze, neue Knotenpunkte und 300 Lkw-Stellplätze. Die Arbeiten
-            laufen bei fließendem Verkehr.
-          </p>
-        </div>
-      </div>
+        {/* Vertical divider */}
+        <div className="hidden md:block w-5 bg-[#436f4d] self-stretch"></div>
 
-      {/* Right side button */}
-      <div className="flex justify-end space-x-4 mt-4 md:mt-0">
-        <a
-          href="https://www.budapester.hu/wirtschaft/ausbau-auf-sechs-spuren/"
-          className="inline-flex items-center text-green-600 hover:text-green-800 font-medium space-x-2"
-        >
-          <span>Zur Seite</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-arrow-right-circle"
-            viewBox="0 0 16 16"
-          >
-            <path d="M11.293 8.707a1 1 0 0 1 0-1.414l3-3a1 1 0 1 1 1.414 1.414L13.414 8H3a1 1 0 0 1 0-2h10.414L12.707 3.707a1 1 0 0 1 1.414-1.414l3 3a1 1 0 0 1 0 1.414l-3 3a1 1 0 0 1-1.414-1.414L13.414 8H3a1 1 0 0 1 0-2h10.414L12.707 3.707a1 1 0 0 1 1.414-1.414l3 3a1 1 0 0 1 0 1.414l-3 3a1 1 0 0 1-1.414-1.414L13.414 8H3a1 1 0 0 1 0-2h10.414L12.707 3.707a1 1 0 0 1 1.414-1.414l3 3a1 1 0 0 1 0 1.414l-3 3a1 1 0 0 1-1.414-1.414L13.414 8H3z" />
-          </svg>
-        </a>
+        <div>
+          <p className="text-base font-semibold text-gray-600">
+            INTELLIGENTE AUTOBAN M1: ENDE DER STAU IN SICHT?
+          </p>
+          <span className="text-[12px] block mt-[5px] normal-case">
+            Nach 20 Jahren gibt es einen Wechsel an der Spitze des
+            Fidesz-Wahlkampfteams. Der Stratege Balázs Orbán übernimmt. Der
+            Artikel beleuchtet seine Person, seine Aufgaben und die Gründe für
+          </span>
+          <p className="text-red-900 text-[11px]">
+            <a
+              href="https://telex.hu/belfold/2025/09/08/orban-balazs-miniszterelnoki-tanacsado-kampanyfonok"
+              target="_blank"
+            >
+              https://telex.hu/belfold/2025/09/08/orban-balazs-miniszterelnoki
+            </a>
+          </p>
+
+          <blockquote className="text-[0.7em] text-left m-[0_0_0_1px] p-[0_0_0_37px] bg-[url('https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/quote.jpg')] bg-[top_left] bg-no-repeat bg-[length:30px] min-h-[30px]">
+            Balázs Orbán ist nicht nur ein Wahlkampf-Typ, er ist auch einer der
+            Denker hinter der Langfrist-Strategie des Landes. Seine Ideen zur
+            Außen.
+          </blockquote>
+          <div className="flex items-center justify-between mt-4">
+            {/* Left: Flag */}
+            <div>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Flag_of_Hungary.svg"
+                alt="Hungary Flag"
+                className="w-7 h-5 rounded-sm shadow-sm"
+              />
+            </div>
+
+            {/* Middle: Icons */}
+            <div className="flex space-x-2">
+              <button className="p-1.5 bg-[#436f4d] text-white rounded-md hover:bg-green-700">
+                <FaHeart size={18} />
+              </button>
+              <button className="p-1.5 bg-[#436f4d] text-white rounded-md hover:bg-green-700">
+                <FaComment size={18} />
+              </button>
+
+              {/* Right: Button */}
+              <a
+                href="#"
+                className="bg-[#436f4d] text-white px-4 py-2 rounded-md text-sm font-medium"
+              >
+                ZUR SEITE
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

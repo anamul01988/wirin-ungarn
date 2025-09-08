@@ -1,4 +1,5 @@
 import NewsCard from "@/components/_components/NewsCard";
+import NewscardHeader from "@/components/_components/NewscardHeader";
 
 export const fakeData = {
   title: "Einleitung: Der Duft von Sommer, Markt und purer Lebensfreude",
@@ -47,7 +48,7 @@ A weboldal tartalmát a lehető legnagyobb gondossággal hozzuk létre. A szolg�
 
 export const slideData = [
   {
-    title: "Ungran-Insider",
+    title: <NewscardHeader/>,
     content: <NewsCard />,
   },
   {
