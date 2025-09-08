@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
-import Wissenswert from "@/components/pages/wissenswert/page";
 import { useRouter } from "next/navigation";
+import PhilosopiesDetails from "@/components/pages/philosopies/philosopiesDetails";
 
-export default function WissenswertModal() {
+export default function PhilosophieModal() {
   const [open, setOpen] = useState(false);
-  //   const [showDetails, setShowDetails] = useState(false);
-
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => setOpen(true);
   const route = useRouter();
 
+  const handleBackToMenu = () => {
+    route.back();
+  };
   const handleClose = () => {
     setOpen(false);
     route.push("/");
@@ -29,11 +30,11 @@ export default function WissenswertModal() {
     <>
       <Dialog
         open={open}
+        handler={handleOpen}
+        size={"md"}
         dismiss={{
           enabled: false,
         }}
-        handler={handleOpen}
-        size={"lg"}
         className="bg-white relative border-4 border-green-700 rounded-2xl max-h-[90vh] h-[80vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
@@ -55,7 +56,7 @@ export default function WissenswertModal() {
             </button>
 
             {/* Love Icon */}
-            {/* {showDetails && ( */}
+
             <button className="p-4 rounded-full">
               <img
                 src="/assets/icons/favorit_e.png"
@@ -63,12 +64,11 @@ export default function WissenswertModal() {
                 className="w-3rem h-2rem"
               />
             </button>
-            {/* )} */}
           </div>
         )}
 
-        <DialogBody className="overflow-auto px-[60px] py-[30px] flex-1">
-          <Wissenswert />
+        <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
+          <PhilosopiesDetails onBack={handleBackToMenu} />
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">

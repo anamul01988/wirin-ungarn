@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
 import ImpressumtModal from "../ui/ImpressumModal";
+import { footerLinks } from "@/lib/utils/utils";
+import Link from "next/link";
 
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
@@ -142,25 +144,10 @@ const LandingPage = () => {
 
           {/* Footer Links */}
           <div className="footer-links">
-            {[
-              "Neueste Beiträge",
-              "Philosophie",
-              "Datenschutz",
-              "Ungarn-Insider",
-              "Transparenz",
-              "Neuigkeiten",
-              "Kontakt",
-              "WIU-Münzen",
-              "Karriere",
-              "Cookie-Richtlinie",
-              "Über uns",
-              "Impressum",
-              "Soziale Projekte",
-              "Kooperationen",
-            ].map((link, i) => (
-              <a key={i} href="#" className="footer-link">
-                {link}
-              </a>
+            {footerLinks.map((link) => (
+              <Link key={link.key} href={link.endpoint} className="footer-link">
+                {link.title}
+              </Link>
             ))}
           </div>
         </div>
