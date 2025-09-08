@@ -49,7 +49,7 @@ export default function WissenswertModal() {
             {/* Cross Icon */}
             <button onClick={handleClose} className="p-4 rounded-full">
               <img
-                src="/assets/close.png"
+                src="/assets/icons/close.png"
                 alt="Close Icon"
                 className="w-4rem h-3rem"
               />
@@ -59,7 +59,7 @@ export default function WissenswertModal() {
 
             <button className="p-4 rounded-full">
               <img
-                src="/assets/favorit_e.png"
+                src="/assets/icons/favorit_e.png"
                 alt="Love Icon"
                 className="w-3rem h-2rem"
               />

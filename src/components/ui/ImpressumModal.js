@@ -43,7 +43,7 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
             {/* Cross Icon */}
             <button onClick={handleOpen} className="p-4 rounded-full">
               <img
-                src="/assets/close.png"
+                src="/assets/icons/close.png"
                 alt="Close Icon"
                 className="w-4rem h-3rem"
               />
@@ -63,7 +63,7 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
               aria-label="Previous"
             >
               <img
-                src="/assets/arrow-left.png"
+                src="/assets/icons/arrow-left.png"
                 alt="Previous"
                 className="w-4.5rem h-3.4rem"
               />
@@ -78,7 +78,7 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
               aria-label="Next"
             >
               <img
-                src="/assets/arrow-right.png"
+                src="/assets/icons/arrow-right.png"
                 alt="Next"
                 className="w-3.5rem h-4.4rem"
               />
