@@ -1,29 +1,29 @@
 import React from "react";
 import { FaHeart, FaComment } from "react-icons/fa";
 
-const NewsCard = () => {
+const NewsCard = ({ date, category, categoryIcon, author, authorAvatar, title, description, link, quote }) => {
   return (
-    <div className="max-w-xl mx-auto bg-white rounded-lg shadow-lg flex flex-col md:flex-row">
+    <div className="max-w-xl mx-auto bg-white rounded-lg flex flex-col md:flex-row">
       {/* Left side content */}
       <div className="flex  md:flex-row items-start space-y-4 md:space-x-4 md:space-y-0">
         <div className="flex-none flex flex-col justify-between items-center relative">
           <span className="text-base uppercase mb-0.5 text-[#436f4d] leading-[14px]">
-            Sep
+            {date.month}
           </span>
           <span className=" top-[17px] text-xl font-bold leading-tight text-[#436f4d]">
-            03
+            {date.day}
           </span>
 
           <div className=" top-[40px] text-[#436f4d]">
-            <span className="block text-xs">2025</span>
-            <span className="block text-xs">08:49</span>
+            <span className="block text-xs">{date.year}</span>
+            <span className="block text-xs">{date.time}</span>
           </div>
           <div className="clear-both"></div>
 
           <div className="text-xs uppercase mt-10">
             <div className="tooltip" data-tooltip="Mobilität">
               <img
-                src="https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/insider-cat/mobilitaet.png"
+                src={categoryIcon}
                 alt="Mobilität"
                 className="w-9 h-9"
               />
@@ -68,8 +68,7 @@ const NewsCard = () => {
 
           <blockquote className="text-[0.7em] text-left m-[0_0_0_1px] p-[0_0_0_37px] bg-[url('https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/quote.jpg')] bg-[top_left] bg-no-repeat bg-[length:30px] min-h-[30px]">
             Balázs Orbán ist nicht nur ein Wahlkampf-Typ, er ist auch einer der
-            Denker hinter der Langfrist-Strategie des Landes. Seine Ideen zur
-            Außen.
+            Denker hinter der Langfrist-Strategie des Landes. Seine Ideen zur.
           </blockquote>
           <div className="flex items-center justify-between mt-4">
             {/* Left: Flag */}
