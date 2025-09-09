@@ -3,7 +3,7 @@ import { FaHeart, FaComment } from "react-icons/fa";
 
 const NewsCard = ({ date, category, categoryIcon, author, authorAvatar, title, description, link, quote }) => {
   return (
-    <div className="max-w-xl mx-auto bg-white rounded-lg flex flex-col md:flex-row">
+    <div className=" mx-auto bg-white rounded-lg flex flex-col md:flex-row">
       {/* Left side content */}
       <div className="flex  md:flex-row items-start space-y-4 md:space-x-4 md:space-y-0">
         <div className="flex-none flex flex-col justify-between items-center relative">
@@ -57,7 +57,7 @@ const NewsCard = ({ date, category, categoryIcon, author, authorAvatar, title, d
             Fidesz-Wahlkampfteams. Der Stratege Balázs Orbán übernimmt. Der
             Artikel beleuchtet seine Person, seine Aufgaben und die Gründe für
           </span>
-          <p className="text-red-900 text-[11px]">
+           <p className="text-red-900 text-[11px] mt-1 mb-1">
             <a
               href="https://telex.hu/belfold/2025/09/08/orban-balazs-miniszterelnoki-tanacsado-kampanyfonok"
               target="_blank"
