@@ -53,14 +53,19 @@ body {
 /* Sticky Header */
 
 .main__page {
-  min-height: 100vh;
+  /* min-height: 100vh;
   position: relative;
   background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 50%, #e0f0e0 100%),
     url("/assets/pattern-bg.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  padding-bottom: 120px; */
+  min-height: 100vh;
+  position: relative;
+  background-repeat: repeat;
   padding-bottom: 120px;
+  background-image: url(/assets/pattern-bg.jpg);
 }
 
 .header {

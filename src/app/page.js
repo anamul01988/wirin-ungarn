@@ -6,12 +6,12 @@ export default function Home() {
   return (
     <div
       className="flex flex-col items-center justify-start bg-gray-100 main__page"
-      style={{
-        backgroundImage: 'url("/assets/pattern-bg.jpg")',
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        width: "100%",
-      }}
+      // style={{
+      //   backgroundImage: 'url("/assets/pattern-bg.jpg")',
+      //   backgroundSize: "cover",
+      //   backgroundPosition: "center",
+      //   width: "100%",
+      // }}
     >
       <header className="header w-full">
         <nav className="header-buttons">

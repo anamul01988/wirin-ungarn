@@ -34,7 +34,7 @@ export default function WissenswertModal() {
         }}
         handler={handleOpen}
         size={"lg"}
-        className="bg-white relative border-4 border-green-700 rounded-2xl max-h-[90vh] h-[80vh] flex flex-col"
+        className="bg-white relative border-4 border-green-700 rounded-2xl  h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -42,7 +42,7 @@ export default function WissenswertModal() {
             className="absolute flex flex-col space-y-3 z-50"
             style={{
               top: "-0.5rem",
-              right: "-10rem",
+              right: "-8rem",
             }}
           >
             {/* Cross Icon */}
