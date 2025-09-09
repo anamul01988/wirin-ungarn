@@ -11,7 +11,7 @@ export default function Footer() {
     { label: "Karriere", href: "/karriere" },
     { label: "Kooperationen", href: "/kooperationen" },
     { label: "Transparenz", href: "/transparenz" },
-    { label: "Cookie-Richtlinie (EU)", href: "/cookie-richtlinie" },
+    { label: "Cookie-Richtlinie (EU)", href: "/cookie-richtlinie-eu" },
   ];
 
   return (
