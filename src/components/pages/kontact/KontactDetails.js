@@ -21,21 +21,34 @@ const KontactDetails = () => {
     fetchData();
   }, []);
 
-  if (loading) return (
-    <div>
-      <DefaultSpinner />
-    </div>
-  );
+  useEffect(() => {
+    if (data && data.data && data.data.page) {
+      const form = document.querySelector('form');
+      if (form) {
+        form.classList.add('mt-5');
+        const inputs = form.querySelectorAll('input, textarea');
+        inputs.forEach((input) => {
+          input.classList.add('w-full', 'p-2', 'border', 'border-gray-300', 'rounded-md', 'mb-4');
+        });
+
+        const submitButton = form.querySelector('input[type="submit"]');
+        if (submitButton) {
+          submitButton.classList.add('bg-red-500', 'text-white', 'py-2', 'px-4', 'rounded-md', 'hover:bg-red-600');
+        }
+      }
+    }
+  }, [data]);
+
+  if (loading) return <div><DefaultSpinner /></div>;
   if (error) return <div>{error}</div>;
   if (!data || !data.data || !data.data.page) return <div>Keine Kontakt-Daten gefunden.</div>;
 
   const { title, content } = data.data.page;
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">{title}</h1>
       <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
-      {/* You can add your contact form below if you want to keep it */}
     </div>
   );
 };
