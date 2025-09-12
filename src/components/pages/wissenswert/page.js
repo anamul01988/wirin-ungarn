@@ -5,10 +5,13 @@ import { articles } from "@/lib/utils/utils";
 import ArticleCard from "@/components/ui/ArticleCard"; // Ensure the correct path
 import { useRouter } from "next/navigation";
 
-export default function Wissenswert() {
+export default function Wissenswert({ apiData }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
   const route = useRouter();
+
+  console.log('66666666666',apiData);
+  
   return (
     <>
       <div className="mb-4">
@@ -87,19 +90,39 @@ export default function Wissenswert() {
       </Typography>
 
       <div className="p-6 max-w-5xl mx-auto">
-        {articles?.map((item, idx) => (
-          <div key={item.id}>
-            <ArticleCard
-              image={item.image}
-              title={item.title}
-              description={item.description}
-            />
-            {/* Divider except last */}
-            {idx < articles.length - 1 && (
-              <hr className="my-6 border-gray-300" />
-            )}
-          </div>
-        ))}
+        {apiData ? (
+          <>
+           {apiData.apiData.data.posts.nodes.map((post) => (
+             <div key={post.id}>
+                <ArticleCard
+                  image={post.featuredImage.node.sourceUrl}
+                  title={post.title}
+                  description={post.excerpt}
+                  slug={post.slug}
+                />
+                {post.id < apiData.apiData.data.posts.nodes.length - 1 && (
+                  <hr className="my-6 border-gray-300" />
+                )}
+              </div>
+          ))}
+          </>
+        ) : (
+          <>
+            {articles?.map((item, idx) => (
+              <div key={item.id}>
+                <ArticleCard
+                  image={item.image}
+                  title={item.title}
+                  description={item.description}
+                />
+                {/* Divider except last */}
+                {idx < articles.length - 1 && (
+                  <hr className="my-6 border-gray-300" />
+                )}
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </>
   );

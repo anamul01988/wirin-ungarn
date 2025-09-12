@@ -6,7 +6,7 @@ import {
 } from "./queries";
 import { BASE_URL } from "./routes";
 
-async function fetchPage(query) {
+export async function fetchPage(query) {
   try {
     const res = await fetch(BASE_URL, {
       method: "POST",
@@ -46,6 +46,32 @@ export function GetDatenschutzPages() {
 
 export function GetImpressumPages() {
   return fetchPage(GET_PAGE_IMPRESSUM);
+}
+
+export function GetAllPosts() {
+  const ALL_POSTS_QUERY = `
+   {
+  posts (first: 50) {
+    nodes {
+      id
+      title
+      date
+      slug
+      featuredImage {
+        node {
+          sourceUrl
+        }
+      }
+      author {
+        node {
+          name
+        }
+      }
+    }
+  }
+}
+  `;
+  return fetchPage(ALL_POSTS_QUERY);
 }
 
 export function GetKontactPages() {

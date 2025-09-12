@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 
-export default function DialogContent({ title, content }) {
+export default function DialogContent({ title, content, imageFeature }) {
   const [open, setOpen] = useState(true);
   const route = useRouter();
   const handleOpen = () => setOpen(!open);
@@ -29,7 +29,7 @@ export default function DialogContent({ title, content }) {
             style={{ top: "-0.5rem", right: "-8rem" }}
           >
             {/* Cross Icon */}
-            <button onClick={handleClose} className="p-4 rounded-full">
+            <button onClick={navigateToHome} className="p-4 rounded-full">
               <img
                 src="/assets/icons/close.png"
                 alt="Close Icon"
@@ -50,17 +50,38 @@ export default function DialogContent({ title, content }) {
 
         {/* Dialog Body */}
         <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
-          <div className="mt-8">
-            {/* Keep Navigate Button */}
-            <Button
-              onClick={navigateToHome}
-              color="blue"
-              size="lg"
-              className="px-6 py-3 capitalize mt-6"
-            >
-              Navigate to Home
-            </Button>
+          <div>
+            <div className="mb-4">
+              <button
+                onClick={navigateToHome}
+                className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
+                aria-label="Back"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+            </div>
             <h1 className="text-3xl font-bold mb-6">{title}</h1>
+            {imageFeature && (
+              <div
+                className="w-full h-56 md:h-72 bg-cover bg-center rounded-lg mb-6"
+                style={{
+                  backgroundImage: `url('${imageFeature}')`,
+                }}
+              ></div>
+            )}
             <div
               className="prose prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: content }}
