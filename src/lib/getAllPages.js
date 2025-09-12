@@ -3,6 +3,7 @@ import {
   GET_PAGE_DATENSCHUTZ,
   GET_PAGE_IMPRESSUM,
   GET_PAGE_KONTAKT,
+  GET_PAGE_LIEDTEXTE,
 } from "./queries";
 import { BASE_URL } from "./routes";
 
@@ -25,6 +26,9 @@ async function fetchPage(query) {
 
 export function GetCookiesPages() {
   return fetchPage(GET_PAGE_COOKIE);
+}
+export function GetLiedTextePages() {
+  return fetchPage(GET_PAGE_LIEDTEXTE);
 }
 // Dynamic page fetch
 export function GetDynamicCookiesPages(slug) {

@@ -41,3 +41,38 @@ export const GET_PAGE_KONTAKT = `
     }
   }
 `;
+export const GET_PAGE_LIEDTEXTE = `
+  {
+  pages(where: {name: "liedtexte"}) {
+    nodes {
+      title
+      status
+      slug
+      uri
+      content
+      contentTypeName
+      date
+      id
+      isComment
+      isContentNode
+      isFrontPage
+      isPostsPage
+      featuredImageId
+      featuredImage {
+        node {
+          file(size: ARCHIVE_IMAGE)
+          filePath(size: ARCHIVE_IMAGE)
+          mediaItemUrl
+          title
+          uri
+          slug
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+`;

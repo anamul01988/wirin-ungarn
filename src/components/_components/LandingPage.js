@@ -4,12 +4,14 @@ import "./style.css";
 import ImpressumtModal from "../ui/ImpressumModal";
 import { footerLinks } from "@/lib/utils/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
   const [allowImpressumModal, setAllowImpressumModal] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
+  const route = useRouter();
   const routerServerGlobal = () => {
     setAllowImpressumModal(true);
     handleOpen();
@@ -51,19 +53,25 @@ const LandingPage = () => {
       {/* Sidebar */}
       <nav className="sidebar">
         {[
-          { title: "Information", text: "alles über Ungarn" },
-          { title: "Sprache", text: "einfach lernen" },
-          { title: "Ungarn", text: "Land & Leute" },
-          { title: "Community", text: "Gemeinsam" },
+          {
+            title: "Information",
+            text: "alles über Ungarn",
+            slug: "information",
+          },
+          { title: "Sprache", text: "einfach lernen", slug: "sprache" },
+          { title: "Ungarn", text: "Land & Leute", slug: "ungarn" },
+          { title: "Community", text: "Gemeinsam", slug: "community" },
+          { title: "LiedTexte", text: "LiedTexte", slug: "liedtexte" },
         ].map((item, i) => (
           <div
             key={i}
             className="nav-item"
             onClick={(e) => {
-              e.currentTarget.style.transform = "scale(0.98)";
-              setTimeout(() => {
-                e.currentTarget.style.transform = "scale(1)";
-              }, 100);
+              route.push(`/${item.slug}`);
+              // e.currentTarget.style.transform = "scale(0.98)";
+              // setTimeout(() => {
+              //   e.currentTarget.style.transform = "scale(1)";
+              // }, 100);
             }}
           >
             <h3>{item.title}</h3>
