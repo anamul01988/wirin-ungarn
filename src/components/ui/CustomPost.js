@@ -7,8 +7,7 @@ const CustomPost = ({ image = "", title, description, slug, onlyHeadings }) => {
   const route = useRouter();
 
   const handleClick = (slug) => {
-    console.log("Clicked slug:", slug);
-    route.push(`/${slug}`);
+    route.push(`/liedtexte/${slug}`);
   };
   return (
     <div className="flex flex-col md:flex-row gap-4 pb-6">

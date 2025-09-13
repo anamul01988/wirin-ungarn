@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { GetCookiesPages, GetLiedTextePages } from "@/lib/getAllPages";
+import { GetLiedTextePages } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
-import { useRouter } from "next/navigation";
 import CustomPost from "@/components/ui/CustomPost";
 const LiedTextePage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [filtering, setFiltering] = useState(false);
   const [customPosts, setCustomPosts] = useState({});
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
-  const route = useRouter();
+
   useEffect(() => {
     async function fetchData() {
       try {
         const apiData = await GetLiedTextePages();
-        console.log("LiedTextePage data:", apiData.data.liedtexte);
+        // console.log("LiedTextePage data:", apiData.data.liedtexte);
         setCookieData(apiData);
         setCustomPosts(apiData.data.liedtexte);
       } catch (err) {
@@ -89,7 +89,23 @@ const LiedTextePage = () => {
             onChange={(e) => setSearch(e.target.value)}
             crossOrigin={undefined}
           />
-          <Button color="red" onClick={() => alert(`Searching for: ${search}`)}>
+          {/* <Button color="red" onClick={() => alert(`Searching for: ${search}`)}>
+            SUCHE
+          </Button> */}
+          <Button
+            color="red"
+            onClick={async () => {
+              setFiltering(true);
+              try {
+                const apiData = await GetLiedTextePages(search);
+                setCustomPosts(apiData.data.liedtexte);
+              } catch (err) {
+                setError("Fehler beim Suchen.");
+              } finally {
+                setFiltering(false);
+              }
+            }}
+          >
             SUCHE
           </Button>
         </div>
@@ -100,21 +116,29 @@ const LiedTextePage = () => {
         Angezeigt werden 50 von 144 Beiträgen.
       </Typography>
       <div className="p-6 max-w-5xl mx-auto">
-        {customPosts?.nodes?.map((item, idx) => (
-          <div key={item.id}>
-            <CustomPost
-              // image={item.image}
-              title={item?.title}
-              description={item.postContentLyrik?.introText}
-              onlyHeadings={onlyHeadings}
-              slug={item.slug}
-            />
-            {/* Divider except last */}
-            {!onlyHeadings && idx < customPosts?.nodes?.length - 1 && (
-              <hr className="my-6 border-gray-300" />
-            )}
+        {filtering === true ? (
+          <div>
+            <DefaultSpinner />
           </div>
-        ))}
+        ) : (
+          <>
+            {" "}
+            {customPosts?.nodes?.map((item, idx) => (
+              <div key={item.id}>
+                <CustomPost
+                  title={item?.title}
+                  description={item.postContentLyrik?.introText}
+                  onlyHeadings={onlyHeadings}
+                  slug={item.slug}
+                />
+                {/* Divider except last */}
+                {!onlyHeadings && idx < customPosts?.nodes?.length - 1 && (
+                  <hr className="my-6 border-gray-300" />
+                )}
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
