@@ -3,9 +3,14 @@
 import { Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 
-const ArticleCard = ({ image, title, description }) => {
+const ArticleCard = ({ image, title, description,slug }) => {
   const route = useRouter();
-  const handleDetails = () => {
+
+    const handleClick = (slug) => {
+    route.push(`/${slug}`);
+  };
+
+    const handleDetails = () => {
     route.push("die-nutzung-des-oeffentlichen-verkehrs-in-ungarn");
   };
   return (
@@ -25,7 +30,7 @@ const ArticleCard = ({ image, title, description }) => {
           variant="h6"
           color="blue-gray"
           className="font-semibold mb-2 cursor-pointer"
-          onClick={handleDetails}
+          onClick={() => slug ? handleClick(slug) : handleDetails()}
         >
           {title}
         </Typography>

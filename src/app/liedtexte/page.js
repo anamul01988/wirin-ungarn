@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
-import KontactDetails from "@/components/pages/kontact/KontactDetails";
+// import CookieDetails from "@/components/pages/cookie/CookieDetails";
+import LiedTextePage from "@/components/pages/liedtexte/LiedTextePage";
 
-export default function KontactModal() {
+export default function Liedtexte() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const route = useRouter();
@@ -68,7 +69,31 @@ export default function KontactModal() {
         )}
 
         <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
-          <KontactDetails onBack={handleBackToMenu} />
+          {handleBackToMenu && (
+            <button
+              onClick={handleBackToMenu}
+              className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
+              aria-label="Back"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+          )}
+          <div className="mt-8">
+            <LiedTextePage />
+          </div>
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
