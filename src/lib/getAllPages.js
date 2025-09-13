@@ -175,21 +175,48 @@ export function GetImpressumPages() {
   return fetchPage(GET_PAGE_IMPRESSUM);
 }
 
-export function GetAllPosts() {
+// export function GetAllPosts() {
+//   const ALL_POSTS_QUERY = `
+//     {
+//       posts(first: 50) {
+//         nodes {
+//           id
+//           title
+//           date
+//           slug
+//           featuredImage { node { sourceUrl } }
+//           author {
+//             node {
+//               name
+//             }
+//           }
+//           postContent {
+//             introText
+//             postOrder
+//             shortTitle
+//             shortsPostContent
+//           }
+//         }
+//         pageInfo {
+//           hasNextPage
+//           hasPreviousPage
+//         }
+//       }
+//     }
+//   `;
+//   return fetchPage(ALL_POSTS_QUERY);
+// }
+export async function GetAllPosts({ first = 10, after = null } = {}) {
   const ALL_POSTS_QUERY = `
-    {
-      posts(first: 50) {
+    query GetPosts($first: Int, $after: String) {
+      posts(first: $first, after: $after) {
         nodes {
           id
           title
           date
           slug
           featuredImage { node { sourceUrl } }
-          author {
-            node {
-              name
-            }
-          }
+          author { node { name } }
           postContent {
             introText
             postOrder
@@ -200,11 +227,13 @@ export function GetAllPosts() {
         pageInfo {
           hasNextPage
           hasPreviousPage
+          endCursor
+          startCursor
         }
       }
     }
   `;
-  return fetchPage(ALL_POSTS_QUERY);
+  return fetchPage(ALL_POSTS_QUERY, { first, after });
 }
 
 export function GetKontactPages() {

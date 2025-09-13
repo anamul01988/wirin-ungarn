@@ -1,14 +1,44 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
-import { articles } from "@/lib/utils/utils";
-import ArticleCard from "@/components/ui/ArticleCard"; // Ensure the correct path
+import ArticleCard from "@/components/ui/ArticleCard";
+import { GetAllPosts } from "@/lib/getAllPages";
 import { useRouter } from "next/navigation";
 
-export default function Wissenswert({ apiData }) {
+export default function Wissenswert({ initialData }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
+  const [apiData, setApiData] = useState({ ...initialData });
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [cursors, setCursors] = useState([null]);
   const route = useRouter();
+
+  useEffect(() => {
+    async function fetchPosts() {
+      setLoading(true);
+      const after = cursors[page];
+      const data = await GetAllPosts({ first: 10, after });
+      setApiData(data);
+
+      // Storing the next page's cursor if moving forward
+      const nextCursor = data?.data?.posts?.pageInfo?.endCursor;
+      if (nextCursor && cursors.length === page + 1) {
+        setCursors([...cursors, nextCursor]);
+      }
+      setLoading(false);
+    }
+    fetchPosts();
+  }, [page]);
+
+  const handleNext = () => {
+    setPage(page + 1);
+  };
+
+  const handlePrev = () => {
+    if (page > 0) setPage(page - 1);
+  };
+
   return (
     <>
       <div className="mb-4">
@@ -85,41 +115,41 @@ export default function Wissenswert({ apiData }) {
       <Typography variant="small" color="gray" className="mt-4">
         Angezeigt werden 50 von 144 Beiträgen.
       </Typography>
-
       <div className="p-6 max-w-5xl mx-auto">
-        {apiData ? (
-          <>
-            {apiData.apiData.data.posts.nodes.map((post) => (
-              <div key={post.id}>
-                <ArticleCard
-                  image={post.featuredImage.node.sourceUrl}
-                  title={post.title}
-                  description={post.excerpt}
-                  slug={post.slug}
-                />
-                {post.id < apiData.apiData.data.posts.nodes.length - 1 && (
-                  <hr className="my-6 border-gray-300" />
-                )}
-              </div>
-            ))}
-          </>
+        {loading ? (
+          <Typography>Loading...</Typography>
         ) : (
-          <>
-            {articles?.map((item, idx) => (
-              <div key={item.id}>
-                <ArticleCard
-                  image={item.image}
-                  title={item.title}
-                  description={item.description}
-                />
-                {/* Divider except last */}
-                {idx < articles.length - 1 && (
-                  <hr className="my-6 border-gray-300" />
-                )}
-              </div>
-            ))}
-          </>
+          apiData?.data?.posts?.nodes?.map((post, idx) => (
+            <div key={post.id}>
+              <ArticleCard
+                image={post.featuredImage.node.sourceUrl}
+                title={post.title}
+                description={post.excerpt}
+                slug={post.slug}
+              />
+              {idx < apiData?.data?.posts.nodes.length - 1 && (
+                <hr className="my-6 border-gray-300" />
+              )}
+            </div>
+          ))
         )}
+      </div>
+      {/* Pagination Controls */}
+      <div className="flex justify-between mt-4">
+        <Button
+          color="red"
+          disabled={page === 0 || loading}
+          onClick={handlePrev}
+        >
+          Previous
+        </Button>
+        <Button
+          color="red"
+          disabled={!apiData?.data?.posts?.pageInfo?.hasNextPage || loading}
+          onClick={handleNext}
+        >
+          Next
+        </Button>
       </div>
     </>
   );
