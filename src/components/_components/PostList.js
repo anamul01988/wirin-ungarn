@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import Wissenswert from "../pages/wissenswert/page";
-export default function PostList(apiData) {
-const route = useRouter();
+export default function PostList({ initialApiData }) {
+  const route = useRouter();
   const [open, setOpen] = useState(false);
   //   const [showDetails, setShowDetails] = useState(false);
 
   const handleOpen = () => setOpen(!open);
-  
 
   const handleClose = () => {
     setOpen(false);
@@ -24,6 +23,8 @@ const route = useRouter();
   const navigateToHome = () => {
     route.push("/");
   };
+
+  // console.log("Initial API Data in PostList:", initialApiData);
   return (
     <>
       <Dialog
@@ -67,7 +68,7 @@ const route = useRouter();
         )}
 
         <DialogBody className="overflow-auto px-[60px] py-[30px] flex-1">
-          <Wissenswert apiData={apiData} />
+          <Wissenswert initialData={initialApiData} />
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">

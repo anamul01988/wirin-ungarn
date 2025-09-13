@@ -1,15 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
-import { articles } from "@/lib/utils/utils";
-import ArticleCard from "@/components/ui/ArticleCard"; // Ensure the correct path
+import ArticleCard from "@/components/ui/ArticleCard";
+import { GetAllPosts } from "@/lib/getAllPages";
 import { useRouter } from "next/navigation";
 
-export default function Wissenswert({ apiData }) {
+export default function Wissenswert({ initialData }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [totalPosts, setTotalPosts] = useState(0);
+  const [apiData, setApiData] = useState({ ...initialData });
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [cursors, setCursors] = useState([null]);
   const route = useRouter();
 
   // Initialize filtered posts when component mounts or apiData changes
@@ -55,6 +59,32 @@ export default function Wissenswert({ apiData }) {
     setFilteredPosts(filtered);
     setTotalPosts(apiData.apiData.data.posts.nodes.length); // Keep total count the same
   };
+
+  useEffect(() => {
+    async function fetchPosts() {
+      setLoading(true);
+      const after = cursors[page];
+      const data = await GetAllPosts({ first: 10, after });
+      setApiData(data);
+
+      // Storing the next page's cursor if moving forward
+      const nextCursor = data?.data?.posts?.pageInfo?.endCursor;
+      if (nextCursor && cursors.length === page + 1) {
+        setCursors([...cursors, nextCursor]);
+      }
+      setLoading(false);
+    }
+    fetchPosts();
+  }, [page]);
+
+  const handleNext = () => {
+    setPage(page + 1);
+  };
+
+  const handlePrev = () => {
+    if (page > 0) setPage(page - 1);
+  };
+
   return (
     <>
       <div className="mb-4">
@@ -157,7 +187,6 @@ export default function Wissenswert({ apiData }) {
       <Typography variant="small" color="gray" className="mt-4">
         Angezeigt werden {filteredPosts.length} von {totalPosts} Beiträgen.
       </Typography>
-
       <div className="p-6 max-w-5xl mx-auto">
         {apiData ? (
           <>
@@ -203,6 +232,23 @@ export default function Wissenswert({ apiData }) {
             ))}
           </>
         )}
+      </div>
+      {/* Pagination Controls */}
+      <div className="flex justify-between mt-4">
+        <Button
+          color="red"
+          disabled={page === 0 || loading}
+          onClick={handlePrev}
+        >
+          Previous
+        </Button>
+        <Button
+          color="red"
+          disabled={!apiData?.data?.posts?.pageInfo?.hasNextPage || loading}
+          onClick={handleNext}
+        >
+          Next
+        </Button>
       </div>
     </>
   );
