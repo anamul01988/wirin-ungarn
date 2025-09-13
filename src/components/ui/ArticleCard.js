@@ -7,7 +7,11 @@ const ArticleCard = ({ image, title, description,slug }) => {
   const route = useRouter();
 
     const handleClick = (slug) => {
-    route.push(`/posts/${slug}`);
+    route.push(`/${slug}`);
+  };
+
+    const handleDetails = () => {
+    route.push("die-nutzung-des-oeffentlichen-verkehrs-in-ungarn");
   };
   return (
     <div className="flex flex-col md:flex-row gap-4 pb-6">
@@ -26,7 +30,7 @@ const ArticleCard = ({ image, title, description,slug }) => {
           variant="h6"
           color="blue-gray"
           className="font-semibold mb-2 cursor-pointer"
-          onClick={() => handleClick(slug)}
+          onClick={() => slug ? handleClick(slug) : handleDetails()}
         >
           {title}
         </Typography>

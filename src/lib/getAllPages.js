@@ -120,6 +120,53 @@ export function GetDynamicCookiesPages(slug) {
   `;
   return fetchPage(DYNAMIC_PAGE_QUERY);
 }
+
+export async function GetDynamicContent(slug) {
+  try {
+    // Try to fetch as a post first
+    const postQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          content
+          featuredImage {
+            node {
+              sourceUrl
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.post) {
+      return {
+        type: "post",
+        data: postData,
+      };
+    }
+
+    // If post doesn't exist, try as a page
+    const pageData = await GetDynamicCookiesPages(slug);
+
+    if (pageData?.data?.page) {
+      return {
+        type: "page",
+        data: pageData,
+      };
+    }
+
+    // Neither post nor page exists
+    return null;
+  } catch (error) {
+    console.error("Error fetching dynamic content:", error);
+    return null;
+  }
+}
 export function GetDatenschutzPages() {
   return fetchPage(GET_PAGE_DATENSCHUTZ);
 }
@@ -130,26 +177,32 @@ export function GetImpressumPages() {
 
 export function GetAllPosts() {
   const ALL_POSTS_QUERY = `
-   {
-  posts (first: 50) {
-    nodes {
-      id
-      title
-      date
-      slug
-      featuredImage {
-        node {
-          sourceUrl
+    {
+      posts(first: 50) {
+        nodes {
+          id
+          title
+          date
+          slug
+          featuredImage { node { sourceUrl } }
+          author {
+            node {
+              name
+            }
+          }
+          postContent {
+            introText
+            postOrder
+            shortTitle
+            shortsPostContent
+          }
         }
-      }
-      author {
-        node {
-          name
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
         }
       }
     }
-  }
-}
   `;
   return fetchPage(ALL_POSTS_QUERY);
 }

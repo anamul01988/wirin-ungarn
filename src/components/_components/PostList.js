@@ -24,12 +24,6 @@ const route = useRouter();
   const navigateToHome = () => {
     route.push("/");
   };
-
-  const handleClick = (slug) => {
-    route.push(`/posts/${slug}`);
-  };
-
-
   return (
     <>
       <Dialog
