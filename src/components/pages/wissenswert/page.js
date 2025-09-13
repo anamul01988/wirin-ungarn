@@ -10,10 +10,11 @@ export default function Wissenswert({ initialData }) {
   const [search, setSearch] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [totalPosts, setTotalPosts] = useState(0);
-  const [apiData, setApiData] = useState({ ...initialData });
+  const [apiData, setApiData] = useState({ apiData: { ...initialData?.apiData } });
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [cursors, setCursors] = useState([null]);
+  const [isSearching, setIsSearching] = useState(false);
   const route = useRouter();
 
   // Initialize filtered posts when component mounts or apiData changes
@@ -32,50 +33,75 @@ export default function Wissenswert({ initialData }) {
   }, [search, apiData]);
 
   // Handle search functionality
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!apiData?.apiData?.data?.posts?.nodes) return;
 
     const searchTerm = search.toLowerCase().trim();
     if (!searchTerm) {
-      // If search is empty, show all posts
+      // If search is empty, show all posts and reset search state
+      setIsSearching(false);
       setFilteredPosts(apiData.apiData.data.posts.nodes);
       setTotalPosts(apiData.apiData.data.posts.nodes.length);
       return;
     }
 
-    // Filter posts based on search term in title and excerpt
-    const filtered = apiData.apiData.data.posts.nodes.filter((post) => {
-      const title = post.title?.toLowerCase() || "";
-      const excerpt = post.excerpt?.toLowerCase() || "";
-      const content = post.postContent?.introText?.toLowerCase() || "";
-
-      return (
-        title.includes(searchTerm) ||
-        excerpt.includes(searchTerm) ||
-        content.includes(searchTerm)
-      );
-    });
-
-    setFilteredPosts(filtered);
-    setTotalPosts(apiData.apiData.data.posts.nodes.length); // Keep total count the same
+    setIsSearching(true); // Mark that we're in search mode
+    
+    try {
+      // For a real search, we'd ideally make an API request with the search term
+      // But for client-side filtering with the data we already have:
+      const filtered = apiData.apiData.data.posts.nodes.filter((post) => {
+        const title = post.title?.toLowerCase() || "";
+        const excerpt = post.excerpt?.toLowerCase() || "";
+        const content = post.postContent?.introText?.toLowerCase() || "";
+  
+        return (
+          title.includes(searchTerm) ||
+          excerpt.includes(searchTerm) ||
+          content.includes(searchTerm)
+        );
+      });
+  
+      setFilteredPosts(filtered);
+      setTotalPosts(apiData.apiData.data.posts.nodes.length); // Keep total count the same
+    } catch (error) {
+      console.error("Error searching posts:", error);
+    }
   };
 
   useEffect(() => {
     async function fetchPosts() {
+      if (isSearching) return; // Don't fetch new data while searching
+      
       setLoading(true);
       const after = cursors[page];
-      const data = await GetAllPosts({ first: 10, after });
-      setApiData(data);
-
-      // Storing the next page's cursor if moving forward
-      const nextCursor = data?.data?.posts?.pageInfo?.endCursor;
-      if (nextCursor && cursors.length === page + 1) {
-        setCursors([...cursors, nextCursor]);
+      const searchTerm = search.trim() || ""; // Use search term if present
+      
+      try {
+        const data = await GetAllPosts({ 
+          first: 10, 
+          after, 
+          search: searchTerm 
+        });
+        
+        if (data) {
+          setApiData({ apiData: data });
+          
+          // Storing the next page's cursor if moving forward
+          const nextCursor = data?.data?.posts?.pageInfo?.endCursor;
+          if (nextCursor && cursors.length === page + 1) {
+            setCursors([...cursors, nextCursor]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
+    
     fetchPosts();
-  }, [page]);
+  }, [page, isSearching, search]);
 
   const handleNext = () => {
     setPage(page + 1);
@@ -152,11 +178,11 @@ export default function Wissenswert({ initialData }) {
               onChange={(e) => {
                 setSearch(e.target.value);
                 // If search is cleared, reset to show all posts immediately
-                if (
-                  e.target.value === "" &&
-                  apiData?.apiData?.data?.posts?.nodes
-                ) {
-                  setFilteredPosts(apiData.apiData.data.posts.nodes);
+                if (e.target.value === "") {
+                  setIsSearching(false);
+                  if (apiData?.apiData?.data?.posts?.nodes) {
+                    setFilteredPosts(apiData.apiData.data.posts.nodes);
+                  }
                 }
               }}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -166,6 +192,7 @@ export default function Wissenswert({ initialData }) {
               <button
                 onClick={() => {
                   setSearch("");
+                  setIsSearching(false); // Exit search mode
                   if (apiData?.apiData?.data?.posts?.nodes) {
                     setFilteredPosts(apiData.apiData.data.posts.nodes);
                   }
@@ -188,13 +215,13 @@ export default function Wissenswert({ initialData }) {
         Angezeigt werden {filteredPosts.length} von {totalPosts} Beiträgen.
       </Typography>
       <div className="p-6 max-w-5xl mx-auto">
-        {apiData ? (
+        {apiData?.apiData?.data?.posts?.nodes ? (
           <>
             {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
                 <div key={post.id}>
                   <ArticleCard
-                    image={post.featuredImage.node.sourceUrl}
+                    image={post.featuredImage?.node?.sourceUrl}
                     title={post.title}
                     description={post.excerpt}
                     slug={post.slug}
@@ -217,19 +244,19 @@ export default function Wissenswert({ initialData }) {
           </>
         ) : (
           <>
-            {articles?.map((item, idx) => (
-              <div key={item.id}>
-                <ArticleCard
-                  image={item.image}
-                  title={item.title}
-                  description={item.description}
-                />
-                {/* Divider except last */}
-                {idx < articles.length - 1 && (
-                  <hr className="my-6 border-gray-300" />
-                )}
+            {loading ? (
+              <div className="text-center py-10">
+                <Typography variant="h6" color="blue">
+                  Wird geladen...
+                </Typography>
               </div>
-            ))}
+            ) : (
+              <div className="text-center py-10">
+                <Typography variant="h6" color="red">
+                  Keine Beiträge verfügbar
+                </Typography>
+              </div>
+            )}
           </>
         )}
       </div>
@@ -237,19 +264,28 @@ export default function Wissenswert({ initialData }) {
       <div className="flex justify-between mt-4">
         <Button
           color="red"
-          disabled={page === 0 || loading}
+          disabled={page === 0 || loading || isSearching}
           onClick={handlePrev}
         >
           Previous
         </Button>
         <Button
           color="red"
-          disabled={!apiData?.data?.posts?.pageInfo?.hasNextPage || loading}
+          disabled={loading || isSearching || !apiData?.apiData?.data?.posts?.pageInfo?.hasNextPage}
           onClick={handleNext}
         >
           Next
         </Button>
       </div>
+      
+      {/* Debug info - remove in production */}
+      {process.env.NODE_ENV !== 'production' && (
+        <div className="mt-2 text-xs text-gray-500">
+          <p>Page: {page}</p>
+          <p>Cursors: {JSON.stringify(cursors)}</p>
+          <p>Has Next Page: {apiData?.apiData?.data?.posts?.pageInfo?.hasNextPage ? 'Yes' : 'No'}</p>
+        </div>
+      )}
     </>
   );
 }

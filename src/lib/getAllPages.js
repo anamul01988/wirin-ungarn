@@ -6,12 +6,15 @@ import {
 } from "./queries";
 import { BASE_URL } from "./routes";
 
-export async function fetchPage(query) {
+export async function fetchPage(query, variables = {}) {
   try {
     const res = await fetch(BASE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ 
+        query,
+        variables 
+      }),
       next: { revalidate: 60 },
     });
 
@@ -127,15 +130,16 @@ export function GetImpressumPages() {
 //   `;
 //   return fetchPage(ALL_POSTS_QUERY);
 // }
-export async function GetAllPosts({ first = 10, after = null } = {}) {
+export async function GetAllPosts({ first = 10, after = null, search = "" } = {}) {
   const ALL_POSTS_QUERY = `
-    query GetPosts($first: Int, $after: String) {
-      posts(first: $first, after: $after) {
+    query GetPosts($first: Int, $after: String, $search: String) {
+      posts(first: $first, after: $after, where: { search: $search }) {
         nodes {
           id
           title
           date
           slug
+          excerpt
           featuredImage { node { sourceUrl } }
           author { node { name } }
           postContent {
@@ -154,7 +158,7 @@ export async function GetAllPosts({ first = 10, after = null } = {}) {
       }
     }
   `;
-  return fetchPage(ALL_POSTS_QUERY, { first, after });
+  return fetchPage(ALL_POSTS_QUERY, { first, after, search });
 }
 
 export function GetKontactPages() {
