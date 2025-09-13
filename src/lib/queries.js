@@ -41,9 +41,8 @@ export const GET_PAGE_KONTAKT = `
     }
   }
 `;
-export const GET_PAGE_LIEDTEXTE = `
-  {
-  pages(where: {name: "liedtexte"}) {
+export const GET_PAGE_LIEDTEXTE = `query GetLiedtextePageAndPosts {
+  pages(where: { name: "liedtexte" }) {
     nodes {
       title
       status
@@ -53,25 +52,47 @@ export const GET_PAGE_LIEDTEXTE = `
       contentTypeName
       date
       id
-      isComment
-      isContentNode
-      isFrontPage
-      isPostsPage
-      featuredImageId
       featuredImage {
         node {
-          file(size: ARCHIVE_IMAGE)
-          filePath(size: ARCHIVE_IMAGE)
-          mediaItemUrl
+          sourceUrl
+          altText
           title
           uri
-          slug
+        }
+      }
+    }
+  }
+
+  liedtexte(first: 50) {
+    nodes {
+      id
+      title
+      date
+      slug
+      postContentLyrik {
+        introText
+        postContent {
+          content
+          icon
+          title
+        }
+        shortTitle
+      }
+      content
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          title
+          uri
         }
       }
     }
     pageInfo {
       hasNextPage
       hasPreviousPage
+      endCursor
+      startCursor
     }
   }
 }
