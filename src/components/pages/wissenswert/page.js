@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import { articles } from "@/lib/utils/utils";
 import ArticleCard from "@/components/ui/ArticleCard"; // Ensure the correct path
@@ -8,7 +8,53 @@ import { useRouter } from "next/navigation";
 export default function Wissenswert({ apiData }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [totalPosts, setTotalPosts] = useState(0);
   const route = useRouter();
+
+  // Initialize filtered posts when component mounts or apiData changes
+  useEffect(() => {
+    if (apiData?.apiData?.data?.posts?.nodes) {
+      setFilteredPosts(apiData.apiData.data.posts.nodes);
+      setTotalPosts(apiData.apiData.data.posts.nodes.length);
+    }
+  }, [apiData]);
+
+  // Reset to all posts when search is cleared
+  useEffect(() => {
+    if (search === "" && apiData?.apiData?.data?.posts?.nodes) {
+      setFilteredPosts(apiData.apiData.data.posts.nodes);
+    }
+  }, [search, apiData]);
+
+  // Handle search functionality
+  const handleSearch = () => {
+    if (!apiData?.apiData?.data?.posts?.nodes) return;
+
+    const searchTerm = search.toLowerCase().trim();
+    if (!searchTerm) {
+      // If search is empty, show all posts
+      setFilteredPosts(apiData.apiData.data.posts.nodes);
+      setTotalPosts(apiData.apiData.data.posts.nodes.length);
+      return;
+    }
+
+    // Filter posts based on search term in title and excerpt
+    const filtered = apiData.apiData.data.posts.nodes.filter((post) => {
+      const title = post.title?.toLowerCase() || "";
+      const excerpt = post.excerpt?.toLowerCase() || "";
+      const content = post.postContent?.introText?.toLowerCase() || "";
+
+      return (
+        title.includes(searchTerm) ||
+        excerpt.includes(searchTerm) ||
+        content.includes(searchTerm)
+      );
+    });
+
+    setFilteredPosts(filtered);
+    setTotalPosts(apiData.apiData.data.posts.nodes.length); // Keep total count the same
+  };
   return (
     <>
       <div className="mb-4">
@@ -68,14 +114,40 @@ export default function Wissenswert({ apiData }) {
           Diese Seite durchsuchen
         </Typography>
         <div className="flex lg:flex-nowrap md:flex-wrap gap-5">
-          <Input
-            type="text"
-            label="Suche..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            crossOrigin={undefined}
-          />
-          <Button color="red" onClick={() => alert(`Searching for: ${search}`)}>
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              label="Suche..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                // If search is cleared, reset to show all posts immediately
+                if (
+                  e.target.value === "" &&
+                  apiData?.apiData?.data?.posts?.nodes
+                ) {
+                  setFilteredPosts(apiData.apiData.data.posts.nodes);
+                }
+              }}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              crossOrigin={undefined}
+            />
+            {search && (
+              <button
+                onClick={() => {
+                  setSearch("");
+                  if (apiData?.apiData?.data?.posts?.nodes) {
+                    setFilteredPosts(apiData.apiData.data.posts.nodes);
+                  }
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          <Button color="red" onClick={handleSearch}>
             SUCHE
           </Button>
         </div>
@@ -83,25 +155,36 @@ export default function Wissenswert({ apiData }) {
 
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
-        Angezeigt werden 50 von 144 Beiträgen.
+        Angezeigt werden {filteredPosts.length} von {totalPosts} Beiträgen.
       </Typography>
 
       <div className="p-6 max-w-5xl mx-auto">
         {apiData ? (
           <>
-            {apiData.apiData.data.posts.nodes.map((post) => (
-              <div key={post.id}>
-                <ArticleCard
-                  image={post.featuredImage.node.sourceUrl}
-                  title={post.title}
-                  description={post.excerpt}
-                  slug={post.slug}
-                />
-                {post.id < apiData.apiData.data.posts.nodes.length - 1 && (
-                  <hr className="my-6 border-gray-300" />
-                )}
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((post) => (
+                <div key={post.id}>
+                  <ArticleCard
+                    image={post.featuredImage.node.sourceUrl}
+                    title={post.title}
+                    description={post.excerpt}
+                    slug={post.slug}
+                  />
+                  {post.id < filteredPosts.length - 1 && (
+                    <hr className="my-6 border-gray-300" />
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-10">
+                <Typography variant="h6" color="red">
+                  Keine Ergebnisse gefunden
+                </Typography>
+                <Typography variant="paragraph" color="gray" className="mt-2">
+                  Bitte versuchen Sie es mit einem anderen Suchbegriff.
+                </Typography>
               </div>
-            ))}
+            )}
           </>
         ) : (
           <>

@@ -3,109 +3,30 @@ import {
   GET_PAGE_DATENSCHUTZ,
   GET_PAGE_IMPRESSUM,
   GET_PAGE_KONTAKT,
-  GET_PAGE_LIEDTEXTE,
 } from "./queries";
 import { BASE_URL } from "./routes";
 
-// export async function fetchPage(query) {
-//   try {
-//     const res = await fetch(BASE_URL, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ query }),
-//     });
-
-//     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-//     return await res.json();
-//   } catch (error) {
-//     console.error("Error fetching pages:", error);
-//     return null;
-//   }
-// }
-async function fetchPage(query, variables = {}) {
+export async function fetchPage(query) {
   try {
     const res = await fetch(BASE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query, variables }),
+      body: JSON.stringify({ query }),
+      next: { revalidate: 60 },
     });
+
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
     return await res.json();
   } catch (error) {
     console.error("Error fetching pages:", error);
-    return [];
+    return null;
   }
 }
 
 export function GetCookiesPages() {
   return fetchPage(GET_PAGE_COOKIE);
 }
-// export function GetLiedTextePages() {
-//   return fetchPage(GET_PAGE_LIEDTEXTE);
-// }
-export function GetLiedTextePages(search = "") {
-  const SEARCH_QUERY = `
-    query GetLiedtextePageAndPosts($search: String) {
-      pages(where: { name: "liedtexte" }) {
-        nodes {
-          title
-          status
-          slug
-          uri
-          content
-          contentTypeName
-          date
-          id
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
-            }
-          }
-        }
-      }
-
-      liedtexte(first: 50, where: { search: $search }) {
-        nodes {
-          id
-          title
-          date
-          slug
-          postContentLyrik {
-            introText
-            postContent {
-              content
-              icon
-              title
-            }
-            shortTitle
-          }
-          content
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
-            }
-          }
-        }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          endCursor
-          startCursor
-        }
-      }
-    }
-  `;
-
-  return fetchPage(SEARCH_QUERY, { search });
-}
-
 // Dynamic page fetch
 export function GetDynamicCookiesPages(slug) {
   const DYNAMIC_PAGE_QUERY = `
@@ -177,32 +98,38 @@ export function GetImpressumPages() {
 
 export function GetAllPosts() {
   const ALL_POSTS_QUERY = `
-    {
-      posts(first: 50) {
-        nodes {
-          id
-          title
-          date
-          slug
-          featuredImage { node { sourceUrl } }
-          author {
-            node {
-              name
-            }
-          }
-          postContent {
-            introText
-            postOrder
-            shortTitle
-            shortsPostContent
+     query GetAllPosts($search: String) {
+    posts(first: 50, where: { search: $search }) {
+      nodes {
+        id
+        title
+        date
+        slug
+        featuredImage {
+          node {
+            sourceUrl
           }
         }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
+        author {
+          node {
+            name
+          }
+        }
+        postContent {
+          introText
+          postOrder
+          shortTitle
+          shortsPostContent
         }
       }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+        startCursor
+      }
     }
+  }
   `;
   return fetchPage(ALL_POSTS_QUERY);
 }
