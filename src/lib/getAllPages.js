@@ -12,7 +12,7 @@ export async function fetchPage(query) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query }),
-      next: { revalidate: 60 }
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -40,6 +40,53 @@ export function GetDynamicCookiesPages(slug) {
     }
   `;
   return fetchPage(DYNAMIC_PAGE_QUERY);
+}
+
+export async function GetDynamicContent(slug) {
+  try {
+    // Try to fetch as a post first
+    const postQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          content
+          featuredImage {
+            node {
+              sourceUrl
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.post) {
+      return {
+        type: "post",
+        data: postData,
+      };
+    }
+
+    // If post doesn't exist, try as a page
+    const pageData = await GetDynamicCookiesPages(slug);
+
+    if (pageData?.data?.page) {
+      return {
+        type: "page",
+        data: pageData,
+      };
+    }
+
+    // Neither post nor page exists
+    return null;
+  } catch (error) {
+    console.error("Error fetching dynamic content:", error);
+    return null;
+  }
 }
 export function GetDatenschutzPages() {
   return fetchPage(GET_PAGE_DATENSCHUTZ);
@@ -80,7 +127,6 @@ export function GetAllPosts() {
   `;
   return fetchPage(ALL_POSTS_QUERY);
 }
-
 
 export function GetKontactPages() {
   return fetchPage(GET_PAGE_KONTAKT);

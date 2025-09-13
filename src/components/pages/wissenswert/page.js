@@ -9,9 +9,6 @@ export default function Wissenswert({ apiData }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
   const route = useRouter();
-
-  console.log('66666666666',apiData);
-  
   return (
     <>
       <div className="mb-4">
@@ -92,8 +89,8 @@ export default function Wissenswert({ apiData }) {
       <div className="p-6 max-w-5xl mx-auto">
         {apiData ? (
           <>
-           {apiData.apiData.data.posts.nodes.map((post) => (
-             <div key={post.id}>
+            {apiData.apiData.data.posts.nodes.map((post) => (
+              <div key={post.id}>
                 <ArticleCard
                   image={post.featuredImage.node.sourceUrl}
                   title={post.title}
@@ -104,7 +101,7 @@ export default function Wissenswert({ apiData }) {
                   <hr className="my-6 border-gray-300" />
                 )}
               </div>
-          ))}
+            ))}
           </>
         ) : (
           <>

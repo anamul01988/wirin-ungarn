@@ -7,7 +7,7 @@ const ArticleCard = ({ image, title, description,slug }) => {
   const route = useRouter();
 
     const handleClick = (slug) => {
-    route.push(`/posts/${slug}`);
+    route.push(`/${slug}`);
   };
 
     const handleDetails = () => {
