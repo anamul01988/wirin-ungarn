@@ -12,6 +12,7 @@ export async function fetchPage(query) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query }),
+      next: { revalidate: 60 }
     });
 
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -50,29 +51,36 @@ export function GetImpressumPages() {
 
 export function GetAllPosts() {
   const ALL_POSTS_QUERY = `
-   {
-  posts (first: 50) {
-    nodes {
-      id
-      title
-      date
-      slug
-      featuredImage {
-        node {
-          sourceUrl
+    {
+      posts(first: 50) {
+        nodes {
+          id
+          title
+          date
+          slug
+          featuredImage { node { sourceUrl } }
+          author {
+            node {
+              name
+            }
+          }
+          postContent {
+            introText
+            postOrder
+            shortTitle
+            shortsPostContent
+          }
         }
-      }
-      author {
-        node {
-          name
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
         }
       }
     }
-  }
-}
   `;
   return fetchPage(ALL_POSTS_QUERY);
 }
+
 
 export function GetKontactPages() {
   return fetchPage(GET_PAGE_KONTAKT);
