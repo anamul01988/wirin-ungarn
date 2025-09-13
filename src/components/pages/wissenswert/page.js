@@ -4,13 +4,16 @@ import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import ArticleCard from "@/components/ui/ArticleCard";
 import { GetAllPosts } from "@/lib/getAllPages";
 import { useRouter } from "next/navigation";
+import { articles } from "@/lib/utils/utils";
 
 export default function Wissenswert({ initialData }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [totalPosts, setTotalPosts] = useState(0);
-  const [apiData, setApiData] = useState({ apiData: { ...initialData?.apiData } });
+  const [apiData, setApiData] = useState({
+    apiData: { ...initialData?.apiData },
+  });
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [cursors, setCursors] = useState([null]);
@@ -46,7 +49,7 @@ export default function Wissenswert({ initialData }) {
     }
 
     setIsSearching(true); // Mark that we're in search mode
-    
+
     try {
       // For a real search, we'd ideally make an API request with the search term
       // But for client-side filtering with the data we already have:
@@ -54,14 +57,14 @@ export default function Wissenswert({ initialData }) {
         const title = post.title?.toLowerCase() || "";
         const excerpt = post.excerpt?.toLowerCase() || "";
         const content = post.postContent?.introText?.toLowerCase() || "";
-  
+
         return (
           title.includes(searchTerm) ||
           excerpt.includes(searchTerm) ||
           content.includes(searchTerm)
         );
       });
-  
+
       setFilteredPosts(filtered);
       setTotalPosts(apiData.apiData.data.posts.nodes.length); // Keep total count the same
     } catch (error) {
@@ -72,21 +75,21 @@ export default function Wissenswert({ initialData }) {
   useEffect(() => {
     async function fetchPosts() {
       if (isSearching) return; // Don't fetch new data while searching
-      
+
       setLoading(true);
       const after = cursors[page];
       const searchTerm = search.trim() || ""; // Use search term if present
-      
+
       try {
-        const data = await GetAllPosts({ 
-          first: 10, 
-          after, 
-          search: searchTerm 
+        const data = await GetAllPosts({
+          first: 10,
+          after,
+          search: searchTerm,
         });
-        
+
         if (data) {
           setApiData({ apiData: data });
-          
+
           // Storing the next page's cursor if moving forward
           const nextCursor = data?.data?.posts?.pageInfo?.endCursor;
           if (nextCursor && cursors.length === page + 1) {
@@ -99,7 +102,7 @@ export default function Wissenswert({ initialData }) {
         setLoading(false);
       }
     }
-    
+
     fetchPosts();
   }, [page, isSearching, search]);
 
@@ -215,76 +218,115 @@ export default function Wissenswert({ initialData }) {
         Angezeigt werden {filteredPosts.length} von {totalPosts} Beiträgen.
       </Typography>
       <div className="p-6 max-w-5xl mx-auto">
-        {apiData?.apiData?.data?.posts?.nodes ? (
+        {!initialData ? (
           <>
-            {filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
-                <div key={post.id}>
-                  <ArticleCard
-                    image={post.featuredImage?.node?.sourceUrl}
-                    title={post.title}
-                    description={post.excerpt}
-                    slug={post.slug}
-                  />
-                  {post.id < filteredPosts.length - 1 && (
-                    <hr className="my-6 border-gray-300" />
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="text-center py-10">
-                <Typography variant="h6" color="red">
-                  Keine Ergebnisse gefunden
-                </Typography>
-                <Typography variant="paragraph" color="gray" className="mt-2">
-                  Bitte versuchen Sie es mit einem anderen Suchbegriff.
-                </Typography>
+            {" "}
+            {articles?.map((item, idx) => (
+              <div key={item.id}>
+                <ArticleCard
+                  image={item.image}
+                  title={item.title}
+                  description={item.description}
+                />
+                {/* Divider except last */}
+                {idx < articles.length - 1 && (
+                  <hr className="my-6 border-gray-300" />
+                )}
               </div>
-            )}
+            ))}
           </>
         ) : (
           <>
-            {loading ? (
-              <div className="text-center py-10">
-                <Typography variant="h6" color="blue">
-                  Wird geladen...
-                </Typography>
-              </div>
+            {apiData?.apiData?.data?.posts?.nodes ? (
+              <>
+                {filteredPosts.length > 0 ? (
+                  filteredPosts.map((post) => (
+                    <div key={post.id}>
+                      <ArticleCard
+                        image={post.featuredImage?.node?.sourceUrl}
+                        title={post.title}
+                        description={post.excerpt}
+                        slug={post.slug}
+                      />
+                      {post.id < filteredPosts.length - 1 && (
+                        <hr className="my-6 border-gray-300" />
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-10">
+                    <Typography variant="h6" color="red">
+                      Keine Ergebnisse gefunden
+                    </Typography>
+                    <Typography
+                      variant="paragraph"
+                      color="gray"
+                      className="mt-2"
+                    >
+                      Bitte versuchen Sie es mit einem anderen Suchbegriff.
+                    </Typography>
+                  </div>
+                )}
+              </>
             ) : (
-              <div className="text-center py-10">
-                <Typography variant="h6" color="red">
-                  Keine Beiträge verfügbar
-                </Typography>
-              </div>
+              <>
+                {loading ? (
+                  <div className="text-center py-10">
+                    <Typography variant="h6" color="blue">
+                      Wird geladen...
+                    </Typography>
+                  </div>
+                ) : (
+                  <div className="text-center py-10">
+                    <Typography variant="h6" color="red">
+                      Keine Beiträge verfügbar
+                    </Typography>
+                  </div>
+                )}
+              </>
             )}
           </>
         )}
       </div>
-      {/* Pagination Controls */}
-      <div className="flex justify-between mt-4">
-        <Button
-          color="red"
-          disabled={page === 0 || loading || isSearching}
-          onClick={handlePrev}
-        >
-          Previous
-        </Button>
-        <Button
-          color="red"
-          disabled={loading || isSearching || !apiData?.apiData?.data?.posts?.pageInfo?.hasNextPage}
-          onClick={handleNext}
-        >
-          Next
-        </Button>
-      </div>
-      
-      {/* Debug info - remove in production */}
-      {process.env.NODE_ENV !== 'production' && (
-        <div className="mt-2 text-xs text-gray-500">
-          <p>Page: {page}</p>
-          <p>Cursors: {JSON.stringify(cursors)}</p>
-          <p>Has Next Page: {apiData?.apiData?.data?.posts?.pageInfo?.hasNextPage ? 'Yes' : 'No'}</p>
-        </div>
+
+      {initialData && (
+        <>
+          {/* Pagination Controls */}
+          <div className="flex justify-between mt-4">
+            <Button
+              color="red"
+              disabled={page === 0 || loading || isSearching}
+              onClick={handlePrev}
+            >
+              Previous
+            </Button>
+            <Button
+              color="red"
+              disabled={
+                loading ||
+                isSearching ||
+                !apiData?.apiData?.data?.posts?.pageInfo?.hasNextPage
+              }
+              onClick={handleNext}
+            >
+              Next
+            </Button>
+          </div>
+
+          {/* Debug info - remove in production */}
+          {process.env.NODE_ENV !== "production" && (
+            <div className="mt-2 text-xs text-gray-500">
+              <p>Page: {page}</p>
+              <p>Cursors: {JSON.stringify(cursors)}</p>
+              <p>
+                Has Next Page:{" "}
+                {apiData?.apiData?.data?.posts?.pageInfo?.hasNextPage
+                  ? "Yes"
+                  : "No"}
+              </p>
+            </div>
+          )}
+        </>
       )}
     </>
   );
