@@ -45,6 +45,68 @@ export function GetDynamicCookiesPages(slug) {
   return fetchPage(DYNAMIC_PAGE_QUERY);
 }
 
+export function GetLiedTextePages(search = "") {
+  const SEARCH_QUERY = `
+    query GetLiedtextePageAndPosts($search: String) {
+      pages(where: { name: "liedtexte" }) {
+        nodes {
+          title
+          status
+          slug
+          uri
+          content
+          contentTypeName
+          date
+          id
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+
+      liedtexte(first: 50, where: { search: $search }) {
+        nodes {
+          id
+          title
+          date
+          slug
+          postContentLyrik {
+            introText
+            postContent {
+              content
+              icon
+              title
+            }
+            shortTitle
+          }
+          content
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { search });
+}
+
 export async function GetDynamicContent(slug) {
   try {
     // Try to fetch as a post first
