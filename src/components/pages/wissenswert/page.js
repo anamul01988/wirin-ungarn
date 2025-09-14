@@ -1,14 +1,119 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
-import { articles } from "@/lib/utils/utils";
-import ArticleCard from "@/components/ui/ArticleCard"; // Ensure the correct path
+import ArticleCard from "@/components/ui/ArticleCard";
+import { GetAllPosts } from "@/lib/getAllPages";
 import { useRouter } from "next/navigation";
+import { articles } from "@/lib/utils/utils";
 
-export default function Wissenswert({ apiData }) {
+export default function Wissenswert({ initialData }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [apiData, setApiData] = useState({
+    apiData: { ...initialData?.apiData },
+  });
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [cursors, setCursors] = useState([null]);
+  const [isSearching, setIsSearching] = useState(false);
   const route = useRouter();
+
+  // Initialize filtered posts when component mounts or apiData changes
+  useEffect(() => {
+    if (apiData?.apiData?.data?.posts?.nodes) {
+      setFilteredPosts(apiData.apiData.data.posts.nodes);
+      setTotalPosts(apiData.apiData.data.posts.nodes.length);
+    }
+  }, [apiData]);
+
+  // Reset to all posts when search is cleared
+  useEffect(() => {
+    if (search === "" && apiData?.apiData?.data?.posts?.nodes) {
+      setFilteredPosts(apiData.apiData.data.posts.nodes);
+    }
+  }, [search, apiData]);
+
+  // Handle search functionality
+  const handleSearch = async () => {
+    if (!apiData?.apiData?.data?.posts?.nodes) return;
+
+    const searchTerm = search.toLowerCase().trim();
+    if (!searchTerm) {
+      // If search is empty, show all posts and reset search state
+      setIsSearching(false);
+      setFilteredPosts(apiData.apiData.data.posts.nodes);
+      setTotalPosts(apiData.apiData.data.posts.nodes.length);
+      return;
+    }
+
+    setIsSearching(true); // Mark that we're in search mode
+
+    try {
+      // For a real search, we'd ideally make an API request with the search term
+      // But for client-side filtering with the data we already have:
+      const filtered = apiData.apiData.data.posts.nodes.filter((post) => {
+        const title = post.title?.toLowerCase() || "";
+        const excerpt = post.excerpt?.toLowerCase() || "";
+        const content = post.postContent?.introText?.toLowerCase() || "";
+
+        return (
+          title.includes(searchTerm) ||
+          excerpt.includes(searchTerm) ||
+          content.includes(searchTerm)
+        );
+      });
+
+      setFilteredPosts(filtered);
+      setTotalPosts(apiData.apiData.data.posts.nodes.length); // Keep total count the same
+    } catch (error) {
+      console.error("Error searching posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchPosts() {
+      if (isSearching) return; // Don't fetch new data while searching
+
+      setLoading(true);
+      const after = cursors[page];
+      const searchTerm = search.trim() || ""; // Use search term if present
+
+      try {
+        const data = await GetAllPosts({
+          first: 10,
+          after,
+          search: searchTerm,
+        });
+
+        if (data) {
+          setApiData({ apiData: data });
+
+          // Storing the next page's cursor if moving forward
+          const nextCursor = data?.data?.posts?.pageInfo?.endCursor;
+          if (nextCursor && cursors.length === page + 1) {
+            setCursors([...cursors, nextCursor]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPosts();
+  }, [page, isSearching, search]);
+
+  const handleNext = () => {
+    setPage(page + 1);
+  };
+
+  const handlePrev = () => {
+    if (page > 0) setPage(page - 1);
+  };
+
   return (
     <>
       <div className="mb-4">
@@ -68,14 +173,41 @@ export default function Wissenswert({ apiData }) {
           Diese Seite durchsuchen
         </Typography>
         <div className="flex lg:flex-nowrap md:flex-wrap gap-5">
-          <Input
-            type="text"
-            label="Suche..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            crossOrigin={undefined}
-          />
-          <Button color="red" onClick={() => alert(`Searching for: ${search}`)}>
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              label="Suche..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                // If search is cleared, reset to show all posts immediately
+                if (e.target.value === "") {
+                  setIsSearching(false);
+                  if (apiData?.apiData?.data?.posts?.nodes) {
+                    setFilteredPosts(apiData.apiData.data.posts.nodes);
+                  }
+                }
+              }}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              crossOrigin={undefined}
+            />
+            {search && (
+              <button
+                onClick={() => {
+                  setSearch("");
+                  setIsSearching(false); // Exit search mode
+                  if (apiData?.apiData?.data?.posts?.nodes) {
+                    setFilteredPosts(apiData.apiData.data.posts.nodes);
+                  }
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          <Button color="red" onClick={handleSearch}>
             SUCHE
           </Button>
         </div>
@@ -83,28 +215,12 @@ export default function Wissenswert({ apiData }) {
 
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
-        Angezeigt werden 50 von 144 Beiträgen.
+        Angezeigt werden {filteredPosts.length} von {totalPosts} Beiträgen.
       </Typography>
-
       <div className="p-6 max-w-5xl mx-auto">
-        {apiData ? (
+        {!initialData ? (
           <>
-            {apiData.apiData.data.posts.nodes.map((post) => (
-              <div key={post.id}>
-                <ArticleCard
-                  image={post.featuredImage.node.sourceUrl}
-                  title={post.title}
-                  description={post.excerpt}
-                  slug={post.slug}
-                />
-                {post.id < apiData.apiData.data.posts.nodes.length - 1 && (
-                  <hr className="my-6 border-gray-300" />
-                )}
-              </div>
-            ))}
-          </>
-        ) : (
-          <>
+            {" "}
             {articles?.map((item, idx) => (
               <div key={item.id}>
                 <ArticleCard
@@ -119,8 +235,99 @@ export default function Wissenswert({ apiData }) {
               </div>
             ))}
           </>
+        ) : (
+          <>
+            {apiData?.apiData?.data?.posts?.nodes ? (
+              <>
+                {filteredPosts.length > 0 ? (
+                  filteredPosts.map((post) => (
+                    <div key={post.id}>
+                      <ArticleCard
+                        image={post.featuredImage?.node?.sourceUrl}
+                        title={post.title}
+                        description={post.excerpt}
+                        slug={post.slug}
+                      />
+                      {post.id < filteredPosts.length - 1 && (
+                        <hr className="my-6 border-gray-300" />
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-10">
+                    <Typography variant="h6" color="red">
+                      Keine Ergebnisse gefunden
+                    </Typography>
+                    <Typography
+                      variant="paragraph"
+                      color="gray"
+                      className="mt-2"
+                    >
+                      Bitte versuchen Sie es mit einem anderen Suchbegriff.
+                    </Typography>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                {loading ? (
+                  <div className="text-center py-10">
+                    <Typography variant="h6" color="blue">
+                      Wird geladen...
+                    </Typography>
+                  </div>
+                ) : (
+                  <div className="text-center py-10">
+                    <Typography variant="h6" color="red">
+                      Keine Beiträge verfügbar
+                    </Typography>
+                  </div>
+                )}
+              </>
+            )}
+          </>
         )}
       </div>
+
+      {initialData && (
+        <>
+          {/* Pagination Controls */}
+          <div className="flex justify-between mt-4">
+            <Button
+              color="red"
+              disabled={page === 0 || loading || isSearching}
+              onClick={handlePrev}
+            >
+              Previous
+            </Button>
+            <Button
+              color="red"
+              disabled={
+                loading ||
+                isSearching ||
+                !apiData?.apiData?.data?.posts?.pageInfo?.hasNextPage
+              }
+              onClick={handleNext}
+            >
+              Next
+            </Button>
+          </div>
+
+          {/* Debug info - remove in production */}
+          {process.env.NODE_ENV !== "production" && (
+            <div className="mt-2 text-xs text-gray-500">
+              <p>Page: {page}</p>
+              <p>Cursors: {JSON.stringify(cursors)}</p>
+              <p>
+                Has Next Page:{" "}
+                {apiData?.apiData?.data?.posts?.pageInfo?.hasNextPage
+                  ? "Yes"
+                  : "No"}
+              </p>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }
