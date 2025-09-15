@@ -61,7 +61,7 @@ const LandingPage = () => {
           { title: "Sprache", text: "einfach lernen", slug: "sprache" },
           { title: "Ungarn", text: "Land & Leute", slug: "ungarn" },
           { title: "Community", text: "Gemeinsam", slug: "community" },
-          { title: "LiedTexte", text: "LiedTexte", slug: "liedtexte" },
+          // { title: "LiedTexte", text: "LiedTexte", slug: "liedtexte" },
         ].map((item, i) => (
           <div
             key={i}

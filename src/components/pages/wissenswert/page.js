@@ -5,6 +5,7 @@ import ArticleCard from "@/components/ui/ArticleCard";
 import { GetAllPosts } from "@/lib/getAllPages";
 import { useRouter } from "next/navigation";
 import { articles } from "@/lib/utils/utils";
+import { DefaultSpinner } from "@/components/_components/Spinners";
 
 export default function Wissenswert({ initialData }) {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
@@ -150,9 +151,9 @@ export default function Wissenswert({ initialData }) {
         <Checkbox
           color="red"
           checked={onlyHeadings}
-          onChange={(e) => setOnlyHeadings(e.target.checked)}
+          onChange={() => setOnlyHeadings(!onlyHeadings)}
           label="ausschließlich Überschriften anzeigen"
-          crossOrigin={undefined} // needed for React strict mode
+          crossOrigin={undefined}
         />
       </div>
 
@@ -245,8 +246,9 @@ export default function Wissenswert({ initialData }) {
                       <ArticleCard
                         image={post.featuredImage?.node?.sourceUrl}
                         title={post.title}
-                        description={post.excerpt}
+                        description={post.postContent?.shortsPostContent}
                         slug={post.slug}
+                        onlyHeadings={onlyHeadings}
                       />
                       {post.id < filteredPosts.length - 1 && (
                         <hr className="my-6 border-gray-300" />
@@ -273,7 +275,7 @@ export default function Wissenswert({ initialData }) {
                 {loading ? (
                   <div className="text-center py-10">
                     <Typography variant="h6" color="blue">
-                      Wird geladen...
+                      <DefaultSpinner />
                     </Typography>
                   </div>
                 ) : (
