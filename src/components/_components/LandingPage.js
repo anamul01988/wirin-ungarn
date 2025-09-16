@@ -57,25 +57,62 @@ const LandingPage = () => {
             title: "Information",
             text: "alles über Ungarn",
             slug: "information",
+            menu: [
+              "Einwanderungsguide",
+              "Rechtliche Grundlagen",
+              "Behördengänge",
+              "Steuersystem",
+              "Versicherungen",
+            ],
           },
-          { title: "Sprache", text: "einfach lernen", slug: "sprache" },
-          { title: "Ungarn", text: "Land & Leute", slug: "ungarn" },
-          { title: "Community", text: "Gemeinsam", slug: "community" },
-          // { title: "LiedTexte", text: "LiedTexte", slug: "liedtexte" },
+          {
+            title: "Sprache",
+            text: "einfach lernen",
+            slug: "sprache",
+            menu: [
+              "Ungarisch Grundkurs",
+              "Vokabeltrainer",
+              "Grammatik-Übungen",
+              "Sprachpartner finden",
+              "Online-Kurse",
+            ],
+          },
+          {
+            title: "Ungarn",
+            text: "Land & Leute",
+            slug: "ungarn",
+            menu: [
+              "Kultur & Traditionen",
+              "Städte & Regionen",
+              "Geschichte",
+              "Sehenswürdigkeiten",
+              "Ungarische Küche",
+            ],
+          },
+          {
+            title: "Community",
+            text: "Gemeinsam",
+            slug: "community",
+            menu: [
+              "Forum",
+              "Lokale Gruppen",
+              "Veranstaltungen",
+              "Kleinanzeigen",
+              "Expat-Treffen",
+            ],
+          },
         ].map((item, i) => (
-          <div
-            key={i}
-            className="nav-item"
-            onClick={(e) => {
-              route.push(`/${item.slug}`);
-              // e.currentTarget.style.transform = "scale(0.98)";
-              // setTimeout(() => {
-              //   e.currentTarget.style.transform = "scale(1)";
-              // }, 100);
-            }}
-          >
+          <div key={i} className="nav-item">
             <h3>{item.title}</h3>
             <p>{item.text}</p>
+
+            <div className="hover-menu">
+              {item.menu.map((menuItem, j) => (
+                <div key={j} className="menu-item">
+                  {menuItem}
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </nav>

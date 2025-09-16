@@ -121,14 +121,17 @@ body {
   z-index: 50;
 }
 
+/* globals.css or styles.css */
 .nav-item {
   background: #4a7c59;
   color: white;
-  padding: 18px;
+  padding: 14px 18px;
   margin-bottom: 14px;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s;
+  outline: 5px solid #ffffff;
+  position: relative;
 }
 
 .nav-item:hover {
@@ -138,7 +141,7 @@ body {
 .nav-item h3 {
   font-size: 19px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   text-transform: uppercase;
 }
 
@@ -147,12 +150,83 @@ body {
   opacity: 0.9;
 }
 
+/* Hover Menu Styles */
+.hover-menu {
+  position: absolute;
+  left: calc(100% + 20px);
+  top: 0;
+  background: #4a7c59;
+  border-radius: 8px;
+  outline: 5px solid #ffffff;
+  min-width: 250px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 100;
+}
+
+.nav-item:hover .hover-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Caret Arrow */
+.hover-menu::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 12px 12px 12px 0;
+  border-color: transparent #ffffff transparent transparent;
+}
+
+.hover-menu::after {
+  content: "";
+  position: absolute;
+  right: calc(100% + 5px);
+  top: 20px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 7px 7px 0;
+  border-color: transparent #4a7c59 transparent transparent;
+}
+
+.menu-item {
+  padding: 12px 20px;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.2s;
+  font-size: 14px;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background: #3d6b4a;
+}
+
+.menu-item:first-child:hover {
+  border-radius: 8px 8px 0 0;
+}
+
+.menu-item:last-child:hover {
+  border-radius: 0 0 8px 8px;
+}
+
 /* Main Logo */
 .main-logo {
   position: absolute;
   left: 20px;
   bottom: 15px;
-  z-index: 50;
+  z-index: 32;
   width: 410px;
 }
 
@@ -259,6 +333,17 @@ body {
   padding: 0px 8px;
 }
 
+@media screen and (max-width: 1366px) {
+  .ticker-container {
+    max-width: 500px;
+    margin-left: 0px;
+  }
+}
+@media screen and (max-width: 940px) {
+  .ht_text {
+    display: none;
+  }
+}
 .ticker-label {
   background-color: #c41e3a;
   color: white;

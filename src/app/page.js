@@ -22,7 +22,7 @@ export default function Home() {
             <span className="ht_text">06.08. Zsuzsanna</span> 📅
           </button>
           <button className="header-btn">
-            <span className="ht_text">meine Seiten-Historie</span>
+            <span className="ht_text">meine Seiten-Historie</span> 📅
           </button>
         </nav>
         <nav className="header-buttons">
