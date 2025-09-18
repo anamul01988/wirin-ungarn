@@ -8,6 +8,10 @@ import { BASE_URL } from "./routes";
 
 export async function fetchPage(query, variables = {}) {
   try {
+    // Add timeout to prevent hanging requests
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const res = await fetch(BASE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -16,14 +20,36 @@ export async function fetchPage(query, variables = {}) {
         variables,
       }),
       next: { revalidate: 60 },
+      signal: controller.signal,
     });
 
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    clearTimeout(timeoutId);
 
-    return await res.json();
+    if (!res.ok) {
+      if (res.status === 508) {
+        throw new Error("Server timeout - GraphQL query too complex");
+      }
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    // Check for GraphQL errors
+    if (data.errors) {
+      console.error("GraphQL errors:", data.errors);
+      throw new Error(
+        `GraphQL error: ${data.errors[0]?.message || "Unknown error"}`
+      );
+    }
+
+    return data;
   } catch (error) {
+    if (error.name === "AbortError") {
+      console.error("Request timeout:", error);
+      throw new Error("Request timeout - server took too long to respond");
+    }
     console.error("Error fetching pages:", error);
-    return null;
+    throw error; // Re-throw to let calling functions handle it
   }
 }
 
@@ -107,6 +133,247 @@ export function GetLiedTextePages(search = "") {
   return fetchPage(SEARCH_QUERY, { search });
 }
 
+export function GetSprachkursPages(search = "") {
+  const SEARCH_QUERY = `
+    query GetSprachkursPageAndPosts($search: String) {
+      pages(where: { name: "sprachkurs" }) {
+        nodes {
+          title
+          status
+          slug
+          uri
+          content
+          contentTypeName
+          date
+          id
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+
+      sprachkurs(first: 50, where: { search: $search }) {
+        nodes {
+          id
+          title
+          date
+          slug
+          content
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { search });
+}
+
+// Configuration for custom post types and their specific fields
+const CUSTOM_POST_TYPES_CONFIG = {
+  liedtexte: {
+    customFields: `
+      postContentLyrik {
+        introText
+        postContent {
+          content
+          icon
+          title
+        }
+        shortTitle
+      }
+    `,
+  },
+  sprachkurs: {
+    customFields: `
+      # Add specific fields for sprachkurs if needed
+    `,
+  },
+  // Add more custom post types here as needed
+  // example: {
+  //   customFields: `
+  //     customField1
+  //     customField2
+  //   `
+  // }
+};
+
+// Generic function to get all custom post types
+export async function getAllCustomPostTypes() {
+  // Return only the confirmed working custom post types
+  const workingCustomPostTypes = ["liedtexte", "sprachkurs"];
+
+  console.log("Returning working custom post types:", workingCustomPostTypes);
+  return workingCustomPostTypes;
+}
+
+// export async function GetDynamicContent(slug) {
+//   console.log("Fetching dynamic content for slug:", slug);
+
+//   try {
+//     // Use only the confirmed working custom post types
+//     // const workingCustomPostTypes = ["liedtexte", "sprachkurs"];
+
+//     // console.log("Trying working custom post types:", workingCustomPostTypes);
+
+//     // Try to fetch as a regular post first
+//     const postQuery = `
+//       query {
+//         post(id: "${slug}", idType: SLUG) {
+//           id
+//           title
+//           slug
+//           content
+//           featuredImage {
+//             node {
+//               sourceUrl
+//               altText
+//               title
+//             }
+//           }
+//           author {
+//             node {
+//               name
+//               slug
+//             }
+//           }
+//           categories {
+//             nodes {
+//               name
+//               slug
+//             }
+//           }
+//           tags {
+//             nodes {
+//               name
+//               slug
+//             }
+//           }
+//         }
+//       }
+//     `;
+
+//     const postData = await fetchPage(postQuery, { slug });
+
+//     if (postData?.data?.post) {
+//       return {
+//         type: "post",
+//         data: postData,
+//       };
+//     }
+
+//     // Try to fetch as a page
+//     const pageQuery = `
+//       query GetPageBySlug($slug: ID!) {
+//         page(id: $slug, idType: URI) {
+//           id
+//           title
+//           slug
+//           content
+//           excerpt
+//           date
+//           modified
+//           featuredImage {
+//             node {
+//               sourceUrl
+//               altText
+//               title
+//             }
+//           }
+//         }
+//       }
+//     `;
+
+//     const pageData = await fetchPage(pageQuery, { slug });
+
+//     if (pageData?.data?.page) {
+//       return {
+//         type: "page",
+//         data: pageData,
+//       };
+//     }
+
+//     // Try to fetch as custom post types using static queries
+//     for (const postType of workingCustomPostTypes) {
+//       try {
+//         let customPostQuery;
+
+//         if (postType === "sprachkurs") {
+//           customPostQuery = `
+//             query GetSprachkursBySlug($slug: ID!) {
+//               sprachkurs(id: $slug, idType: SLUG) {
+//                 id
+//                 title
+//                 slug
+//                 date
+//               }
+//             }
+//           `;
+//         } else if (postType === "liedtexte") {
+//           customPostQuery = `
+//             query GetLiedtexteBySlug($slug: ID!) {
+//               liedtexte(id: $slug, idType: SLUG) {
+//                 id
+//                 title
+//                 slug
+//                 date
+//                 postContentLyrik {
+//                   introText
+//                   postContent {
+//                     content
+//                     icon
+//                     title
+//                   }
+//                   shortTitle
+//                 }
+//               }
+//             }
+//           `;
+//         } else {
+//           continue; // Skip unknown post types
+//         }
+
+//         const customPostData = await fetchPage(customPostQuery, { slug });
+
+//         if (customPostData?.data?.[postType]) {
+//           console.log(`Found content in custom post type: ${postType}`);
+//           return {
+//             type: postType,
+//             data: customPostData,
+//           };
+//         }
+//       } catch (error) {
+//         // Continue to next post type if this one fails
+//         console.log(`Failed to fetch from ${postType}:`, error.message);
+//         continue;
+//       }
+//     }
+
+//     // No content found
+//     console.log(`No content found for slug: ${slug}`);
+//     return null;
+//   } catch (error) {
+//     console.error("Error fetching dynamic content:", error);
+//     return null;
+//   }
+// }
 export async function GetDynamicContent(slug) {
   // console.log("slug 222222222", slug);
   // if (slug === "einfach-lesen") {
@@ -252,4 +519,335 @@ export async function GetAllPosts({
 
 export function GetKontactPages() {
   return fetchPage(GET_PAGE_KONTAKT);
+}
+
+// Specific functions for confirmed working custom post types
+export async function getAllLiedtextePosts(options = {}) {
+  const { first = 50, after = null } = options;
+
+  const query = `
+    query GetAllLiedtexte($first: Int, $after: String) {
+      liedtexte(first: $first, after: $after) {
+        nodes {
+          id
+          title
+          date
+          slug
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  `;
+
+  try {
+    const data = await fetchPage(query, { first, after });
+    return {
+      success: true,
+      data: data?.data?.liedtexte || null,
+      postType: "liedtexte",
+    };
+  } catch (error) {
+    console.error("Error fetching liedtexte posts:", error);
+    return {
+      success: false,
+      data: null,
+      postType: "liedtexte",
+      error: error.message,
+    };
+  }
+}
+
+export async function getAllSprachkursPosts(options = {}) {
+  const { first = 50, after = null } = options;
+
+  const query = `
+    query GetAllSprachkurs($first: Int, $after: String) {
+      sprachkurs(first: $first, after: $after) {
+        nodes {
+          id
+          title
+          date
+          slug
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  `;
+
+  try {
+    const data = await fetchPage(query, { first, after });
+    return {
+      success: true,
+      data: data?.data?.sprachkurs || null,
+      postType: "sprachkurs",
+    };
+  } catch (error) {
+    console.error("Error fetching sprachkurs posts:", error);
+    return {
+      success: false,
+      data: null,
+      postType: "sprachkurs",
+      error: error.message,
+    };
+  }
+}
+
+// Generic function to get all posts from any custom post type
+export async function getAllCustomPostTypePosts(postType, options = {}) {
+  const { first = 50, after = null } = options;
+
+  try {
+    // Use the exact static query structure that you confirmed is working
+    const query = `
+      query GetCustomPostTypePosts($first: Int, $after: String) {
+        ${postType}(first: $first, after: $after) {
+          nodes {
+            id
+            title
+            date
+            slug
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    `;
+
+    const data = await fetchPage(query, {
+      first,
+      after,
+    });
+
+    return {
+      success: true,
+      data: data?.data?.[postType] || null,
+      postType,
+    };
+  } catch (error) {
+    console.error(`Error fetching ${postType} posts:`, error);
+    return {
+      success: false,
+      data: null,
+      postType,
+      error: error.message,
+    };
+  }
+}
+
+// Function to get all available custom post types with their post counts
+export async function getCustomPostTypesWithCounts() {
+  try {
+    const customPostTypes = await getAllCustomPostTypes();
+    const results = [];
+
+    for (const postType of customPostTypes) {
+      try {
+        const query = `
+          query GetCustomPostTypeCount($postType: String!) {
+            ${postType}(first: 1) {
+              pageInfo {
+                hasNextPage
+              }
+            }
+          }
+        `;
+
+        const data = await fetchPage(query);
+        results.push({
+          name: postType,
+          available: !!data?.data?.[postType],
+          hasPosts: data?.data?.[postType]?.pageInfo?.hasNextPage || false,
+        });
+      } catch (error) {
+        results.push({
+          name: postType,
+          available: false,
+          hasPosts: false,
+          error: error.message,
+        });
+      }
+    }
+
+    return results;
+  } catch (error) {
+    console.error("Error getting custom post types with counts:", error);
+    return [];
+  }
+}
+
+// Helper function to get all available content types
+export function getAvailableContentTypes() {
+  return {
+    posts: "Regular WordPress posts",
+    pages: "WordPress pages",
+    customPostTypes: Object.keys(CUSTOM_POST_TYPES_CONFIG),
+  };
+}
+
+// Helper function to add a new custom post type
+export function addCustomPostType(postType, customFields) {
+  CUSTOM_POST_TYPES_CONFIG[postType] = {
+    customFields: customFields,
+  };
+}
+
+// Example usage function - you can call this to add more custom post types
+export function initializeCustomPostTypes() {
+  // Add sprachkurs with specific fields if needed
+  addCustomPostType(
+    "sprachkurs",
+    `
+    # Add specific fields for sprachkurs here
+    # Example:
+    # courseLevel
+    # duration
+    # instructor
+  `
+  );
+
+  // Add more custom post types as needed
+  // addCustomPostType('anotherCustomType', `
+  //   field1
+  //   field2 {
+  //     subField1
+  //     subField2
+  //   }
+  // `);
+}
+
+// Function to get content by type and slug (alternative approach)
+export async function getContentByType(type, slug) {
+  try {
+    let query = "";
+    let variables = { slug };
+
+    switch (type) {
+      case "post":
+        query = `
+          query GetPostBySlug($slug: ID!) {
+            post(id: $slug, idType: SLUG) {
+              id
+              title
+              slug
+              content
+              excerpt
+              date
+              modified
+              featuredImage {
+                node {
+                  sourceUrl
+                  altText
+                  title
+                }
+              }
+              author {
+                node {
+                  name
+                  slug
+                }
+              }
+              categories {
+                nodes {
+                  name
+                  slug
+                }
+              }
+              tags {
+                nodes {
+                  name
+                  slug
+                }
+              }
+            }
+          }
+        `;
+        break;
+
+      case "page":
+        query = `
+          query GetPageBySlug($slug: ID!) {
+            page(id: $slug, idType: URI) {
+              id
+              title
+              slug
+              content
+              excerpt
+              date
+              modified
+              featuredImage {
+                node {
+                  sourceUrl
+                  altText
+                  title
+                }
+              }
+            }
+          }
+        `;
+        break;
+
+      default:
+        // Handle custom post types
+        const config = CUSTOM_POST_TYPES_CONFIG[type];
+        if (!config) {
+          throw new Error(`Unknown content type: ${type}`);
+        }
+
+        query = `
+          query GetCustomPostBySlug($slug: ID!) {
+            ${type}(id: $slug, idType: SLUG) {
+              id
+              title
+              slug
+              content
+              excerpt
+              date
+              modified
+              featuredImage {
+                node {
+                  sourceUrl
+                  altText
+                  title
+                }
+              }
+              ${config.customFields}
+            }
+          }
+        `;
+        break;
+    }
+
+    const data = await fetchPage(query, variables);
+
+    if (data?.data?.[type]) {
+      return {
+        type,
+        data,
+        success: true,
+      };
+    }
+
+    return {
+      type,
+      data: null,
+      success: false,
+      error: "Content not found",
+    };
+  } catch (error) {
+    console.error(`Error fetching ${type} content:`, error);
+    return {
+      type,
+      data: null,
+      success: false,
+      error: error.message,
+    };
+  }
 }
