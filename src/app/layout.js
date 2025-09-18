@@ -20,10 +20,10 @@ const geistMono = Geist_Mono({
 });
 
 const openSans = Open_Sans({
-  variable: "--font-open-sans",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700"], // choose the weights you need
 });
+
 
 const robotoCondensed = Roboto_Condensed({
   variable: "--font-roboto-condensed",
@@ -35,13 +35,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`
-          ${geistSans.variable} 
-          ${geistMono.variable} 
-          ${openSans.variable} 
-          ${robotoCondensed.variable} 
-          antialiased
-        `}
+        className={openSans.className}
       >
         <ThemeProvider>{children}</ThemeProvider>
       </body>

@@ -193,7 +193,7 @@ export const footerLinks = [
     key: "cookies",
     endpoint: "/cookie-richtlinie-eu",
   },
-  { title: "Über uns", key: "about", endpoint: "/ueber-uns" },
+  { title: "Über uns", key: "about", endpoint: "/uber-uns" },
   { title: "Impressum", key: "impressum", endpoint: "/impressum" },
   { title: "Soziale Projekte", key: "projekte", endpoint: "/soziale-projekte" },
   { title: "Kooperationen", key: "kooperationen", endpoint: "/kooperationen" },
