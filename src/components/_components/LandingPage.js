@@ -13,6 +13,15 @@ const LandingPage = () => {
   const handleOpen = () => setOpen(!open);
   const route = useRouter();
 
+  // Helper function to split array into chunks of specified size
+  const chunkArray = (array, chunkSize) => {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  };
+
   const routerServerGlobal = () => {
     setAllowImpressumModal(true);
     handleOpen();
@@ -136,15 +145,19 @@ const LandingPage = () => {
             <p>{item.text}</p>
 
             <div className="hover-menu">
-              {item.menu.map((menuItem, j) => (
-                <div
-                  key={j}
-                  className="menu-item cursor-pointer"
-                  {...(item.slug === "sprache"
-                    ? { onClick: () => route.push(menuItem.menuRoute) }
-                    : {})}
-                >
-                  {item.slug === "sprache" ? menuItem.menuName : menuItem}
+              {chunkArray(item.menu, 6).map((column, columnIndex) => (
+                <div key={columnIndex} className="menu-column">
+                  {column.map((menuItem, j) => (
+                    <div
+                      key={j}
+                      className="menu-item cursor-pointer"
+                      {...(item.slug === "sprache"
+                        ? { onClick: () => route.push(menuItem.menuRoute) }
+                        : {})}
+                    >
+                      {item.slug === "sprache" ? menuItem.menuName : menuItem}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>

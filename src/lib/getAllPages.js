@@ -11,9 +11,9 @@ export async function fetchPage(query, variables = {}) {
     const res = await fetch(BASE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         query,
-        variables 
+        variables,
       }),
       next: { revalidate: 60 },
     });
@@ -108,6 +108,29 @@ export function GetLiedTextePages(search = "") {
 }
 
 export async function GetDynamicContent(slug) {
+  // console.log("slug 222222222", slug);
+  // if (slug === "einfach-lesen") {
+  //   try {
+  //     const postQuery = `
+  //       query {
+  //         post(id: "cG9zdDoxOTQ5NQ==", idType: SLUG) {
+  //           id
+  //           title
+  //           slug
+  //           content
+  //           featuredImage {
+  //             node {
+  //               sourceUrl
+  //             }
+  //           }
+  //         }
+  //       }
+  //     `;
+  //   } catch (error) {
+  //     console.error("Error fetching dynamic content:", error);
+  //     return null;
+  //   }
+  // }
   try {
     // Try to fetch as a post first
     const postQuery = `
@@ -192,7 +215,11 @@ export function GetImpressumPages() {
 //   `;
 //   return fetchPage(ALL_POSTS_QUERY);
 // }
-export async function GetAllPosts({ first = 10, after = null, search = "" } = {}) {
+export async function GetAllPosts({
+  first = 10,
+  after = null,
+  search = "",
+} = {}) {
   const ALL_POSTS_QUERY = `
     query GetPosts($first: Int, $after: String, $search: String) {
       posts(first: $first, after: $after, where: { search: $search }) {

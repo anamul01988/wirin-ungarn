@@ -197,12 +197,40 @@ body {
   border-color: transparent #4a7c59 transparent transparent;
 }
 
+/* Menu Columns */
+.hover-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+  min-width: auto;
+}
+
+.menu-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.menu-column .menu-item {
+  padding: 8px 12px;
+  margin: 2px 0;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.menu-column .menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .menu-item {
-  padding: 12px 20px;
+  padding: 8px 12px;
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: background 0.2s;
   font-size: 14px;
+  border-radius: 4px;
+  margin: 2px 0;
 }
 
 .menu-item:last-child {
@@ -213,12 +241,13 @@ body {
   background: #3d6b4a;
 }
 
-.menu-item:first-child:hover {
-  border-radius: 8px 8px 0 0;
+/* Remove the first/last child border radius overrides for column layout */
+.menu-column .menu-item:first-child:hover {
+  border-radius: 4px;
 }
 
-.menu-item:last-child:hover {
-  border-radius: 0 0 8px 8px;
+.menu-column .menu-item:last-child:hover {
+  border-radius: 4px;
 }
 
 /* Main Logo */

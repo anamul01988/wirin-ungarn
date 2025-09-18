@@ -1,6 +1,6 @@
 import LandingPage from "@/components/_components/LandingPage";
-import HomePage from "@/components/pages/home/Home";
-import { Footer } from "@/components/ui";
+// import HomePage from "@/components/pages/home/Home";
+// import { Footer } from "@/components/ui";
 
 export default function Home() {
   return (

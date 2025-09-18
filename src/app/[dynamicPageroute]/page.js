@@ -12,7 +12,7 @@ export default async function DynamicPage({ params }) {
     if (!contentData) {
       notFound();
     }
-
+    // console.log("contentData 222222222", contentData);
     // Handle post content
     if (contentData.type === "post") {
       const { title, content, featuredImage } = contentData.data.data.post;
