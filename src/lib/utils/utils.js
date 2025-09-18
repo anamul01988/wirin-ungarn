@@ -184,7 +184,11 @@ export const footerLinks = [
   { title: "Datenschutz", key: "datenschutz", endpoint: "/datenschutz" },
   { title: "Ungarn-Insider", key: "insider", endpoint: "/ungarn-insider" },
   { title: "Transparenz", key: "transparenz", endpoint: "/transparenz" },
-  { title: "Neuigkeiten", key: "news", endpoint: "/news" },
+  {
+    title: "Neuigkeiten",
+    key: "news",
+    endpoint: "/neuigkeiten-bei-wir-in-ungarn",
+  },
   { title: "Kontakt", key: "kontakt", endpoint: "/kontakt" },
   { title: "WIU-Münzen", key: "wiu-muenzen", endpoint: "/wiu-muenzen" },
   { title: "Karriere", key: "karriere", endpoint: "/karriere" },
@@ -193,7 +197,7 @@ export const footerLinks = [
     key: "cookies",
     endpoint: "/cookie-richtlinie-eu",
   },
-  { title: "Über uns", key: "about", endpoint: "/ueber-uns" },
+  { title: "Über uns", key: "about", endpoint: "/uber-uns" },
   { title: "Impressum", key: "impressum", endpoint: "/impressum" },
   { title: "Soziale Projekte", key: "projekte", endpoint: "/soziale-projekte" },
   { title: "Kooperationen", key: "kooperationen", endpoint: "/kooperationen" },
@@ -593,15 +597,13 @@ export const kontactData = {
         {
           paragraph: {
             text: "Hey, schön, dass du uns schreiben möchtest!",
-            style:
-              "text-base  mb-4 text-gray-500 dark:text-gray-200",
+            style: "text-base  mb-4 text-gray-500 dark:text-gray-200",
           },
         },
         {
           paragraph: {
             text: "Bevor du uns kontaktierst, könnte es hilfreich sein, kurz auf unserer Seite zu stöbern. Viele Antworten auf gängige Fragen findest du vielleicht schon in unseren Blogposts, FAQs oder anderen Bereichen.",
-            style:
-              "text-base  mb-4 text-gray-500 dark:text-gray-200",
+            style: "text-base  mb-4 text-gray-500 dark:text-gray-200",
           },
         },
         {

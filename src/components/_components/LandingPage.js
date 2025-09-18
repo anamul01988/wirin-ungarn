@@ -12,6 +12,7 @@ const LandingPage = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
   const route = useRouter();
+
   const routerServerGlobal = () => {
     setAllowImpressumModal(true);
     handleOpen();
@@ -27,29 +28,6 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page__container">
-      {/* Header */}
-      {/* <header className="header">
-        <nav className="header-buttons">
-          <button className="header-btn">
-            <span className="ht_text">Währungsrechner</span> EUR ⇔ HUF
-          </button>
-          <button className="header-btn">
-            <span className="ht_text">06.08. Zsuzsanna</span> 📅
-          </button>
-          <button className="header-btn">
-            <span className="ht_text">meine Seiten-Historie</span>
-          </button>
-        </nav>
-        <nav className="header-buttons">
-          <button className="header-btn favorites">
-            <span className="ht_text">Favoriten</span> ❤
-          </button>
-          <button className="header-btn register">
-            <span className="ht_text">Anmelden</span>
-          </button>
-        </nav>
-      </header> */}
-
       {/* Sidebar */}
       <nav className="sidebar">
         {[
@@ -70,11 +48,62 @@ const LandingPage = () => {
             text: "einfach lernen",
             slug: "sprache",
             menu: [
-              "Ungarisch Grundkurs",
-              "Vokabeltrainer",
-              "Grammatik-Übungen",
-              "Sprachpartner finden",
-              "Online-Kurse",
+              {
+                menuName: "GRAMMATIKKURS",
+                menuRoute: "/sprachkurs",
+              },
+              {
+                menuName: "Kreuzworträtsel",
+                menuRoute: "/kreuzwortraetsel",
+              },
+              {
+                menuName: "Ungarisch-Impulse",
+                menuRoute: "/ungarisch-impulse",
+              },
+              {
+                menuName: "SuffixHero",
+                menuRoute: "/suffixhero",
+              },
+              {
+                menuName: "Zahlentrainer",
+                menuRoute: "/zahlentrainer",
+              },
+              {
+                menuName: "memória",
+                menuRoute: "/memoria",
+              },
+              {
+                menuName: "KulTour Ungarn",
+                menuRoute: "/kultour-ungarn",
+              },
+              {
+                menuName: "Vokabel-Entdecker",
+                menuRoute: "/ungarisch-lernen/vokabel-entdecker",
+              },
+              {
+                menuName: "aus dem Leben",
+                menuRoute: "/aus-dem-leben",
+              },
+              {
+                menuName: "EINFACH LESEN",
+                menuRoute: "/einfach-lesen",
+              },
+              {
+                menuName: "Wie spät ist es?",
+                menuRoute: "/wie-spaet-ist-es",
+              },
+              {
+                menuName: "Verbarium",
+                menuRoute: "/verbarium",
+              },
+              {
+                menuName: "Vokabel-Aufkleber",
+                menuRoute: "/vokabel-aufkleber",
+              },
+              {
+                menuName: "LIEDTEXTE",
+                menuRoute: "/liedtexte",
+              },
             ],
           },
           {
@@ -108,8 +137,14 @@ const LandingPage = () => {
 
             <div className="hover-menu">
               {item.menu.map((menuItem, j) => (
-                <div key={j} className="menu-item">
-                  {menuItem}
+                <div
+                  key={j}
+                  className="menu-item cursor-pointer"
+                  {...(item.slug === "sprache"
+                    ? { onClick: () => route.push(menuItem.menuRoute) }
+                    : {})}
+                >
+                  {item.slug === "sprache" ? menuItem.menuName : menuItem}
                 </div>
               ))}
             </div>
@@ -117,6 +152,7 @@ const LandingPage = () => {
         ))}
       </nav>
 
+      {/* Cards */}
       <div>
         <div className="cards cursor-pointer" onClick={routerServerGlobal}>
           Cards will go here...
@@ -198,6 +234,7 @@ const LandingPage = () => {
         </div>
       </footer>
 
+      {/* Impressum Modal */}
       {allowImpressumModal && (
         <ImpressumtModal
           open={open}
@@ -208,4 +245,5 @@ const LandingPage = () => {
     </div>
   );
 };
+
 export default LandingPage;
