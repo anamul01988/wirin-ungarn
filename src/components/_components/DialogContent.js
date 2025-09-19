@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import CollapsibleComment from "./CollapsibleComment";
+import ContactForm from "./ContactForm";
 export default function DialogContent({
   title,
   content,
@@ -25,6 +26,10 @@ export default function DialogContent({
   const navigateToHome = () => {
     route.back();
   };
+
+  // Check if content contains a contact form
+  const hasContactForm = content && content.includes("wpcf7-form");
+  const isContactPage = title && title.toLowerCase().includes("kontakt");
 
   return (
     <>
@@ -221,10 +226,15 @@ export default function DialogContent({
               {/* Collapsible Comment Component */}
               <CollapsibleComment />
             </div>
-            <div
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: content }}
-            />
+            {/* Render Contact Form or regular content */}
+            {hasContactForm && isContactPage ? (
+              <ContactForm formHtml={content} />
+            ) : (
+              <div
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            )}
           </div>
         </DialogBody>
       </Dialog>

@@ -8,7 +8,7 @@ export default async function DynamicPage({ params }) {
 
   try {
     const contentData = await GetDynamicContent(dynamicPageroute);
-
+    console.log("content data333eeeee333", contentData);
     if (!contentData) {
       notFound();
     }
