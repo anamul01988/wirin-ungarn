@@ -1,4 +1,6 @@
 import LandingPage from "@/components/_components/LandingPage";
+import { Navbar } from "@/components/ui";
+import { useAuth } from "../lib/auth-context";
 // import HomePage from "@/components/pages/home/Home";
 // import { Footer } from "@/components/ui";
 
@@ -13,6 +15,35 @@ export default function Home() {
       //   width: "100%",
       // }}
     >
+      {/* New Authentication Navbar */}
+      <Navbar>
+        <a
+          href="/"
+          className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Home
+        </a>
+        <a
+          href="/posts"
+          className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Posts
+        </a>
+        <a
+          href="/sprachkurs"
+          className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Sprachkurs
+        </a>
+        <a
+          href="/liedtexte"
+          className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Liedtexte
+        </a>
+      </Navbar>
+
+      {/* Original Header - keeping for reference */}
       <header className="header w-full">
         <nav className="header-buttons">
           <button className="header-btn">

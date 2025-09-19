@@ -7,7 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 
-import { ThemeProvider } from "@material-tailwind/react";
+import Providers from "../components/providers/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +24,6 @@ const openSans = Open_Sans({
   weight: ["400", "500", "600", "700"], // choose the weights you need
 });
 
-
 const robotoCondensed = Roboto_Condensed({
   variable: "--font-roboto-condensed",
   subsets: ["latin"],
@@ -34,10 +33,8 @@ const robotoCondensed = Roboto_Condensed({
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={openSans.className}
-      >
-        <ThemeProvider>{children}</ThemeProvider>
+      <body className={openSans.className}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
