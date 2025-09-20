@@ -21,8 +21,11 @@ export default function DialogContent({
 
   const route = useRouter();
   const handleOpen = () => setOpen(!open);
-  const handleClose = () => setOpen(false);
   const navigateToHome = () => {
+    route.push("/");
+  };
+
+  const navigateToPreviousPage = () => {
     route.back();
   };
 
@@ -66,7 +69,7 @@ export default function DialogContent({
           <div>
             <div className="mb-4">
               <button
-                onClick={navigateToHome}
+                onClick={navigateToPreviousPage}
                 className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
                 aria-label="Back"
               >
@@ -180,47 +183,50 @@ export default function DialogContent({
             )}
 
             {imageFeature && (
-              <div
-                className="w-full h-56 md:h-72 bg-cover bg-center rounded-lg mb-6"
-                style={{
-                  backgroundImage: `url('${imageFeature}')`,
-                }}
-                role="img"
-                aria-label={imageAlt || title}
-              ></div>
+              <>
+                <div
+                  className="w-full h-56 md:h-72 bg-cover bg-center rounded-lg mb-6"
+                  style={{
+                    backgroundImage: `url('${imageFeature}')`,
+                  }}
+                  role="img"
+                  aria-label={imageAlt || title}
+                ></div>
+
+                <div className="w-full max-w-3xl mx-auto p-6">
+                  {/* Next Lesson Button */}
+                  <div className="flex justify-end">
+                    <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
+                      <span className="mr-2 text-sm font-semibold">
+                        Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick
+                        in die Geschichte
+                      </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 text-[#436f4d]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t-2 border-[#436f4d] my-6"></div>
+
+                  {/* Collapsible Comment Component */}
+                  <CollapsibleComment />
+                </div>
+              </>
             )}
 
-            <div className="w-full max-w-3xl mx-auto p-6">
-              {/* Next Lesson Button */}
-              <div className="flex justify-end">
-                <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
-                  <span className="mr-2 text-sm font-semibold">
-                    Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick in
-                    die Geschichte
-                  </span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 text-[#436f4d]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Divider */}
-              <div className="border-t-2 border-[#436f4d] my-6"></div>
-
-              {/* Collapsible Comment Component */}
-              <CollapsibleComment />
-            </div>
             <div
               className="prose prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: content }}
