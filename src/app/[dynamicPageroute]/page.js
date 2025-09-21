@@ -4,11 +4,11 @@ import DialogContent from "@/components/_components/DialogContent";
 // import DialogContent from "@/components/DialogContent"; // client component
 
 export default async function DynamicPage({ params }) {
-  const { dynamicPageroute } = params;
+  const { dynamicPageroute } = await params;
 
   try {
     const contentData = await GetDynamicContent(dynamicPageroute);
-
+    console.log("content data333eeeee333", contentData);
     if (!contentData) {
       notFound();
     }

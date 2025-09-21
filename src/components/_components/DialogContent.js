@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import CollapsibleComment from "./CollapsibleComment";
+import ContactForm from "./ContactForm";
 export default function DialogContent({
   title,
   content,
@@ -28,6 +29,10 @@ export default function DialogContent({
   const navigateToPreviousPage = () => {
     route.back();
   };
+
+  // Check if content contains a contact form
+  const hasContactForm = content && content.includes("wpcf7-form");
+  const isContactPage = title && title.toLowerCase().includes("kontakt");
 
   return (
     <>
@@ -192,45 +197,49 @@ export default function DialogContent({
                   role="img"
                   aria-label={imageAlt || title}
                 ></div>
-
-                <div className="w-full max-w-3xl mx-auto p-6">
-                  {/* Next Lesson Button */}
-                  <div className="flex justify-end">
-                    <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
-                      <span className="mr-2 text-sm font-semibold">
-                        Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick
-                        in die Geschichte
-                      </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 text-[#436f4d]"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="border-t-2 border-[#436f4d] my-6"></div>
-
-                  {/* Collapsible Comment Component */}
-                  <CollapsibleComment />
-                </div>
               </>
             )}
 
-            <div
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: content }}
-            />
+            <div className="w-full max-w-3xl mx-auto p-6">
+              {/* Next Lesson Button */}
+              <div className="flex justify-end">
+                <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
+                  <span className="mr-2 text-sm font-semibold">
+                    Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick in
+                    die Geschichte
+                  </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 text-[#436f4d]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div className="border-t-2 border-[#436f4d] my-6"></div>
+
+              {/* Collapsible Comment Component */}
+              <CollapsibleComment />
+            </div>
+            {/* Render Contact Form or regular content */}
+            {hasContactForm && isContactPage ? (
+              <ContactForm formHtml={content} />
+            ) : (
+              <div
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            )}
           </div>
         </DialogBody>
       </Dialog>
