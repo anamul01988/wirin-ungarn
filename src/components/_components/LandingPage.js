@@ -45,11 +45,9 @@ const LandingPage = () => {
             text: "alles über Ungarn",
             slug: "information",
             menu: [
-              "Einwanderungsguide",
-              "Rechtliche Grundlagen",
-              "Behördengänge",
-              "Steuersystem",
-              "Versicherungen",
+              "WISSEENWERT",
+              "SHORTS",
+              "KATEGORIEN",
             ],
           },
           {
@@ -65,30 +63,38 @@ const LandingPage = () => {
                 menuName: "Kreuzworträtsel",
                 menuRoute: "/kreuzwortraetsel",
               },
-              {
-                menuName: "Ungarisch-Impulse",
-                menuRoute: "/ungarisch-impulse",
-              },
+              // {
+              //   menuName: "Ungarisch-Impulse",
+              //   menuRoute: "/ungarisch-impulse",
+              // },
               {
                 menuName: "SuffixHero",
                 menuRoute: "/suffixhero",
               },
-              {
-                menuName: "Zahlentrainer",
-                menuRoute: "/zahlentrainer",
-              },
+              // {
+              //   menuName: "Zahlentrainer",
+              //   menuRoute: "/zahlentrainer",
+              // },
               {
                 menuName: "memória",
                 menuRoute: "/memoria",
               },
               {
+                menuName: "Vokabel-Aufkleber",
+                menuRoute: "/vokabel-aufkleber",
+              },
+              {
+                menuName: "LIEDTEXTE",
+                menuRoute: "/liedtexte",
+              },
+              {
                 menuName: "KulTour Ungarn",
                 menuRoute: "/kultour-ungarn",
               },
-              {
-                menuName: "Vokabel-Entdecker",
-                menuRoute: "/ungarisch-lernen/vokabel-entdecker",
-              },
+              // {
+              //   menuName: "Vokabel-Entdecker",
+              //   menuRoute: "/ungarisch-lernen/vokabel-entdecker",
+              // },
               {
                 menuName: "aus dem Leben",
                 menuRoute: "/aus-dem-leben",
@@ -101,18 +107,11 @@ const LandingPage = () => {
                 menuName: "Wie spät ist es?",
                 menuRoute: "/wie-spaet-ist-es",
               },
-              {
-                menuName: "Verbarium",
-                menuRoute: "/verbarium",
-              },
-              {
-                menuName: "Vokabel-Aufkleber",
-                menuRoute: "/vokabel-aufkleber",
-              },
-              {
-                menuName: "LIEDTEXTE",
-                menuRoute: "/liedtexte",
-              },
+              // {
+              //   menuName: "Verbarium",
+              //   menuRoute: "/verbarium",
+              // },
+              
             ],
           },
           {
@@ -120,11 +119,8 @@ const LandingPage = () => {
             text: "Land & Leute",
             slug: "ungarn",
             menu: [
-              "Kultur & Traditionen",
-              "Städte & Regionen",
-              "Geschichte",
-              "Sehenswürdigkeiten",
-              "Ungarische Küche",
+              "kulinarische Seele",
+              "AUSFLUGSZIELE",
             ],
           },
           {
@@ -132,11 +128,11 @@ const LandingPage = () => {
             text: "Gemeinsam",
             slug: "community",
             menu: [
-              "Forum",
-              "Lokale Gruppen",
-              "Veranstaltungen",
-              "Kleinanzeigen",
-              "Expat-Treffen",
+              // "Forum",
+              // "Lokale Gruppen",
+              // "Veranstaltungen",
+              // "Kleinanzeigen",
+              // "Expat-Treffen",
             ],
           },
         ].map((item, i) => (

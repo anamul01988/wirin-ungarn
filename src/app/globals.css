@@ -201,13 +201,13 @@ body {
 }
 
 /* Menu Columns */
-.hover-menu {
+/* .hover-menu {
   display: flex;
   flex-direction: row;
   gap: 20px;
   padding: 20px;
   min-width: auto;
-}
+} */
 
 .menu-column {
   display: flex;
