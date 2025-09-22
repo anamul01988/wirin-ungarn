@@ -184,6 +184,58 @@ export function GetShortPages(first = 10, after = null) {
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
+export function GetKategorienPages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetShortsPosts($first: Int = 10, $after: String) {
+      pages(where: { name: "kategorien" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+      posts(
+        first: $first
+        after: $after
+        where: {
+         metaQuery: {
+          relation: AND
+          metaArray: [
+          {
+            key: "post_layout"
+            value: "topics"
+            compare: EQUAL_TO
+          }
+        ]
+      }
+    }
+      ) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            postId
+            link
+            date
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
 
 export function SearchAllPosts(search = "", first = 10, after = null) {
   const SEARCH_QUERY = `
