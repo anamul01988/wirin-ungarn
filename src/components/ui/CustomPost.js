@@ -14,7 +14,8 @@ const CustomPost = ({
   const route = useRouter();
 
   const handleClick = (slug) => {
-    route.push(`/${routePrefix}/${slug}`);
+    // route.push(`/${routePrefix}/${slug}`);
+    route.push(`${slug}`);
   };
   return (
     <div className="flex flex-col md:flex-row gap-4 pb-6">

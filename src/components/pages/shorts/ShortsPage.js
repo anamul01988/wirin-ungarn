@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { GetLiedTextePages, GetShortPages } from "@/lib/getAllPages";
+import {
+  GetLiedTextePages,
+  GetShortPages,
+  SearchAllPosts,
+} from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
@@ -9,6 +13,8 @@ const ShortsPage = () => {
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
   const [customPosts, setCustomPosts] = useState({});
+  const [searchResults, setSearchResults] = useState({});
+  const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
@@ -16,9 +22,15 @@ const ShortsPage = () => {
     hasNextPage: false,
     endCursor: null,
   });
+  const [searchPageInfo, setSearchPageInfo] = useState({
+    hasNextPage: false,
+    endCursor: null,
+  });
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const [loadingPage, setLoadingPage] = useState(false);
   const [pageHistory, setPageHistory] = useState([]); // Store page history for navigation
+  const [searchPageHistory, setSearchPageHistory] = useState([]); // Store search page history
 
   const loadPage = async (direction) => {
     if (loadingPage) return;
@@ -26,42 +38,97 @@ const ShortsPage = () => {
     setLoadingPage(true);
     try {
       let cursor = null;
-      let newPage = currentPage;
+      let newPage = isSearching ? searchCurrentPage : currentPage;
+      let currentPageInfo = isSearching ? searchPageInfo : pageInfo;
+      let currentHistory = isSearching ? searchPageHistory : pageHistory;
 
       if (direction === "next") {
-        cursor = pageInfo.endCursor;
-        newPage = currentPage + 1;
+        cursor = currentPageInfo.endCursor;
+        newPage = (isSearching ? searchCurrentPage : currentPage) + 1;
         // Store current page in history
-        setPageHistory((prev) => [
-          ...prev,
-          { page: currentPage, cursor: pageInfo.endCursor },
-        ]);
+        if (isSearching) {
+          setSearchPageHistory((prev) => [
+            ...prev,
+            { page: searchCurrentPage, cursor: searchPageInfo.endCursor },
+          ]);
+        } else {
+          setPageHistory((prev) => [
+            ...prev,
+            { page: currentPage, cursor: pageInfo.endCursor },
+          ]);
+        }
       } else if (direction === "previous") {
-        if (pageHistory.length > 0) {
+        if (currentHistory.length > 0) {
           // Get the previous page from history
-          const prevPage = pageHistory[pageHistory.length - 1];
+          const prevPage = currentHistory[currentHistory.length - 1];
           cursor = prevPage.cursor;
           newPage = prevPage.page;
           // Remove the last page from history
-          setPageHistory((prev) => prev.slice(0, -1));
+          if (isSearching) {
+            setSearchPageHistory((prev) => prev.slice(0, -1));
+          } else {
+            setPageHistory((prev) => prev.slice(0, -1));
+          }
         } else {
           setLoadingPage(false);
           return;
         }
       }
 
-      const apiData = await GetShortPages(10, cursor);
+      let apiData;
+      if (isSearching) {
+        apiData = await SearchAllPosts(search, 10, cursor);
+      } else {
+        apiData = await GetShortPages(10, cursor);
+      }
       const newPosts = apiData.data.posts;
 
       // Replace posts instead of appending
-      setCustomPosts(newPosts);
-      setPageInfo(newPosts.pageInfo);
-      setCurrentPage(newPage);
+      if (isSearching) {
+        setSearchResults(newPosts);
+        setSearchPageInfo(newPosts.pageInfo);
+        setSearchCurrentPage(newPage);
+      } else {
+        setCustomPosts(newPosts);
+        setPageInfo(newPosts.pageInfo);
+        setCurrentPage(newPage);
+      }
     } catch (err) {
       setError("Fehler beim Laden der Seite.");
     } finally {
       setLoadingPage(false);
     }
+  };
+
+  const handleSearch = async () => {
+    if (!search.trim()) {
+      // If search is empty, clear search and show original data
+      clearSearch();
+      return;
+    }
+
+    setFiltering(true);
+    setIsSearching(true);
+    try {
+      const apiData = await SearchAllPosts(search);
+      setSearchResults(apiData.data.posts);
+      setSearchPageInfo(apiData.data.posts.pageInfo);
+      setSearchCurrentPage(1);
+      setSearchPageHistory([]);
+    } catch (err) {
+      setError("Fehler beim Suchen.");
+    } finally {
+      setFiltering(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearch("");
+    setIsSearching(false);
+    setSearchResults({});
+    setSearchPageInfo({ hasNextPage: false, endCursor: null });
+    setSearchCurrentPage(1);
+    setSearchPageHistory([]);
   };
 
   useEffect(() => {
@@ -148,33 +215,30 @@ const ShortsPage = () => {
           {/* <Button color="red" onClick={() => alert(`Searching for: ${search}`)}>
             SUCHE
           </Button> */}
-          <Button
-            color="red"
-            onClick={async () => {
-              setFiltering(true);
-              try {
-                // For now, just reload all posts - search functionality can be added later
-                const apiData = await GetShortPages();
-                setCustomPosts(apiData.data.posts);
-                setPageInfo(apiData.data.posts.pageInfo);
-                setCurrentPage(1);
-                setPageHistory([]);
-              } catch (err) {
-                setError("Fehler beim Suchen.");
-              } finally {
-                setFiltering(false);
-              }
-            }}
-          >
-            SUCHE
+          <Button color="red" onClick={handleSearch} disabled={filtering}>
+            {filtering ? "Suche..." : "SUCHE"}
           </Button>
+          {isSearching && (
+            <Button color="gray" onClick={clearSearch} className="px-4 py-2">
+              Clear
+            </Button>
+          )}
         </div>
       </div>
 
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
-        Seite {currentPage} - Angezeigt werden {customPosts?.edges?.length || 0}{" "}
-        Beiträge.
+        {isSearching ? (
+          <>
+            Suchergebnisse - Seite {searchCurrentPage} - Angezeigt werden{" "}
+            {searchResults?.edges?.length || 0} Beiträge.
+          </>
+        ) : (
+          <>
+            Seite {currentPage} - Angezeigt werden{" "}
+            {customPosts?.edges?.length || 0} Beiträge.
+          </>
+        )}
       </Typography>
       <div className="p-6 max-w-5xl mx-auto">
         {filtering === true ? (
@@ -183,39 +247,52 @@ const ShortsPage = () => {
           </div>
         ) : (
           <>
-            {customPosts?.edges?.map((edge, idx) => (
-              <div key={edge.node.id}>
-                <CustomPost
-                  title={edge.node?.title}
-                  description={edge.node.postContentLyrik?.introText}
-                  onlyHeadings={onlyHeadings}
-                  slug={edge.node.slug}
-                  routePrefix="shorts"
-                />
-                {/* Divider except last */}
-                {!onlyHeadings && idx < customPosts?.edges?.length - 1 && (
-                  <hr className="my-6 border-gray-300" />
-                )}
-              </div>
-            ))}
+            {(isSearching ? searchResults?.edges : customPosts?.edges)?.map(
+              (edge, idx) => {
+                const posts = isSearching ? searchResults : customPosts;
+                return (
+                  <div key={edge.node.id}>
+                    <CustomPost
+                      title={edge.node?.title}
+                      description={edge.node.postContentLyrik?.introText}
+                      onlyHeadings={onlyHeadings}
+                      slug={edge.node.slug}
+                      routePrefix="shorts"
+                    />
+                    {/* Divider except last */}
+                    {!onlyHeadings && idx < posts?.edges?.length - 1 && (
+                      <hr className="my-6 border-gray-300" />
+                    )}
+                  </div>
+                );
+              }
+            )}
 
             {/* Pagination Buttons */}
             <div className="flex justify-center gap-4 mt-8">
               <Button
                 color="red"
                 onClick={() => loadPage("previous")}
-                disabled={pageHistory.length === 0 || loadingPage}
+                disabled={
+                  (isSearching
+                    ? searchPageHistory.length === 0
+                    : pageHistory.length === 0) || loadingPage
+                }
                 className="px-6 py-2"
               >
-                {loadingPage ? "Lade..." : "Vorherige"}
+                {loadingPage ? "Lade..." : "Previous"}
               </Button>
               <Button
                 color="red"
                 onClick={() => loadPage("next")}
-                disabled={!pageInfo.hasNextPage || loadingPage}
+                disabled={
+                  !(isSearching
+                    ? searchPageInfo.hasNextPage
+                    : pageInfo.hasNextPage) || loadingPage
+                }
                 className="px-6 py-2"
               >
-                {loadingPage ? "Lade..." : "Nächste"}
+                {loadingPage ? "Lade..." : "Next"}
               </Button>
             </div>
           </>
