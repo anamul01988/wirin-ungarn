@@ -3,11 +3,18 @@
 import { Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 
-const CustomPost = ({ image = "", title, description, slug, onlyHeadings }) => {
+const CustomPost = ({
+  image = "",
+  title,
+  description,
+  slug,
+  onlyHeadings,
+  routePrefix = "liedtexte",
+}) => {
   const route = useRouter();
 
   const handleClick = (slug) => {
-    route.push(`/liedtexte/${slug}`);
+    route.push(`/${routePrefix}/${slug}`);
   };
   return (
     <div className="flex flex-col md:flex-row gap-4 pb-6">

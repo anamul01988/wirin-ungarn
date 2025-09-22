@@ -1,9 +1,10 @@
+"use client";
 import React, { useEffect, useState } from "react";
-import { GetShortPages } from "@/lib/getAllPages";
+import { GetLiedTextePages, GetShortPages } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
-const ShortPage = () => {
+const ShortsPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
@@ -11,14 +12,69 @@ const ShortPage = () => {
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
+  const [pageInfo, setPageInfo] = useState({
+    hasNextPage: false,
+    endCursor: null,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [pageHistory, setPageHistory] = useState([]); // Store page history for navigation
+
+  const loadPage = async (direction) => {
+    if (loadingPage) return;
+
+    setLoadingPage(true);
+    try {
+      let cursor = null;
+      let newPage = currentPage;
+
+      if (direction === "next") {
+        cursor = pageInfo.endCursor;
+        newPage = currentPage + 1;
+        // Store current page in history
+        setPageHistory((prev) => [
+          ...prev,
+          { page: currentPage, cursor: pageInfo.endCursor },
+        ]);
+      } else if (direction === "previous") {
+        if (pageHistory.length > 0) {
+          // Get the previous page from history
+          const prevPage = pageHistory[pageHistory.length - 1];
+          cursor = prevPage.cursor;
+          newPage = prevPage.page;
+          // Remove the last page from history
+          setPageHistory((prev) => prev.slice(0, -1));
+        } else {
+          setLoadingPage(false);
+          return;
+        }
+      }
+
+      const apiData = await GetShortPages(10, cursor);
+      const newPosts = apiData.data.posts;
+
+      // Replace posts instead of appending
+      setCustomPosts(newPosts);
+      setPageInfo(newPosts.pageInfo);
+      setCurrentPage(newPage);
+    } catch (err) {
+      setError("Fehler beim Laden der Seite.");
+    } finally {
+      setLoadingPage(false);
+    }
+  };
 
   useEffect(() => {
     async function fetchData() {
       try {
         const apiData = await GetShortPages();
-        // console.log("LiedTextePage data:", apiData.data.liedtexte);
+        console.log("shorts data:", apiData.data.posts);
+        console.log("shorts data: alll 222222", apiData);
         setCookieData(apiData);
-        setCustomPosts(apiData.data.short);
+        setCustomPosts(apiData.data.posts);
+        setPageInfo(apiData.data.posts.pageInfo);
+        setCurrentPage(1);
+        setPageHistory([]);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");
       } finally {
@@ -37,7 +93,7 @@ const ShortPage = () => {
   if (error) return <div>{error}</div>;
   // if (!cookieData || !cookieData.data || !cookieData.data.page)
   //   return <div>Keine Cookie-Daten gefunden.</div>;
-  console.log("LiedTextePage data: cookieData 2222:", customPosts);
+  console.log("shorts data: cookieData 2222:", customPosts);
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
 
   return (
@@ -97,8 +153,12 @@ const ShortPage = () => {
             onClick={async () => {
               setFiltering(true);
               try {
-                const apiData = await GetLiedTextePages(search);
-                setCustomPosts(apiData.data.liedtexte);
+                // For now, just reload all posts - search functionality can be added later
+                const apiData = await GetShortPages();
+                setCustomPosts(apiData.data.posts);
+                setPageInfo(apiData.data.posts.pageInfo);
+                setCurrentPage(1);
+                setPageHistory([]);
               } catch (err) {
                 setError("Fehler beim Suchen.");
               } finally {
@@ -113,7 +173,8 @@ const ShortPage = () => {
 
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
-        Angezeigt werden 50 von 144 Beiträgen.
+        Seite {currentPage} - Angezeigt werden {customPosts?.edges?.length || 0}{" "}
+        Beiträge.
       </Typography>
       <div className="p-6 max-w-5xl mx-auto">
         {filtering === true ? (
@@ -122,21 +183,41 @@ const ShortPage = () => {
           </div>
         ) : (
           <>
-            {" "}
-            {customPosts?.nodes?.map((item, idx) => (
-              <div key={item.id}>
+            {customPosts?.edges?.map((edge, idx) => (
+              <div key={edge.node.id}>
                 <CustomPost
-                  title={item?.title}
-                  description={item.postContentLyrik?.introText}
+                  title={edge.node?.title}
+                  description={edge.node.postContentLyrik?.introText}
                   onlyHeadings={onlyHeadings}
-                  slug={item.slug}
+                  slug={edge.node.slug}
+                  routePrefix="shorts"
                 />
                 {/* Divider except last */}
-                {!onlyHeadings && idx < customPosts?.nodes?.length - 1 && (
+                {!onlyHeadings && idx < customPosts?.edges?.length - 1 && (
                   <hr className="my-6 border-gray-300" />
                 )}
               </div>
             ))}
+
+            {/* Pagination Buttons */}
+            <div className="flex justify-center gap-4 mt-8">
+              <Button
+                color="red"
+                onClick={() => loadPage("previous")}
+                disabled={pageHistory.length === 0 || loadingPage}
+                className="px-6 py-2"
+              >
+                {loadingPage ? "Lade..." : "Vorherige"}
+              </Button>
+              <Button
+                color="red"
+                onClick={() => loadPage("next")}
+                disabled={!pageInfo.hasNextPage || loadingPage}
+                className="px-6 py-2"
+              >
+                {loadingPage ? "Lade..." : "Nächste"}
+              </Button>
+            </div>
           </>
         )}
       </div>
@@ -144,4 +225,4 @@ const ShortPage = () => {
   );
 };
 
-export default ShortPage;
+export default ShortsPage;
