@@ -131,10 +131,10 @@ const LandingPage = () => {
               //   menuName: "Land & Leute",
               //   menuRoute: "/land-leute",
               // },
-              {
-                menuName: "Ungarn",
-                menuRoute: "/ungarn-insider",
-              },
+              // {
+              //   menuName: "Ungarn",
+              //   menuRoute: "/ungarn-insider",
+              // },
               {
                 menuName: "kulinarische Seele",
                 menuRoute: "/kulinarische-seele",
@@ -150,10 +150,10 @@ const LandingPage = () => {
             text: "Gemeinsam",
             slug: "community",
             menu: [
-              {
-                menuName: "Gemeinsam",
-                menuRoute: "/gemeinsam",
-              },
+              // {
+              //   menuName: "Gemeinsam",
+              //   menuRoute: "/gemeinsam",
+              // },
             ],
           },
         ].map((item, i) => (

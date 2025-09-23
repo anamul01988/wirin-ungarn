@@ -237,10 +237,11 @@ export function GetKategorienPages(first = 10, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-export function SearchAllPosts(search = "", first = 10, after = null) {
+export function GetAusflugszielePages(first = 10, after = null) {
   const SEARCH_QUERY = `
-    query SearchAllPosts($search: String, $first: Int = 10, $after: String) {
-      pages(where: { name: "shorts" }) {
+    query GetAusflugsziele($first: Int = 10, $after: String) {
+      # Get the ausflugsziele Page
+      pages(where: { title: "ausflugsziele" }) {
         nodes {
           id
           title
@@ -250,6 +251,73 @@ export function SearchAllPosts(search = "", first = 10, after = null) {
           status
         }
       }
+
+      # Get Listings CPT
+      listings(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            date
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+export function GetKulinarischeSeelePages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetKulinarischeSeelePages($first: Int = 10, $after: String) {
+      # Get the "kulinarische" Page
+      pages(where: { title: "Ungarns kulinarische Seele" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+
+      # Get Listings CPT
+      recipes(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            date
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+export function SearchAllPosts(search = "", first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query SearchAllPosts($search: String, $first: Int = 10, $after: String) {
       posts(
         first: $first
         after: $after
