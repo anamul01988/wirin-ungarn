@@ -44,11 +44,7 @@ const LandingPage = () => {
             title: "Information",
             text: "alles über Ungarn",
             slug: "information",
-            menu: [
-              "WISSEENWERT",
-              "SHORTS",
-              "KATEGORIEN",
-            ],
+            menu: ["WISSEENWERT", "SHORTS", "KATEGORIEN"],
           },
           {
             title: "Sprache",
@@ -111,52 +107,49 @@ const LandingPage = () => {
               //   menuName: "Verbarium",
               //   menuRoute: "/verbarium",
               // },
-              
             ],
           },
           {
             title: "Ungarn",
             text: "Land & Leute",
             slug: "ungarn",
-            menu: [
-              "kulinarische Seele",
-              "AUSFLUGSZIELE",
-            ],
+            menu: ["kulinarische Seele", "AUSFLUGSZIELE"],
           },
           {
             title: "Community",
             text: "Gemeinsam",
             slug: "community",
             menu: [
-              // "Forum",
-              // "Lokale Gruppen",
-              // "Veranstaltungen",
-              // "Kleinanzeigen",
-              // "Expat-Treffen",
+              "Forum",
+              "Lokale Gruppen",
+              "Veranstaltungen",
+              "Kleinanzeigen",
+              "Expat-Treffen",
             ],
           },
         ].map((item, i) => (
           <div key={i} className="nav-item">
             <h3>{item.title}</h3>
             <p>{item.text}</p>
-
-            <div className="hover-menu">
-              {chunkArray(item.menu, 6).map((column, columnIndex) => (
-                <div key={columnIndex} className="menu-column">
-                  {column.map((menuItem, j) => (
-                    <div
-                      key={j}
-                      className="menu-item cursor-pointer"
-                      {...(item.slug === "sprache"
-                        ? { onClick: () => route.push(menuItem.menuRoute) }
-                        : {})}
-                    >
-                      {item.slug === "sprache" ? menuItem.menuName : menuItem}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
+            {item.slug !== "community" && (
+              <div className="hover-menu">
+                {chunkArray(item.menu, 6).map((column, columnIndex) => (
+                  <div key={columnIndex} className="menu-column">
+                    {column.map((menuItem, j) => (
+                      <div
+                        key={j}
+                        className="menu-item cursor-pointer"
+                        {...(item.slug === "sprache"
+                          ? { onClick: () => route.push(menuItem.menuRoute) }
+                          : {})}
+                      >
+                        {item.slug === "sprache" ? menuItem.menuName : menuItem}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </nav>
