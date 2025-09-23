@@ -275,7 +275,115 @@ export function GetAusflugszielePages(first = 10, after = null) {
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
+// export function GetSprachkursPages(search = "") {
+//   const SEARCH_QUERY = `
+//       query GetSprachkursPageAndPosts($search: String) {
+//         pages(where: { name: "sprachkurs" }) {
+//           nodes {
+//             title
+//             status
+//             slug
+//             uri
+//             content
+//             contentTypeName
+//             date
+//             id
+//             featuredImage {
+//               node {
+//                 sourceUrl
+//                 altText
+//                 title
+//                 uri
+//               }
+//             }
+//           }
+//         }
 
+//         sprachkurs(first: 50, where: { search: $search }) {
+//           nodes {
+//             id
+//             title
+//             date
+//             slug
+//             content
+//             featuredImage {
+//               node {
+//                 sourceUrl
+//                 altText
+//                 title
+//                 uri
+//               }
+//             }
+//           }
+//           pageInfo {
+//             hasNextPage
+//             hasPreviousPage
+//             endCursor
+//             startCursor
+//           }
+//         }
+//       }
+//     `;
+
+//   return fetchPage(SEARCH_QUERY, { search });
+// }
+export function GetAllSprachkursPages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllSprachkursPages($first: Int = 10, $after: String) {
+      # Get the "kulinarische" Page
+      pages(where: { name: "sprachkurs" }) {
+        nodes {
+           title
+            status
+            slug
+            uri
+            content
+            contentTypeName
+            date
+            id
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+        }
+      }
+
+      # Get Listings CPT
+      sprachkurs(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            date
+            slug
+            content
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
 export function GetKulinarischeSeelePages(first = 10, after = null) {
   const SEARCH_QUERY = `
     query GetKulinarischeSeelePages($first: Int = 10, $after: String) {
