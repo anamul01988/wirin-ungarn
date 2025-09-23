@@ -45,9 +45,18 @@ const LandingPage = () => {
             text: "alles über Ungarn",
             slug: "information",
             menu: [
-              "WISSEENWERT",
-              "SHORTS",
-              "KATEGORIEN",
+              {
+                menuName: "WISSEENWERT",
+                menuRoute: "/wissenswert",
+              },
+              {
+                menuName: "SHORTS",
+                menuRoute: "/shorts",
+              },
+              {
+                menuName: "KATEGORIEN",
+                menuRoute: "/kategorien",
+              },
             ],
           },
           {
@@ -119,8 +128,22 @@ const LandingPage = () => {
             text: "Land & Leute",
             slug: "ungarn",
             menu: [
-              "kulinarische Seele",
-              "AUSFLUGSZIELE",
+              // {
+              //   menuName: "Land & Leute",
+              //   menuRoute: "/land-leute",
+              // },
+              // {
+              //   menuName: "Ungarn",
+              //   menuRoute: "/ungarn-insider",
+              // },
+              {
+                menuName: "kulinarische Seele",
+                menuRoute: "/kulinarische-seele",
+              },
+              {
+                menuName: "AUSFLUGSZIELE",
+                menuRoute: "/ausflugsziele",
+              },
             ],
           },
           {
@@ -128,11 +151,10 @@ const LandingPage = () => {
             text: "Gemeinsam",
             slug: "community",
             menu: [
-              // "Forum",
-              // "Lokale Gruppen",
-              // "Veranstaltungen",
-              // "Kleinanzeigen",
-              // "Expat-Treffen",
+              // {
+              //   menuName: "Gemeinsam",
+              //   menuRoute: "/gemeinsam",
+              // },
             ],
           },
         ].map((item, i) => (
@@ -149,9 +171,11 @@ const LandingPage = () => {
                       className="menu-item cursor-pointer"
                       {...(item.slug === "sprache"
                         ? { onClick: () => route.push(menuItem.menuRoute) }
-                        : {})}
+                        : { onClick: () => route.push(menuItem.menuRoute) })}
                     >
-                      {item.slug === "sprache" ? menuItem.menuName : menuItem}
+                      {item.slug === "sprache"
+                        ? menuItem.menuName
+                        : menuItem.menuName}
                     </div>
                   ))}
                 </div>

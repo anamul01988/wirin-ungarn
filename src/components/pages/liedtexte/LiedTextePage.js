@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { GetLiedTextePages } from "@/lib/getAllPages";
+import { GetShortPages } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
-const LiedTextePage = () => {
+const ShortPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
@@ -15,10 +15,10 @@ const LiedTextePage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const apiData = await GetLiedTextePages();
+        const apiData = await GetShortPages();
         // console.log("LiedTextePage data:", apiData.data.liedtexte);
         setCookieData(apiData);
-        setCustomPosts(apiData.data.liedtexte);
+        setCustomPosts(apiData.data.short);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");
       } finally {
@@ -144,4 +144,4 @@ const LiedTextePage = () => {
   );
 };
 
-export default LiedTextePage;
+export default ShortPage;

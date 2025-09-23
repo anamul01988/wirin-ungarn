@@ -1,1 +1,1 @@
-export const BASE_URL= process.env.BASE_URL || "https://151.hu/ruf/graphql";
+export const BASE_URL = "https://wir-in-ungarn.hu/graphql";
