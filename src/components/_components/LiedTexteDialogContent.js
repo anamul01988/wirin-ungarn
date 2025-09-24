@@ -16,7 +16,10 @@ export default function LiedTexteDialogContent({
   const [open, setOpen] = useState(true);
   const route = useRouter();
   const handleOpen = () => setOpen(!open);
-  const handleClose = () => setOpen(false);
+   const handleClose = () => {
+    setOpen(false);
+    route.push("/");
+  };
   const navigateToHome = () => {
     route.push("/");
   };
@@ -31,31 +34,62 @@ export default function LiedTexteDialogContent({
         className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
-        {open && (
-          <div
-            className="absolute flex flex-col space-y-3 z-50"
-            style={{ top: "-0.5rem", right: "-8rem" }}
-          >
-            {/* Cross Icon */}
-            <button onClick={navigateToHome} className="p-4 rounded-full">
-              <img
-                src="/assets/icons/close.png"
-                alt="Close Icon"
-                className="w-4rem h-3rem"
-              />
-            </button>
+         {open && (
+          <>
+            {/* Top icons (Cross, Love, Layers) */}
+            <div
+              className="absolute flex flex-col space-y-3 z-50"
+              style={{
+                top: "-0.5rem",
+                right: "-8rem",
+              }}
+            >
+              {/* Cross Icon */}
+              <button onClick={handleClose} className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/close.png"
+                  alt="Close Icon"
+                  className="w-4rem h-3rem"
+                />
+              </button>
 
-            {/* Love Icon */}
-            <button className="p-4 rounded-full">
-              <img
-                src="/assets/icons/favorit_e.png"
-                alt="Love Icon"
-                className="w-3rem h-2rem"
-              />
-            </button>
-          </div>
+              {/* Love Icon */}
+              <button className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/favorit_e.png"
+                  alt="Love Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+
+              {/* Layers Icon */}
+              <button className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/layers.png"
+                  alt="Layers Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+            </div>
+
+            {/* Share button anchored at bottom */}
+            <div
+              className="absolute z-50"
+              style={{
+                bottom: "0rem",
+                right: "-8rem",
+              }}
+            >
+              <button className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/share.png"
+                  alt="Share Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+            </div>
+          </>
         )}
-
         {/* Dialog Body */}
         <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
           <div>
