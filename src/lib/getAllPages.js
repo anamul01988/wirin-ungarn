@@ -59,129 +59,453 @@ export function GetCookiesPages() {
 // Dynamic page fetch
 export function GetDynamicCookiesPages(slug) {
   const DYNAMIC_PAGE_QUERY = `
-    {
-      page(id: "${slug}", idType: URI) {
-        id
-        title
-        slug
-        content
+      {
+        page(id: "${slug}", idType: URI) {
+          id
+          title
+          slug
+          content
+        }
       }
-    }
-  `;
+    `;
   return fetchPage(DYNAMIC_PAGE_QUERY);
 }
 
 export function GetLiedTextePages(search = "") {
   const SEARCH_QUERY = `
-    query GetLiedtextePageAndPosts($search: String) {
-      pages(where: { name: "liedtexte" }) {
-        nodes {
-          title
-          status
-          slug
-          uri
-          content
-          contentTypeName
-          date
-          id
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
+      query GetLiedtextePageAndPosts($search: String) {
+        pages(where: { name: "liedtexte" }) {
+          nodes {
+            title
+            status
+            slug
+            uri
+            content
+            contentTypeName
+            date
+            id
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
             }
+          }
+        }
+
+        liedtexte(first: 50, where: { search: $search }) {
+          nodes {
+            id
+            title
+            date
+            slug
+            postContentLyrik {
+              introText
+              postContent {
+                content
+                icon
+                title
+              }
+              shortTitle
+            }
+            content
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            endCursor
+            startCursor
           }
         }
       }
+    `;
 
-      liedtexte(first: 50, where: { search: $search }) {
+  return fetchPage(SEARCH_QUERY, { search });
+}
+export function GetShortPages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetShortsPosts($first: Int = 10, $after: String) {
+      pages(where: { name: "shorts" }) {
         nodes {
           id
           title
-          date
+          isContentNode
           slug
-          postContentLyrik {
-            introText
-            postContent {
-              content
-              icon
-              title
-            }
-            shortTitle
-          }
           content
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
-            }
+          status
+        }
+      }
+      posts(
+        first: $first
+        after: $after
+        where: {
+          metaQuery: {
+            relation: AND
+            metaArray: [
+              {
+                key: "post_layout"
+                value: "shorts"
+                compare: EQUAL_TO
+              }
+            ]
           }
         }
+      ) {
         pageInfo {
           hasNextPage
           hasPreviousPage
           endCursor
           startCursor
         }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            postId
+            link
+            date
+          }
+        }
       }
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, { search });
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+export function GetKategorienPages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetShortsPosts($first: Int = 10, $after: String) {
+      pages(where: { name: "kategorien" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+      posts(
+        first: $first
+        after: $after
+        where: {
+         metaQuery: {
+          relation: AND
+          metaArray: [
+          {
+            key: "post_layout"
+            value: "topics"
+            compare: EQUAL_TO
+          }
+        ]
+      }
+    }
+      ) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            postId
+            link
+            date
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+export function GetAusflugszielePages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetAusflugsziele($first: Int = 10, $after: String) {
+      # Get the ausflugsziele Page
+      pages(where: { title: "ausflugsziele" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+
+      # Get Listings CPT
+      listings(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            date
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+// export function GetSprachkursPages(search = "") {
+//   const SEARCH_QUERY = `
+//       query GetSprachkursPageAndPosts($search: String) {
+//         pages(where: { name: "sprachkurs" }) {
+//           nodes {
+//             title
+//             status
+//             slug
+//             uri
+//             content
+//             contentTypeName
+//             date
+//             id
+//             featuredImage {
+//               node {
+//                 sourceUrl
+//                 altText
+//                 title
+//                 uri
+//               }
+//             }
+//           }
+//         }
+
+//         sprachkurs(first: 50, where: { search: $search }) {
+//           nodes {
+//             id
+//             title
+//             date
+//             slug
+//             content
+//             featuredImage {
+//               node {
+//                 sourceUrl
+//                 altText
+//                 title
+//                 uri
+//               }
+//             }
+//           }
+//           pageInfo {
+//             hasNextPage
+//             hasPreviousPage
+//             endCursor
+//             startCursor
+//           }
+//         }
+//       }
+//     `;
+
+//   return fetchPage(SEARCH_QUERY, { search });
+// }
+export function GetAllSprachkursPages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllSprachkursPages($first: Int = 10, $after: String) {
+      # Get the "kulinarische" Page
+      pages(where: { name: "sprachkurs" }) {
+        nodes {
+           title
+            status
+            slug
+            uri
+            content
+            contentTypeName
+            date
+            id
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+        }
+      }
+
+      # Get Listings CPT
+      sprachkurs(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            date
+            slug
+            content
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+export function GetKulinarischeSeelePages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetKulinarischeSeelePages($first: Int = 10, $after: String) {
+      # Get the "kulinarische" Page
+      pages(where: { title: "Ungarns kulinarische Seele" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+
+      # Get Listings CPT
+      recipes(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            date
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+export function SearchAllPosts(search = "", first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query SearchAllPosts($search: String, $first: Int = 10, $after: String) {
+      posts(
+        first: $first
+        after: $after
+        where: {
+          search: $search
+        }
+      ) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            postId
+            link
+            date
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { search, first, after });
 }
 
 export function GetSprachkursPages(search = "") {
   const SEARCH_QUERY = `
-    query GetSprachkursPageAndPosts($search: String) {
-      pages(where: { name: "sprachkurs" }) {
-        nodes {
-          title
-          status
-          slug
-          uri
-          content
-          contentTypeName
-          date
-          id
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
+      query GetSprachkursPageAndPosts($search: String) {
+        pages(where: { name: "sprachkurs" }) {
+          nodes {
+            title
+            status
+            slug
+            uri
+            content
+            contentTypeName
+            date
+            id
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
             }
           }
         }
-      }
 
-      sprachkurs(first: 50, where: { search: $search }) {
-        nodes {
-          id
-          title
-          date
-          slug
-          content
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
+        sprachkurs(first: 50, where: { search: $search }) {
+          nodes {
+            id
+            title
+            date
+            slug
+            content
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
             }
           }
-        }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          endCursor
-          startCursor
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            endCursor
+            startCursor
+          }
         }
       }
-    }
-  `;
+    `;
 
   return fetchPage(SEARCH_QUERY, { search });
 }
@@ -190,21 +514,21 @@ export function GetSprachkursPages(search = "") {
 const CUSTOM_POST_TYPES_CONFIG = {
   liedtexte: {
     customFields: `
-      postContentLyrik {
-        introText
-        postContent {
-          content
-          icon
-          title
+        postContentLyrik {
+          introText
+          postContent {
+            content
+            icon
+            title
+          }
+          shortTitle
         }
-        shortTitle
-      }
-    `,
+      `,
   },
   sprachkurs: {
     customFields: `
-      # Add specific fields for sprachkurs if needed
-    `,
+        # Add specific fields for sprachkurs if needed
+      `,
   },
   // Add more custom post types here as needed
   // example: {
@@ -401,20 +725,20 @@ export async function GetDynamicContent(slug) {
   try {
     // Try to fetch as a post first
     const postQuery = `
-      query {
-        post(id: "${slug}", idType: SLUG) {
-          id
-          title
-          slug
-          content
-          featuredImage {
-            node {
-              sourceUrl
+        query {
+          post(id: "${slug}", idType: SLUG) {
+            id
+            title
+            slug
+            content
+            featuredImage {
+              node {
+                sourceUrl
+              }
             }
           }
         }
-      }
-    `;
+      `;
 
     const postData = await fetchPage(postQuery);
 
@@ -488,32 +812,32 @@ export async function GetAllPosts({
   search = "",
 } = {}) {
   const ALL_POSTS_QUERY = `
-    query GetPosts($first: Int, $after: String, $search: String) {
-      posts(first: $first, after: $after, where: { search: $search }) {
-        nodes {
-          id
-          title
-          date
-          slug
-          excerpt
-          featuredImage { node { sourceUrl } }
-          author { node { name } }
-          postContent {
-            introText
-            postOrder
-            shortTitle
-            shortsPostContent
+      query GetPosts($first: Int, $after: String, $search: String) {
+        posts(first: $first, after: $after, where: { search: $search }) {
+          nodes {
+            id
+            title
+            date
+            slug
+            excerpt
+            featuredImage { node { sourceUrl } }
+            author { node { name } }
+            postContent {
+              introText
+              postOrder
+              shortTitle
+              shortsPostContent
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            endCursor
+            startCursor
           }
         }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          endCursor
-          startCursor
-        }
       }
-    }
-  `;
+    `;
   return fetchPage(ALL_POSTS_QUERY, { first, after, search });
 }
 
@@ -526,21 +850,21 @@ export async function getAllLiedtextePosts(options = {}) {
   const { first = 50, after = null } = options;
 
   const query = `
-    query GetAllLiedtexte($first: Int, $after: String) {
-      liedtexte(first: $first, after: $after) {
-        nodes {
-          id
-          title
-          date
-          slug
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
+      query GetAllLiedtexte($first: Int, $after: String) {
+        liedtexte(first: $first, after: $after) {
+          nodes {
+            id
+            title
+            date
+            slug
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
         }
       }
-    }
-  `;
+    `;
 
   try {
     const data = await fetchPage(query, { first, after });
@@ -564,21 +888,21 @@ export async function getAllSprachkursPosts(options = {}) {
   const { first = 50, after = null } = options;
 
   const query = `
-    query GetAllSprachkurs($first: Int, $after: String) {
-      sprachkurs(first: $first, after: $after) {
-        nodes {
-          id
-          title
-          date
-          slug
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
+      query GetAllSprachkurs($first: Int, $after: String) {
+        sprachkurs(first: $first, after: $after) {
+          nodes {
+            id
+            title
+            date
+            slug
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
         }
       }
-    }
-  `;
+    `;
 
   try {
     const data = await fetchPage(query, { first, after });
@@ -605,21 +929,21 @@ export async function getAllCustomPostTypePosts(postType, options = {}) {
   try {
     // Use the exact static query structure that you confirmed is working
     const query = `
-      query GetCustomPostTypePosts($first: Int, $after: String) {
-        ${postType}(first: $first, after: $after) {
-          nodes {
-            id
-            title
-            date
-            slug
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
+        query GetCustomPostTypePosts($first: Int, $after: String) {
+          ${postType}(first: $first, after: $after) {
+            nodes {
+              id
+              title
+              date
+              slug
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
           }
         }
-      }
-    `;
+      `;
 
     const data = await fetchPage(query, {
       first,
@@ -651,14 +975,14 @@ export async function getCustomPostTypesWithCounts() {
     for (const postType of customPostTypes) {
       try {
         const query = `
-          query GetCustomPostTypeCount($postType: String!) {
-            ${postType}(first: 1) {
-              pageInfo {
-                hasNextPage
+            query GetCustomPostTypeCount($postType: String!) {
+              ${postType}(first: 1) {
+                pageInfo {
+                  hasNextPage
+                }
               }
             }
-          }
-        `;
+          `;
 
         const data = await fetchPage(query);
         results.push({
@@ -705,12 +1029,12 @@ export function initializeCustomPostTypes() {
   addCustomPostType(
     "sprachkurs",
     `
-    # Add specific fields for sprachkurs here
-    # Example:
-    # courseLevel
-    # duration
-    # instructor
-  `
+      # Add specific fields for sprachkurs here
+      # Example:
+      # courseLevel
+      # duration
+      # instructor
+    `
   );
 
   // Add more custom post types as needed
@@ -732,66 +1056,66 @@ export async function getContentByType(type, slug) {
     switch (type) {
       case "post":
         query = `
-          query GetPostBySlug($slug: ID!) {
-            post(id: $slug, idType: SLUG) {
-              id
-              title
-              slug
-              content
-              excerpt
-              date
-              modified
-              featuredImage {
-                node {
-                  sourceUrl
-                  altText
-                  title
+            query GetPostBySlug($slug: ID!) {
+              post(id: $slug, idType: SLUG) {
+                id
+                title
+                slug
+                content
+                excerpt
+                date
+                modified
+                featuredImage {
+                  node {
+                    sourceUrl
+                    altText
+                    title
+                  }
                 }
-              }
-              author {
-                node {
-                  name
-                  slug
+                author {
+                  node {
+                    name
+                    slug
+                  }
                 }
-              }
-              categories {
-                nodes {
-                  name
-                  slug
+                categories {
+                  nodes {
+                    name
+                    slug
+                  }
                 }
-              }
-              tags {
-                nodes {
-                  name
-                  slug
+                tags {
+                  nodes {
+                    name
+                    slug
+                  }
                 }
               }
             }
-          }
-        `;
+          `;
         break;
 
       case "page":
         query = `
-          query GetPageBySlug($slug: ID!) {
-            page(id: $slug, idType: URI) {
-              id
-              title
-              slug
-              content
-              excerpt
-              date
-              modified
-              featuredImage {
-                node {
-                  sourceUrl
-                  altText
-                  title
+            query GetPageBySlug($slug: ID!) {
+              page(id: $slug, idType: URI) {
+                id
+                title
+                slug
+                content
+                excerpt
+                date
+                modified
+                featuredImage {
+                  node {
+                    sourceUrl
+                    altText
+                    title
+                  }
                 }
               }
             }
-          }
-        `;
+          `;
         break;
 
       default:
@@ -802,26 +1126,26 @@ export async function getContentByType(type, slug) {
         }
 
         query = `
-          query GetCustomPostBySlug($slug: ID!) {
-            ${type}(id: $slug, idType: SLUG) {
-              id
-              title
-              slug
-              content
-              excerpt
-              date
-              modified
-              featuredImage {
-                node {
-                  sourceUrl
-                  altText
-                  title
+            query GetCustomPostBySlug($slug: ID!) {
+              ${type}(id: $slug, idType: SLUG) {
+                id
+                title
+                slug
+                content
+                excerpt
+                date
+                modified
+                featuredImage {
+                  node {
+                    sourceUrl
+                    altText
+                    title
+                  }
                 }
+                ${config.customFields}
               }
-              ${config.customFields}
             }
-          }
-        `;
+          `;
         break;
     }
 

@@ -1,10 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { SearchAllPosts, GetAllSprachkursPages } from "@/lib/getAllPages";
+import {
+  GetLiedTextePages,
+  GetKategorienPages,
+  SearchAllPosts,
+} from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
-const SprachkursPage = () => {
+const KategorienPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
@@ -75,12 +79,11 @@ const SprachkursPage = () => {
       if (isSearching) {
         apiData = await SearchAllPosts(search, 10, cursor);
       } else {
-        apiData = await GetAllSprachkursPages(10, cursor);
+        apiData = await GetKategorienPages(10, cursor);
       }
 
-      const newPosts = isSearching
-        ? apiData.data.posts
-        : apiData.data.sprachkurs;
+      console.log("kategorien data:", apiData.data.posts);
+      const newPosts = apiData.data.posts;
 
       // Replace posts instead of appending
       if (isSearching) {
@@ -133,10 +136,12 @@ const SprachkursPage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const apiData = await GetAllSprachkursPages();
+        const apiData = await GetKategorienPages();
+        console.log("shorts data:", apiData.data.posts);
+        console.log("shorts data: alll 222222", apiData);
         setCookieData(apiData);
-        setCustomPosts(apiData.data.sprachkurs);
-        setPageInfo(apiData.data.sprachkurs.pageInfo);
+        setCustomPosts(apiData.data.posts);
+        setPageInfo(apiData.data.posts.pageInfo);
         setCurrentPage(1);
         setPageHistory([]);
       } catch (err) {
@@ -155,9 +160,11 @@ const SprachkursPage = () => {
       </div>
     );
   if (error) return <div>{error}</div>;
-
+  // if (!cookieData || !cookieData.data || !cookieData.data.page)
+  //   return <div>Keine Cookie-Daten gefunden.</div>;
+  console.log("shorts data: cookieData 2222:", customPosts);
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-  // console.log("sprachkurs data: cookieData 2222:", customPosts);
+
   return (
     <div className="mx-auto">
       {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
@@ -242,73 +249,54 @@ const SprachkursPage = () => {
           </div>
         ) : (
           <>
-            {isSearching &&
-            (!searchResults?.edges || searchResults.edges.length === 0) ? (
-              <div className="text-center py-8">
-                <Typography variant="h6" color="gray" className="mb-4">
-                  Keine Suchergebnisse gefunden
-                </Typography>
-                <Typography variant="paragraph" color="gray">
-                  Versuchen Sie es mit anderen Suchbegriffen oder schauen Sie
-                  sich alle verfügbaren Artikel an.
-                </Typography>
-              </div>
-            ) : (
-              (isSearching ? searchResults?.edges : customPosts?.edges)?.map(
-                (edge, idx) => {
-                  const posts = isSearching ? searchResults : customPosts;
-                  return (
-                    <div key={edge.node.id}>
-                      <CustomPost
-                        title={edge.node?.title}
-                        image={edge.node?.featuredImage?.node?.sourceUrl}
-                        description={edge.node.postContentLyrik?.introText}
-                        onlyHeadings={onlyHeadings}
-                        slug={edge.node.slug}
-                        routePrefix="shorts"
-                      />
-                      {/* Divider except last */}
-                      {!onlyHeadings && idx < posts?.edges?.length - 1 && (
-                        <hr className="my-6 border-gray-300" />
-                      )}
-                    </div>
-                  );
-                }
-              )
+            {(isSearching ? searchResults?.edges : customPosts?.edges)?.map(
+              (edge, idx) => {
+                const posts = isSearching ? searchResults : customPosts;
+                return (
+                  <div key={edge.node.id}>
+                    <CustomPost
+                      title={edge.node?.title}
+                      description={edge.node.postContentLyrik?.introText}
+                      onlyHeadings={onlyHeadings}
+                      slug={edge.node.slug}
+                      routePrefix="shorts"
+                    />
+                    {/* Divider except last */}
+                    {!onlyHeadings && idx < posts?.edges?.length - 1 && (
+                      <hr className="my-6 border-gray-300" />
+                    )}
+                  </div>
+                );
+              }
             )}
 
-            {/* Pagination Buttons - Only show if not searching with empty results */}
-            {!(
-              isSearching &&
-              (!searchResults?.edges || searchResults.edges.length === 0)
-            ) && (
-              <div className="flex justify-center gap-4 mt-8">
-                <Button
-                  color="red"
-                  onClick={() => loadPage("previous")}
-                  disabled={
-                    (isSearching
-                      ? searchPageHistory.length === 0
-                      : pageHistory.length === 0) || loadingPage
-                  }
-                  className="px-6 py-2"
-                >
-                  {loadingPage ? "Lade..." : "Previous"}
-                </Button>
-                <Button
-                  color="red"
-                  onClick={() => loadPage("next")}
-                  disabled={
-                    !(isSearching
-                      ? searchPageInfo.hasNextPage
-                      : pageInfo.hasNextPage) || loadingPage
-                  }
-                  className="px-6 py-2"
-                >
-                  {loadingPage ? "Lade..." : "Next"}
-                </Button>
-              </div>
-            )}
+            {/* Pagination Buttons */}
+            <div className="flex justify-center gap-4 mt-8">
+              <Button
+                color="red"
+                onClick={() => loadPage("previous")}
+                disabled={
+                  (isSearching
+                    ? searchPageHistory.length === 0
+                    : pageHistory.length === 0) || loadingPage
+                }
+                className="px-6 py-2"
+              >
+                {loadingPage ? "Lade..." : "Previous"}
+              </Button>
+              <Button
+                color="red"
+                onClick={() => loadPage("next")}
+                disabled={
+                  !(isSearching
+                    ? searchPageInfo.hasNextPage
+                    : pageInfo.hasNextPage) || loadingPage
+                }
+                className="px-6 py-2"
+              >
+                {loadingPage ? "Lade..." : "Next"}
+              </Button>
+            </div>
           </>
         )}
       </div>
@@ -316,4 +304,4 @@ const SprachkursPage = () => {
   );
 };
 
-export default SprachkursPage;
+export default KategorienPage;

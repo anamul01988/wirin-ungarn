@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { SearchAllPosts, GetAllSprachkursPages } from "@/lib/getAllPages";
+import { SearchAllPosts, GetAusflugszielePages } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
-const SprachkursPage = () => {
+const AusflugszielePage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
@@ -75,12 +75,10 @@ const SprachkursPage = () => {
       if (isSearching) {
         apiData = await SearchAllPosts(search, 10, cursor);
       } else {
-        apiData = await GetAllSprachkursPages(10, cursor);
+        apiData = await GetAusflugszielePages(10, cursor);
       }
 
-      const newPosts = isSearching
-        ? apiData.data.posts
-        : apiData.data.sprachkurs;
+      const newPosts = isSearching ? apiData.data.posts : apiData.data.listings;
 
       // Replace posts instead of appending
       if (isSearching) {
@@ -133,10 +131,10 @@ const SprachkursPage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const apiData = await GetAllSprachkursPages();
+        const apiData = await GetAusflugszielePages();
         setCookieData(apiData);
-        setCustomPosts(apiData.data.sprachkurs);
-        setPageInfo(apiData.data.sprachkurs.pageInfo);
+        setCustomPosts(apiData.data.listings);
+        setPageInfo(apiData.data.listings.pageInfo);
         setCurrentPage(1);
         setPageHistory([]);
       } catch (err) {
@@ -157,7 +155,7 @@ const SprachkursPage = () => {
   if (error) return <div>{error}</div>;
 
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-  // console.log("sprachkurs data: cookieData 2222:", customPosts);
+
   return (
     <div className="mx-auto">
       {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
@@ -261,7 +259,6 @@ const SprachkursPage = () => {
                     <div key={edge.node.id}>
                       <CustomPost
                         title={edge.node?.title}
-                        image={edge.node?.featuredImage?.node?.sourceUrl}
                         description={edge.node.postContentLyrik?.introText}
                         onlyHeadings={onlyHeadings}
                         slug={edge.node.slug}
@@ -316,4 +313,4 @@ const SprachkursPage = () => {
   );
 };
 
-export default SprachkursPage;
+export default AusflugszielePage;
