@@ -30,7 +30,7 @@ export default function DialogContent({
     route.back();
   };
 
-    const handleClose = () => {
+  const handleClose = () => {
     setOpen(false);
     route.push("/");
   };
