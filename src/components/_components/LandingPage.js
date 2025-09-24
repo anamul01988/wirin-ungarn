@@ -120,7 +120,6 @@ const LandingPage = () => {
               //   menuName: "Verbarium",
               //   menuRoute: "/verbarium",
               // },
-              
             ],
           },
           {
@@ -161,26 +160,27 @@ const LandingPage = () => {
           <div key={i} className="nav-item">
             <h3>{item.title}</h3>
             <p>{item.text}</p>
-
-            <div className="hover-menu">
-              {chunkArray(item.menu, 6).map((column, columnIndex) => (
-                <div key={columnIndex} className="menu-column">
-                  {column.map((menuItem, j) => (
-                    <div
-                      key={j}
-                      className="menu-item cursor-pointer"
-                      {...(item.slug === "sprache"
-                        ? { onClick: () => route.push(menuItem.menuRoute) }
-                        : { onClick: () => route.push(menuItem.menuRoute) })}
-                    >
-                      {item.slug === "sprache"
+            {item.slug !== "community" && (
+              <div className="hover-menu">
+                {chunkArray(item.menu, 6).map((column, columnIndex) => (
+                  <div key={columnIndex} className="menu-column">
+                    {column.map((menuItem, j) => (
+                      <div
+                        key={j}
+                        className="menu-item cursor-pointer"
+                        {...(item.slug === "sprache"
+                          ? { onClick: () => route.push(menuItem.menuRoute) }
+                          : { onClick: () => route.push(menuItem.menuRoute) })}
+                      >
+                        {item.slug === "sprache"
                         ? menuItem.menuName
                         : menuItem.menuName}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </nav>
