@@ -157,7 +157,7 @@ const SprachkursPage = () => {
   if (error) return <div>{error}</div>;
 
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-  // console.log("sprachkurs data: cookieData 2222:", customPosts);
+  console.log("sprachkurs data: cookieData 2222:", customPosts);
   return (
     <div className="mx-auto">
       {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
@@ -262,10 +262,12 @@ const SprachkursPage = () => {
                       <CustomPost
                         title={edge.node?.title}
                         image={edge.node?.featuredImage?.node?.sourceUrl}
-                        description={edge.node.postContentLyrik?.introText}
+                        description={
+                          edge.node.postContentSprachlektion?.postContent
+                        }
                         onlyHeadings={onlyHeadings}
                         slug={edge.node.slug}
-                        routePrefix="shorts"
+                        routePrefix="sprachkurs"
                       />
                       {/* Divider except last */}
                       {!onlyHeadings && idx < posts?.edges?.length - 1 && (

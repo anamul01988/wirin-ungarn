@@ -71,71 +71,10 @@ export function GetDynamicCookiesPages(slug) {
   return fetchPage(DYNAMIC_PAGE_QUERY);
 }
 
-export function GetLiedTextePages(search = "") {
+export function GetLiedTextePages(first = 10, after = null) {
   const SEARCH_QUERY = `
-      query GetLiedtextePageAndPosts($search: String) {
-        pages(where: { name: "liedtexte" }) {
-          nodes {
-            title
-            status
-            slug
-            uri
-            content
-            contentTypeName
-            date
-            id
-            featuredImage {
-              node {
-                sourceUrl
-                altText
-                title
-                uri
-              }
-            }
-          }
-        }
-
-        liedtexte(first: 50, where: { search: $search }) {
-          nodes {
-            id
-            title
-            date
-            slug
-            postContentLyrik {
-              introText
-              postContent {
-                content
-                icon
-                title
-              }
-              shortTitle
-            }
-            content
-            featuredImage {
-              node {
-                sourceUrl
-                altText
-                title
-                uri
-              }
-            }
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            endCursor
-            startCursor
-          }
-        }
-      }
-    `;
-
-  return fetchPage(SEARCH_QUERY, { search });
-}
-export function GetShortPages(first = 10, after = null) {
-  const SEARCH_QUERY = `
-    query GetShortsPosts($first: Int = 10, $after: String) {
-      pages(where: { name: "shorts" }) {
+    query GetLiedTexte($first: Int = 10, $after: String) {
+      pages(where: { name: "liedtexte" }) {
         nodes {
           id
           title
@@ -145,22 +84,8 @@ export function GetShortPages(first = 10, after = null) {
           status
         }
       }
-      posts(
-        first: $first
-        after: $after
-        where: {
-          metaQuery: {
-            relation: AND
-            metaArray: [
-              {
-                key: "post_layout"
-                value: "shorts"
-                compare: EQUAL_TO
-              }
-            ]
-          }
-        }
-      ) {
+
+      liedtexte(first: $first, after: $after) {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -173,13 +98,154 @@ export function GetShortPages(first = 10, after = null) {
             id
             title
             slug
-            postId
-            link
             date
+            postContentLyrik {
+              postContent {
+                content
+                title
+              }
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
           }
         }
       }
     }
+  `;
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+// export function GetLiedTextePages(search = "") {
+//   const SEARCH_QUERY = `
+//       query GetLiedtextePageAndPosts($search: String) {
+//         pages(where: { name: "liedtexte" }) {
+//           nodes {
+//             title
+//             status
+//             slug
+//             uri
+//             content
+//             contentTypeName
+//             date
+//             id
+//             featuredImage {
+//               node {
+//                 sourceUrl
+//                 altText
+//                 title
+//                 uri
+//               }
+//             }
+//           }
+//         }
+
+//         liedtexte(first: 50, where: { search: $search }) {
+//           nodes {
+//             id
+//             title
+//             date
+//             slug
+//             postContentLyrik {
+//               introText
+//               postContent {
+//                 content
+//                 icon
+//                 title
+//               }
+//               shortTitle
+//             }
+//             content
+//             featuredImage {
+//               node {
+//                 sourceUrl
+//                 altText
+//                 title
+//                 uri
+//               }
+//             }
+//           }
+//           pageInfo {
+//             hasNextPage
+//             hasPreviousPage
+//             endCursor
+//             startCursor
+//           }
+//         }
+//       }
+//     `;
+
+//   return fetchPage(SEARCH_QUERY, { search });
+// }
+
+export function GetShortPages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+  query GetShortsPosts($first: Int = 10, $after: String) {
+  pages(where: { name: "shorts" }) {
+    nodes {
+      id
+      title
+      isContentNode
+      slug
+      content
+      status
+    }
+  }
+
+  posts(
+    first: $first
+    after: $after
+    where: {
+      metaQuery: {
+        relation: AND
+        metaArray: [
+          {
+            key: "post_layout"
+            value: "shorts"
+            compare: EQUAL_TO
+          }
+        ]
+      }
+    }
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    edges {
+      cursor
+      node {
+        id
+        title
+        slug
+        postId
+        link
+        date
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+            title
+            uri
+          }
+        }
+        postContent {
+          introText
+          shortTitle
+          shortsPostContent
+        }
+      }
+    }
+  }
+}
+
   `;
 
   return fetchPage(SEARCH_QUERY, { first, after });
@@ -228,6 +294,22 @@ export function GetKategorienPages(first = 10, after = null) {
             postId
             link
             date
+            postContent {
+              topicsPostContent {
+                title
+                content
+              }
+              postOrder
+              shortTitle
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
           }
         }
       }
@@ -267,6 +349,19 @@ export function GetAusflugszielePages(first = 10, after = null) {
             title
             slug
             date
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+            // postContent {
+            //   introText
+            //   shortTitle
+            //   shortsPostContent
+            // }
           }
         }
       }
@@ -348,7 +443,7 @@ export function GetAllSprachkursPages(first = 10, after = null) {
                 title
                 uri
               }
-            }
+            } 
         }
       }
 
@@ -368,6 +463,13 @@ export function GetAllSprachkursPages(first = 10, after = null) {
             date
             slug
             content
+            postContentSprachlektion {
+              postContent {
+                icon
+                title
+                content
+              }
+            }
             featuredImage {
               node {
                 sourceUrl

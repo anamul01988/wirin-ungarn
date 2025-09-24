@@ -137,8 +137,8 @@ const KategorienPage = () => {
     async function fetchData() {
       try {
         const apiData = await GetKategorienPages();
-        console.log("shorts data:", apiData.data.posts);
-        console.log("shorts data: alll 222222", apiData);
+        // console.log("shorts data:", apiData.data.posts);
+        // console.log("shorts data: alll 222222", apiData);
         setCookieData(apiData);
         setCustomPosts(apiData.data.posts);
         setPageInfo(apiData.data.posts.pageInfo);
@@ -162,7 +162,7 @@ const KategorienPage = () => {
   if (error) return <div>{error}</div>;
   // if (!cookieData || !cookieData.data || !cookieData.data.page)
   //   return <div>Keine Cookie-Daten gefunden.</div>;
-  console.log("shorts data: cookieData 2222:", customPosts);
+  console.log("kategorien data: cookieData 2222:", customPosts);
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
 
   return (
@@ -256,10 +256,13 @@ const KategorienPage = () => {
                   <div key={edge.node.id}>
                     <CustomPost
                       title={edge.node?.title}
-                      description={edge.node.postContentLyrik?.introText}
+                      image={edge.node?.featuredImage?.node?.sourceUrl}
+                      imageAlt={edge.node?.featuredImage?.node?.altText}
+                      description={edge.node.postContent?.topicsPostContent}
+                      excerpt={null}
                       onlyHeadings={onlyHeadings}
                       slug={edge.node.slug}
-                      routePrefix="shorts"
+                      routePrefix="kategorien"
                     />
                     {/* Divider except last */}
                     {!onlyHeadings && idx < posts?.edges?.length - 1 && (

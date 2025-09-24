@@ -1,10 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  GetLiedTextePages,
-  GetShortPages,
-  SearchAllPosts,
-} from "@/lib/getAllPages";
+import { GetShortPages, SearchAllPosts } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
@@ -160,7 +156,7 @@ const ShortsPage = () => {
   if (error) return <div>{error}</div>;
   // if (!cookieData || !cookieData.data || !cookieData.data.page)
   //   return <div>Keine Cookie-Daten gefunden.</div>;
-  console.log("shorts data: cookieData 2222:", customPosts);
+  // console.log("shorts data: cookieData 2222:", customPosts);
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
 
   return (
@@ -254,7 +250,13 @@ const ShortsPage = () => {
                   <div key={edge.node.id}>
                     <CustomPost
                       title={edge.node?.title}
-                      description={edge.node.postContentLyrik?.introText}
+                      description={edge.node.postContent?.shortsPostContent}
+                      image={edge.node.featuredImage?.node?.sourceUrl || null}
+                      imageAlt={
+                        edge.node.featuredImage?.node?.altText ||
+                        edge.node.title
+                      }
+                      excerpt={null}
                       onlyHeadings={onlyHeadings}
                       slug={edge.node.slug}
                       routePrefix="shorts"

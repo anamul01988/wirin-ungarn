@@ -277,7 +277,7 @@ export default function DialogContent({
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
-            )}  
+            )}
           </div>
         </DialogBody>
       </Dialog>
