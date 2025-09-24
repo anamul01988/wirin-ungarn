@@ -132,24 +132,27 @@ export default function ContactForm({ formHtml }) {
         onClose={hideToast}
       />
 
-      <div className="w-full mx-auto">
-        <div className="p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Kontakt</h2>
-
-          <p className="text-gray-600 mb-6">
-            Hey, schön, dass du uns schreiben möchtest! Bevor du uns
-            kontaktierst, könnte es hilfreich sein, kurz auf unserer Seite zu
-            stöbern. Viele Antworten auf gängige Fragen findest du vielleicht
-            schon in unseren Blogposts, FAQs oder anderen Bereichen.
+      <div className="flex w-full justify-between">
+        {/* Left side text */}
+        <div className="w-[48%]">
+          <p className="mb-6">
+            Hey, schön, dass du uns schreiben möchtest! <br />
+            <br /> Bevor du uns kontaktierst, könnte es hilfreich sein, kurz auf
+            unserer Seite zu stöbern. Viele Antworten auf gängige Fragen findest
+            du vielleicht schon in unseren Blogposts, FAQs oder anderen
+            Bereichen.
           </p>
 
-          <p className="text-gray-600 mb-8">
+          <p className="mb-8">
             Aber natürlich wissen wir, dass manchmal direkte Kommunikation
             unschlagbar ist! Wenn du also eine spezielle Frage hast, Anregungen
             geben möchtest oder einfach nur Hallo sagen willst, zögere nicht und
             schreib uns.
           </p>
+        </div>
 
+        {/* Right side form */}
+        <div className="w-[48%]">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Field */}
             <div>
@@ -236,7 +239,7 @@ export default function ContactForm({ formHtml }) {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center"
+                className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 transition duration-200 flex items-center justify-center"
               >
                 {isSubmitting ? (
                   <>

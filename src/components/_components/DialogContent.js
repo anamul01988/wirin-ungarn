@@ -131,7 +131,7 @@ export default function DialogContent({
                 </svg>
               </button>
             </div>
-            <h1 className="text-3xl font-bold mb-6">{title}</h1>
+            <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1>
 
             {/* Content Metadata */}
             <div className="mb-6 text-sm text-gray-600 space-y-2">
@@ -277,7 +277,7 @@ export default function DialogContent({
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
-            )}
+            )}  
           </div>
         </DialogBody>
       </Dialog>
