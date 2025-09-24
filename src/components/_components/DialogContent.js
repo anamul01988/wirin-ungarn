@@ -30,6 +30,11 @@ export default function DialogContent({
     route.back();
   };
 
+    const handleClose = () => {
+    setOpen(false);
+    route.push("/");
+  };
+
   // Check if content contains a contact form
   const hasContactForm = content && content.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
@@ -45,28 +50,60 @@ export default function DialogContent({
       >
         {/* Floating Cross + Love Icons */}
         {open && (
-          <div
-            className="absolute flex flex-col space-y-3 z-50"
-            style={{ top: "-0.5rem", right: "-8rem" }}
-          >
-            {/* Cross Icon */}
-            <button onClick={navigateToHome} className="p-4 rounded-full">
-              <img
-                src="/assets/icons/close.png"
-                alt="Close Icon"
-                className="w-4rem h-3rem"
-              />
-            </button>
+          <>
+            {/* Top icons (Cross, Love, Layers) */}
+            <div
+              className="absolute flex flex-col space-y-3 z-50"
+              style={{
+                top: "-0.5rem",
+                right: "-8rem",
+              }}
+            >
+              {/* Cross Icon */}
+              <button onClick={handleClose} className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/close.png"
+                  alt="Close Icon"
+                  className="w-4rem h-3rem"
+                />
+              </button>
 
-            {/* Love Icon */}
-            <button className="p-4 rounded-full">
-              <img
-                src="/assets/icons/favorit_e.png"
-                alt="Love Icon"
-                className="w-3rem h-2rem"
-              />
-            </button>
-          </div>
+              {/* Love Icon */}
+              <button className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/favorit_e.png"
+                  alt="Love Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+
+              {/* Layers Icon */}
+              <button className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/layers.png"
+                  alt="Layers Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+            </div>
+
+            {/* Share button anchored at bottom */}
+            <div
+              className="absolute z-50"
+              style={{
+                bottom: "0rem",
+                right: "-8rem",
+              }}
+            >
+              <button className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/share.png"
+                  alt="Share Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+            </div>
+          </>
         )}
 
         {/* Dialog Body */}
