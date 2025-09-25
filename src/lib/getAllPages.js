@@ -349,19 +349,7 @@ export function GetAusflugszielePages(first = 10, after = null) {
             title
             slug
             date
-            featuredImage {
-              node {
-                sourceUrl
-                altText
-                title
-                uri
-              }
-            }
-            // postContent {
-            //   introText
-            //   shortTitle
-            //   shortsPostContent
-            // }
+     
           }
         }
       }
