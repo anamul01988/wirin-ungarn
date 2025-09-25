@@ -22,13 +22,14 @@
 }
 
 body {
-  background: var(--background);
+  /* background: var(--background); */
+  background-image: url(/assets/pattern-bg.jpg);
   /* color: var(--foreground); */
-  color: #56646F;
-  font-family: 'Open Sans', sans-serif;
+  color: #56646f;
+  font-family: "Open Sans", sans-serif;
 }
-*{
- font-family: 'Open Sans', sans-serif;;
+* {
+  font-family: "Open Sans", sans-serif;
 }
 
 /* * {
@@ -202,13 +203,13 @@ body {
 }
 
 /* Menu Columns */
-/* .hover-menu {
+.hover-menu {
   display: flex;
   flex-direction: row;
   gap: 20px;
-  padding: 20px;
+  padding: 7px;
   min-width: auto;
-} */
+}
 
 .menu-column {
   display: flex;
@@ -243,7 +244,6 @@ body {
 
 .menu-item:hover {
   background: #3d6b4a !important;
-  
 }
 
 /* Remove the first/last child border radius overrides for column layout */
@@ -500,7 +500,7 @@ body {
 
 .prose strong {
   font-weight: 600;
-  color: #56646F;
+  color: #56646f;
 }
 /* Font size mappings */
 .has-small-font-size {
