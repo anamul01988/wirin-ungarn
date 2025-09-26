@@ -1,15 +1,11 @@
-// pages/404.tsx
-import Image from "next/image";
+import DialogContent from "@/components/_components/DialogContent";
 
 export default function Custom404() {
   return (
-    <div className="relative h-screen w-screen">
-      <Image
-        src="/assets/404-page-not-found.jpg"
-        alt="404 - Page Not Found"
-        fill
-        priority
-      />
-    </div>
+    <DialogContent
+      content="<div style='text-align:center'><img src='/assets/404-page-not-found.jpg' alt='404 - Page Not Found' style='max-width:100%;margin:auto;'/></div>"
+      imageFeature={null}
+      imageAlt="404 - Page Not Found"
+    />
   );
 }
