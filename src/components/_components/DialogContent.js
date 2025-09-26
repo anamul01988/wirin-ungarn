@@ -31,9 +31,6 @@ export default function DialogContent({
     route.back();
   };
 
-
-  
-
   const handleClose = () => {
     setOpen(false);
     route.push("/");
@@ -43,8 +40,7 @@ export default function DialogContent({
   const hasContactForm = content && content.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
 
-
-    console.log('DialogContent content:', content);
+  console.log("DialogContent content:", content);
 
   return (
     <>
@@ -57,11 +53,11 @@ export default function DialogContent({
       >
         {/* Floating Cross + Love Icons */}
         {open && (
-          <ModalIcons 
+          <ModalIcons
             onClose={handleClose}
-            onFavorite={() => console.log('Favorite clicked')}
-            onLayers={() => console.log('Layers clicked')}
-            onShare={() => console.log('Share clicked')}
+            onFavorite={() => console.log("Favorite clicked")}
+            onLayers={() => console.log("Layers clicked")}
+            onShare={() => console.log("Share clicked")}
           />
         )}
 
@@ -193,38 +189,6 @@ export default function DialogContent({
                   role="img"
                   aria-label={imageAlt || title}
                 ></div>
-
-                <div className="w-full mx-auto py-6">
-                  {/* Next Lesson Button */}
-                  <div className="flex justify-end">
-                    <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
-                      <span className="mr-2 text-sm font-semibold">
-                        Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick
-                        in die Geschichte
-                      </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 text-[#436f4d]"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="border-t-2 border-[#436f4d] my-6"></div>
-
-                  {/* Collapsible Comment Component */}
-                  <CollapsibleComment />
-                </div>
               </>
             )}
 
@@ -236,6 +200,40 @@ export default function DialogContent({
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
+            )}
+
+            {imageFeature && (
+              <div className="w-full mx-auto py-6">
+                {/* Next Lesson Button */}
+                <div className="flex justify-end">
+                  <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
+                    <span className="mr-2 text-sm font-semibold">
+                      Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick in
+                      die Geschichte
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 text-[#436f4d]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Divider */}
+                <div className="border-t-2 border-[#436f4d] my-6"></div>
+
+                {/* Collapsible Comment Component */}
+                <CollapsibleComment />
+              </div>
             )}
           </div>
         </DialogBody>
