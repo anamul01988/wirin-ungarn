@@ -319,6 +319,52 @@ export function GetKategorienPages(first = 10, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
+export function GetEinFachPages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetEinFachPage($first: Int = 10, $after: String) {
+      pages(where: { name: "Einfach Lesen" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+
+      einfacheLesungen(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            content
+            slug
+            date
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
 export function GetAusflugszielePages(first = 10, after = null) {
   const SEARCH_QUERY = `
     query GetAusflugsziele($first: Int = 10, $after: String) {
