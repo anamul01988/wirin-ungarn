@@ -826,6 +826,11 @@ export async function GetDynamicContent(slug) {
                 sourceUrl
               }
             }
+              postContent {
+                introText
+                shortTitle
+                shortsPostContent
+      }
           }
         }
       `;

@@ -30,6 +30,9 @@ export default function DialogContent({
     route.back();
   };
 
+
+  
+
   const handleClose = () => {
     setOpen(false);
     route.push("/");
@@ -38,6 +41,9 @@ export default function DialogContent({
   // Check if content contains a contact form
   const hasContactForm = content && content.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
+
+
+    console.log('DialogContent content:', content);
 
   return (
     <>
