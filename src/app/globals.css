@@ -524,3 +524,9 @@ body {
 .wp-block-list {
   @apply list-disc pl-6;
 }
+.backdrop-blur-sm {
+  backdrop-filter: blur(1px);
+}
+.bg-black {
+  background-color: transparent;
+}
