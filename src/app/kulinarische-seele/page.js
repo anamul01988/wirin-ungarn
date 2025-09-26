@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 // import CookieDetails from "@/components/pages/cookie/CookieDetails";
 // import KategorienPage from "@/components/pages/kategorien/kategorienPage";
 import KulinarischeSeelePage from "@/components/pages/kulinarischeSeele/KulinarischeSeelePage";
+import ModalIcons from "@/components/_components/ModalIcons";
 
 export default function Kategorien() {
   const [open, setOpen] = useState(false);
@@ -41,60 +42,12 @@ export default function Kategorien() {
       >
         {/* Floating Cross + Love Icons */}
         {open && (
-          <>
-            {/* Top icons (Cross, Love, Layers) */}
-            <div
-              className="absolute flex flex-col space-y-3 z-50"
-              style={{
-                top: "-0.5rem",
-                right: "-8rem",
-              }}
-            >
-              {/* Cross Icon */}
-              <button onClick={handleClose} className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/close.png"
-                  alt="Close Icon"
-                  className="w-4rem h-3rem"
-                />
-              </button>
-
-              {/* Love Icon */}
-              <button className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/favorit_e.png"
-                  alt="Love Icon"
-                  className="w-3rem h-2rem"
-                />
-              </button>
-
-              {/* Layers Icon */}
-              <button className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/layers.png"
-                  alt="Layers Icon"
-                  className="w-3rem h-2rem"
-                />
-              </button>
-            </div>
-
-            {/* Share button anchored at bottom */}
-            <div
-              className="absolute z-50"
-              style={{
-                bottom: "0rem",
-                right: "-8rem",
-              }}
-            >
-              <button className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/share.png"
-                  alt="Share Icon"
-                  className="w-3rem h-2rem"
-                />
-              </button>
-            </div>
-          </>
+          <ModalIcons 
+            onClose={handleClose}
+            onFavorite={() => console.log('Favorite clicked')}
+            onLayers={() => console.log('Layers clicked')}
+            onShare={() => console.log('Share clicked')}
+          />
         )}
 
         <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
