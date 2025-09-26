@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import SubMenu from "../pages/home/SubMenu";
+import ModalIcons from "../_components/ModalIcons";
 
 export default function ImpressumtModal({ open, setOpen, handleOpen }) {
   // const [open, setOpen] = useState(false);
@@ -35,22 +36,16 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
         >
           {/* Floating Cross + Love Icons */}
           {open && (
-            <div
-              className="absolute flex flex-col space-y-3 z-50"
-              style={{
+            <ModalIcons 
+              onClose={handleOpen}
+              onFavorite={() => console.log('Favorite clicked')}
+              onLayers={() => console.log('Layers clicked')}
+              onShare={() => console.log('Share clicked')}
+              topIconsStyle={{
                 top: "-0.5rem",
                 right: "-20rem",
               }}
-            >
-              {/* Cross Icon */}
-              <button onClick={handleOpen} className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/close.png"
-                  alt="Close Icon"
-                  className="w-4rem h-3rem"
-                />
-              </button>
-            </div>
+            />
           )}
 
           {/* Outside Arrow Buttons */}

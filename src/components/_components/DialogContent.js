@@ -5,6 +5,7 @@ import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import CollapsibleComment from "./CollapsibleComment";
 import ContactForm from "./ContactForm";
+import ModalIcons from "./ModalIcons";
 export default function DialogContent({
   title,
   content,
@@ -39,6 +40,8 @@ export default function DialogContent({
   const hasContactForm = content && content.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
 
+  console.log("DialogContent content:", content);
+
   return (
     <>
       <Dialog
@@ -50,60 +53,12 @@ export default function DialogContent({
       >
         {/* Floating Cross + Love Icons */}
         {open && (
-          <>
-            {/* Top icons (Cross, Love, Layers) */}
-            <div
-              className="absolute flex flex-col space-y-3 z-50"
-              style={{
-                top: "-0.5rem",
-                right: "-8rem",
-              }}
-            >
-              {/* Cross Icon */}
-              <button onClick={handleClose} className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/close.png"
-                  alt="Close Icon"
-                  className="w-4rem h-3rem"
-                />
-              </button>
-
-              {/* Love Icon */}
-              <button className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/favorit_e.png"
-                  alt="Love Icon"
-                  className="w-3rem h-2rem"
-                />
-              </button>
-
-              {/* Layers Icon */}
-              <button className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/layers.png"
-                  alt="Layers Icon"
-                  className="w-3rem h-2rem"
-                />
-              </button>
-            </div>
-
-            {/* Share button anchored at bottom */}
-            <div
-              className="absolute z-50"
-              style={{
-                bottom: "0rem",
-                right: "-8rem",
-              }}
-            >
-              <button className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/share.png"
-                  alt="Share Icon"
-                  className="w-3rem h-2rem"
-                />
-              </button>
-            </div>
-          </>
+          <ModalIcons
+            onClose={handleClose}
+            onFavorite={() => console.log("Favorite clicked")}
+            onLayers={() => console.log("Layers clicked")}
+            onShare={() => console.log("Share clicked")}
+          />
         )}
 
         {/* Dialog Body */}
@@ -234,38 +189,6 @@ export default function DialogContent({
                   role="img"
                   aria-label={imageAlt || title}
                 ></div>
-
-                <div className="w-full mx-auto py-6">
-                  {/* Next Lesson Button */}
-                  <div className="flex justify-end">
-                    <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
-                      <span className="mr-2 text-sm font-semibold">
-                        Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick
-                        in die Geschichte
-                      </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 text-[#436f4d]"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="border-t-2 border-[#436f4d] my-6"></div>
-
-                  {/* Collapsible Comment Component */}
-                  <CollapsibleComment />
-                </div>
               </>
             )}
 
@@ -277,6 +200,40 @@ export default function DialogContent({
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
+            )}
+
+            {imageFeature && (
+              <div className="w-full mx-auto py-6">
+                {/* Next Lesson Button */}
+                <div className="flex justify-end">
+                  <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
+                    <span className="mr-2 text-sm font-semibold">
+                      Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick in
+                      die Geschichte
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4 text-[#436f4d]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Divider */}
+                <div className="border-t-2 border-[#436f4d] my-6"></div>
+
+                {/* Collapsible Comment Component */}
+                <CollapsibleComment />
+              </div>
             )}
           </div>
         </DialogBody>

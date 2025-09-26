@@ -15,14 +15,14 @@ export default async function DynamicPage({ params }) {
     // console.log("contentData 222222222", contentData);
     // Handle post content
     if (contentData.type === "post") {
-      const { title, content, featuredImage } = contentData.data.data.post;
+      const { title, content, featuredImage, postContent } = contentData.data.data.post;
       const imageUrl = featuredImage?.node?.sourceUrl || null;
 
       return (
         <div className="min-h-screen flex items-center justify-center">
           <DialogContent
             title={title}
-            content={content}
+            content={content === null ? postContent.shortsPostContent : content}
             imageFeature={imageUrl}
           />
         </div>
