@@ -10,39 +10,25 @@ const isHTML = (str) => {
 };
 
 // Utility function to truncate text to 300 words
-const truncateText = (text, maxWords = 100) => {
+const truncateText = (text, maxWords = 80) => {
   if (typeof text !== "string") return text;
 
-  // For HTML content, we need to be more careful
+  // For HTML content, remove all HTML tags and entities
   if (isHTML(text)) {
-    // Remove HTML tags to count words
-    const textOnly = text
-      .replace(/<[^>]*>/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-    const words = textOnly.split(" ");
+    // Remove HTML tags, entities, and clean up whitespace
+    const cleanText = text
+      .replace(/<[^>]*>/g, " ") // Remove all HTML tags
+      .replace(/&[^;]+;/g, " ") // Remove HTML entities like &#8211;
+      .replace(/\s+/g, " ") // Replace multiple spaces with single space
+      .trim(); // Remove leading/trailing whitespace
+
+    const words = cleanText.split(" ");
 
     if (words.length <= maxWords) {
-      return text;
+      return cleanText;
     }
 
-    // Find the position where to cut in the original HTML
-    let wordCount = 0;
-    let cutPosition = 0;
-    const wordsInOriginal = text.split(/\s+/);
-
-    for (let i = 0; i < wordsInOriginal.length; i++) {
-      const word = wordsInOriginal[i].replace(/<[^>]*>/g, "").trim();
-      if (word) {
-        wordCount++;
-        if (wordCount > maxWords) {
-          cutPosition = i;
-          break;
-        }
-      }
-    }
-
-    const truncated = wordsInOriginal.slice(0, cutPosition).join(" ");
+    const truncated = words.slice(0, maxWords).join(" ");
     return truncated + "...";
   } else {
     // For plain text
@@ -73,89 +59,93 @@ const CustomPost = ({
   const renderDescription = () => {
     // For kategorien route, description is an array of objects
     if (routePrefix === "kategorien" && Array.isArray(description)) {
+      const firstItem = description.length > 0 ? description[0] : null;
+      if (!firstItem) return null;
+
       return (
         <div className="space-y-4">
-          {description.map((item, index) => (
-            <div key={index} className="border-l-4 border-blue-200 pl-4">
-              <h6 className="font-semibold text-blue-800 mb-2 text-sm">
-                {item.title}
-              </h6>
-              <div
-                className="text-sm leading-relaxed text-justify"
-                {...(isHTML(item.content)
-                  ? {
-                      dangerouslySetInnerHTML: {
-                        __html: truncateText(item.content),
-                      },
-                    }
-                  : { children: truncateText(item.content) })}
-              />
-            </div>
-          ))}
+          <div className="pl-4">
+            {/* <h6 className="font-semibold text-blue-800 mb-2 text-sm">
+              {firstItem.title}
+            </h6> */}
+            <div
+              className="text-sm leading-relaxed text-justify"
+              {...(isHTML(firstItem.content)
+                ? {
+                    dangerouslySetInnerHTML: {
+                      __html: truncateText(firstItem.content),
+                    },
+                  }
+                : { children: truncateText(firstItem.content) })}
+            />
+          </div>
         </div>
       );
     }
 
     // For sprachkurs route, description is an array of objects with icon, title, content
     if (routePrefix === "sprachkurs" && Array.isArray(description)) {
+      const firstItem = description.length > 0 ? description[0] : null;
+      if (!firstItem) return null;
+
       return (
         <div className="space-y-4">
-          {description.map((item, index) => (
-            <div key={index} className="border-l-4 border-green-200 pl-4">
-              <div className="flex items-center gap-2 mb-2">
-                {item.icon && item.icon.length > 0 && (
-                  <div className="flex items-center gap-1">
-                    {item.icon.map((iconName, iconIndex) => (
-                      <span
-                        key={iconIndex}
-                        className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full"
-                      >
-                        {iconName}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <h6 className="font-semibold text-green-800 text-sm">
-                  {item.title}
-                </h6>
-              </div>
-              <div
-                className="text-sm leading-relaxed text-justify"
-                {...(isHTML(item.content)
-                  ? {
-                      dangerouslySetInnerHTML: {
-                        __html: truncateText(item.content),
-                      },
-                    }
-                  : { children: truncateText(item.content) })}
-              />
+          {/* <div className="border-l-4 border-green-200 pl-4"> */}
+          <div className="pl-4">
+            <div className="flex items-center gap-2 mb-2">
+              {firstItem.icon && firstItem.icon.length > 0 && (
+                <div className="flex items-center gap-1">
+                  {firstItem.icon.map((iconName, iconIndex) => (
+                    <span
+                      key={iconIndex}
+                      className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full"
+                    >
+                      {iconName}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <h6 className="font-semibold text-green-800 text-sm">
+                {firstItem.title}
+              </h6>
             </div>
-          ))}
+            <div
+              className="text-sm leading-relaxed text-justify"
+              {...(isHTML(firstItem.content)
+                ? {
+                    dangerouslySetInnerHTML: {
+                      __html: truncateText(firstItem.content),
+                    },
+                  }
+                : { children: truncateText(firstItem.content) })}
+            />
+          </div>
         </div>
       );
     }
 
     // For liedtexte route, description is an array of objects with title, content
     if (routePrefix === "liedtexte" && Array.isArray(description)) {
+      const firstItem = description.length > 0 ? description[0] : null;
+      if (!firstItem) return null;
+
       return (
         <div className="space-y-4">
-          {description.map((item, index) => (
-            <div key={index} className="border-l-4 border-purple-200 pl-4">
-              <h6 className="font-semibold text-purple-800 mb-2 text-sm">
-                {item.title}
-              </h6>
-              <div
-                className="text-sm leading-relaxed text-justify"
-                {...(isHTML(item.content)
-                  ? {
-                      dangerouslySetInnerHTML: {
-                        __html: truncateText(item.content),
-                      },
-                    }
-                  : { children: truncateText(item.content) })}
-              />
-            </div>
-          ))}
+          <div className="pl-4">
+            {/* <h6 className="font-semibold text-purple-800 mb-2 text-sm">
+              {firstItem.title}
+            </h6> */}
+            <div
+              className="text-sm leading-relaxed text-justify"
+              {...(isHTML(firstItem.content)
+                ? {
+                    dangerouslySetInnerHTML: {
+                      __html: truncateText(firstItem.content),
+                    },
+                  }
+                : { children: truncateText(firstItem.content) })}
+            />
+          </div>
         </div>
       );
     }
