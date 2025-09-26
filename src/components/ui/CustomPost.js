@@ -53,6 +53,9 @@ const CustomPost = ({
   const handleClick = (slug) => {
     // route.push(`/${routePrefix}/${slug}`);
     route.push(`${slug}`);
+    if (routePrefix === "einfach-lesen") {
+      route.push(`/${routePrefix}/${slug}`);
+    }
   };
 
   // Render description based on routePrefix and data type
@@ -93,7 +96,7 @@ const CustomPost = ({
           {/* <div className="border-l-4 border-green-200 pl-4"> */}
           <div className="pl-4">
             <div className="flex items-center gap-2 mb-2">
-              {firstItem.icon && firstItem.icon.length > 0 && (
+              {/* {firstItem.icon && firstItem.icon.length > 0 && (
                 <div className="flex items-center gap-1">
                   {firstItem.icon.map((iconName, iconIndex) => (
                     <span
@@ -107,7 +110,7 @@ const CustomPost = ({
               )}
               <h6 className="font-semibold text-green-800 text-sm">
                 {firstItem.title}
-              </h6>
+              </h6> */}
             </div>
             <div
               className="text-sm leading-relaxed text-justify"

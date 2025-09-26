@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { GetKategorienPages, SearchAllPosts } from "@/lib/getAllPages";
+import { GetEinFachPages, SearchAllPosts } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
-const KategorienPage = () => {
+const EinFachPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
@@ -75,11 +75,11 @@ const KategorienPage = () => {
       if (isSearching) {
         apiData = await SearchAllPosts(search, 10, cursor);
       } else {
-        apiData = await GetKategorienPages(10, cursor);
+        apiData = await GetEinFachPages(10, cursor);
       }
 
-      console.log("kategorien data:", apiData.data.posts);
-      const newPosts = apiData.data.posts;
+      console.log("kategorien data:", apiData.data.einfacheLesungen);
+      const newPosts = apiData.data.einfacheLesungen;
 
       // Replace posts instead of appending
       if (isSearching) {
@@ -132,12 +132,12 @@ const KategorienPage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const apiData = await GetKategorienPages();
+        const apiData = await GetEinFachPages();
         // console.log("shorts data:", apiData.data.posts);
-        // console.log("shorts data: alll 222222", apiData);
+        console.log("einfachLessen data: alll 222222", apiData);
         setCookieData(apiData);
-        setCustomPosts(apiData.data.posts);
-        setPageInfo(apiData.data.posts.pageInfo);
+        setCustomPosts(apiData.data.einfacheLesungen);
+        setPageInfo(apiData.data.einfacheLesungen.pageInfo);
         setCurrentPage(1);
         setPageHistory([]);
       } catch (err) {
@@ -254,11 +254,11 @@ const KategorienPage = () => {
                       title={edge.node?.title}
                       image={edge.node?.featuredImage?.node?.sourceUrl}
                       imageAlt={edge.node?.featuredImage?.node?.altText}
-                      description={edge.node.postContent?.topicsPostContent}
+                      description={edge.node?.content}
                       excerpt={null}
                       onlyHeadings={onlyHeadings}
                       slug={edge.node.slug}
-                      routePrefix="kategorien"
+                      routePrefix="einfach-lesen"
                     />
                     {/* Divider except last */}
                     {!onlyHeadings && idx < posts?.edges?.length - 1 && (
@@ -303,4 +303,4 @@ const KategorienPage = () => {
   );
 };
 
-export default KategorienPage;
+export default EinFachPage;
