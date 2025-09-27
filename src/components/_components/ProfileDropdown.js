@@ -44,7 +44,7 @@ const ProfileDropdown = () => {
       {/* Profile button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="header-btn register flex items-center gap-2 hover:bg-gray-100 rounded-md px-3 py-2"
+        className="header-btn register flex items-center gap-2 rounded-md px-3 py-2"
       >
         {/* Avatar */}
         <div className="w-8 h-8 user-avatar rounded-full flex items-center justify-center text-sm font-medium">
