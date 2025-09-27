@@ -319,6 +319,75 @@ export function GetKategorienPages(first = 10, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
+export function GetWessenwertPages(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetShortsPosts($first: Int = 10, $after: String) {
+      pages(where: { name: "wessenwert" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+      posts(
+        first: $first
+        after: $after
+        where: {
+         metaQuery: {
+          relation: AND
+          metaArray: [
+          {
+            key: "post_layout"
+            value: "topics"
+            compare: EQUAL_TO
+          }
+        ]
+      }
+    }
+      ) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            postId
+            link
+            date
+            postContent {
+              topicsPostContent {
+                title
+                content
+              }
+              postOrder
+              shortTitle
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
 export function GetEinFachPages(first = 10, after = null) {
   const SEARCH_QUERY = `
     query GetEinFachPage($first: Int = 10, $after: String) {
