@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 
 import { ThemeProvider } from "@material-tailwind/react";
+import ReduxProvider from "@/lib/store/ReduxProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,9 @@ export default function RootLayout({ children }) {
       <body
         className={openSans.className}
       >
+        <ReduxProvider>
         <ThemeProvider>{children}</ThemeProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

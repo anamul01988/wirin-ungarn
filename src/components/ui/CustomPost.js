@@ -1,8 +1,9 @@
 "use client";
 
+import { setRoutePrefix } from "@/lib/store/routeSlice";
 import { Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
-
+import { useDispatch } from "react-redux";
 // Utility function to check if content contains HTML
 const isHTML = (str) => {
   if (typeof str !== "string") return false;
@@ -49,13 +50,22 @@ const CustomPost = ({
   routePrefix = "liedtexte",
 }) => {
   const route = useRouter();
+  const dispatch = useDispatch();
 
   const handleClick = (slug) => {
-    // route.push(`/${routePrefix}/${slug}`);
-    route.push(`${slug}`);
-    if (routePrefix === "einfach-lesen") {
-      route.push(`/${routePrefix}/${slug}`);
-    }
+    // Dispatch routePrefix to Redux store before navigation
+    dispatch(setRoutePrefix(routePrefix));
+    console.log('Dispatched routePrefix to Redux:', routePrefix);
+    
+    // Small timeout to ensure dispatch completes before navigation
+    setTimeout(() => {
+      // route.push(`/${routePrefix}/${slug}`);
+      route.push(`${slug}`);
+      if (routePrefix === "einfach-lesen") {
+        route.push(`/${routePrefix}/${slug}`);
+      }
+    }, 10);
+    
   };
 
   // Render description based on routePrefix and data type

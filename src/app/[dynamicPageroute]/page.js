@@ -1,47 +1,8 @@
-import { notFound } from "next/navigation";
-import { GetDynamicContent } from "@/lib/getAllPages";
-import DialogContent from "@/components/_components/DialogContent";
-// import DialogContent from "@/components/DialogContent"; // client component
+import DynamicPageClient from "@/components/ui/DynamicPageClient";
 
-export default async function DynamicPage({ params }) {
-  const { dynamicPageroute } = await params;
-
-  try {
-    const contentData = await GetDynamicContent(dynamicPageroute);
-    console.log("content data333eeeee333", contentData);
-    if (!contentData) {
-      notFound();
-    }
-    // console.log("contentData 222222222", contentData);
-    // Handle post content
-    if (contentData.type === "post") {
-      const { title, content, featuredImage, postContent } = contentData.data.data.post;
-      const imageUrl = featuredImage?.node?.sourceUrl || null;
-
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <DialogContent
-            title={title}
-            content={content === null ? postContent.shortsPostContent : content}
-            imageFeature={imageUrl}
-          />
-        </div>
-      );
-    }
-
-    // Handle page content
-    if (contentData.type === "page") {
-      const { title, content } = contentData.data.data.page;
-
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <DialogContent title={title} content={content} />
-        </div>
-      );
-    }
-    notFound();
-  } catch (error) {
-    console.error("Error fetching content:", error);
-    notFound();
-  }
+export default function DynamicPage({ params }) {
+  const { dynamicPageroute } = params;
+  
+  // We now use the client component that handles the conditional API calls
+  return <DynamicPageClient slug={dynamicPageroute} />;
 }
