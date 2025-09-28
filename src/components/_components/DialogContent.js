@@ -18,6 +18,8 @@ export default function DialogContent({
   tags,
   customFields,
   contentType,
+  routePrefix,
+  postContent, // Add postContent prop
 }) {
   const [open, setOpen] = useState(true);
 
@@ -26,6 +28,17 @@ export default function DialogContent({
   const navigateToHome = () => {
     route.push("/");
   };
+
+  // Log routePrefix and other props for debugging
+  console.log(
+    "DialogContent received routePrefix:",
+    routePrefix,
+    "contentType:",
+    contentType
+  );
+  if (contentType === "sprachkurs") {
+    console.log("Sprachkurs postContent:", postContent);
+  }
 
   const navigateToPreviousPage = () => {
     route.back();
@@ -101,11 +114,11 @@ export default function DialogContent({
                   <strong>Author:</strong> {author}
                 </p>
               )}
-              {contentType && (
+              {/* {contentType && (
                 <p>
                   <strong>Type:</strong> {contentType}
                 </p>
-              )}
+              )} */}
               {categories && categories.length > 0 && (
                 <p>
                   <strong>Categories:</strong>{" "}
@@ -176,6 +189,86 @@ export default function DialogContent({
                       </div>
                     </div>
                   )}
+              </div>
+            )}
+
+            {/* Custom Fields for Kategorien with topicsPostContent */}
+            {customFields &&
+              contentType === "kategorien" &&
+              customFields.topicsPostContent && (
+                <div className="mb-6">
+                  <h3 className="font-semibold text-green-800 mb-4 text-xl">
+                    {customFields.shortTitle || "Kategorien"}
+                  </h3>
+                  <div className="space-y-8">
+                    {customFields.topicsPostContent.map((section, index) => (
+                      <div
+                        key={index}
+                        className="border-l-4 border-green-300 pl-4"
+                      >
+                        {section.title && (
+                          <h4 className="font-medium text-green-800 text-lg mb-2">
+                            {section.title}
+                          </h4>
+                        )}
+                        {section.content && (
+                          <div
+                            className="prose prose-sm max-w-none text-green-700"
+                            dangerouslySetInnerHTML={{
+                              __html: section.content,
+                            }}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            {/* Custom Fields for Sprachkurs */}
+            {contentType === "sprachkurs" && (
+              <div className="mb-6">
+                {postContent?.sprachkursContent ? (
+                  <div className="space-y-6">
+                    {postContent.sprachkursContent.map((section, index) => (
+                      <div
+                        key={index}
+                        className="border-l-4 border-purple-300 pl-4"
+                      >
+                        {section.title && (
+                          <h4 className="font-medium text-purple-800 text-lg mb-2">
+                            {section.title}
+                          </h4>
+                        )}
+                        {section.icon && section.icon.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {section.icon.map((iconName, iconIndex) => (
+                              <span
+                                key={iconIndex}
+                                className="inline-block px-2 py-1 text-xs font-medium text-purple-700 bg-purple-100 rounded-full"
+                              >
+                                {iconName}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {section.content && (
+                          <div
+                            className="prose prose-sm max-w-none"
+                            dangerouslySetInnerHTML={{
+                              __html: section.content,
+                            }}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    className="prose prose-lg max-w-none"
+                    dangerouslySetInnerHTML={{ __html: content }}
+                  />
+                )}
               </div>
             )}
 

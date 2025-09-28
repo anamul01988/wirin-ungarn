@@ -903,6 +903,220 @@ export async function getAllCustomPostTypes() {
 //     return null;
 //   }
 // }
+// Enhanced version that accepts routePrefix parameter
+export async function GetDynamicContentV2(slug, routePrefix) {
+  console.log(
+    "GetDynamicContentV2 called with slug:",
+    slug,
+    "and routePrefix:",
+    routePrefix
+  );
+
+  try {
+    // Handle post with topicsPostContent (e.g. kategorien)
+    if (routePrefix === "kategorien") {
+      const topicsQuery = `
+        query GetTopicsPostBySlug {
+          post(id: "${slug}", idType: SLUG) {
+            id
+            title
+            slug
+            date
+            content
+            author {
+              node {
+                name
+              }
+            }
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+            postContent {
+              topicsPostContent {
+                title
+                content
+              }
+              postOrder
+              shortTitle
+            }
+          }
+        }
+      `;
+
+      const topicsData = await fetchPage(topicsQuery);
+
+      if (topicsData?.data?.post) {
+        return {
+          type: "post",
+          data: topicsData,
+          customType: "kategorien",
+        };
+      }
+    }
+
+    // If it's a specific custom post type, use specialized query
+    if (routePrefix === "liedtexte") {
+      const customQuery = `
+        query GetLiedtexteBySlug {
+          liedtexte(id: "${slug}", idType: SLUG) {
+            id
+            title
+            slug
+            content
+            date
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+            postContentLyrik {
+              introText
+              postContent {
+                content
+                title
+                icon
+              }
+              shortTitle
+            }
+          }
+        }
+      `;
+
+      const customData = await fetchPage(customQuery);
+
+      if (customData?.data?.liedtexte) {
+        return {
+          type: "post",
+          data: {
+            data: {
+              post: {
+                ...customData.data.liedtexte,
+                postContent: {
+                  shortsPostContent: customData.data.liedtexte.content,
+                },
+              },
+            },
+          },
+          customType: "liedtexte",
+        };
+      }
+    }
+
+    if (routePrefix === "sprachkurs") {
+      const customQuery = `
+query sprachlektionByID {
+  sprachlektion(id: "${slug}", idType: SLUG) {
+    id
+    databaseId
+    title
+    date
+    slug
+    postContentSprachlektion {
+      postContent {
+        icon
+        title
+        content
+      }
+    }
+    featuredImage {
+      node {
+        sourceUrl
+      }
+    }
+  }
+}
+      `;
+
+      const customData = await fetchPage(customQuery);
+
+      console.log("33333333", customData);
+
+      if (customData?.data?.sprachlektion) {
+        return {
+          type: "post",
+          data: {
+            data: {
+              post: {
+                ...customData.data.sprachlektion,
+                // Make the structure match what the DialogContent component expects
+                content:
+                  customData.data.sprachlektion.postContentSprachlektion
+                    ?.postContent?.[0]?.content || "",
+                postContent: {
+                  sprachkursContent:
+                    customData.data.sprachlektion.postContentSprachlektion
+                      ?.postContent || [],
+                  shortsPostContent:
+                    customData.data.sprachlektion.postContentSprachlektion
+                      ?.postContent?.[0]?.content || "",
+                },
+              },
+            },
+          },
+          customType: "sprachkurs",
+        };
+      }
+    }
+
+    if (routePrefix === "kategorien") {
+      const customQuery = `
+        query GetKategorienBySlug {
+          post(id: "${slug}", idType: SLUG) {
+    id
+    title
+    date
+    slug
+    author {
+      node {
+        name
+      }
+    }
+    postContent {
+      topicsPostContent {
+        title
+        content
+      }
+      postOrder
+      shortTitle
+    }
+  }
+        }
+      `;
+
+      const customData = await fetchPage(customQuery);
+
+      console.log("444444444", customData);
+
+      if (customData?.data?.post) {
+        return {
+          type: "post",
+          data: {
+            data: {
+              post: {
+                ...customData.data.post,
+                postContent: {
+                  shortsPostContent:
+                    customData?.data?.post?.postContent?.topicsPostContent,
+                },
+              },
+            },
+          },
+          customType: "sprachkurs",
+        };
+      }
+    }
+
+    // Fall back to regular GetDynamicContent if no specialized handling
+    return GetDynamicContent(slug);
+  } catch (error) {
+    console.error("Error in GetDynamicContentV2:", error);
+    // Fall back to regular GetDynamicContent
+    return GetDynamicContent(slug);
+  }
+}
+
 export async function GetDynamicContent(slug) {
   // console.log("slug 222222222", slug);
   // if (slug === "einfach-lesen") {
