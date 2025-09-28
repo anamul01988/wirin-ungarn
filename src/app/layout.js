@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 
 import { ThemeProvider } from "@material-tailwind/react";
+import { AuthProvider } from "@/contexts/AuthContext";
 import ReduxProvider from "@/lib/store/ReduxProvider";
 
 const geistSans = Geist({
@@ -25,7 +26,6 @@ const openSans = Open_Sans({
   weight: ["400", "500", "600", "700"], // choose the weights you need
 });
 
-
 const robotoCondensed = Roboto_Condensed({
   variable: "--font-roboto-condensed",
   subsets: ["latin"],
@@ -35,12 +35,10 @@ const robotoCondensed = Roboto_Condensed({
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={openSans.className}
-      >
-        <ReduxProvider>
-        <ThemeProvider>{children}</ThemeProvider>
-        </ReduxProvider>
+      <body className={openSans.className}>
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
