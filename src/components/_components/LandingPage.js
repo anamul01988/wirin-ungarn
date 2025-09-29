@@ -65,21 +65,30 @@ const LandingPage = () => {
         const hoverButtons = document.createElement('div');
         hoverButtons.className = 'hover-buttons';
         hoverButtons.innerHTML = `
-          <button class="hover-plus"><img src="/assets/icons/favorit_e.png" alt="+ button"></button>
-          <button class="hover-close"><img src="/assets/icons/close.png" alt="x button"></button>
+          <button class="hover-plus"><img src="/assets/icons/favorit_e.png" alt="+ button" style="width:40px; height:40px;"></button>
+          <button class="hover-close"><img src="/assets/icons/close.png" alt="x button" style="width:40px; height:40px;"></button>
         `;
         card.appendChild(hoverButtons);
 
         const plusBtn = hoverButtons.querySelector('.hover-plus');
         plusBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          // Add your plus button functionality here
+          // Add favorite functionality here
+          console.log('Added to favorites:', card);
         });
 
         const closeBtn = hoverButtons.querySelector('.hover-close');
         closeBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          wrapper.style.display = 'none';
+          // Hide the card with smooth animation
+          gsap.to(wrapper, {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.3,
+            onComplete: () => {
+              wrapper.style.display = 'none';
+            }
+          });
         });
       });
 
@@ -443,17 +452,23 @@ const LandingPage = () => {
                 document.getElementById('modalText').textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
                 
                 // Add a button to navigate to the page
-                const modalContent = document.querySelector('.modal-content');
-                const existingButton = modalContent.querySelector('.navigate-btn');
-                if (!existingButton) {
+                const buttonContainer = modal.querySelector('.modal-content div');
+                if (buttonContainer) {
+                  // Clear existing buttons first
+                  const existingNavigateBtn = buttonContainer.querySelector('.navigate-btn');
+                  if (existingNavigateBtn) {
+                    existingNavigateBtn.remove();
+                  }
+                  
+                  // Create and add the navigation button
                   const navigateBtn = document.createElement('button');
                   navigateBtn.className = 'close-modal navigate-btn';
-                  navigateBtn.style.marginLeft = '10px';
+                  navigateBtn.style.backgroundColor = '#4a7c59';
                   navigateBtn.textContent = 'Zur Seite';
                   navigateBtn.onclick = () => {
                     route.push(card.route);
                   };
-                  modalContent.appendChild(navigateBtn);
+                  buttonContainer.appendChild(navigateBtn);
                 }
                 
                 modal.style.display = 'flex';
@@ -475,15 +490,17 @@ const LandingPage = () => {
         <div className="modal-content">
           <h2 id="modalTitle" style={{ color: '#4a7c59', fontFamily: "'Roboto Condensed', sans-serif", marginBottom: '15px' }}>Card Title</h2>
           <p id="modalText" style={{ marginBottom: '20px', fontSize: '16px', lineHeight: '1.6' }}>Card details will appear here</p>
-          <button 
-            className="close-modal" 
-            onClick={() => {
-              document.getElementById('modal').style.display = 'none';
-            }}
-            style={{ backgroundColor: '#4a7c59', marginRight: '10px' }}
-          >
-            Schließen
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+            <button 
+              className="close-modal" 
+              onClick={() => {
+                document.getElementById('modal').style.display = 'none';
+              }}
+              style={{ backgroundColor: '#4a7c59', marginRight: '10px' }}
+            >
+              Schließen
+            </button>
+          </div>
         </div>
       </div>
 
