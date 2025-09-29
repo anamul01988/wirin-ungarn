@@ -319,10 +319,10 @@ export function GetKategorienPages(first = 10, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-export function GetWessenwertPages(first = 10, after = null) {
+export function GetWessenwertPages(first = 5, after = null) {
   const SEARCH_QUERY = `
-    query GetShortsPosts($first: Int = 10, $after: String) {
-      pages(where: { name: "wessenwert" }) {
+    query GetWessenwertPosts($first: Int = 5, $after: String) {
+      pages(where: { name: "wissenswert" }) {
         nodes {
           id
           title
@@ -341,7 +341,7 @@ export function GetWessenwertPages(first = 10, after = null) {
           metaArray: [
           {
             key: "post_layout"
-            value: "topics"
+            value: "informative"
             compare: EQUAL_TO
           }
         ]
@@ -364,8 +364,9 @@ export function GetWessenwertPages(first = 10, after = null) {
             link
             date
             postContent {
-              topicsPostContent {
+              postContent {
                 title
+                icon
                 content
               }
               postOrder
@@ -1191,6 +1192,140 @@ export async function GetDynamicContent(slug) {
     return null;
   }
 }
+export async function GetWissenswertPostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          postId
+          link
+          date
+          content
+          postContent {
+            postContent {
+              title
+              icon
+              content
+            }
+            postOrder
+            shortTitle
+            introText
+            shortsPostContent
+          }
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+    console.log("postData 222222222", postData);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.post) {
+      return {
+        type: "post",
+        data: postData,
+      };
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching wissenswert post by slug:", error);
+    return null;
+  }
+}
+
+export async function GetEinfachLesenPostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        einfachLesen(id: "${slug}", idType: URI) {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+          featuredImage {
+            node {
+              sourceUrl
+              title
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+    console.log("postData 222222222", postData);
+    console.log("einfachLesen exists:", !!postData?.data?.einfachLesen);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.einfachLesen) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching einfach lesen post by slug:", error);
+    return null;
+  }
+}
+
+export async function GetAusflugszielePostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        listing(id: "${slug}", idType: URI) {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+    console.log("postData 222222222", postData);
+    console.log("listing exists:", !!postData?.data?.listing);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.listing) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching ausflugsziele post by slug:", error);
+    return null;
+  }
+}
+
 export function GetDatenschutzPages() {
   return fetchPage(GET_PAGE_DATENSCHUTZ);
 }
