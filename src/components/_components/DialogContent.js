@@ -18,6 +18,7 @@ export default function DialogContent({
   tags,
   customFields,
   contentType,
+  singlePostContent = [],
 }) {
   const [open, setOpen] = useState(true);
 
@@ -88,6 +89,15 @@ export default function DialogContent({
             </div>
             <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1>
 
+            {contentType === "wissenswert" && (
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <p
+                  className="text-gray-700 italic"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              </div>
+            )}
+
             {/* Content Metadata */}
             <div className="mb-6 text-sm text-gray-600 space-y-2">
               {date && (
@@ -101,11 +111,11 @@ export default function DialogContent({
                   <strong>Author:</strong> {author}
                 </p>
               )}
-              {contentType && (
+              {/* {contentType && (
                 <p>
                   <strong>Type:</strong> {contentType}
                 </p>
-              )}
+              )} */}
               {categories && categories.length > 0 && (
                 <p>
                   <strong>Categories:</strong>{" "}
@@ -190,6 +200,63 @@ export default function DialogContent({
                   aria-label={imageAlt || title}
                 ></div>
               </>
+            )}
+            {/* ---------------------------------------- */}
+            {singlePostContent && singlePostContent.length > 0 && (
+              <div className="prose prose-lg max-w-none">
+                {singlePostContent.map((content, index) => (
+                  <div key={index} className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <div className="text-red-600 text-2xl">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          className="w-8 h-8"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
+                          />
+                        </svg>
+                      </div>
+                      <h2 className="text-2xl font-semibold text-green-700">
+                        <div
+                          dangerouslySetInnerHTML={{ __html: content.title }}
+                        />
+                      </h2>
+                    </div>
+
+                    <p className="text-gray-600 leading-relaxed">
+                      <div
+                        dangerouslySetInnerHTML={{ __html: content.content }}
+                      />
+                    </p>
+
+                    {content?.shortTitle && (
+                      <div className="border border-red-500 bg-red-50 p-4">
+                        <h3 className="text-red-600 font-semibold text-lg mb-1">
+                          {content.shortTitle}
+                        </h3>
+                        <p className="text-red-600 text-sm leading-relaxed">
+                          {content.title}{" "}
+                          {content.shortsPostContent && (
+                            <a
+                              href={content.shortsPostContent}
+                              className="underline hover:text-red-700"
+                            >
+                              Klicke hier
+                            </a>
+                          )}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             )}
 
             {/* Render Contact Form or regular content */}

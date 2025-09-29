@@ -51,11 +51,16 @@ const CustomPost = ({
   const route = useRouter();
 
   const handleClick = (slug) => {
+    console.log("routePrefix", routePrefix, typeof routePrefix);
     // route.push(`/${routePrefix}/${slug}`);
-    route.push(`${slug}`);
-    if (routePrefix === "einfach-lesen") {
+    if (routePrefix === "wissenswert") {
       route.push(`/${routePrefix}/${slug}`);
     }
+    // if (routePrefix === "einfach-lesen") {
+    //   route.push(`/${routePrefix}/${slug}`);
+    // } else {
+    //   route.push(`${slug}`);
+    // }
   };
 
   // Render description based on routePrefix and data type

@@ -319,10 +319,10 @@ export function GetKategorienPages(first = 10, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-export function GetWessenwertPages(first = 10, after = null) {
+export function GetWessenwertPages(first = 5, after = null) {
   const SEARCH_QUERY = `
-    query GetShortsPosts($first: Int = 10, $after: String) {
-      pages(where: { name: "wessenwert" }) {
+    query GetWessenwertPosts($first: Int = 5, $after: String) {
+      pages(where: { name: "wissenswert" }) {
         nodes {
           id
           title
@@ -341,7 +341,7 @@ export function GetWessenwertPages(first = 10, after = null) {
           metaArray: [
           {
             key: "post_layout"
-            value: "topics"
+            value: "informative"
             compare: EQUAL_TO
           }
         ]
@@ -364,8 +364,9 @@ export function GetWessenwertPages(first = 10, after = null) {
             link
             date
             postContent {
-              topicsPostContent {
+              postContent {
                 title
+                icon
                 content
               }
               postOrder
@@ -974,6 +975,59 @@ export async function GetDynamicContent(slug) {
     return null;
   } catch (error) {
     console.error("Error fetching dynamic content:", error);
+    return null;
+  }
+}
+export async function GetWissenswertPostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          postId
+          link
+          date
+          content
+          postContent {
+            postContent {
+              title
+              icon
+              content
+            }
+            postOrder
+            shortTitle
+            introText
+            shortsPostContent
+          }
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+    console.log("postData 222222222", postData);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.post) {
+      return {
+        type: "post",
+        data: postData,
+      };
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching wissenswert post by slug:", error);
     return null;
   }
 }
