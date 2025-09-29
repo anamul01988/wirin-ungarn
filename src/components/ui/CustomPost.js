@@ -53,19 +53,26 @@ const CustomPost = ({
   const dispatch = useDispatch();
 
   const handleClick = (slug) => {
+    console.log("routePrefix", routePrefix, typeof routePrefix);
     // Dispatch routePrefix to Redux store before navigation
     dispatch(setRoutePrefix(routePrefix));
-    console.log('Dispatched routePrefix to Redux:', routePrefix);
-    
+    console.log("Dispatched routePrefix to Redux:", routePrefix);
+
     // Small timeout to ensure dispatch completes before navigation
     setTimeout(() => {
       // route.push(`/${routePrefix}/${slug}`);
-      route.push(`${slug}`);
+      if (routePrefix === "wissenswert") {
+        route.push(`/${routePrefix}/${slug}`);
+      }
       if (routePrefix === "einfach-lesen") {
         route.push(`/${routePrefix}/${slug}`);
       }
+      if (routePrefix === "ausflugsziele") {
+        route.push(`/${routePrefix}/${slug}`);
+      } else {
+        route.push(`${slug}`);
+      }
     }, 10);
-    
   };
 
   // Render description based on routePrefix and data type
