@@ -1031,6 +1031,87 @@ export async function GetWissenswertPostBySlug(slug) {
     return null;
   }
 }
+
+export async function GetEinfachLesenPostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        einfachLesen(id: "${slug}", idType: URI) {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+          featuredImage {
+            node {
+              sourceUrl
+              title
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+    console.log("postData 222222222", postData);
+    console.log("einfachLesen exists:", !!postData?.data?.einfachLesen);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.einfachLesen) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching einfach lesen post by slug:", error);
+    return null;
+  }
+}
+
+export async function GetAusflugszielePostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        listing(id: "${slug}", idType: URI) {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+    console.log("postData 222222222", postData);
+    console.log("listing exists:", !!postData?.data?.listing);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.listing) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching ausflugsziele post by slug:", error);
+    return null;
+  }
+}
+
 export function GetDatenschutzPages() {
   return fetchPage(GET_PAGE_DATENSCHUTZ);
 }

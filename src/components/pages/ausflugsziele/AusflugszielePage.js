@@ -262,7 +262,7 @@ const AusflugszielePage = () => {
                         description={edge.node.postContentLyrik?.introText}
                         onlyHeadings={onlyHeadings}
                         slug={edge.node.slug}
-                        routePrefix="shorts"
+                        routePrefix="ausflugsziele"
                       />
                       {/* Divider except last */}
                       {!onlyHeadings && idx < posts?.edges?.length - 1 && (

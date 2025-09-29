@@ -56,11 +56,14 @@ const CustomPost = ({
     if (routePrefix === "wissenswert") {
       route.push(`/${routePrefix}/${slug}`);
     }
-    // if (routePrefix === "einfach-lesen") {
-    //   route.push(`/${routePrefix}/${slug}`);
-    // } else {
-    //   route.push(`${slug}`);
-    // }
+    if (routePrefix === "einfach-lesen") {
+      route.push(`/${routePrefix}/${slug}`);
+    }
+    if (routePrefix === "ausflugsziele") {
+      route.push(`/${routePrefix}/${slug}`);
+    } else {
+      route.push(`${slug}`);
+    }
   };
 
   // Render description based on routePrefix and data type
