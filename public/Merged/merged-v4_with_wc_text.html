@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Das Auswanderer-Portal</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Styles from demo_wiu_v2.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 50%, #e0f0e0 100%);
+            min-height: 100vh;
+            position: relative;
+            background-image: url(pattern-bg.jpg);
+            padding-bottom: 120px;
+            background-attachment: fixed;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 45px;
+        }
+
+        .header-btn {
+            background: #c41e3a;
+            color: #f7f7f7;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            outline: 5px solid #ffffff;
+        }
+
+        .header-btn .ht_text {
+            margin-right: 20px;
+        }
+
+        .header-btn:hover {
+            background: #a01729;
+        }
+
+        .header-btn.favorites {
+            background: #c41e3a;
+        }
+
+        .header-btn.register {
+            background: #c41e3a;
+        }
+
+        .header-btn {
+            position: relative;
+        }
+        .header-btn .ind_icon {
+           min-width: 16px;
+           display: inline-block;
+        }
+
+        .header-btn span img {
+            width: 18px;
+            height: 18px;
+            position: absolute;
+            top: 8px;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 20px;
+            top: 12%;
+            width: 200px;
+            z-index: 50;
+        }
+
+        .nav-item {
+            background: #4a7c59;
+            color: white;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            outline: 5px solid #ffffff;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: #3d6b4a;
+        }
+
+        .nav-item h3 {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-item p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .hover-menu {
+            position: absolute;
+            left: calc(100% + 20px);
+            top: 0;
+            background: #4a7c59;
+            border-radius: 8px;
+            outline: 5px solid #ffffff;
+            min-width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 100;
+        }
+
+        .nav-item:hover .hover-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hover-menu::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 12px 12px 12px 0;
+            border-color: transparent #ffffff transparent transparent;
+        }
+
+        .hover-menu::after {
+            content: '';
+            position: absolute;
+            right: calc(100% + 5px);
+            top: 20px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 7px 7px 7px 0;
+            border-color: transparent #4a7c59 transparent transparent;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.2s;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background: #3d6b4a;
+        }
+
+        .menu-item:first-child:hover {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .menu-item:last-child:hover {
+            border-radius: 0 0 8px 8px;
+        }
+
+        .main-logo {
+            position: fixed;
+            left: 20px;
+            bottom: 80px;
+            /*z-index: 50;*/
+            width: 410px;
+        }
+
+        .main-logo img {
+            width: 100%;
+        }
+
+        .news-content {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .news-item {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .cards {
+            position: absolute;
+            background: #4a7c59;
+            padding: 10px;
+            top: 12%;
+            left: 22%;
+            color: white;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 40px;
+        }
+
+        .footer-links {
+            flex: 1;
+            max-width: 650px;
+            margin-left: auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            background: #4a7c59;
+            padding: 10px;
+            border-radius: 5px;
+            outline: 5px solid #ffffff;
+        }
+
+        .footer-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 0px 5px;
+            border-radius: 4px;
+            transition: background 0.3s;
+            line-height: 14px;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        .footer-link:hover {
+            background: rgba(74, 124, 89, 0.2);
+        }
+
+        .flag-text {
+            background: linear-gradient(to bottom, #dd2c2c 33%, white 33%, white 66%, #4a7c59 66%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ticker-container {
+            position: relative;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+            overflow: hidden;
+            margin: 20px 20px -8px 0px;
+            max-width: 750px;
+            display: flex;
+            align-items: center;
+            height: 50px;
+            border: 2px solid #436f4d;
+            padding: 0 8px;
+        }
+
+        .ticker-label {
+            background-color: #c41e3a;
+            color: white;
+            padding: 0 15px;
+            font-weight: bold;
+            font-size: 13px;
+            white-space: nowrap;
+            height: 75%;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .ticker-content {
+            position: relative;
+            background-color: #fff;
+            overflow: hidden;
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker-wrapper {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            padding-left: 100%;
+            border: 1px solid #1c6547;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .ticker-content:hover .ticker-wrapper {
+            animation-play-state: paused;
+        }
+
+        .ticker-item {
+            white-space: nowrap;
+            padding: 0 5px;
+            color: #333;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker-separator {
+            color: #c41e3a;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .close-button {
+            background-color: #c41e3a;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 15px;
+            height: 75%;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .close-button:hover {
+            opacity: 1;
+            background-color: #a01729;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ticker-container {
+                height: 40px;
+            }
+            .ticker-label {
+                font-size: 11px;
+                padding: 0 10px;
+            }
+            .ticker-item {
+                font-size: 12px;
+                padding: 0 30px;
+            }
+            .close-button {
+                padding: 0 12px;
+                font-size: 16px;
+            }
+        }
+
+        .ticker-container.hidden {
+            display: none;
+        }
+
+        .news-link {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .news-link:hover {
+            color: #c41e3a;
+        }
+
+        @media screen and (max-width:1366px) {
+            .ticker-container {
+                max-width: 500px;
+            }
+            .footer-links {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 7px;
+            }
+            .footer-content {
+                gap: 8px;
+            }
+        }
+
+        @media screen and (max-width:940px) {
+            .ht_text {
+                display: none;
+            }
+        }
+
+        /* Styles from card_on_board_september_23.html */
+
+
+         /* New code for hero section */
+
+         .clearfix {
+            clear: both;
+        }
+        .panel {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            text-transform: uppercase;
+        }
+
+        .hero_logo img {
+            float: right;
+            width: 65%;
+        }
+
+        .top-text {
+            font-size: 45px;
+            font-weight: 400;
+            color: #4a7c59;
+            margin: 0;
+            font-family: 'Roboto Condensed', sans-serif;
+            /* Enhanced drop shadow with the existing white outline */
+            text-shadow: 
+            /* White outline (keeping your existing extensive outline) */
+            rgb(255, 255, 255) 7px 0px 0px, rgb(255, 255, 255) 6.92869px 0.996602px 0px, rgb(255, 255, 255) 6.71622px 1.9729px 0px, rgb(255, 255, 255) 6.36692px 2.909px 0px, rgb(255, 255, 255) 5.8879px 3.78584px 0px, rgb(255, 255, 255) 5.28893px 4.58555px 0px, rgb(255, 255, 255) 4.5822px 5.29183px 0px, rgb(255, 255, 255) 3.78212px 5.8903px 0px, rgb(255, 255, 255) 2.90498px 6.36876px 0px, rgb(255, 255, 255) 1.96865px 6.71747px 0px, rgb(255, 255, 255) 0.992221px 6.92932px 0px, rgb(255, 255, 255) -0.00442571px 7px 0px, rgb(255, 255, 255) -1.00098px 6.92806px 0px, rgb(255, 255, 255) -1.97715px 6.71498px 0px, rgb(255, 255, 255) -2.91303px 6.36508px 0px, rgb(255, 255, 255) -3.78956px 5.88551px 0px, rgb(255, 255, 255) -4.58889px 5.28603px 0px, rgb(255, 255, 255) -5.29472px 4.57885px 0px, rgb(255, 255, 255) -5.89269px 3.77839px 0px, rgb(255, 255, 255) -6.3706px 2.90095px 0px, rgb(255, 255, 255) -6.71871px 1.96441px 0px, rgb(255, 255, 255) -6.92995px 0.98784px 0px, rgb(255, 255, 255) -6.99999px -0.00885142px 0px, rgb(255, 255, 255) -6.92743px -1.00536px 0px, rgb(255, 255, 255) -6.71372px -1.98139px 0px, rgb(255, 255, 255) -6.36324px -2.91705px 0px, rgb(255, 255, 255) -5.88311px -3.79328px 0px, rgb(255, 255, 255) -5.28313px -4.59223px 0px, rgb(255, 255, 255) -4.57551px -5.29762px 0px, rgb(255, 255, 255) -3.77467px -5.89507px 0px, rgb(255, 255, 255) -2.89692px -6.37243px 0px, rgb(255, 255, 255) -1.96016px -6.71995px 0px, rgb(255, 255, 255) -0.983458px -6.93057px 0px, rgb(255, 255, 255) 0.0132771px -6.99999px 0px, rgb(255, 255, 255) 1.00974px -6.92679px 0px, rgb(255, 255, 255) 1.98564px -6.71247px 0px, rgb(255, 255, 255) 2.92107px -6.36139px 0px, rgb(255, 255, 255) 3.797px -5.88071px 0px, rgb(255, 255, 255) 4.59557px -5.28022px 0px, rgb(255, 255, 255) 5.30051px -4.57215px 0px, rgb(255, 255, 255) 5.89746px -3.77094px 0px, rgb(255, 255, 255) 6.37426px -2.89289px 0px, rgb(255, 255, 255) 6.72119px -1.95591px 0px, rgb(255, 255, 255) 6.93119px -0.979076px 0px,
+                /* Enhanced drop shadow */
+                8px 8px 12px rgba(0, 0, 0, 0.8),
+                10px 10px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .subtitle {
+            font-size: 30px;
+            color: #c41e3a;
+            margin: 10px 0;
+            font-family: 'Roboto Condensed', sans-serif;
+            margin-bottom: 18px;
+            /* White outline with enhanced drop shadow */
+            text-shadow: 
+            /* White outline */
+            rgb(255, 255, 255) 4px 0px 0px, rgb(255, 255, 255) 3.87565px 0.989616px 0px, rgb(255, 255, 255) 3.51033px 1.9177px 0px, rgb(255, 255, 255) 2.92676px 2.72656px 0px, rgb(255, 255, 255) 2.16121px 3.36588px 0px, rgb(255, 255, 255) 1.26129px 3.79594px 0px, rgb(255, 255, 255) 0.282949px 3.98998px 0px, rgb(255, 255, 255) -0.712984px 3.93594px 0px, rgb(255, 255, 255) -1.66459px 3.63719px 0px, rgb(255, 255, 255) -2.51269px 3.11229px 0px, rgb(255, 255, 255) -3.20457px 2.39389px 0px, rgb(255, 255, 255) -3.69721px 1.52664px 0px, rgb(255, 255, 255) -3.95997px 0.56448px 0px, rgb(255, 255, 255) -3.97652px -0.432781px 0px, rgb(255, 255, 255) -3.74583px -1.40313px 0px, rgb(255, 255, 255) -3.28224px -2.28625px 0px, rgb(255, 255, 255) -2.61457px -3.02721px 0px, rgb(255, 255, 255) -1.78435px -3.57996px 0px, rgb(255, 255, 255) -0.843183px -3.91012px 0px, rgb(255, 255, 255) 0.150409px -3.99717px 0px, rgb(255, 255, 255) 1.13465px -3.8357px 0px, rgb(255, 255, 255) 2.04834px -3.43574px 0px, rgb(255, 255, 255) 2.83468px -2.82216px 0px, rgb(255, 255, 255) 3.44477px -2.03312px 0px, rgb(255, 255, 255) 3.84068px -1.11766px 0px, rgb(255, 255, 255) 3.9978px -0.132717px 0px,
+            /* Enhanced drop shadow */
+            5px 5px 10px rgba(0, 0, 0, 0.8),
+            7px 7px 15px rgba(0, 0, 0, 0.8);
+        }
+        
+        .body-text {
+            font-size: 20px;
+            margin: 5px 0;
+            line-height: 1.5;
+            font-family: 'Roboto Condensed', sans-serif;
+            color: #4a7c59;
+            margin-left: 45px;
+            /* White outline with enhanced drop shadow */
+            text-shadow: 
+            /* White outline */
+            rgb(255, 255, 255) 4px 0px 0px, rgb(255, 255, 255) 3.87565px 0.989616px 0px, rgb(255, 255, 255) 3.51033px 1.9177px 0px, rgb(255, 255, 255) 2.92676px 2.72656px 0px, rgb(255, 255, 255) 2.16121px 3.36588px 0px, rgb(255, 255, 255) 1.26129px 3.79594px 0px, rgb(255, 255, 255) 0.282949px 3.98998px 0px, rgb(255, 255, 255) -0.712984px 3.93594px 0px, rgb(255, 255, 255) -1.66459px 3.63719px 0px, rgb(255, 255, 255) -2.51269px 3.11229px 0px, rgb(255, 255, 255) -3.20457px 2.39389px 0px, rgb(255, 255, 255) -3.69721px 1.52664px 0px, rgb(255, 255, 255) -3.95997px 0.56448px 0px, rgb(255, 255, 255) -3.97652px -0.432781px 0px, rgb(255, 255, 255) -3.74583px -1.40313px 0px, rgb(255, 255, 255) -3.28224px -2.28625px 0px, rgb(255, 255, 255) -2.61457px -3.02721px 0px, rgb(255, 255, 255) -1.78435px -3.57996px 0px, rgb(255, 255, 255) -0.843183px -3.91012px 0px, rgb(255, 255, 255) 0.150409px -3.99717px 0px, rgb(255, 255, 255) 1.13465px -3.8357px 0px, rgb(255, 255, 255) 2.04834px -3.43574px 0px, rgb(255, 255, 255) 2.83468px -2.82216px 0px, rgb(255, 255, 255) 3.44477px -2.03312px 0px, rgb(255, 255, 255) 3.84068px -1.11766px 0px, rgb(255, 255, 255) 3.9978px -0.132717px 0px,
+            /* Enhanced drop shadow */
+            5px 5px 8px rgba(0, 0, 0, 0.5),
+            6px 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .plus_icon , .x_icon {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-size: cover;
+            vertical-align: middle;
+        }
+
+        .plus_icon {
+            background-image: url(plus-icon.png);
+        }
+
+        .x_icon {
+            background-image: url(x-icon.png);
+        }
+
+        /* New code for hero section */
+
+
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            /*z-index: 10;*/
+        }
+
+        .hero-title {
+            font-size: 60px;
+            color: #487957;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: none;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-subtitle {
+            font-size: 25px;
+            color: #487957;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .cards-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .card-wrapper {
+            position: absolute;
+            width: 450px;
+            pointer-events: auto;
+            opacity: 0;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: .5rem;
+            cursor: pointer;
+            transform-origin: center center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-wrapper:hover .card {
+            transform: scale(1.05);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .card-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .content-section {
+            height: 300vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .close-modal {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.2s ease;
+        }
+
+        .close-modal:hover {
+            background: #555;
+        }
+
+        .hover-buttons {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: none;
+            flex-direction: row;
+            gap: 15px;
+        }
+
+        .hover-buttons img {
+            width: 45px;
+        }
+
+        .card:hover .hover-buttons {
+            display: flex;
+        }
+
+        .hover-plus, .hover-close {
+            background: transparent;
+            color: #cc2233;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hover-plus {
+            font-size: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="header-buttons">
+            <a class="header-btn"><span class="ht_text">Währungsrechner</span> <span class="ind_icon">EUR ⇔ HUF</a>
+            <a class="header-btn"><span class="ht_text">06.08. Zsuzsanna</span> <span class="ind_icon"><img src="calendar.png" alt="calendar icon"></span></a>
+            <a class="header-btn"><span class="ht_text">meine Seiten-Historie</span><span class="ind_icon">📅</span></a>
+        </nav>
+        <nav class="header-buttons">
+            <a class="header-btn favorites"><span class="ht_text">Favoriten </span> <span class="ind_icon"><img src="favorit.png" alt="favorit_icon"></a>
+            <a class="header-btn register"><span class="ht_text">Anmelden</a>
+        </nav>
+    </header>
+
+    <nav class="sidebar">
+        <div class="nav-item">
+            <h3>Information</h3>
+            <p>alles über Ungarn</p>
+            <div class="hover-menu">
+                <div class="menu-column">
+                    <div class="menu-item cursor-pointer">WISSEENWERT</div>
+                    <div class="menu-item cursor-pointer">SHORTS</div>
+                    <div class="menu-item cursor-pointer">KATEGORIEN</div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item">
+            <h3>Sprache</h3>
+            <p>einfach lernen</p>
+            <div class="hover-menu">
+                <div class="menu-column">
+                    <div class="menu-item cursor-pointer">GRAMMATIKKURS</div>
+                    <div class="menu-item cursor-pointer">Kreuzworträtsel</div>
+                    <div class="menu-item cursor-pointer">SuffixHero</div>
+                    <div class="menu-item cursor-pointer">memória</div>
+                    <div class="menu-item cursor-pointer">Vokabel-Aufkleber</div>
+                    <div class="menu-item cursor-pointer">LIEDTEXTE</div>
+                </div>
+                <div class="menu-column">
+                    <div class="menu-item cursor-pointer">KulTour Ungarn</div>
+                    <div class="menu-item cursor-pointer">aus dem Leben</div>
+                    <div class="menu-item cursor-pointer">EINFACH LESEN</div>
+                    <div class="menu-item cursor-pointer">Wie spät ist es?</div>
+                    <div class="menu-item cursor-pointer">LIEDTEXTE</div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item">
+            <h3>Ungarn</h3>
+            <p>Land &amp; Leute</p>
+            <div class="hover-menu">
+                <div class="menu-column">
+                    <div class="menu-item cursor-pointer">kulinarische Seele</div>
+                    <div class="menu-item cursor-pointer">AUSFLUGSZIELE</div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-item">
+            <h3>Community</h3>
+            <p>Gemeinsam</p>
+        </div>
+    </nav>
+
+    <main> 
+        <div class="hero-section">
+
+            <!-- New code for hero section -->
+
+            <div class="panel">
+
+                <h1 class="top-text">Schön, dass du hier bist bei</h1>
+
+                <div class="hero_logo">
+                    <img src="Logo-Welcome.png" alt="Main Logo">
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+
+                <p class="subtitle">Entdecke einen Stapel voller Inspiration und Wissen und
+viele Themen, die deinen Alltag in Ungarn bereichern werden.
+Scrolle einfach nach unten und lass dich überraschen.
+Oder nutze traditionell die Navigation hier links.</p>
+
+                <p class="body-text">Jede Karte ist ein eigenes Thema – klicke sie an um die Inhalte dazu aufzurufen.
+Mit dem   <span src="x-icon.png" class="x_icon">  </span>blendest du aus, was du schon kennst oder Dich nicht interessiert 
+und mit dem    <span src="plus-icon.png" class="plus_icon">  </span>  bekommst Du mehr aus diesem Themenbereich. 
+Und wenn du etwas ganz Bestimmtes wissen möchtest: Die Suche oben rechts 
+beantwortet dir auch komplette Fragen.</p>
+
+                <!-- /* ###################################### */ -->
+            </div>
+
+            <!-- New code for hero section -->
+
+
+            
+        </div>
+
+        <div class="cards-container" id="cardsContainer">
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-Zahlentrainer.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-Uhrzeittrainer.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-kulinarische-Selle.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-Raetsel.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-Ungarn-Insider.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-Zustand-in-einem-Wort.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-Plural.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-Makler-Tricks.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-aus-dem-leben.avif');"></div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <div class="card-image" style="background-image: url('tl-itt-ott.avif');"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section"></div>
+    </main>
+
+    <div class="main-logo">
+        <img src="WIU-logo.png" alt="Wir In Ungarn Logo">
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Card Title</h2>
+            <p id="modalText">Card details will appear here</p>
+            <button class="close-modal" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-ticker">
+                <div class="ticker-container" id="newsTickerContainer">
+                    <div class="ticker-label">UNGARN-INSIDER</div>
+                    <div class="ticker-content">
+                        <div class="ticker-wrapper">
+                            <span class="ticker-item"><a href="#" class="news-link">Neue Soros-Netzwerk Enthüllungen</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">300% Preisunterschied: Warenkorb im Europa-Vergleich</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">Streit um Smalltalk: Was Ungarn wirklich denken</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">EU-Kommission kritisiert ungarische Mediengesetze</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">Budapest: Neue Entwicklungen am Immobilienmarkt</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">Neue Soros-Netzwerk Enthüllungen</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">300% Preisunterschied: Warenkorb im Europa-Vergleich</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">Streit um Smalltalk: Was Ungarn wirklich denken</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">EU-Kommission kritisiert ungarische Mediengesetze</a></span>
+                            <span class="ticker-separator">|</span>
+                            <span class="ticker-item"><a href="#" class="news-link">Budapest: Neue Entwicklungen am Immobilienmarkt</a></span>
+                            <span class="ticker-separator">|</span>
+                        </div>
+                    </div>
+                    <button class="close-button" id="closeTickerBtn" aria-label="Schließen">✕</button>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#" class="footer-link">Neueste Beiträge</a>
+                <a href="#" class="footer-link">Philosophie</a>
+                <a href="#" class="footer-link">Datenschutz</a>
+                <a href="#" class="footer-link">Ungarn-Insider</a>
+                <a href="#" class="footer-link">Transparenz</a>
+                <a href="#" class="footer-link">Neuigkeiten</a>
+                <a href="#" class="footer-link">Kontakt</a>
+                <a href="#" class="footer-link">WIU-Münzen</a>
+                <a href="#" class="footer-link">Karriere</a>
+                <a href="#" class="footer-link">Cookie-Richtlinie</a>
+                <a href="#" class="footer-link">Über uns</a>
+                <a href="#" class="footer-link">Impressum</a>
+                <a href="#" class="footer-link">Soziale Projekte</a>
+                <a href="#" class="footer-link">Kooperationen</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        // Scripts from demo_wiu_v2.html
+        document.getElementById('closeTickerBtn').addEventListener('click', function() {
+            const tickerContainer = document.getElementById('newsTickerContainer');
+            tickerContainer.classList.add('hidden');
+            localStorage.setItem('tickerClosed', 'true');
+        });
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const tickerClosed = localStorage.getItem('tickerClosed');
+            if (tickerClosed === 'true') {
+                const tickerContainer = document.getElementById('newsTickerContainer');
+                tickerContainer.classList.add('hidden');
+            }
+        });
+
+        function resetTickerDaily() {
+            const lastReset = localStorage.getItem('tickerLastReset');
+            const today = new Date().toDateString();
+            if (lastReset !== today) {
+                localStorage.removeItem('tickerClosed');
+                localStorage.setItem('tickerLastReset', today);
+            }
+        }
+        resetTickerDaily();
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+
+        // Scripts from card_on_board_september_23.html
+        gsap.registerPlugin(ScrollTrigger);
+
+        const cardData = [
+            { title: "Discovery", description: "Explore new horizons and uncover hidden possibilities in every journey." },
+            { title: "Innovation", description: "Transform ideas into reality with cutting-edge solutions and creative thinking." },
+            { title: "Growth", description: "Expand your potential and reach new heights of personal achievement." },
+            { title: "Connection", description: "Build meaningful relationships that enrich your life and career." },
+            { title: "Balance", description: "Find harmony between work and life for sustainable success." },
+            { title: "Vision", description: "See beyond the present to create a better tomorrow." },
+            { title: "Courage", description: "Face challenges head-on with confidence and determination." },
+            { title: "Wisdom", description: "Learn from experience and make informed decisions." },
+            { title: "Passion", description: "Fuel your dreams with enthusiasm and dedication." },
+            { title: "Excellence", description: "Strive for the highest standards in everything you do." }
+        ];
+
+        gsap.timeline()
+            .to('.hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+            .to('.hero-subtitle', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.5')
+            .to('.scroll-indicator', { opacity: 0.7, duration: 1 }, '-=0.3');
+
+        const cardWrappers = gsap.utils.toArray('.card-wrapper');
+        cardWrappers.forEach((wrapper) => {
+            const card = wrapper.querySelector('.card');
+            const hoverButtons = document.createElement('div');
+            hoverButtons.className = 'hover-buttons';
+            hoverButtons.innerHTML = `
+                <button class="hover-plus"><img src="plus-icon.png" alt="+ button"></button>
+                <button class="hover-close"><img src="x-icon.png" alt="x button"></button>
+            `;
+            card.appendChild(hoverButtons);
+
+            const plusBtn = hoverButtons.querySelector('.hover-plus');
+            plusBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            const closeBtn = hoverButtons.querySelector('.hover-close');
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                wrapper.style.display = 'none';
+            });
+        });
+
+        function getStartPosition(index) {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            const startX = Math.random() * (viewportWidth + 800) - 400;
+            const startY = viewportHeight + 400;
+            
+            return { startX, startY };
+        }
+
+        const imagePromises = [];
+        cardWrappers.forEach((wrapper) => {
+            const imageDiv = wrapper.querySelector('.card-image');
+            if (imageDiv) {
+                const styleAttr = imageDiv.getAttribute('style');
+                const urlMatch = styleAttr ? styleAttr.match(/url\(['"]?([^'"]+)['"]?\)/) : null;
+                if (urlMatch) {
+                    const url = urlMatch[1];
+                    imagePromises.push(
+                        new Promise((resolve) => {
+                            const img = new Image();
+                            img.src = url;
+                            img.onload = () => {
+                                const aspectRatio = img.naturalHeight / img.naturalWidth;
+                                const containerWidth = 450;
+                                const newHeight = aspectRatio * containerWidth;
+                                imageDiv.style.height = `${newHeight}px`;
+                                resolve();
+                            };
+                            img.onerror = resolve;
+                        })
+                    );
+                }
+            }
+        });
+
+        Promise.all(imagePromises).then(() => {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const horizontalMargin = 0.060; // Adjust this higher to narrow width more (e.g., 0.125 gives ~75% width area)
+            const verticalMargin = 0.02; // Keep this as is for current height (~85% height area)
+
+            const areaWidth = viewportWidth * (1 - 2 * horizontalMargin);
+            const areaHeight = viewportHeight * (1 - 2 * verticalMargin);
+            const startAreaX = viewportWidth * horizontalMargin;
+            const startAreaY = viewportHeight * verticalMargin;
+
+            const finalPositions = [];
+            const minDist = 300;
+
+            function findGoodPosition(cardHeight) {
+                const maxX = areaWidth - 450;
+                const maxY = areaHeight - cardHeight;
+                for (let attempts = 0; attempts < 50; attempts++) {
+                    const x = startAreaX + Math.random() * maxX;
+                    const y = startAreaY + Math.random() * maxY;
+                    let tooClose = false;
+                    for (let pos of finalPositions) {
+                        const dx = x - pos.x;
+                        const dy = y - pos.y;
+                        if (Math.sqrt(dx * dx + dy * dy) < minDist) {
+                            tooClose = true;
+                            break;
+                        }
+                    }
+                    if (!tooClose) {
+                        return { x, y };
+                    }
+                }
+                return {
+                    x: startAreaX + Math.random() * maxX,
+                    y: startAreaY + Math.random() * maxY
+                };
+            }
+
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '.content-section',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 2
+                }
+            });
+
+            cardWrappers.forEach((wrapper, index) => {
+                const cardHeight = wrapper.clientHeight;
+                const pos = findGoodPosition(cardHeight);
+                finalPositions.push(pos);
+                const { startX, startY } = getStartPosition(index);
+                
+                gsap.set(wrapper, {
+                    x: startX,
+                    y: startY,
+                    opacity: 0,
+                    zIndex: index + 10
+                });
+
+                tl.to(wrapper, {
+                    opacity: 1,
+                    duration: 2,
+                    ease: 'power2.out'
+                }, index * 1.5);
+                
+                tl.to(wrapper, {
+                    x: pos.x,
+                    y: pos.y,
+                    duration: 4,
+                    ease: 'power2.out'
+                }, index * 1.5);
+            });
+        });
+
+        function openModal(title, description, number) {
+            const modal = document.getElementById('modal');
+            document.getElementById('modalTitle').textContent = `Card ${number}: ${title}`;
+            document.getElementById('modalText').textContent = `${description} This is card number ${number} in our collection. Click anywhere outside or the close button to dismiss.`;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.querySelectorAll('.card-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('card-button')) {
+                    const data = cardData[index];
+                    openModal(data.title, data.description, index + 1);
+                }
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            ScrollTrigger.refresh();
+        });
+    </script>
+</body>
+</html>
