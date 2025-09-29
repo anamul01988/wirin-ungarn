@@ -33,7 +33,7 @@ const LandingPage = () => {
   useEffect(() => {
     // Check ticker status and reset daily if needed
     resetTickerDaily();
-    
+
     // Register GSAP ScrollTrigger plugin
     if (typeof window !== "undefined") {
       gsap.registerPlugin(ScrollTrigger);
@@ -41,44 +41,72 @@ const LandingPage = () => {
       // Card data object for modal content (if needed)
       const cardData = [
         { title: "Zahlentrainer", description: "Übe Zahlen auf Ungarisch" },
-        { title: "Uhrzeittrainer", description: "Lerne die Uhrzeit auf Ungarisch" },
-        { title: "Kulinarische Seele", description: "Entdecke die ungarische Küche" },
+        {
+          title: "Uhrzeittrainer",
+          description: "Lerne die Uhrzeit auf Ungarisch",
+        },
+        {
+          title: "Kulinarische Seele",
+          description: "Entdecke die ungarische Küche",
+        },
         { title: "Rätsel", description: "Teste dein Wissen mit Rätseln" },
         { title: "Ungarn Insider", description: "Insider-Tipps für Ungarn" },
-        { title: "Zustand in einem Wort", description: "Lerne ungarische Ausdrücke" },
-        { title: "Plural", description: "Lerne die Pluralbildung im Ungarischen" },
-        { title: "Makler-Tricks", description: "Worauf du bei Maklern achten solltest" },
-        { title: "Aus dem Leben", description: "Geschichten aus dem ungarischen Alltag" },
+        {
+          title: "Zustand in einem Wort",
+          description: "Lerne ungarische Ausdrücke",
+        },
+        {
+          title: "Plural",
+          description: "Lerne die Pluralbildung im Ungarischen",
+        },
+        {
+          title: "Makler-Tricks",
+          description: "Worauf du bei Maklern achten solltest",
+        },
+        {
+          title: "Aus dem Leben",
+          description: "Geschichten aus dem ungarischen Alltag",
+        },
         { title: "Itt-Ott", description: "Hier und da in Ungarn" },
       ];
-      
+
       // Animation for hero section
-      gsap.timeline()
-        .to('.hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
-        .to('.hero-subtitle', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.5')
-        .to('.scroll-indicator', { opacity: 0.7, duration: 1 }, '-=0.3');
+      gsap
+        .timeline()
+        .to(".hero-title", {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+        })
+        .to(
+          ".hero-subtitle",
+          { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+          "-=0.5"
+        )
+        .to(".scroll-indicator", { opacity: 0.7, duration: 1 }, "-=0.3");
 
       // Add hover buttons to cards
-      const cardWrappers = gsap.utils.toArray('.card-wrapper');
+      const cardWrappers = gsap.utils.toArray(".card-wrapper");
       cardWrappers.forEach((wrapper) => {
-        const card = wrapper.querySelector('.card');
-        const hoverButtons = document.createElement('div');
-        hoverButtons.className = 'hover-buttons';
+        const card = wrapper.querySelector(".card");
+        const hoverButtons = document.createElement("div");
+        hoverButtons.className = "hover-buttons";
         hoverButtons.innerHTML = `
           <button class="hover-plus"><img src="/assets/icons/favorit_e.png" alt="+ button" style="width:40px; height:40px;"></button>
           <button class="hover-close"><img src="/assets/icons/close.png" alt="x button" style="width:40px; height:40px;"></button>
         `;
         card.appendChild(hoverButtons);
 
-        const plusBtn = hoverButtons.querySelector('.hover-plus');
-        plusBtn.addEventListener('click', (e) => {
+        const plusBtn = hoverButtons.querySelector(".hover-plus");
+        plusBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           // Add favorite functionality here
-          console.log('Added to favorites:', card);
+          console.log("Added to favorites:", card);
         });
 
-        const closeBtn = hoverButtons.querySelector('.hover-close');
-        closeBtn.addEventListener('click', (e) => {
+        const closeBtn = hoverButtons.querySelector(".hover-close");
+        closeBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           // Hide the card with smooth animation
           gsap.to(wrapper, {
@@ -86,8 +114,8 @@ const LandingPage = () => {
             scale: 0.8,
             duration: 0.3,
             onComplete: () => {
-              wrapper.style.display = 'none';
-            }
+              wrapper.style.display = "none";
+            },
           });
         });
       });
@@ -96,20 +124,22 @@ const LandingPage = () => {
       function getStartPosition() {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
-        
+
         const startX = Math.random() * (viewportWidth + 800) - 400;
         const startY = viewportHeight + 400;
-        
+
         return { startX, startY };
       }
 
       // Load and process card images
       const imagePromises = [];
       cardWrappers.forEach((wrapper) => {
-        const imageDiv = wrapper.querySelector('.card-image');
+        const imageDiv = wrapper.querySelector(".card-image");
         if (imageDiv) {
-          const styleAttr = imageDiv.getAttribute('style');
-          const urlMatch = styleAttr ? styleAttr.match(/url\(['"]?([^'"]+)['"]?\)/) : null;
+          const styleAttr = imageDiv.getAttribute("style");
+          const urlMatch = styleAttr
+            ? styleAttr.match(/url\(['"]?([^'"]+)['"]?\)/)
+            : null;
           if (urlMatch) {
             const url = urlMatch[1];
             imagePromises.push(
@@ -134,7 +164,7 @@ const LandingPage = () => {
       Promise.all(imagePromises).then(() => {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
-        const horizontalMargin = 0.060;
+        const horizontalMargin = 0.06;
         const verticalMargin = 0.02;
 
         const areaWidth = viewportWidth * (1 - 2 * horizontalMargin);
@@ -167,18 +197,18 @@ const LandingPage = () => {
           }
           return {
             x: startAreaX + Math.random() * maxX,
-            y: startAreaY + Math.random() * maxY
+            y: startAreaY + Math.random() * maxY,
           };
         }
 
         // Create scroll-triggered animation timeline
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: '.content-section',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 2
-          }
+            trigger: ".content-section",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 2,
+          },
         });
 
         // Animate each card wrapper
@@ -187,30 +217,38 @@ const LandingPage = () => {
           const pos = findGoodPosition(cardHeight);
           finalPositions.push(pos);
           const { startX, startY } = getStartPosition();
-          
+
           gsap.set(wrapper, {
             x: startX,
             y: startY,
             opacity: 0,
-            zIndex: index + 10
+            zIndex: index + 10,
           });
 
-          tl.to(wrapper, {
-            opacity: 1,
-            duration: 2,
-            ease: 'power2.out'
-          }, index * 1.5);
-          
-          tl.to(wrapper, {
-            x: pos.x,
-            y: pos.y,
-            duration: 4,
-            ease: 'power2.out'
-          }, index * 1.5);
+          tl.to(
+            wrapper,
+            {
+              opacity: 1,
+              duration: 2,
+              ease: "power2.out",
+            },
+            index * 1.5
+          );
+
+          tl.to(
+            wrapper,
+            {
+              x: pos.x,
+              y: pos.y,
+              duration: 4,
+              ease: "power2.out",
+            },
+            index * 1.5
+          );
         });
 
         // Add window resize handler
-        window.addEventListener('resize', () => {
+        window.addEventListener("resize", () => {
           ScrollTrigger.refresh();
         });
       });
@@ -219,22 +257,22 @@ const LandingPage = () => {
 
   const handleCloseTicker = () => {
     setTickerClosed(true);
-    localStorage.setItem('tickerClosed', 'true');
+    localStorage.setItem("tickerClosed", "true");
   };
-  
+
   // Function to reset ticker visibility daily
   const resetTickerDaily = () => {
     if (typeof window !== "undefined") {
-      const lastReset = localStorage.getItem('tickerLastReset');
+      const lastReset = localStorage.getItem("tickerLastReset");
       const today = new Date().toDateString();
       if (lastReset !== today) {
-        localStorage.removeItem('tickerClosed');
-        localStorage.setItem('tickerLastReset', today);
+        localStorage.removeItem("tickerClosed");
+        localStorage.setItem("tickerLastReset", today);
         setTickerClosed(false);
       } else {
         // Check if ticker was previously closed
-        const wasClosed = localStorage.getItem('tickerClosed');
-        if (wasClosed === 'true') {
+        const wasClosed = localStorage.getItem("tickerClosed");
+        if (wasClosed === "true") {
           setTickerClosed(true);
         }
       }
@@ -242,7 +280,16 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="landing-page__container" style={{ minHeight: '100vh', position: 'relative', backgroundImage: 'url(/assets/pattern-bg.jpg)', backgroundRepeat: 'repeat', backgroundAttachment: 'fixed' }}>
+    <div
+      className="landing-page__container"
+      style={{
+        minHeight: "100vh",
+        position: "relative",
+        backgroundImage: "url(/assets/pattern-bg.jpg)",
+        backgroundRepeat: "repeat",
+        backgroundAttachment: "fixed",
+      }}
+    >
       {/* Sidebar */}
       <nav className="sidebar">
         {[
@@ -379,8 +426,8 @@ const LandingPage = () => {
                           : { onClick: () => route.push(menuItem.menuRoute) })}
                       >
                         {item.slug === "sprache"
-                        ? menuItem.menuName
-                        : menuItem.menuName}
+                          ? menuItem.menuName
+                          : menuItem.menuName}
                       </div>
                     ))}
                   </div>
@@ -409,69 +456,115 @@ const LandingPage = () => {
           <div className="clearfix"></div>
 
           <p className="subtitle">
-            Entdecke einen Stapel voller Inspiration und Wissen und viele Themen,
-            die deinen Alltag in Ungarn bereichern werden. Scrolle einfach nach
-            unten und lass dich überraschen. Oder nutze traditionell die
-            Navigation hier links.
+            Entdecke einen Stapel voller Inspiration und Wissen und viele
+            Themen, die deinen Alltag in Ungarn bereichern werden. Scrolle
+            einfach nach unten und lass dich überraschen. Oder nutze
+            traditionell die Navigation hier links.
           </p>
 
           <p className="body-text">
             Jede Karte ist ein eigenes Thema – klicke sie an um die Inhalte dazu
-            aufzurufen. Mit dem{" "}
-            <span className="x_icon"></span>
-            {" "}blendest du aus, was du schon kennst oder Dich nicht interessiert und
-            mit dem{" "}
-            <span className="plus_icon"></span>
-            {" "}
-            bekommst Du mehr aus diesem Themenbereich. Und wenn du etwas ganz
-            Bestimmtes wissen möchtest: Die Suche oben rechts beantwortet dir auch
-            komplette Fragen.
+            aufzurufen. Mit dem <span className="x_icon"></span> blendest du
+            aus, was du schon kennst oder Dich nicht interessiert und mit dem{" "}
+            <span className="plus_icon"></span> bekommst Du mehr aus diesem
+            Themenbereich. Und wenn du etwas ganz Bestimmtes wissen möchtest:
+            Die Suche oben rechts beantwortet dir auch komplette Fragen.
           </p>
         </div>
       </div>
 
-      <div className="cards-container" id="cardsContainer" ref={cardsContainerRef}>
+      <div
+        className="cards-container"
+        id="cardsContainer"
+        ref={cardsContainerRef}
+      >
         {[
-          { image: "/assets/tl-Zahlentrainer.avif", title: "Zahlentrainer", route: "/zahlentrainer" },
-          { image: "/assets/tl-Uhrzeittrainer.avif", title: "Uhrzeittrainer", route: "/wie-spaet-ist-es" },
-          { image: "/assets/tl-kulinarische-Selle.avif", title: "Kulinarische Seele", route: "/kulinarische-seele" },
-          { image: "/assets/tl-Raetsel.avif", title: "Rätsel", route: "/kreuzwortraetsel" },
-          { image: "/assets/tl-Ungarn-Insider.avif", title: "Ungarn Insider", route: "/wissenswert" },
-          { image: "/assets/tl-Zustand-in-einem-Wort.avif", title: "Zustand in einem Wort", route: "/einfach-lesen" },
-          { image: "/assets/tl-Plural.avif", title: "Plural", route: "/sprachkurs" },
-          { image: "/assets/tl-Makler-Tricks.avif", title: "Makler Tricks", route: "/wissenswert" },
-          { image: "/assets/tl-aus-dem-leben.avif", title: "Aus dem Leben", route: "/aus-dem-leben" },
-          { image: "/assets/tl-itt-ott.avif", title: "Itt-Ott", route: "/einfach-lesen" },
+          {
+            image: "/assets/tl-Zahlentrainer.avif",
+            title: "Zahlentrainer",
+            route: "/zahlentrainer",
+          },
+          {
+            image: "/assets/tl-Uhrzeittrainer.avif",
+            title: "Uhrzeittrainer",
+            route: "/wie-spaet-ist-es",
+          },
+          {
+            image: "/assets/tl-kulinarische-Selle.avif",
+            title: "Kulinarische Seele",
+            route: "/kulinarische-seele",
+          },
+          {
+            image: "/assets/tl-Raetsel.avif",
+            title: "Rätsel",
+            route: "/kreuzwortraetsel",
+          },
+          {
+            image: "/assets/tl-Ungarn-Insider.avif",
+            title: "Ungarn Insider",
+            route: "/wissenswert",
+          },
+          {
+            image: "/assets/tl-Zustand-in-einem-Wort.avif",
+            title: "Zustand in einem Wort",
+            route: "/einfach-lesen",
+          },
+          {
+            image: "/assets/tl-Plural.avif",
+            title: "Plural",
+            route: "/sprachkurs",
+          },
+          {
+            image: "/assets/tl-Makler-Tricks.avif",
+            title: "Makler Tricks",
+            route: "/wissenswert",
+          },
+          {
+            image: "/assets/tl-aus-dem-leben.avif",
+            title: "Aus dem Leben",
+            route: "/aus-dem-leben",
+          },
+          {
+            image: "/assets/tl-itt-ott.avif",
+            title: "Itt-Ott",
+            route: "/einfach-lesen",
+          },
         ].map((card, index) => (
           <div key={index} className="card-wrapper">
-            <div 
-              className="card" 
+            <div
+              className="card"
               onClick={() => {
-                const modal = document.getElementById('modal');
-                document.getElementById('modalTitle').textContent = `${card.title}`;
-                document.getElementById('modalText').textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
-                
+                const modal = document.getElementById("modal");
+                document.getElementById(
+                  "modalTitle"
+                ).textContent = `${card.title}`;
+                document.getElementById(
+                  "modalText"
+                ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
+
                 // Add a button to navigate to the page
-                const buttonContainer = modal.querySelector('.modal-content div');
+                const buttonContainer =
+                  modal.querySelector(".modal-content div");
                 if (buttonContainer) {
                   // Clear existing buttons first
-                  const existingNavigateBtn = buttonContainer.querySelector('.navigate-btn');
+                  const existingNavigateBtn =
+                    buttonContainer.querySelector(".navigate-btn");
                   if (existingNavigateBtn) {
                     existingNavigateBtn.remove();
                   }
-                  
+
                   // Create and add the navigation button
-                  const navigateBtn = document.createElement('button');
-                  navigateBtn.className = 'close-modal navigate-btn';
-                  navigateBtn.style.backgroundColor = '#4a7c59';
-                  navigateBtn.textContent = 'Zur Seite';
+                  const navigateBtn = document.createElement("button");
+                  navigateBtn.className = "close-modal navigate-btn";
+                  navigateBtn.style.backgroundColor = "#4a7c59";
+                  navigateBtn.textContent = "Zur Seite";
                   navigateBtn.onclick = () => {
                     route.push(card.route);
                   };
                   buttonContainer.appendChild(navigateBtn);
                 }
-                
-                modal.style.display = 'flex';
+
+                modal.style.display = "flex";
               }}
             >
               <div
@@ -483,20 +576,43 @@ const LandingPage = () => {
         ))}
       </div>
 
-      <div className="content-section" style={{ minHeight: '300vh', position: 'relative', zIndex: 2 }}></div>
+      <div
+        className="content-section"
+        style={{ minHeight: "300vh", position: "relative", zIndex: 2 }}
+      ></div>
 
       {/* Modal for card details */}
-      <div className="modal" id="modal" style={{display: 'none'}}>
+      <div className="modal" id="modal" style={{ display: "none" }}>
         <div className="modal-content">
-          <h2 id="modalTitle" style={{ color: '#4a7c59', fontFamily: "'Roboto Condensed', sans-serif", marginBottom: '15px' }}>Card Title</h2>
-          <p id="modalText" style={{ marginBottom: '20px', fontSize: '16px', lineHeight: '1.6' }}>Card details will appear here</p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-            <button 
-              className="close-modal" 
+          <h2
+            id="modalTitle"
+            style={{
+              color: "#4a7c59",
+              fontFamily: "'Roboto Condensed', sans-serif",
+              marginBottom: "15px",
+            }}
+          >
+            Card Title
+          </h2>
+          <p
+            id="modalText"
+            style={{
+              marginBottom: "20px",
+              fontSize: "16px",
+              lineHeight: "1.6",
+            }}
+          >
+            Card details will appear here
+          </p>
+          <div
+            style={{ display: "flex", justifyContent: "center", gap: "10px" }}
+          >
+            <button
+              className="close-modal"
               onClick={() => {
-                document.getElementById('modal').style.display = 'none';
+                document.getElementById("modal").style.display = "none";
               }}
-              style={{ backgroundColor: '#4a7c59', marginRight: '10px' }}
+              style={{ backgroundColor: "#4a7c59", marginRight: "10px" }}
             >
               Schließen
             </button>
@@ -514,7 +630,14 @@ const LandingPage = () => {
         <div className="footer-content">
           {/* Ticker */}
           {!tickerClosed && (
-            <div className="ticker-container" style={{ margin: '0', marginRight: '20px', outline: '5px solid #ffffff' }}>
+            <div
+              className="ticker-container"
+              style={{
+                margin: "0",
+                marginRight: "20px",
+                outline: "5px solid #ffffff",
+              }}
+            >
               <div className="ticker-label">UNGARN-INSIDER</div>
               <div className="ticker-content">
                 <div className="ticker-wrapper">
