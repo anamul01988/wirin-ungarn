@@ -93,8 +93,8 @@ const LandingPage = () => {
         const hoverButtons = document.createElement("div");
         hoverButtons.className = "hover-buttons";
         hoverButtons.innerHTML = `
-          <button class="hover-plus"><img src="/assets/icons/favorit_e.png" alt="+ button" style="width:40px; height:40px;"></button>
-          <button class="hover-close"><img src="/assets/icons/close.png" alt="x button" style="width:40px; height:40px;"></button>
+          <button class="hover-plus"><img src="/assets/plus-icon.png" alt="+ button" style="width:40px; height:40px;"></button>
+          <button class="hover-close"><img src="/assets/x-icon.png" alt="x button" style="width:40px; height:40px;"></button>
         `;
         card.appendChild(hoverButtons);
 
