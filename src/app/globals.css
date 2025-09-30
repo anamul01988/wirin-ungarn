@@ -83,6 +83,7 @@ body {
   position: relative;
   background-repeat: repeat;
   padding-bottom: 120px;
+  background-attachment: fixed;
   background-image: url(/assets/pattern-bg.jpg);
 }
 
@@ -236,25 +237,30 @@ body {
   gap: 20px;
   padding: 7px;
   min-width: auto;
+  background-color: #e3e3e3;
 }
 
 .menu-column {
   display: flex;
   flex-direction: column;
-  min-width: 200px;
+  min-width: 190px;
 }
 
 .menu-column .menu-item {
+  /* padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease; */
   padding: 8px 12px;
-  /* margin: 2px 0; */
   border-radius: 4px;
   transition: background-color 0.2s ease;
+  display: block;
+  color: #56646f;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 12px 20px 12px;
+  border-top: 1px solid rgb(231 231 231);
+  border-bottom: 1px solid rgb(231 231 231);
 }
-
-.menu-column .menu-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
 .menu-item {
   padding: 8px 12px;
   color: white;
@@ -270,7 +276,7 @@ body {
 }
 
 .menu-item:hover {
-  background: #3d6b4a !important;
+  background: #d2d0d0;
 }
 
 /* Remove the first/last child border radius overrides for column layout */
