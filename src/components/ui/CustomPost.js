@@ -84,21 +84,19 @@ const CustomPost = ({
 
       return (
         <div className="space-y-4">
-          <div className="pl-4">
-            {/* <h6 className="font-semibold text-blue-800 mb-2 text-sm">
+          {/* <h6 className="font-semibold text-blue-800 mb-2 text-sm">
               {firstItem.title}
             </h6> */}
-            <div
-              className="text-sm leading-relaxed text-justify"
-              {...(isHTML(firstItem.content)
-                ? {
-                    dangerouslySetInnerHTML: {
-                      __html: truncateText(firstItem.content),
-                    },
-                  }
-                : { children: truncateText(firstItem.content) })}
-            />
-          </div>
+          <div
+            className="text-sm leading-relaxed text-justify"
+            {...(isHTML(firstItem.content)
+              ? {
+                  dangerouslySetInnerHTML: {
+                    __html: truncateText(firstItem.content),
+                  },
+                }
+              : { children: truncateText(firstItem.content) })}
+          />
         </div>
       );
     }

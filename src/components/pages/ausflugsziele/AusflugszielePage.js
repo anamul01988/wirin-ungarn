@@ -233,7 +233,7 @@ const AusflugszielePage = () => {
           </>
         )}
       </Typography>
-      <div className="p-6 max-w-5xl mx-auto">
+      <div className="p-6 max-w-5xl overflow-auto mx-auto" style={{ height: "calc(100vh - 500px)" }}>
         {filtering === true ? (
           <div>
             <DefaultSpinner />
@@ -256,7 +256,7 @@ const AusflugszielePage = () => {
                 (edge, idx) => {
                   const posts = isSearching ? searchResults : customPosts;
                   return (
-                    <div key={edge.node.id}>
+                    <div className="relative" key={edge.node.id}>
                       <CustomPost
                         title={edge.node?.title}
                         description={edge.node.postContentLyrik?.introText}
