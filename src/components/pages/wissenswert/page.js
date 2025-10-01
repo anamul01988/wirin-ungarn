@@ -218,7 +218,7 @@ export default function Wissenswert({ initialData }) {
       <Typography variant="small" color="gray" className="mt-4">
         Angezeigt werden {filteredPosts.length} von {totalPosts} Beiträgen.
       </Typography>
-      <div className="p-6 max-w-5xl mx-auto">
+      <div className="py-6 max-w-5xl mx-auto">
         {!initialData ? (
           <>
             {" "}

@@ -235,7 +235,7 @@ const SprachkursPage = () => {
           </>
         )}
       </Typography>
-      <div className="p-6 max-w-5xl mx-auto">
+      <div className="py-6 max-w-5xl mx-auto">
         {filtering === true ? (
           <div>
             <DefaultSpinner />

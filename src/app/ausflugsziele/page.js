@@ -50,7 +50,7 @@ export default function Kategorien() {
           />
         )}
 
-        <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
+        <DialogBody className=" px-[30px] py-[30px] flex-1">
           {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}
