@@ -10,6 +10,7 @@ import "./globals.css";
 import { ThemeProvider } from "@material-tailwind/react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ReduxProvider from "@/lib/store/ReduxProvider";
+import SessionProvider from "@/components/providers/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,11 +37,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={openSans.className}>
-        <ReduxProvider>
-          <ThemeProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </ThemeProvider>
-        </ReduxProvider>
+        <SessionProvider>
+          <ReduxProvider>
+            <ThemeProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </ThemeProvider>
+          </ReduxProvider>
+        </SessionProvider>
       </body>
     </html>
   );

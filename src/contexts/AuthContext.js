@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { tokenStorage, TOKEN_KEYS, isTokenExpired } from "@/lib/auth";
+import { signIn, signOut, getSession, useSession } from "next-auth/react";
+import { tokenStorage, TOKEN_KEYS, isTokenExpired } from "@/lib/auth-utils";
 
 const AuthContext = createContext();
 
@@ -17,6 +18,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Use NextAuth session
+  const { data: session, status } = useSession();
 
   // Check for existing auth token on mount
   useEffect(() => {
@@ -47,6 +51,34 @@ export const AuthProvider = ({ children }) => {
 
     checkAuthStatus();
   }, []);
+
+  // Monitor NextAuth session changes
+  useEffect(() => {
+    if (status === "loading") {
+      setLoading(true);
+      return;
+    }
+
+    if (session?.user) {
+      // User is authenticated via NextAuth (OAuth)
+      setUser(session.user);
+      setIsAuthenticated(true);
+      setLoading(false);
+    } else if (status === "unauthenticated") {
+      // User is not authenticated via NextAuth
+      // Check if we have custom auth (GraphQL) session
+      const token = tokenStorage.getItem(TOKEN_KEYS.AUTH_TOKEN);
+      const userData = tokenStorage.getItem(TOKEN_KEYS.USER_DATA);
+
+      if (!token || !userData || isTokenExpired(token)) {
+        // No valid custom auth session either
+        setUser(null);
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+      // If we have valid custom auth, keep the existing state
+    }
+  }, [session, status]);
 
   const login = async (username, password) => {
     try {
@@ -106,9 +138,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     // Clear all auth data using secure storage
     tokenStorage.clear();
+
+    // Also sign out from NextAuth if user was authenticated via OAuth
+    if (session?.user) {
+      await signOut({ redirect: false });
+    }
 
     setUser(null);
     setIsAuthenticated(false);
@@ -244,6 +281,179 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const response = await fetch("https://wir-in-ungarn.hu/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            mutation SendPasswordResetEmail($input: SendPasswordResetEmailInput!) {
+              sendPasswordResetEmail(input: $input) {
+                success
+              }
+            }
+          `,
+          variables: {
+            input: {
+              clientMutationId: "forgotPassword",
+              username: email,
+            },
+          },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.errors) {
+        throw new Error(
+          result.errors[0]?.message || "Failed to send reset email"
+        );
+      }
+
+      if (result.data?.sendPasswordResetEmail?.success) {
+        return {
+          success: true,
+          message:
+            "Password reset email sent successfully. Please check your email for further instructions.",
+        };
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const resetPassword = async (key, login, password) => {
+    try {
+      const response = await fetch("https://wir-in-ungarn.hu/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            mutation ResetUserPassword($input: ResetUserPasswordInput!) {
+              resetUserPassword(input: $input) {
+                success
+              }
+            }
+          `,
+          variables: {
+            input: {
+              clientMutationId: "resetPassword",
+              key: key,
+              login: login,
+              password: password,
+            },
+          },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.errors) {
+        throw new Error(result.errors[0]?.message || "Password reset failed");
+      }
+
+      if (result.data?.resetUserPassword?.success) {
+        return {
+          success: true,
+          message: "Password reset successfully",
+        };
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (error) {
+      console.error("Reset password error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signIn("google", {
+        redirect: false,
+        callbackUrl: "/",
+      });
+
+      if (result?.error) {
+        return {
+          success: false,
+          error: "Google sign-in failed. Please try again.",
+        };
+      } else if (result?.ok) {
+        // Get the session to update user state
+        const session = await getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setIsAuthenticated(true);
+        }
+        return { success: true };
+      } else {
+        // If no error and no explicit ok, check if we have a session
+        // This handles cases where NextAuth redirects internally
+        const session = await getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setIsAuthenticated(true);
+          return { success: true };
+        }
+
+        // If no session and no error, it might be a redirect case
+        // Return success to avoid showing error message
+        return { success: true };
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const loginWithFacebook = async () => {
+    try {
+      const result = await signIn("facebook", {
+        redirect: false,
+        callbackUrl: "/",
+      });
+
+      if (result?.error) {
+        return {
+          success: false,
+          error: "Facebook sign-in failed. Please try again.",
+        };
+      } else if (result?.ok) {
+        // Get the session to update user state
+        const session = await getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setIsAuthenticated(true);
+        }
+        return { success: true };
+      } else {
+        // If no error and no explicit ok, check if we have a session
+        // This handles cases where NextAuth redirects internally
+        const session = await getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setIsAuthenticated(true);
+          return { success: true };
+        }
+
+        // If no session and no error, it might be a redirect case
+        // Return success to avoid showing error message
+        return { success: true };
+      }
+    } catch (error) {
+      console.error("Facebook login error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const value = {
     user,
     isAuthenticated,
@@ -252,6 +462,10 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     refreshAuthToken,
+    forgotPassword,
+    resetPassword,
+    loginWithGoogle,
+    loginWithFacebook,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
