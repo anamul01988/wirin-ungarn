@@ -691,6 +691,12 @@ const LandingPage = () => {
             </div>
           )}
 
+           <div>
+        <div className="cards cursor-pointer" onClick={routerServerGlobal}>
+          Cards will go here...
+        </div>
+      </div>
+
           {/* Footer Links */}
           <div className="footer-links">
             {footerLinks.map((link) => (
