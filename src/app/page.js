@@ -9,6 +9,10 @@ import RegisterModal from "@/components/_components/RegisterModal";
 import ForgotPasswordModal from "@/components/_components/ForgotPasswordModal";
 import ResetPasswordModal from "@/components/_components/ResetPasswordModal";
 import ProfileDropdown from "@/components/_components/ProfileDropdown";
+import CalendarMenu from "@/components/_components/CalendarMenu";
+import PageHistoryMenu from "@/components/_components/PageHistoryMenu";
+import FavoritenMenu from "@/components/_components/FavoritenMenu";
+import "./calendarMenu.css";
 // import HomePage from "@/components/pages/home/Home";
 // import { Footer } from "@/components/ui";
 
@@ -84,20 +88,29 @@ export default function Home() {
           <button className="header-btn">
             <span className="ht_text">Währungsrechner</span> EUR ⇔ HUF
           </button>
-          <button className="header-btn flex items-center gap-1">
-            <span className="ht_text">06.08. Zsuzsanna</span>{" "}
-            <Image
-              src="/assets/calendar.png"
-              alt="calendar"
-              width={15}
-              height={15}
-            />
-          </button>
-          <button className="header-btn">
-            <span className="ht_text">meine Seiten-Historie</span> 📅
-          </button>
+
+          <div className="calendar-item">
+            <button className="header-btn flex items-center gap-1">
+              <span className="ht_text">06.08. Zsuzsanna</span>{" "}
+              <Image
+                src="/assets/calendar.png"
+                alt="calendar"
+                width={15}
+                height={15}
+              />
+            </button>
+            <CalendarMenu />
+          </div>
+
+          <div className="calendar-item">
+            <button className="header-btn">
+              <span className="ht_text">meine Seiten-Historie</span> 📅
+            </button>
+            <PageHistoryMenu />
+          </div>
         </nav>
         <nav className="header-buttons">
+           <div className="calendar-item">
           <button className="header-btn favorites flex items-center">
             <span className="ht_text">Favoriten</span>{" "}
             <Image
@@ -107,6 +120,8 @@ export default function Home() {
               height={15}
             />
           </button>
+          <FavoritenMenu />
+          </div>
           {loading ? (
             <div className="header-btn register flex items-center">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>

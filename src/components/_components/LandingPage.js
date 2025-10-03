@@ -12,6 +12,10 @@ const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
   const [allowImpressumModal, setAllowImpressumModal] = useState(false);
   const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const primaryLinks = footerLinks.filter((link) => link.primary);
+  const secondaryLinks = footerLinks.filter((link) => !link.primary);
   const handleOpen = () => setOpen(!open);
   const route = useRouter();
   const cardsContainerRef = useRef(null);
@@ -691,13 +695,84 @@ const LandingPage = () => {
             </div>
           )}
 
+          {/* <div>
+            <div className="cards cursor-pointer" onClick={routerServerGlobal}>
+              Cards will go here...
+            </div>
+          </div> */}
+
           {/* Footer Links */}
-          <div className="footer-links">
-            {footerLinks.map((link) => (
-              <Link key={link.key} href={link.endpoint} className="footer-link">
-                {link.title}
-              </Link>
-            ))}
+
+          <div className="relative">
+            {/* Main Footer Links */}
+            <div className="bg-[#4a7c59] p-3 rounded-lg border-[5px] border-white shadow-lg">
+              <div className="flex flex-wrap items-center">
+                {primaryLinks.map((link, index) => (
+                  <React.Fragment key={link.key}>
+                    <Link
+                      href={link.endpoint}
+                      className="text-white hover:text-gray-200 transition-colors text-sm font-medium px-1 whitespace-nowrap"
+                    >
+                      {link.title}
+                    </Link>
+                    {index < primaryLinks.length - 1 && (
+                      <span className="text-white">|</span>
+                    )}
+                  </React.Fragment>
+                ))}
+                <span className="text-white">|</span>
+
+                {/* More Button */}
+                <div className="relative">
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="text-white hover:text-gray-200 transition-colors text-sm font-medium flex items-center gap-1 px-1"
+                  >
+                    more
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className={`transition-transform duration-200 ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
+                    >
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isOpen && (
+                    <>
+                      {/* Backdrop */}
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setIsOpen(false)}
+                      />
+
+                      {/* Menu */}
+                      <div className="absolute bottom-full right-0 mb-2 bg-[#e3e3e3] rounded-lg shadow-xl border-[3px] border-white py-2 min-w-[220px] z-20">
+                        {secondaryLinks.map((link) => (
+                          <Link
+                            key={link.key}
+                            href={link.endpoint}
+                            className="block px-4 py-2.5 text-sm font-semibold hover:bg-[#d2d0d0] transition-colors"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {link.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

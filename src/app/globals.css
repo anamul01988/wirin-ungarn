@@ -343,20 +343,6 @@ body {
   gap: 40px;
 }
 
-.footer-links {
-  flex: 1;
-  max-width: 650px;
-  margin-left: auto;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  background: #4a7c59;
-  padding: 10px;
-  border-radius: 5px;
-  outline: 5px solid #ffffff;
-  z-index: 1001;
-}
-
 .footer-link {
   color: #ffffff;
   text-decoration: none;
@@ -563,11 +549,18 @@ body {
   list-style-type: disc;
   padding-left: 1.5rem;
 }
-.backdrop-blur-sm {
-  backdrop-filter: blur(1px);
-}
 .bg-black {
   background-color: transparent;
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(1px);
+  /* background-color: #a1a1a1 !important;
+  height: 72vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6%; */
 }
 
 .hero-section {

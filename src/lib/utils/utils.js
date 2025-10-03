@@ -179,28 +179,31 @@ export const philosopiesDetails = {
   },
 };
 export const footerLinks = [
-  { title: "Neueste Beiträge", key: "posts", endpoint: "/posts" },
-  { title: "Philosophie", key: "philosophie", endpoint: "/philosophie" },
-  { title: "Datenschutz", key: "datenschutz", endpoint: "/datenschutz" },
-  { title: "Ungarn-Insider", key: "insider", endpoint: "/ungarn-insider" },
-  { title: "Transparenz", key: "transparenz", endpoint: "/transparenz" },
+  { title: "Neueste Beiträge", key: "posts", endpoint: "/posts", primary: true },
   {
     title: "Neuigkeiten",
     key: "news",
     endpoint: "/neuigkeiten-bei-wir-in-ungarn",
+    primary: true
   },
-  { title: "Kontakt", key: "kontakt", endpoint: "/kontakt" },
-  { title: "WIU-Münzen", key: "wiu-muenzen", endpoint: "/wiu-muenzen" },
-  { title: "Karriere", key: "karriere", endpoint: "/karriere" },
+  { title: "Über uns", key: "about", endpoint: "/uber-uns", primary: true },
+  { title: "Philosophie", key: "philosophie", endpoint: "/philosophie", primary: true },
+  { title: "Kontakt", key: "kontakt", endpoint: "/kontakt", primary: true },
+  { title: "Impressum", key: "impressum", endpoint: "/impressum", primary: true },
+  { title: "Datenschutz", key: "datenschutz", endpoint: "/datenschutz", primary: true },
+  
+  { title: "Ungarn-Insider", key: "insider", endpoint: "/ungarn-insider", primary: false },
+  { title: "Transparenz", key: "transparenz", endpoint: "/transparenz", primary: false },
+  { title: "WIU-Münzen", key: "wiu-muenzen", endpoint: "/wiu-muenzen", primary: false },
+  { title: "Karriere", key: "karriere", endpoint: "/karriere", primary: false },
   {
     title: "Cookie-Richtlinie",
     key: "cookies",
     endpoint: "/cookie-richtlinie-eu",
+    primary: false
   },
-  { title: "Über uns", key: "about", endpoint: "/uber-uns" },
-  { title: "Impressum", key: "impressum", endpoint: "/impressum" },
-  { title: "Soziale Projekte", key: "projekte", endpoint: "/soziale-projekte" },
-  { title: "Kooperationen", key: "kooperationen", endpoint: "/kooperationen" },
+  { title: "Soziale Projekte", key: "projekte", endpoint: "/soziale-projekte", primary: false },
+  { title: "Kooperationen", key: "kooperationen", endpoint: "/kooperationen", primary: false },
 ];
 
 export const karriere = {

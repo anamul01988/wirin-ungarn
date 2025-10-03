@@ -117,9 +117,9 @@ const LoginModal = ({
         {/* Header */}
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">
-            Sign In or Register
+            Anmelden oder Registrieren
           </h2>
-          <p className="text-gray-600 mt-2">Quick and easy to get started!</p>
+          <p className="text-gray-600 mt-2">Schnell und einfach loslegen!</p>
         </div>
 
         {/* Social Login Buttons */}
@@ -155,9 +155,9 @@ const LoginModal = ({
             type="button"
             onClick={handleFacebookLogin}
             disabled={isLoading}
-            className="w-1/2 flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-1/2 bg-[#46629B] flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white hover:bg-[#365899] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <svg className="w-5 h-5 mr-2" fill="#1877F2" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 mr-2" fill="##5B78B4" viewBox="0 0 24 24">
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
             </svg>
             Facebook
@@ -167,10 +167,10 @@ const LoginModal = ({
         {/* Divider */}
         <div className="relative mb-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300" />
+            <div className="w-full border-2 border-[#4a7c59]" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">or</span>
+            <span className="px-2 bg-white text-gray-500">oder</span>
           </div>
         </div>
 
