@@ -2,7 +2,7 @@
 
 import LandingPage from "@/components/_components/LandingPage";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import LoginModal from "@/components/_components/LoginModal";
 import RegisterModal from "@/components/_components/RegisterModal";
@@ -141,11 +141,13 @@ export default function Home() {
         onClose={handleCloseForgotPasswordModal}
         onBackToLogin={handleBackToLogin}
       />
-      <ResetPasswordModal
-        isOpen={isResetPasswordModalOpen}
-        onClose={handleCloseResetPasswordModal}
-        onBackToLogin={handleBackToLogin}
-      />
+      <Suspense fallback={<div className="hidden" />}>
+        <ResetPasswordModal
+          isOpen={isResetPasswordModalOpen}
+          onClose={handleCloseResetPasswordModal}
+          onBackToLogin={handleBackToLogin}
+        />
+      </Suspense>
     </div>
   );
 }
