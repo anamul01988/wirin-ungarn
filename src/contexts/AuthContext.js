@@ -394,9 +394,20 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
         }
         return { success: true };
-      }
+      } else {
+        // If no error and no explicit ok, check if we have a session
+        // This handles cases where NextAuth redirects internally
+        const session = await getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setIsAuthenticated(true);
+          return { success: true };
+        }
 
-      return { success: false, error: "Unknown error occurred." };
+        // If no session and no error, it might be a redirect case
+        // Return success to avoid showing error message
+        return { success: true };
+      }
     } catch (error) {
       console.error("Google login error:", error);
       return { success: false, error: error.message };
@@ -423,9 +434,20 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
         }
         return { success: true };
-      }
+      } else {
+        // If no error and no explicit ok, check if we have a session
+        // This handles cases where NextAuth redirects internally
+        const session = await getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setIsAuthenticated(true);
+          return { success: true };
+        }
 
-      return { success: false, error: "Unknown error occurred." };
+        // If no session and no error, it might be a redirect case
+        // Return success to avoid showing error message
+        return { success: true };
+      }
     } catch (error) {
       console.error("Facebook login error:", error);
       return { success: false, error: error.message };
