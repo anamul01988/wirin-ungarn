@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import LoginModal from "@/components/_components/LoginModal";
 import RegisterModal from "@/components/_components/RegisterModal";
+import ForgotPasswordModal from "@/components/_components/ForgotPasswordModal";
+import ResetPasswordModal from "@/components/_components/ResetPasswordModal";
 import ProfileDropdown from "@/components/_components/ProfileDropdown";
 // import HomePage from "@/components/pages/home/Home";
 // import { Footer } from "@/components/ui";
@@ -13,6 +15,10 @@ import ProfileDropdown from "@/components/_components/ProfileDropdown";
 export default function Home() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
+    useState(false);
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
+    useState(false);
   const { isAuthenticated, loading } = useAuth();
 
   const handleLoginClick = () => {
@@ -39,6 +45,28 @@ export default function Home() {
   const handleSwitchToLogin = () => {
     setIsRegisterModalOpen(false);
     setIsLoginModalOpen(true);
+  };
+
+  const handleSwitchToForgotPassword = () => {
+    setIsForgotPasswordModalOpen(true);
+  };
+
+  const handleCloseForgotPasswordModal = () => {
+    setIsForgotPasswordModalOpen(false);
+  };
+
+  const handleBackToLogin = () => {
+    setIsForgotPasswordModalOpen(false);
+    setIsResetPasswordModalOpen(false);
+    setIsLoginModalOpen(true);
+  };
+
+  const handleSwitchToResetPassword = () => {
+    setIsResetPasswordModalOpen(true);
+  };
+
+  const handleCloseResetPasswordModal = () => {
+    setIsResetPasswordModalOpen(false);
   };
 
   return (
@@ -101,11 +129,22 @@ export default function Home() {
         isOpen={isLoginModalOpen}
         onClose={handleCloseLoginModal}
         onSwitchToRegister={handleSwitchToRegister}
+        onSwitchToForgotPassword={handleSwitchToForgotPassword}
       />
       <RegisterModal
         isOpen={isRegisterModalOpen}
         onClose={handleCloseRegisterModal}
         onSwitchToLogin={handleSwitchToLogin}
+      />
+      <ForgotPasswordModal
+        isOpen={isForgotPasswordModalOpen}
+        onClose={handleCloseForgotPasswordModal}
+        onBackToLogin={handleBackToLogin}
+      />
+      <ResetPasswordModal
+        isOpen={isResetPasswordModalOpen}
+        onClose={handleCloseResetPasswordModal}
+        onBackToLogin={handleBackToLogin}
       />
     </div>
   );

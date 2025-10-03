@@ -4,7 +4,12 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 
-const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
+const LoginModal = ({
+  isOpen,
+  onClose,
+  onSwitchToRegister,
+  onSwitchToForgotPassword,
+}) => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -81,8 +86,10 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
 
         {/* Header */}
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Login</h2>
-          <p className="text-gray-600 mt-2">Sign in to your account</p>
+          <h2 className="text-2xl font-bold text-gray-900">Sign In</h2>
+          <p className="text-gray-600 mt-2">
+            Welcome back! Please sign in to your account
+          </p>
         </div>
 
         {/* Error message */}
@@ -96,7 +103,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
               htmlFor="username"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Username
+              Username or Email
             </label>
             <input
               type="text"
@@ -105,7 +112,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
               value={formData.username}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent auth-input"
-              placeholder="Enter your username"
+              placeholder="Enter your username or email"
               disabled={isLoading}
             />
           </div>
@@ -174,6 +181,20 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
             </div>
           </div>
 
+          {/* Forgot password link */}
+          <div className="text-right">
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onSwitchToForgotPassword();
+              }}
+              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Forgot your password?
+            </button>
+          </div>
+
           {/* Submit button */}
           <button
             type="submit"
@@ -221,7 +242,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
               }}
               className="text-blue-600 hover:text-blue-800 font-medium"
             >
-              Register here
+              Create Account
             </button>
           </p>
         </div>

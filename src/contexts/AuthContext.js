@@ -244,6 +244,99 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const forgotPassword = async (email) => {
+    try {
+      const response = await fetch("https://wir-in-ungarn.hu/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            mutation SendPasswordResetEmail($input: SendPasswordResetEmailInput!) {
+              sendPasswordResetEmail(input: $input) {
+                success
+              }
+            }
+          `,
+          variables: {
+            input: {
+              clientMutationId: "forgotPassword",
+              username: email,
+            },
+          },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.errors) {
+        throw new Error(
+          result.errors[0]?.message || "Failed to send reset email"
+        );
+      }
+
+      if (result.data?.sendPasswordResetEmail?.success) {
+        return {
+          success: true,
+          message:
+            "Password reset email sent successfully. Please check your email for further instructions.",
+        };
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const resetPassword = async (key, login, password) => {
+    try {
+      const response = await fetch("https://wir-in-ungarn.hu/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            mutation ResetUserPassword($input: ResetUserPasswordInput!) {
+              resetUserPassword(input: $input) {
+                success
+              }
+            }
+          `,
+          variables: {
+            input: {
+              clientMutationId: "resetPassword",
+              key: key,
+              login: login,
+              password: password,
+            },
+          },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.errors) {
+        throw new Error(result.errors[0]?.message || "Password reset failed");
+      }
+
+      if (result.data?.resetUserPassword?.success) {
+        return {
+          success: true,
+          message: "Password reset successfully",
+        };
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (error) {
+      console.error("Reset password error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const value = {
     user,
     isAuthenticated,
@@ -252,6 +345,8 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     refreshAuthToken,
+    forgotPassword,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
