@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { signIn, signOut, getSession } from "next-auth/react";
+import { signIn, signOut, getSession, useSession } from "next-auth/react";
 import { tokenStorage, TOKEN_KEYS, isTokenExpired } from "@/lib/auth-utils";
 
 const AuthContext = createContext();
@@ -18,6 +18,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Use NextAuth session
+  const { data: session, status } = useSession();
 
   // Check for existing auth token on mount
   useEffect(() => {
@@ -48,6 +51,34 @@ export const AuthProvider = ({ children }) => {
 
     checkAuthStatus();
   }, []);
+
+  // Monitor NextAuth session changes
+  useEffect(() => {
+    if (status === "loading") {
+      setLoading(true);
+      return;
+    }
+
+    if (session?.user) {
+      // User is authenticated via NextAuth (OAuth)
+      setUser(session.user);
+      setIsAuthenticated(true);
+      setLoading(false);
+    } else if (status === "unauthenticated") {
+      // User is not authenticated via NextAuth
+      // Check if we have custom auth (GraphQL) session
+      const token = tokenStorage.getItem(TOKEN_KEYS.AUTH_TOKEN);
+      const userData = tokenStorage.getItem(TOKEN_KEYS.USER_DATA);
+
+      if (!token || !userData || isTokenExpired(token)) {
+        // No valid custom auth session either
+        setUser(null);
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+      // If we have valid custom auth, keep the existing state
+    }
+  }, [session, status]);
 
   const login = async (username, password) => {
     try {
@@ -107,9 +138,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     // Clear all auth data using secure storage
     tokenStorage.clear();
+
+    // Also sign out from NextAuth if user was authenticated via OAuth
+    if (session?.user) {
+      await signOut({ redirect: false });
+    }
 
     setUser(null);
     setIsAuthenticated(false);
