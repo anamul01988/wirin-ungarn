@@ -13,7 +13,7 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
   const handleShowDetails = (title) => {
     // setSelectedTitle(title);
     // setShowDetails(true);
-    route.push("/wissenwert");
+    route.push("/wissenswert");
   };
 
   // const navigateToHome = () => {
@@ -22,7 +22,7 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
   // };
 
   return (
-    <>
+    <div className=" bg-red-900">
       <div className="dialog-container" style={{ height: "98vh" }}>
         {" "}
         <Dialog
@@ -41,6 +41,7 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
               onFavorite={() => console.log('Favorite clicked')}
               onLayers={() => console.log('Layers clicked')}
               onShare={() => console.log('Share clicked')}
+              type="impressum"
               topIconsStyle={{
                 top: "-0.5rem",
                 right: "-20rem",
@@ -98,6 +99,6 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
           Impressum
         </Button>
       </div> */}
-    </>
+    </div>
   );
 }

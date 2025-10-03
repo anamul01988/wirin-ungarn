@@ -25,6 +25,7 @@ export default function ModalIcons({
   showShare = true,
   topIconsStyle,
   shareIconStyle,
+  type,
 }) {
   const defaultTopIconsStyle = {
     top: "-0.5rem",
@@ -55,46 +56,54 @@ export default function ModalIcons({
           />
         </button>
 
-        {/* Love Icon */}
-        {showFavorite && (
-          <button onClick={onFavorite} className="p-4 rounded-full">
-            <img
-              src="/assets/icons/favorit_e.png"
-              alt="Love Icon"
-              className="w-3rem h-2rem"
-            />
-          </button>
-        )}
+        {type !== "impressum" && (
+          <>
+            {/* Love Icon */}
+            {showFavorite && (
+              <button onClick={onFavorite} className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/favorit_e.png"
+                  alt="Love Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+            )}
 
-        {/* Layers Icon */}
-        {showLayers && (
-          <button onClick={onLayers} className="p-4 rounded-full">
-            <img
-              src="/assets/icons/layers.png"
-              alt="Layers Icon"
-              className="w-3rem h-2rem"
-            />
-          </button>
+            {/* Layers Icon */}
+            {showLayers && (
+              <button onClick={onLayers} className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/layers.png"
+                  alt="Layers Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+            )}
+          </>
         )}
       </div>
 
       {/* Share button anchored at bottom */}
-      {showShare && (
-        <div
-          className="absolute z-50"
-          style={{
-            ...defaultShareIconStyle,
-            ...shareIconStyle,
-          }}
-        >
-          <button onClick={onShare} className="p-4 rounded-full">
-            <img
-              src="/assets/icons/share.png"
-              alt="Share Icon"
-              className="w-3rem h-2rem"
-            />
-          </button>
-        </div>
+      {type !== "impressum" && (
+        <>
+          {showShare && (
+            <div
+              className="absolute z-50"
+              style={{
+                ...defaultShareIconStyle,
+                ...shareIconStyle,
+              }}
+            >
+              <button onClick={onShare} className="p-4 rounded-full">
+                <img
+                  src="/assets/icons/share.png"
+                  alt="Share Icon"
+                  className="w-3rem h-2rem"
+                />
+              </button>
+            </div>
+          )}
+        </>
       )}
     </>
   );

@@ -42,9 +42,9 @@
   gap: 0px !important;
 }
 
-.history-hover-menu.calendar-hover-menu{
-    display: inline !important;
-    flex-direction: initial !important;
+.history-hover-menu.calendar-hover-menu {
+  display: inline !important;
+  flex-direction: initial !important;
 }
 
 .calendar-hover-menu .menu-column {
@@ -81,13 +81,6 @@
   font-weight: 600;
 }
 
-.history-hover-menu .menu-footer {
-  display: block !important;
-  width: 100% !important;
-  clear: both !important;
-  margin-top: 10px !important;
-}
-
 /* Calendar Tabs */
 .calendar-tabs {
   display: flex;
@@ -110,9 +103,7 @@
   margin-bottom: -2px;
 }
 
-.calendar-tab:hover:not(.active) {
-  background-color: #d2d0d0;
-}
+
 
 /* History Item Styling */
 .calendar-hover-menu .history-item {
@@ -124,6 +115,7 @@
   border-top: 1px solid rgb(231 231 231);
   border-bottom: 1px solid rgb(231 231 231);
   border-radius: 4px !important;
+  width: 100%;
 }
 
 .calendar-hover-menu .history-date {
@@ -134,3 +126,4 @@
 .calendar-hover-menu .history-title {
   font-weight: 600;
 }
+

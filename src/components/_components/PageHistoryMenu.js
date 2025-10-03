@@ -26,7 +26,7 @@ const pageHistory = [
           <span className="history-title">{page.title}</span>
         </div>
       ))}
-      <div className="menu-footer">Verlauf anzeigen</div>
+       <div className="menu-footer">alle anzeigen</div>
     </div>
   );
 };
