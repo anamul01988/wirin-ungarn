@@ -1,112 +1,41 @@
-// Authentication utilities for token management
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 
-export const TOKEN_KEYS = {
-  AUTH_TOKEN: "authToken",
-  REFRESH_TOKEN: "refreshToken",
-  USER_DATA: "userData",
-};
-
-// Secure token storage with fallback
-export const tokenStorage = {
-  setItem: (key, value) => {
-    try {
-      if (typeof window !== "undefined") {
-        localStorage.setItem(key, value);
-      }
-    } catch (error) {
-      console.error("Error storing token:", error);
-    }
-  },
-
-  getItem: (key) => {
-    try {
-      if (typeof window !== "undefined") {
-        return localStorage.getItem(key);
-      }
-      return null;
-    } catch (error) {
-      console.error("Error retrieving token:", error);
-      return null;
-    }
-  },
-
-  removeItem: (key) => {
-    try {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem(key);
-      }
-    } catch (error) {
-      console.error("Error removing token:", error);
-    }
-  },
-
-  clear: () => {
-    try {
-      if (typeof window !== "undefined") {
-        Object.values(TOKEN_KEYS).forEach((key) => {
-          localStorage.removeItem(key);
-        });
-      }
-    } catch (error) {
-      console.error("Error clearing tokens:", error);
-    }
-  },
-};
-
-// Check if token is expired (basic check)
-export const isTokenExpired = (token) => {
-  if (!token) return true;
-
-  try {
-    // Decode JWT token (basic implementation)
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    const currentTime = Date.now() / 1000;
-    return payload.exp < currentTime;
-  } catch (error) {
-    console.error("Error checking token expiration:", error);
-    return true;
-  }
-};
-
-// Get auth headers for API requests
-export const getAuthHeaders = () => {
-  const token = tokenStorage.getItem(TOKEN_KEYS.AUTH_TOKEN);
-
-  if (!token || isTokenExpired(token)) {
-    return {};
-  }
-
-  return {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  };
-};
-
-// GraphQL request helper with auth
-export const makeAuthenticatedRequest = async (query, variables = {}) => {
-  const headers = getAuthHeaders();
-
-  const response = await fetch("https://wir-in-ungarn.hu/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    body: JSON.stringify({
-      query,
-      variables,
+export const authOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "your-google-client-id",
+      clientSecret:
+        process.env.GOOGLE_CLIENT_SECRET || "your-google-client-secret",
     }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const result = await response.json();
-
-  if (result.errors) {
-    throw new Error(result.errors[0]?.message || "GraphQL error occurred");
-  }
-
-  return result;
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID || "1162573049076751",
+      clientSecret:
+        process.env.FACEBOOK_CLIENT_SECRET ||
+        "9db2d916a54d3093cdb978ba1b348f01",
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, account, profile }) {
+      // Persist the OAuth access_token to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token;
+        token.provider = account.provider;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Send properties to the client
+      session.accessToken = token.accessToken;
+      session.provider = token.provider;
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/auth/signin",
+    error: "/auth/error",
+  },
 };
+
+export default NextAuth(authOptions);

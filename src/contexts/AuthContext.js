@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { tokenStorage, TOKEN_KEYS, isTokenExpired } from "@/lib/auth";
+import { signIn, signOut, getSession } from "next-auth/react";
+import { tokenStorage, TOKEN_KEYS, isTokenExpired } from "@/lib/auth-utils";
 
 const AuthContext = createContext();
 
@@ -337,6 +338,64 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signIn("google", {
+        redirect: false,
+        callbackUrl: "/",
+      });
+
+      if (result?.error) {
+        return {
+          success: false,
+          error: "Google sign-in failed. Please try again.",
+        };
+      } else if (result?.ok) {
+        // Get the session to update user state
+        const session = await getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setIsAuthenticated(true);
+        }
+        return { success: true };
+      }
+
+      return { success: false, error: "Unknown error occurred." };
+    } catch (error) {
+      console.error("Google login error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const loginWithFacebook = async () => {
+    try {
+      const result = await signIn("facebook", {
+        redirect: false,
+        callbackUrl: "/",
+      });
+
+      if (result?.error) {
+        return {
+          success: false,
+          error: "Facebook sign-in failed. Please try again.",
+        };
+      } else if (result?.ok) {
+        // Get the session to update user state
+        const session = await getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setIsAuthenticated(true);
+        }
+        return { success: true };
+      }
+
+      return { success: false, error: "Unknown error occurred." };
+    } catch (error) {
+      console.error("Facebook login error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const value = {
     user,
     isAuthenticated,
@@ -347,6 +406,8 @@ export const AuthProvider = ({ children }) => {
     refreshAuthToken,
     forgotPassword,
     resetPassword,
+    loginWithGoogle,
+    loginWithFacebook,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
