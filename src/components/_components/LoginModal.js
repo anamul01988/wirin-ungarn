@@ -93,7 +93,7 @@ const LoginModal = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 auth-modal">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 relative auth-modal-content">
+      <div className="bg-white rounded-lg p-6 w-full max-w-xl mx-4 relative auth-modal-content">
         {/* Close button */}
         <button
           onClick={handleClose}
