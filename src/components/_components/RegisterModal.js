@@ -104,8 +104,10 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 relative">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 auth-modal">
+      <div className="bg-white rounded-lg p-2  w-full max-w-2xl  relative auth-modal-content">
+        <div className=" border-2 border-black rounded-lg border-solid">
+        <div className="py-6 px-16">
         {/* Close button */}
         <button
           onClick={handleClose}
@@ -128,8 +130,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
         {/* Header */}
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
-          <p className="text-gray-600 mt-2">Join us today</p>
+          <h2 className="text-2xl font-bold text-gray-900">Nutzerkonto registrieren</h2>
         </div>
 
         {/* Error message */}
@@ -152,9 +153,10 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           <div>
             <label
               htmlFor="reg-username"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-md font-bold text-black text mb-1"
             >
-              Username
+              Gewünschter Benutzername*
+          <span className="block text-sm font-medium text-gray-700 italic text mb-1">Wähle Dir einen Namen mit 3 - 12 Buchstaben Länge.</span>    
             </label>
             <input
               type="text"
@@ -368,6 +370,8 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           </p>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };
