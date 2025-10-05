@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import SubMenu from "../pages/home/SubMenu";
@@ -10,6 +10,17 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(!open);
   const route = useRouter();
+
+  // Escape key closes modal
+  React.useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') handleOpen();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [open, handleOpen]);
+
   const handleShowDetails = (title) => {
     // setSelectedTitle(title);
     // setShowDetails(true);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogBody,
@@ -21,6 +21,17 @@ export default function LiedTexteDialogContent({
     setOpen(false);
     route.push("/");
   };
+
+  // Escape key closes modal
+  React.useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') handleClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [open]);
+
   const navigateToHome = () => {
     route.push("/");
   };

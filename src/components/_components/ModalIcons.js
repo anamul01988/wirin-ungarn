@@ -28,55 +28,43 @@ export default function ModalIcons({
   type,
 }) {
   const defaultTopIconsStyle = {
-    top: "-0.5rem",
-    right: "-8rem",
+    top: "0rem",
+    right: "-6.5rem",
   };
 
   const defaultShareIconStyle = {
     bottom: "0rem",
-    right: "-8rem",
+    right: "-6rem",
   };
 
   return (
     <>
       {/* Top icons (Cross, Love, Layers) */}
       <div
-        className="absolute flex flex-col space-y-3 z-50"
+        className="absolute flex flex-col z-50"
         style={{
           ...defaultTopIconsStyle,
           ...topIconsStyle,
         }}
       >
         {/* Cross Icon */}
-        <button onClick={onClose} className="p-4 rounded-full">
-          <img
-            src="/assets/icons/close.png"
-            alt="Close Icon"
-            className="w-4rem h-3rem"
-          />
+        <button onClick={onClose} className="px-4 rounded-full">
+          <img src="/assets/icons/close.png" alt="Close Icon" />
         </button>
 
         {type !== "impressum" && (
           <>
             {/* Love Icon */}
             {showFavorite && (
-              <button onClick={onFavorite} className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/favorit_e.png"
-                  alt="Love Icon"
-                  className="w-3rem h-2rem"
-                />
+              <button onClick={onFavorite} className="px-4 py-1 rounded-full">
+                <img src="/assets/icons/favorit_e.png" alt="Love Icon" />
               </button>
             )}
 
             {/* Layers Icon */}
             {showLayers && (
-              <button onClick={onLayers} className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/layers.png"
-                  alt="Layers Icon"
-                  className="w-3rem h-2rem"
-                />
+              <button onClick={onLayers} className="px-4 py-1 rounded-full">
+                <img src="/assets/icons/plus.png" alt="Layers Icon" />
               </button>
             )}
           </>
@@ -94,12 +82,8 @@ export default function ModalIcons({
                 ...shareIconStyle,
               }}
             >
-              <button onClick={onShare} className="p-4 rounded-full">
-                <img
-                  src="/assets/icons/share.png"
-                  alt="Share Icon"
-                  className="w-3rem h-2rem"
-                />
+              <button onClick={onShare} className="px-4 rounded-full">
+                <img src="/assets/icons/share.png" alt="Share Icon" />
               </button>
             </div>
           )}
