@@ -638,7 +638,6 @@ const LandingPage = () => {
               className="ticker-container"
               style={{
                 margin: "0",
-                marginRight: "20px",
                 outline: "5px solid #ffffff",
               }}
             >
