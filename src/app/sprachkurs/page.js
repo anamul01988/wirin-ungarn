@@ -134,6 +134,13 @@ export default function Sprachkurs() {
 
   useEffect(() => {
     setOpen(true);
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
   const navigateToHome = () => {
@@ -161,7 +168,7 @@ export default function Sprachkurs() {
         )}
 
         <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
-          {handleBackToMenu && (
+          {/* {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}
               className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
@@ -182,8 +189,8 @@ export default function Sprachkurs() {
                 />
               </svg>
             </button>
-          )}
-          <div className="mt-8">
+          )} */}
+          <div className="">
             <SprachkursPage />
           </div>
         </DialogBody>
