@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
@@ -39,6 +39,16 @@ const ForgotPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
     setSuccess(false);
     onClose();
   };
+
+  // Escape key closes modal
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 

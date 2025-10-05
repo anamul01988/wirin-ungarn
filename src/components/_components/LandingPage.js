@@ -7,12 +7,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
   const [allowImpressumModal, setAllowImpressumModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [openAiBtn, setOpenAiBtn] = useState(false);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
@@ -294,6 +296,45 @@ const LandingPage = () => {
         backgroundAttachment: "fixed",
       }}
     >
+      <div className="aiBtn bg-[#4a7c59] rounded-md text-lg text-white hover:bg-[#426e4f]">
+        {!openAiBtn && (
+          <button
+            onClick={() => setOpenAiBtn(true)}
+            className="flex items-center gap-2 bg-[#4a7c59] text-white font-bold rounded-md px-4 py-2 shadow-lg hover:bg-[#426e4f] transition"
+          >
+            AI{" "}
+            <Image
+              src="/assets/search-icon-white.png"
+              alt="AI Icon"
+              width={24}
+              height={24}
+            />
+          </button>
+        )}
+
+        {openAiBtn && (
+          <div className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden">
+            <input
+              type="text"
+              style={{ width: "520px" }}
+              placeholder="SCHREIBE HIER WAS DU SUCHST, GERNE AUCH ALS FRAGE"
+              className="px-4 py-2 text-white placeholder-white bg-transparent outline-none"
+            />
+            <button
+              onClick={() => setOpenAiBtn(false)}
+              className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
+            >
+              <Image
+                src="/assets/search-icon-white.png"
+                alt="AI Icon"
+                width={24}
+                height={24}
+              />
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Sidebar */}
       <nav className="sidebar">
         {[
@@ -638,7 +679,6 @@ const LandingPage = () => {
               className="ticker-container"
               style={{
                 margin: "0",
-                marginRight: "20px",
                 outline: "5px solid #ffffff",
               }}
             >

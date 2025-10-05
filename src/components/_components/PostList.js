@@ -21,6 +21,16 @@ export default function PostList({ initialApiData }) {
     setOpen(true);
   }, []);
 
+  // Escape key closes modal
+  useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') handleClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [open]);
+
   const navigateToHome = () => {
     route.push("/");
   };
