@@ -13,6 +13,7 @@ const LandingPage = () => {
   const [allowImpressumModal, setAllowImpressumModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [openAiBtn, setOpenAiBtn] = useState(false);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
@@ -294,6 +295,61 @@ const LandingPage = () => {
         backgroundAttachment: "fixed",
       }}
     >
+      <div className="aiBtn bg-[#4a7c59] text-white hover:bg-[#426e4f]">
+        {!openAiBtn && (
+          <button
+            onClick={() => setOpenAiBtn(true)}
+            className="flex items-center gap-2 bg-[#4a7c59] text-white font-bold rounded-md px-4 py-2 shadow-lg hover:bg-[#426e4f] transition"
+          >
+            AI{" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"
+              />
+            </svg>
+          </button>
+        )}
+
+        {openAiBtn && (
+          <div  className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden">
+            <input
+              type="text"
+              style={{ width: "500px" }}
+              placeholder="SCHREIBE HIER WAS DU SUCHST, GERNE AUCH ALS FRAGE"
+              className="px-4 py-2 text-white placeholder-white bg-transparent outline-none"
+            />
+            <button
+              onClick={() => setOpenAiBtn(false)}
+              className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Sidebar */}
       <nav className="sidebar">
         {[

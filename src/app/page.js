@@ -18,7 +18,7 @@ import "./calendarMenu.css";
 
 export default function Home() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [open, setOpen] = useState(false);
+
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
     useState(false);
@@ -85,7 +85,7 @@ export default function Home() {
       // }}
     >
       <header className="header w-full">
-        <nav className="header-buttons -mt-12">
+        <nav className="header-buttons">
           <button className="header-btn">
             <span className="ht_text">Währungsrechner</span> EUR ⇔ HUF
           </button>
@@ -137,60 +137,8 @@ export default function Home() {
               >
                 <span className="ht_text">Anmelden</span>
               </button>
-              {/* <button className="header-btn register" onClick={handleRegisterClick}>
-                <span className="ht_text">Registrieren</span>
-              </button> */}
-              {!open && (
-                <button
-                  onClick={() => setOpen(true)}
-                  className="flex items-center gap-2 bg-green-700 text-white font-bold rounded-md px-4 py-2 shadow-lg hover:bg-green-800 transition"
-                >
-                  AI{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"
-                    />
-                  </svg>
-                </button>
-              )}
-
-              {open && (
-                <div className="flex items-center bg-green-700 rounded-md shadow-lg overflow-hidden">
-                  <input
-                    type="text"
-                    placeholder="SCHREIBE HIER WAS DU SUCHST, GERNE AUCH ALS FRAGE"
-                    className="px-4 py-2 w-80 text-white placeholder-white bg-transparent outline-none"
-                  />
-                  <button
-                    onClick={() => setOpen(false)}
-                    className="bg-green-800 hover:bg-green-900 px-3 py-2 text-white"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke="currentColor"
-                      className="w-5 h-5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              )}
+              
+             
             </div>
           )}
         </nav>
