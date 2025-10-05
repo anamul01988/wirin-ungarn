@@ -18,6 +18,7 @@ import "./calendarMenu.css";
 
 export default function Home() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
     useState(false);
@@ -110,17 +111,17 @@ export default function Home() {
           </div>
         </nav>
         <nav className="header-buttons">
-           <div className="calendar-item">
-          <button className="header-btn favorites flex items-center">
-            <span className="ht_text">Favoriten</span>{" "}
-            <Image
-              src="/assets/favorit.png"
-              alt="favorit"
-              width={15}
-              height={15}
-            />
-          </button>
-          <FavoritenMenu />
+          <div className="calendar-item">
+            <button className="header-btn favorites flex items-center">
+              <span className="ht_text">Favoriten</span>{" "}
+              <Image
+                src="/assets/favorit.png"
+                alt="favorit"
+                width={15}
+                height={15}
+              />
+            </button>
+            <FavoritenMenu />
           </div>
           {loading ? (
             <div className="header-btn register flex items-center">
@@ -129,9 +130,16 @@ export default function Home() {
           ) : isAuthenticated ? (
             <ProfileDropdown />
           ) : (
-            <button className="header-btn register" onClick={handleLoginClick}>
-              <span className="ht_text">Anmelden</span>
-            </button>
+            <div className="flex flex-col gap-2">
+              <button
+                className="header-btn register"
+                onClick={handleLoginClick}
+              >
+                <span className="ht_text">Anmelden</span>
+              </button>
+              
+             
+            </div>
           )}
         </nav>
       </header>
