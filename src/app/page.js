@@ -84,7 +84,7 @@ export default function Home() {
       // }}
     >
       <header className="header w-full">
-        <nav className="header-buttons">
+        <nav className="header-buttons -mt-12">
           <button className="header-btn">
             <span className="ht_text">Währungsrechner</span> EUR ⇔ HUF
           </button>
@@ -129,9 +129,14 @@ export default function Home() {
           ) : isAuthenticated ? (
             <ProfileDropdown />
           ) : (
-            <button className="header-btn register" onClick={handleLoginClick}>
-              <span className="ht_text">Anmelden</span>
-            </button>
+            <div className="flex flex-col gap-2">
+              <button className="header-btn register" onClick={handleLoginClick}>
+                <span className="ht_text">Anmelden</span>
+              </button>
+              <button className="header-btn register" onClick={handleRegisterClick}>
+                <span className="ht_text">Registrieren</span>
+              </button>
+            </div>
           )}
         </nav>
       </header>
