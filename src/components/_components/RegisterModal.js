@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 import { Checkbox } from "@material-tailwind/react";
@@ -101,6 +101,17 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     setSuccess("");
     onClose();
   };
+
+
+  // Escape key closes modal
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 

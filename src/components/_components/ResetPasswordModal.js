@@ -88,6 +88,17 @@ const ResetPasswordModal = ({ isOpen, onClose, onBackToLogin }) => {
     onClose();
   };
 
+
+  // Escape key closes modal
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
