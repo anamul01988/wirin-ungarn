@@ -42,15 +42,15 @@ export default function Kategorien() {
       >
         {/* Floating Cross + Love Icons */}
         {open && (
-          <ModalIcons 
+          <ModalIcons
             onClose={handleClose}
-            onFavorite={() => console.log('Favorite clicked')}
-            onLayers={() => console.log('Layers clicked')}
-            onShare={() => console.log('Share clicked')}
+            onFavorite={() => console.log("Favorite clicked")}
+            onLayers={() => console.log("Layers clicked")}
+            onShare={() => console.log("Share clicked")}
           />
         )}
 
-        <DialogBody className=" px-[30px] py-[30px] flex-1">
+        <DialogBody className=" px-[30px] py-[30px] custom__modal_area flex-1">
           {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}

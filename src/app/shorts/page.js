@@ -41,15 +41,15 @@ export default function Shorts() {
       >
         {/* Floating Cross + Love Icons */}
         {open && (
-          <ModalIcons 
+          <ModalIcons
             onClose={handleClose}
-            onFavorite={() => console.log('Favorite clicked')}
-            onLayers={() => console.log('Layers clicked')}
-            onShare={() => console.log('Share clicked')}
+            onFavorite={() => console.log("Favorite clicked")}
+            onLayers={() => console.log("Layers clicked")}
+            onShare={() => console.log("Share clicked")}
           />
         )}
 
-        <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
+        <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1 custom__modal_area border-0">
           {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}

@@ -52,6 +52,8 @@ const CustomPost = ({
   const route = useRouter();
   const dispatch = useDispatch();
 
+  console.log("routePrefix", routePrefix);
+
   const handleClick = (slug) => {
     console.log("routePrefix", routePrefix, typeof routePrefix);
     // Dispatch routePrefix to Redux store before navigation
@@ -68,6 +70,9 @@ const CustomPost = ({
         route.push(`/${routePrefix}/${slug}`);
       }
       if (routePrefix === "ausflugsziele") {
+        route.push(`/${routePrefix}/${slug}`);
+      }
+      if (routePrefix === "liedtexte") {
         route.push(`/${routePrefix}/${slug}`);
       } else {
         route.push(`${slug}`);
