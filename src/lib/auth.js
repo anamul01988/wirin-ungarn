@@ -5,15 +5,17 @@ import FacebookProvider from "next-auth/providers/facebook";
 export const authOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "your-google-client-id",
-      clientSecret:
-        process.env.GOOGLE_CLIENT_SECRET || "your-google-client-secret",
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
     FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID || "1162573049076751",
-      clientSecret:
-        process.env.FACEBOOK_CLIENT_SECRET ||
-        "9db2d916a54d3093cdb978ba1b348f01",
+      clientId: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+      authorization: {
+        params: {
+          scope: "email,public_profile",
+        },
+      },
     }),
   ],
   callbacks: {
