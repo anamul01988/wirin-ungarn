@@ -52,18 +52,24 @@ export default function ModalIcons({
           <img src="/assets/icons/close.png" alt="Close Icon" />
         </div>
 
-        {type !== "impressum" && (
+        {type !== "impressum" && type !== "not-found" && (
           <>
             {/* Love Icon */}
             {showFavorite && (
-              <div onClick={onFavorite} className="px-4 cursor-pointer py-1 rounded-full">
+              <div
+                onClick={onFavorite}
+                className="px-4 cursor-pointer py-1 rounded-full"
+              >
                 <img src="/assets/icons/favorit_e.png" alt="Love Icon" />
               </div>
             )}
 
             {/* Layers Icon */}
             {showLayers && (
-              <div onClick={onLayers} className="px-4 cursor-pointer py-1 rounded-full">
+              <div
+                onClick={onLayers}
+                className="px-4 cursor-pointer py-1 rounded-full"
+              >
                 <img src="/assets/icons/plus.png" alt="Layers Icon" />
               </div>
             )}
@@ -72,7 +78,7 @@ export default function ModalIcons({
       </div>
 
       {/* Share button anchored at bottom */}
-      {type !== "impressum" && (
+      {type !== "impressum" && type !== "not-found" && (
         <>
           {showShare && (
             <div
@@ -82,7 +88,10 @@ export default function ModalIcons({
                 ...shareIconStyle,
               }}
             >
-              <div onClick={onShare} className="px-4 cursor-pointer rounded-full">
+              <div
+                onClick={onShare}
+                className="px-4 cursor-pointer rounded-full"
+              >
                 <img src="/assets/icons/share.png" alt="Share Icon" />
               </div>
             </div>

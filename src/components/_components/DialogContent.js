@@ -20,6 +20,7 @@ export default function DialogContent({
   contentType,
   singlePostContent = [],
   routePrefix,
+  type,
   postContent, // Add postContent prop
 }) {
   const [open, setOpen] = useState(true);
@@ -81,13 +82,13 @@ export default function DialogContent({
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}
+            type={type}
           />
         )}
 
         {/* Dialog Body */}
         <DialogBody className="overflow-auto custom__modal_area px-[30px] py-[30px] flex-1">
           <div>
-            
             <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1>
 
             {contentType === "wissenswert" && (
