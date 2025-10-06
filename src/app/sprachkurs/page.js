@@ -159,7 +159,7 @@ export default function Sprachkurs() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
+        className="bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col outline-none"
       >
         {open && (
           <ModalIcons

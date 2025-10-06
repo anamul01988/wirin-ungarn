@@ -45,7 +45,7 @@ export default function PostList({ initialApiData }) {
         }}
         handler={handleOpen}
         size={"lg"}
-        className="bg-white relative border-4 border-green-700 rounded-2xl  h-[96vh] flex flex-col"
+        className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl  h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
