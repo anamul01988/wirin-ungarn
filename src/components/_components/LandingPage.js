@@ -94,6 +94,8 @@ const LandingPage = () => {
 
       // Add hover buttons to cards
       const cardWrappers = gsap.utils.toArray(".card-wrapper");
+      console.log('Initial card wrappers found:', cardWrappers.length);
+      
       cardWrappers.forEach((wrapper) => {
         const card = wrapper.querySelector(".card");
         const hoverButtons = document.createElement("div");
@@ -150,7 +152,7 @@ const LandingPage = () => {
             const url = urlMatch[1];
             imagePromises.push(
               new Promise((resolve) => {
-                const img = new Image();
+                const img = document.createElement('img');
                 img.src = url;
                 img.onload = () => {
                   const aspectRatio = img.naturalHeight / img.naturalWidth;
@@ -162,12 +164,24 @@ const LandingPage = () => {
                 img.onerror = resolve;
               })
             );
+          } else {
+            // If no image URL found, still resolve the promise
+            imagePromises.push(Promise.resolve());
           }
+        } else {
+          // If no image div found, still resolve the promise
+          imagePromises.push(Promise.resolve());
         }
       });
 
+      // If no images to load, add a timeout to ensure DOM is ready
+      if (imagePromises.length === 0) {
+        imagePromises.push(new Promise(resolve => setTimeout(resolve, 100)));
+      }
+
       // Set up card animations after images load
       Promise.all(imagePromises).then(() => {
+        console.log('Images loaded, setting up card animations');
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         const horizontalMargin = 0.06;
@@ -183,8 +197,8 @@ const LandingPage = () => {
 
         // Function to find non-overlapping positions for cards
         function findGoodPosition(cardHeight) {
-          const maxX = areaWidth - 450;
-          const maxY = areaHeight - cardHeight;
+          const maxX = Math.max(0, areaWidth - 450);
+          const maxY = Math.max(0, areaHeight - cardHeight);
           for (let attempts = 0; attempts < 50; attempts++) {
             const x = startAreaX + Math.random() * maxX;
             const y = startAreaY + Math.random() * maxY;
@@ -202,9 +216,18 @@ const LandingPage = () => {
             }
           }
           return {
-            x: startAreaX + Math.random() * maxX,
-            y: startAreaY + Math.random() * maxY,
+            x: startAreaX + Math.random() * Math.max(0, maxX),
+            y: startAreaY + Math.random() * Math.max(0, maxY),
           };
+        }
+
+        // Re-query card wrappers to ensure we have the latest elements
+        const currentCardWrappers = document.querySelectorAll('.card-wrapper');
+        console.log('Found card wrappers:', currentCardWrappers.length);
+
+        if (currentCardWrappers.length === 0) {
+          console.warn('No card wrappers found for animation');
+          return;
         }
 
         // Create scroll-triggered animation timeline
@@ -214,15 +237,20 @@ const LandingPage = () => {
             start: "top bottom",
             end: "bottom top",
             scrub: 2,
+            onUpdate: (self) => {
+              console.log('ScrollTrigger progress:', self.progress);
+            }
           },
         });
 
         // Animate each card wrapper
-        cardWrappers.forEach((wrapper, index) => {
-          const cardHeight = wrapper.clientHeight;
+        currentCardWrappers.forEach((wrapper, index) => {
+          const cardHeight = wrapper.clientHeight || 400;
           const pos = findGoodPosition(cardHeight);
           finalPositions.push(pos);
           const { startX, startY } = getStartPosition();
+
+          console.log(`Setting up card ${index}:`, { startX, startY, finalPos: pos });
 
           gsap.set(wrapper, {
             x: startX,
@@ -253,10 +281,15 @@ const LandingPage = () => {
           );
         });
 
+        // Refresh ScrollTrigger after setup
+        ScrollTrigger.refresh();
+
         // Add window resize handler
         window.addEventListener("resize", () => {
           ScrollTrigger.refresh();
         });
+      }).catch((error) => {
+        console.error('Error setting up card animations:', error);
       });
     }
   }, []);

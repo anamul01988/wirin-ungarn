@@ -48,24 +48,24 @@ export default function ModalIcons({
         }}
       >
         {/* Cross Icon */}
-        <button onClick={onClose} className="px-4 rounded-full">
+        <div onClick={onClose} className="px-4 cursor-pointer rounded-full">
           <img src="/assets/icons/close.png" alt="Close Icon" />
-        </button>
+        </div>
 
         {type !== "impressum" && (
           <>
             {/* Love Icon */}
             {showFavorite && (
-              <button onClick={onFavorite} className="px-4 py-1 rounded-full">
+              <div onClick={onFavorite} className="px-4 cursor-pointer py-1 rounded-full">
                 <img src="/assets/icons/favorit_e.png" alt="Love Icon" />
-              </button>
+              </div>
             )}
 
             {/* Layers Icon */}
             {showLayers && (
-              <button onClick={onLayers} className="px-4 py-1 rounded-full">
+              <div onClick={onLayers} className="px-4 cursor-pointer py-1 rounded-full">
                 <img src="/assets/icons/plus.png" alt="Layers Icon" />
-              </button>
+              </div>
             )}
           </>
         )}
@@ -82,9 +82,9 @@ export default function ModalIcons({
                 ...shareIconStyle,
               }}
             >
-              <button onClick={onShare} className="px-4 rounded-full">
+              <div onClick={onShare} className="px-4 cursor-pointer rounded-full">
                 <img src="/assets/icons/share.png" alt="Share Icon" />
-              </button>
+              </div>
             </div>
           )}
         </>

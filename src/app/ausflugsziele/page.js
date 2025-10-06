@@ -29,6 +29,15 @@ export default function Kategorien() {
     route.push("/");
   };
 
+    useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e) => {
+      if (e.key === "Escape") handleClose();
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [open]);
+
   return (
     <>
       <Dialog
@@ -38,7 +47,7 @@ export default function Kategorien() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
+        className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (

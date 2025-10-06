@@ -61,7 +61,7 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
             enabled: false,
           }}
           size={"md"}
-          className="bg-white relative border-4 border-green-700 rounded-2xl flex flex-col"
+          className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl flex flex-col"
           style={{
             // maxHeight: "calc(80vh - 400px)",
             height: "calc(80vh - 80px)",

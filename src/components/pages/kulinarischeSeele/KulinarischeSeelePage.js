@@ -169,7 +169,7 @@ const KulinarischeSeelePage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="bg-red-600 text-white py-3 px-4 mb-6">
+      <div className="bg-red-600 text-white rounded-md py-3 px-4 mb-6">
         <Typography variant="h5" className="font-bold text-center">
           {title}
         </Typography>

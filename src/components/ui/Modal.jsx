@@ -18,7 +18,7 @@ export default function Modal() {
       <Button onClick={handleOpen} color="blue">
         Open Modal
       </Button>
-      <Dialog open={open} handler={handleOpen}>
+      <Dialog open={open} handler={handleOpen} className="outline-none border-4 border-[#406c4d]">
         <DialogHeader>Modal Title</DialogHeader>
         <DialogBody divider>This is a reusable modal component.</DialogBody>
         <DialogFooter>
