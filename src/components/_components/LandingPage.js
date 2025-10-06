@@ -351,10 +351,10 @@ const LandingPage = () => {
                 menuName: "SHORTS",
                 menuRoute: "/shorts",
               },
-              {
-                menuName: "KATEGORIEN",
-                menuRoute: "/kategorien",
-              },
+              // {
+              //   menuName: "KATEGORIEN",
+              //   menuRoute: "/kategorien",
+              // },
             ],
           },
           {
@@ -429,10 +429,10 @@ const LandingPage = () => {
               //   menuName: "Land & Leute",
               //   menuRoute: "/land-leute",
               // },
-              // {
-              //   menuName: "Ungarn",
-              //   menuRoute: "/ungarn-insider",
-              // },
+              {
+                menuName: "Ungarn-insider",
+                menuRoute: "insider_custom",
+              },
               {
                 menuName: "kulinarische Seele",
                 menuRoute: "/kulinarische-seele",
@@ -466,8 +466,8 @@ const LandingPage = () => {
                       <div
                         key={j}
                         className="menu-item cursor-pointer"
-                        {...(item.slug === "sprache"
-                          ? { onClick: () => route.push(menuItem.menuRoute) }
+                        {...(menuItem.menuRoute === "insider_custom"
+                          ? { onClick: routerServerGlobal }
                           : { onClick: () => route.push(menuItem.menuRoute) })}
                       >
                         {item.slug === "sprache"

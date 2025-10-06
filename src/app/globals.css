@@ -79,7 +79,8 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   padding-bottom: 120px; */
-  min-height: 100vh;
+  /* min-height: 100vh; */
+  /* height: 80vh; */
   position: relative;
   background-repeat: repeat;
   padding-bottom: 120px;
@@ -161,7 +162,7 @@ body {
   z-index: 50;
 }
 
-.inputAi{
+.inputAi {
   transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -177,6 +178,7 @@ body {
   transition: background 0.3s;
   outline: 5px solid #ffffff;
   position: relative;
+  z-index: 50;
 }
 
 .nav-item:hover {
@@ -1028,3 +1030,45 @@ body {
   border: 1px solid transparent;
   background-clip: content-box;
 } */
+
+/* Override Material Tailwind Dialog backdrop styles using data attributes */
+[data-dialog] {
+  /* background: transparent !important; */
+  backdrop-filter: none !important;
+}
+
+/* Target the backdrop element specifically */
+[data-dialog] + div[class*="fixed"] {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* Override any backdrop with grid place-items-center */
+[class*="grid"][class*="place-items-center"][class*="fixed"][class*="w-screen"][class*="h-screen"] {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* More specific targeting for dialog backdrop */
+.dialog-container [class*="grid"][class*="place-items-center"] {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* Target the specific backdrop that appears after dialog */
+.dialog-container > div > div[class*="fixed"] {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* Target backdrop using data-dialog-backdrop attribute */
+[data-dialog-backdrop] {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* More specific targeting for backdrop with all the classes */
+[data-dialog-backdrop].grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60.backdrop-blur-sm {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}

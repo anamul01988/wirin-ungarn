@@ -137,8 +137,6 @@ export default function Home() {
               >
                 <span className="ht_text">Anmelden</span>
               </button>
-              
-             
             </div>
           )}
         </nav>

@@ -15,10 +15,10 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
   React.useEffect(() => {
     if (!open) return;
     const handleEsc = (e) => {
-      if (e.key === 'Escape') handleOpen();
+      if (e.key === "Escape") handleOpen();
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
   }, [open, handleOpen]);
 
   const handleShowDetails = (title) => {
@@ -33,9 +33,27 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
   // };
 
   return (
-    <div className=" bg-red-900">
-      <div className="dialog-container" style={{ height: "98vh" }}>
-        {" "}
+    <div className="relative">
+      {/* Custom backdrop with blur effect and height restrictions */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 shalar__dialog"
+          style={{
+            background: `
+              linear-gradient(to bottom, transparent 0px, transparent 200px),
+              linear-gradient(to top, transparent 0px, transparent 200px),
+              rgba(0, 0, 0, 0.3)
+            `,
+            // backdropFilter: "blur(4px)",
+            top: "100px",
+            bottom: "100px",
+            height: "calc(100vh - 200px)",
+          }}
+          onClick={handleOpen}
+        />
+      )}
+
+      <div className="dialog-container" style={{ height: "100%" }}>
         <Dialog
           open={open}
           handler={handleOpen}
@@ -43,15 +61,26 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
             enabled: false,
           }}
           size={"md"}
-          className="bg-white relative border-4 border-green-700 rounded-2xl max-h-[90vh] h-[80vh] flex flex-col"
+          className="bg-white relative border-4 border-green-700 rounded-2xl flex flex-col"
+          style={{
+            // maxHeight: "calc(80vh - 400px)",
+            height: "calc(80vh - 80px)",
+            background: "#fff !important",
+            // height: "100%",
+            // minHeight: "300px",
+          }}
+          backdrop={{
+            enabled: false,
+          }}
+          data-dialog="impressum-modal"
         >
           {/* Floating Cross + Love Icons */}
           {open && (
-            <ModalIcons 
+            <ModalIcons
               onClose={handleOpen}
-              onFavorite={() => console.log('Favorite clicked')}
-              onLayers={() => console.log('Layers clicked')}
-              onShare={() => console.log('Share clicked')}
+              onFavorite={() => console.log("Favorite clicked")}
+              onLayers={() => console.log("Layers clicked")}
+              onShare={() => console.log("Share clicked")}
               type="impressum"
               topIconsStyle={{
                 top: "-0.5rem",

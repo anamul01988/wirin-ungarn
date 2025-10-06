@@ -12,7 +12,7 @@ export default async function LiedTexteDetailsPage({ params }) {
     // if (!texteDetails) {
     //   return notFound();
     // }
-    // console.log("texteDetails", texteDetails);
+    console.log("texteDetails", texteDetails);
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LiedTexteDialogContent
