@@ -1109,6 +1109,40 @@ query sprachlektionByID {
       }
     }
 
+    if (routePrefix === "ausflugsziele") {
+      const customQuery = `
+        query GetAusflugszieleBySlug {
+          listing(id: "${slug}", idType: SLUG) {
+            id
+            databaseId
+            title
+            date
+            slug
+            content
+          }
+        }
+      `;
+
+      const customData = await fetchPage(customQuery);
+
+      console.log("Ausflugsziele customData:", customData);
+
+      if (customData?.data?.listing) {
+        return {
+          type: "post",
+          data: {
+            data: {
+              post: {
+                ...customData.data.listing,
+                postContent: null,
+              },
+            },
+          },
+          customType: "ausflugsziele",
+        };
+      }
+    }
+
     // Fall back to regular GetDynamicContent if no specialized handling
     return GetDynamicContent(slug);
   } catch (error) {

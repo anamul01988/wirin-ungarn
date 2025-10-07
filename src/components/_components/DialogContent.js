@@ -31,12 +31,7 @@ export default function DialogContent({
   };
 
   // Log routePrefix and other props for debugging
-  console.log(
-    "DialogContent received routePrefix:",
-    routePrefix,
-    "contentType:",
-    contentType
-  );
+  console.log("contentType:", contentType);
   if (contentType === "sprachkurs") {
     console.log("Sprachkurs postContent:", postContent);
   }
@@ -87,7 +82,6 @@ export default function DialogContent({
         {/* Dialog Body */}
         <DialogBody className="overflow-auto custom__modal_area px-[30px] py-[30px] flex-1">
           <div>
-            
             <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1>
 
             {contentType === "wissenswert" && (
@@ -269,6 +263,8 @@ export default function DialogContent({
                 )}
               </div>
             )}
+
+            {contentType === "ausflugsziele" && <>{title}</>}
 
             {imageFeature && (
               <>

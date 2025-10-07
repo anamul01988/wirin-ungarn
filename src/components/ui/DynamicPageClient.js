@@ -30,6 +30,8 @@ export default function DynamicPageClient({ slug }) {
             ? "sprachkurs"
             : !routePrefix && currentUrl.includes("/kategorien/")
             ? "kategorien"
+            : !routePrefix && currentUrl.includes("/ausflugsziele/")
+            ? "ausflugsziele"
             : routePrefix;
 
         console.log("66", currentPrefix);
@@ -41,7 +43,8 @@ export default function DynamicPageClient({ slug }) {
         if (
           currentPrefix === "liedtexte" ||
           currentPrefix === "sprachkurs" ||
-          currentPrefix === "kategorien"
+          currentPrefix === "kategorien" ||
+          currentPrefix === "ausflugsziele"
         ) {
           console.log("Using GetDynamicContentV2 for:", currentPrefix);
           data = await GetDynamicContentV2(slug, currentPrefix);
@@ -116,6 +119,21 @@ export default function DynamicPageClient({ slug }) {
 
     // Special handling for sprachkurs content
     if (contentType === "sprachkurs") {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <DialogContent
+            title={title}
+            content={content}
+            imageFeature={imageUrl}
+            contentType={contentType}
+            routePrefix={routePrefix || detectedPrefix}
+            postContent={postContent} // Pass the entire postContent object for sprachkursContent
+          />
+        </div>
+      );
+    }
+
+    if (contentType === "ausflugsziele") {
       return (
         <div className="min-h-screen flex items-center justify-center">
           <DialogContent
