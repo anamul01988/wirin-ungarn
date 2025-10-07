@@ -28,14 +28,16 @@
 
 body {
   /* background: var(--background); */
-  background-image: url(/assets/pattern-bg.jpg);
+  background-image: url(/assets/Startpage.jpg);
   /* color: var(--foreground); */
   color: #56646f;
   font-family: "Open Sans", sans-serif;
-  background-repeat: repeat;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center top;
   background-attachment: fixed;
   min-height: 100vh;
-  position: relative;
+  width: 100%;
   padding-bottom: 120px;
 }
 * {
