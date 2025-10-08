@@ -620,6 +620,14 @@ export function GetKulinarischeSeelePages(first = 10, after = null) {
             title
             slug
             date
+            featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+           }
           }
         }
       }
@@ -654,6 +662,7 @@ export function SearchAllPosts(search = "", first = 10, after = null) {
             postId
             link
             date
+            
           }
         }
       }

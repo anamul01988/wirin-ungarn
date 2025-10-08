@@ -10,3 +10,4 @@ export {
   default as WissenwertPostGrid,
   WissenwertPost,
 } from "./WissenwertPost";
+export { default as ShortPostGrid, ShortPost } from "./ShortPost";

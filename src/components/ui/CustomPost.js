@@ -78,6 +78,7 @@ const CustomPost = ({
         route.push(`${slug}`);
       }
     }, 10);
+    //  dispatch(setRoutePrefix(routePrefix));
   };
 
   // Render description based on routePrefix and data type

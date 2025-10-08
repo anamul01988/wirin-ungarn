@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { GetShortPages, SearchAllPosts } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
-import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
-import CustomPost from "@/components/ui/CustomPost";
-import WissenwertPostGrid from "@/components/ui/WissenwertPost";
+// import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
+// import CustomPost from "@/components/ui/CustomPost";
+import ShortPostGrid from "@/components/ui/ShortPost";
 const ShortsPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -196,7 +196,7 @@ const ShortsPage = () => {
   const currentPageHistory = isSearching ? searchPageHistory : pageHistory;
 
   return (
-    <WissenwertPostGrid
+    <ShortPostGrid
       posts={transformPostsData(currentPosts)}
       title={title}
       onSearch={handleNewSearch}
