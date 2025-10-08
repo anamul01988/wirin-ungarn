@@ -198,7 +198,7 @@ const WissenswertPage = () => {
   const currentPosts = isSearching ? searchResults : customPosts;
   const currentPageNum = isSearching ? searchCurrentPage : currentPage;
   const currentPageInfo = isSearching ? searchPageInfo : pageInfo;
-  const totalPages = Math.ceil((currentPosts?.edges?.length || 0) / 10); // Assuming 10 posts per page
+  const currentPageHistory = isSearching ? searchPageHistory : pageHistory;
 
   return (
     <WissenwertPostGrid
@@ -208,12 +208,15 @@ const WissenswertPage = () => {
       onFilter={handleFilterChange}
       onPageChange={handleNewPageChange}
       currentPage={currentPageNum}
-      totalPages={totalPages}
-      isLoading={filtering || loadingPage}
+      totalPages={Math.ceil((currentPosts?.edges?.length || 0) / 10)}
+      isLoading={filtering}
+      loadingPage={loadingPage}
       searchValue={search}
       onSearchChange={setSearch}
       activeFilter={activeFilter}
       onlyHeadings={onlyHeadings}
+      hasNextPage={currentPageInfo.hasNextPage}
+      hasPreviousPage={currentPageHistory.length > 0}
     />
   );
 };

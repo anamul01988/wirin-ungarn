@@ -114,6 +114,9 @@ const WissenwertPostGrid = ({
   onSearchChange,
   activeFilter = "all",
   onlyHeadings = false,
+  hasNextPage = false,
+  hasPreviousPage = false,
+  loadingPage = false,
 }) => {
   const [filteredPosts, setFilteredPosts] = useState(posts);
 
@@ -176,9 +179,12 @@ const WissenwertPostGrid = ({
               placeholder="Suche..."
               value={searchValue}
               onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+              labelProps={{
+                className: "hidden",
+              }}
               onKeyPress={handleKeyPress}
               crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-green-500"
+              className="!border-2 !border-gray-300 focus:!border-green-500 focus:!ring-2 focus:!ring-green-200 !rounded-lg"
             />
           </div>
           <Button
@@ -245,26 +251,24 @@ const WissenwertPostGrid = ({
           </div>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center gap-4 mt-8">
-              <Button
-                color="red"
-                onClick={() => onPageChange && onPageChange("previous")}
-                disabled={currentPage <= 1}
-                className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-              >
-                Previous
-              </Button>
-              <Button
-                color="red"
-                onClick={() => onPageChange && onPageChange("next")}
-                disabled={currentPage >= totalPages}
-                className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-              >
-                Next
-              </Button>
-            </div>
-          )}
+          <div className="flex justify-center gap-4 mt-8">
+            <Button
+              color="red"
+              onClick={() => onPageChange && onPageChange("previous")}
+              disabled={!hasPreviousPage || loadingPage}
+              className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loadingPage ? "Lade..." : "Previous"}
+            </Button>
+            <Button
+              color="red"
+              onClick={() => onPageChange && onPageChange("next")}
+              disabled={!hasNextPage || loadingPage}
+              className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loadingPage ? "Lade..." : "Next"}
+            </Button>
+          </div>
 
           {/* Results Info */}
           <div className="text-center mt-6">
