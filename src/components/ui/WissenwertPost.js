@@ -61,24 +61,24 @@ const WissenwertPost = ({
 
   return (
     <div
-      className="wissenwert-post-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+      className="wissenwert-post-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
       onClick={handleClick}
       data-category={category}
     >
       {/* Image Wrapper */}
-      <div className="relative">
+      <div className="relative h-48">
         {image && (
           <img
             src={image}
             alt={imageAlt || title}
-            className="w-full h-48 object-cover"
+            className="w-full h-full object-cover"
           />
         )}
         <span
-          className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded ${
+          className={`absolute top-3 right-3 px-3 py-1 text-xs font-bold rounded-full ${
             badge === "SHORTS"
               ? "bg-blue-500 text-white"
-              : "bg-red-500 text-white"
+              : "bg-green-500 text-white"
           }`}
         >
           {badge}
@@ -86,14 +86,14 @@ const WissenwertPost = ({
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <h2 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+      <div className="p-5">
+        <h2 className="text-lg font-bold text-gray-800 mb-3 line-clamp-2 leading-tight">
           {title}
         </h2>
-        <p className="text-sm text-gray-600 leading-relaxed mb-3">
-          {truncateText(description)}
+        <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
+          {truncateText(description, 25)}
         </p>
-        <button className="text-red-600 text-sm font-medium hover:text-red-700 transition-colors">
+        <button className="text-orange-500 text-sm font-semibold hover:text-orange-600 transition-colors">
           Weiterlesen
         </button>
       </div>
@@ -119,7 +119,7 @@ const WissenwertPostGrid = ({
 
   // Filter posts based on active filter
   useEffect(() => {
-    if (activeFilter === "all") {
+    if (activeFilter === "all" || !activeFilter) {
       setFilteredPosts(posts);
     } else {
       setFilteredPosts(posts.filter((post) => post.category === activeFilter));
@@ -127,7 +127,6 @@ const WissenwertPostGrid = ({
   }, [posts, activeFilter]);
 
   const filterTags = [
-    { key: "all", label: "Alle" },
     { key: "burokratie", label: "Bürokratie / Ämter" },
     { key: "verkehr", label: "Verkehr / Mobilität" },
     { key: "immobilien", label: "Immobilien / Miete" },
@@ -150,17 +149,17 @@ const WissenwertPostGrid = ({
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Header */}
-      <div className="bg-red-600 rounded-md text-white py-3 px-4 mb-6">
-        <Typography variant="h5" className="font-bold text-center">
+      <div className="bg-red-600 text-white py-4 px-6 mb-6 rounded-lg">
+        <Typography variant="h4" className="font-bold text-center text-white">
           {title}
         </Typography>
       </div>
 
       {/* Intro Text */}
-      <div className="wissenwert-intro-text">
+      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
         <Typography
           variant="paragraph"
-          className="text-gray-700 leading-relaxed"
+          className="text-gray-800 leading-relaxed text-sm"
         >
           Entdecke unsere Artikel entweder visuell, indem du durch die
           Themenkacheln stöberst, oder finde gezielt, was du suchst: Nutze
@@ -169,8 +168,8 @@ const WissenwertPostGrid = ({
       </div>
 
       {/* Search Section */}
-      <div className="wissenwert-search-section">
-        <div className="flex flex-col sm:flex-row gap-4 items-end">
+      <div className="bg-gray-50 p-6 rounded-lg mb-6">
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
           <div className="flex-1">
             <Input
               type="text"
@@ -179,16 +178,25 @@ const WissenwertPostGrid = ({
               onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
               onKeyPress={handleKeyPress}
               crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
+              className="!border-gray-300 focus:!border-green-500"
             />
           </div>
           <Button
-            color="red"
+            color="green"
             onClick={handleSearch}
             disabled={isLoading}
-            className="px-6 py-2"
+            className="px-8 py-2 bg-green-600 hover:bg-green-700"
           >
             {isLoading ? "Suche..." : "Suche"}
+          </Button>
+          <Button
+            color="gray"
+            variant="outlined"
+            className="px-4 py-2 border-green-500 text-green-600 hover:bg-green-50"
+          >
+            nur Überschriften
+            <br />
+            anzeigen
           </Button>
         </div>
       </div>
@@ -200,10 +208,10 @@ const WissenwertPostGrid = ({
             <button
               key={tag.key}
               onClick={() => onFilter && onFilter(tag.key)}
-              className={`wissenwert-filter-tag px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium border-2 transition-all duration-200 wissenwert-filter-tag ${
                 activeFilter === tag.key
-                  ? "bg-red-600 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  ? "bg-green-600 text-white border-green-600 shadow-md"
+                  : "bg-white text-gray-700 border-green-300 hover:border-green-500 hover:bg-green-50"
               }`}
             >
               {tag.label}
@@ -219,8 +227,8 @@ const WissenwertPostGrid = ({
         </div>
       ) : (
         <>
-          {/* Masonry Grid */}
-          <div className="wissenwert-masonry-grid mb-8">
+          {/* Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {filteredPosts.map((post, index) => (
               <WissenwertPost
                 key={post.id || index}
@@ -243,7 +251,7 @@ const WissenwertPostGrid = ({
                 color="red"
                 onClick={() => onPageChange && onPageChange("previous")}
                 disabled={currentPage <= 1}
-                className="px-6 py-2"
+                className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
               >
                 Previous
               </Button>
@@ -251,7 +259,7 @@ const WissenwertPostGrid = ({
                 color="red"
                 onClick={() => onPageChange && onPageChange("next")}
                 disabled={currentPage >= totalPages}
-                className="px-6 py-2"
+                className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
               >
                 Next
               </Button>
@@ -260,7 +268,7 @@ const WissenwertPostGrid = ({
 
           {/* Results Info */}
           <div className="text-center mt-6">
-            <Typography variant="small" color="gray">
+            <Typography variant="small" color="gray" className="text-sm">
               Seite {currentPage} - Angezeigt werden {filteredPosts.length}{" "}
               Beiträge.
             </Typography>
