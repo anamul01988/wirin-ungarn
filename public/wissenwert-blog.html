@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wissenswert - die Themen-Übersicht</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+      }
+
+      .wiu-blog-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #e8e8e8;
+        border-radius: 20px;
+        padding: 0;
+        border: 3px solid #333;
+      }
+
+      .wiu-blog-content {
+        padding: 40px;
+      }
+
+      .wiu-blog-intro-text {
+        margin-bottom: 30px;
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .wiu-blog-search-section {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .wiu-blog-search-bar {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .wiu-blog-search-bar input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #666;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+      }
+
+      .wiu-blog-search-bar input:focus {
+        border-color: #436f4d;
+      }
+
+      .wiu-blog-search-btn {
+        background-color: #436f4d;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .wiu-blog-search-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .wiu-blog-show-headings-btn {
+        background: white;
+        color: #333;
+        border: 2px solid #666;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+
+      .wiu-blog-show-headings-btn:hover {
+        background: #f0f0f0;
+      }
+
+      .wiu-blog-filter-tags {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
+
+      .wiu-blog-tag {
+        background: white;
+        border: 2px solid #333;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #333;
+      }
+
+      .wiu-blog-tag:hover {
+        background: #436f4d;
+        color: white;
+        border-color: #436f4d;
+      }
+
+      .wiu-blog-tag.active {
+        background: #436f4d;
+        color: white;
+        border-color: #436f4d;
+      }
+
+      .wiu-blog-masonry-grid {
+        column-count: 4;
+        column-gap: 25px;
+      }
+
+      @media (max-width: 1024px) {
+        .wiu-blog-masonry-grid {
+          column-count: 3;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .wiu-blog-masonry-grid {
+          column-count: 2;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .wiu-blog-masonry-grid {
+          column-count: 1;
+        }
+      }
+
+      .wiu-blog-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 25px;
+        break-inside: avoid;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .wiu-blog-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .wiu-blog-card-image-wrapper {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+      }
+
+      .wiu-blog-card-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .wiu-blog-card-badge {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 14px;
+        font-style: italic;
+      }
+
+      .wiu-blog-card-badge.artikel {
+        color: #436f4d;
+      }
+
+      .wiu-blog-card-badge.shorts {
+        color: #7b8fb5;
+      }
+
+      .wiu-blog-card-content {
+        padding: 25px;
+      }
+
+      .wiu-blog-card-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #436f4d;
+      }
+
+      .wiu-blog-card-description {
+        font-size: 15px;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .wiu-blog-card-link {
+        color: #d64456;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+        transition: color 0.2s;
+      }
+
+      .wiu-blog-card-link:hover {
+        color: #b33242;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wiu-blog-container">
+      <div class="wiu-blog-content">
+        <p class="wiu-blog-intro-text">
+          Entdecke unsere Artikel entweder visuell, indem du durch die
+          Themenkacheln stöberst, oder finde gezielt, was du suchst: Nutze
+          einfach die Themen-Tags zur Filterung oder die freie Suche.
+        </p>
+
+        <div class="wiu-blog-search-section">
+          <div class="wiu-blog-search-bar">
+            <input type="text" placeholder="Suche..." id="searchInput" />
+          </div>
+          <button class="wiu-blog-search-btn" onclick="performSearch()">
+            Suche
+          </button>
+          <button class="wiu-blog-show-headings-btn">
+            nur Überschriften<br />anzeigen
+          </button>
+        </div>
+
+        <div class="wiu-blog-filter-tags">
+          <button class="wiu-blog-tag" data-filter="all">
+            Bürokratie / Ämter
+          </button>
+          <button class="wiu-blog-tag" data-filter="verkehr">
+            Verkehr / Mobilität
+          </button>
+          <button class="wiu-blog-tag" data-filter="immobilien">
+            Immobilien / Miete
+          </button>
+          <button class="wiu-blog-tag" data-filter="kultur">
+            Alltag / Kultur
+          </button>
+          <button class="wiu-blog-tag" data-filter="arbeit">
+            Arbeit / Finanzen
+          </button>
+        </div>
+
+        <div class="wiu-blog-masonry-grid" id="cardGrid">
+          <div class="wiu-blog-card" data-category="immobilien">
+            <div class="wiu-blog-card-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop"
+                alt="Hauskauf"
+              />
+              <span class="wiu-blog-card-badge artikel">ARTIKEL</span>
+            </div>
+            <div class="wiu-blog-card-content">
+              <h2 class="wiu-blog-card-title">Hauskauf</h2>
+              <p class="wiu-blog-card-description">
+                Der Kauf einer Immobilie in Ungarn unterscheidet sich in einigen
+                Punkten vom Prozess in Deutschland. Wir führ...
+              </p>
+              <a href="#" class="wiu-blog-card-link">Weiterlesen</a>
+            </div>
+          </div>
+
+          <div class="wiu-blog-card" data-category="verkehr">
+            <div class="wiu-blog-card-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop"
+                alt="Öffentlicher Verkehr"
+              />
+              <span class="wiu-blog-card-badge artikel">ARTIKEL</span>
+            </div>
+            <div class="wiu-blog-card-content">
+              <h2 class="wiu-blog-card-title">öffentlicher Verkehr</h2>
+              <p class="wiu-blog-card-description">
+                Der öffentliche Nahverkehr in Ungarn bietet eine umfassende und
+                effiziente Infrastruktur, die es Reisenden er...
+              </p>
+              <a href="#" class="wiu-blog-card-link">Weiterlesen</a>
+            </div>
+          </div>
+
+          <div class="wiu-blog-card" data-category="arbeit">
+            <div class="wiu-blog-card-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop"
+                alt="Deutsche Rente"
+              />
+              <span class="wiu-blog-card-badge shorts">SHORTS</span>
+            </div>
+            <div class="wiu-blog-card-content">
+              <h2 class="wiu-blog-card-title">deutsche Rente</h2>
+              <p class="wiu-blog-card-description">
+                Die Besteuerung deutscher Renten bei Wohnsitz in Ungarn stellt
+                viele Rentner vor komplexe Fragen. Dieser Beric...
+              </p>
+              <a href="#" class="wiu-blog-card-link">Weiterlesen</a>
+            </div>
+          </div>
+
+          <div class="wiu-blog-card" data-category="kultur">
+            <div class="wiu-blog-card-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop"
+                alt="Gesundheitswesen"
+              />
+              <span class="wiu-blog-card-badge artikel">ARTIKEL</span>
+            </div>
+            <div class="wiu-blog-card-content">
+              <h2 class="wiu-blog-card-title">Gesundheitswesen</h2>
+              <p class="wiu-blog-card-description">
+                In diesem Blogpost erfährst du alles Wichtige über das
+                Gesundheitswesen in Ungarn. Von der Krankenversicheru...
+              </p>
+              <a href="#" class="wiu-blog-card-link">Weiterlesen</a>
+            </div>
+          </div>
+
+          <div class="wiu-blog-card" data-category="arbeit">
+            <div class="wiu-blog-card-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=400&h=300&fit=crop"
+                alt="Steuern"
+              />
+              <span class="wiu-blog-card-badge artikel">ARTIKEL</span>
+            </div>
+            <div class="wiu-blog-card-content">
+              <h2 class="wiu-blog-card-title">Steuern</h2>
+              <p class="wiu-blog-card-description">
+                Das ungarische Steuersystem unterscheidet sich in mehreren
+                Punkten vom deutschen System. Dieser Artikel gibt...
+              </p>
+              <a href="#" class="wiu-blog-card-link">Weiterlesen</a>
+            </div>
+          </div>
+
+          <div class="wiu-blog-card" data-category="verkehr">
+            <div class="wiu-blog-card-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop"
+                alt="Führerschein"
+              />
+              <span class="wiu-blog-card-badge artikel">ARTIKEL</span>
+            </div>
+            <div class="wiu-blog-card-content">
+              <h2 class="wiu-blog-card-title">Führerschein</h2>
+              <p class="wiu-blog-card-description">
+                Informationen zur Anerkennung deutscher Führerscheine in Ungarn
+                und was bei einem Umzug zu beachten ist...
+              </p>
+              <a href="#" class="wiu-blog-card-link">Weiterlesen</a>
+            </div>
+          </div>
+
+          <div class="wiu-blog-card" data-category="kultur">
+            <div class="wiu-blog-card-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&h=300&fit=crop"
+                alt="Krankenversicherung"
+              />
+              <span class="wiu-blog-card-badge shorts">SHORTS</span>
+            </div>
+            <div class="wiu-blog-card-content">
+              <h2 class="wiu-blog-card-title">Krankenversicherung</h2>
+              <p class="wiu-blog-card-description">
+                Alles Wichtige zur Krankenversicherungspflicht in Ungarn und wie
+                das System funktioniert...
+              </p>
+              <a href="#" class="wiu-blog-card-link">Weiterlesen</a>
+            </div>
+          </div>
+
+          <div class="wiu-blog-card" data-category="immobilien">
+            <div class="wiu-blog-card-image-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop"
+                alt="Wohnungssuche"
+              />
+              <span class="wiu-blog-card-badge artikel">ARTIKEL</span>
+            </div>
+            <div class="wiu-blog-card-content">
+              <h2 class="wiu-blog-card-title">Wohnungssuche</h2>
+              <p class="wiu-blog-card-description">
+                Tipps und Hinweise zur Wohnungssuche in Ungarn - von
+                Online-Portalen bis zu wichtigen Vertragspunkten...
+              </p>
+              <a href="#" class="wiu-blog-card-link">Weiterlesen</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tags = document.querySelectorAll(".wiu-blog-tag");
+      const cards = document.querySelectorAll(".wiu-blog-card");
+
+      tags.forEach((tag) => {
+        tag.addEventListener("click", function () {
+          tags.forEach((t) => t.classList.remove("active"));
+          this.classList.add("active");
+
+          const filter = this.getAttribute("data-filter");
+
+          cards.forEach((card) => {
+            if (
+              filter === "all" ||
+              card.getAttribute("data-category") === filter
+            ) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      });
+
+      function performSearch() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+
+        cards.forEach((card) => {
+          const title = card
+            .querySelector(".wiu-blog-card-title")
+            .textContent.toLowerCase();
+          const description = card
+            .querySelector(".wiu-blog-card-description")
+            .textContent.toLowerCase();
+
+          if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      }
+
+      document
+        .getElementById("searchInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            performSearch();
+          }
+        });
+    </script>
+  </body>
+</html>
