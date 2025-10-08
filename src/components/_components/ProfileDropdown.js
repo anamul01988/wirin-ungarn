@@ -2,12 +2,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { user, logout } = useAuth();
+  const router = useRouter();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -119,7 +121,7 @@ const ProfileDropdown = () => {
             <button
               onClick={() => {
                 setIsOpen(false);
-                // Add profile navigation logic here
+                router.push("/profile");
               }}
               className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2 profile-dropdown-item"
             >
