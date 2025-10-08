@@ -46,7 +46,7 @@ export default function Shorts() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="bg-white outline-none relative border-2 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -58,7 +58,7 @@ export default function Shorts() {
           />
         )}
 
-        <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1 custom__modal_area border-0">
+        <DialogBody className="overflow-auto custom__modal_area flex-1 border-0">
           <div className="">
             <ShortsPage />
           </div>

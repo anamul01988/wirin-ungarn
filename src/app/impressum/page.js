@@ -48,7 +48,7 @@ export default function ImpsModal() {
           />
         )}
 
-        <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
+        <DialogBody className="overflow-auto flex-1">
           {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}

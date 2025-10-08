@@ -124,7 +124,7 @@ export default function ImpressumtModal({ open, setOpen, handleOpen }) {
             </>
           )}
 
-          <DialogBody className="overflow-auto px-[30px] py-[30px] flex-1">
+          <DialogBody className="overflow-auto flex-1">
             <SubMenu onTitleClick={handleShowDetails} />
           </DialogBody>
         </Dialog>

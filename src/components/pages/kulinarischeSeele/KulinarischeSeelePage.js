@@ -78,7 +78,7 @@ const KulinarischeSeelePage = () => {
         apiData = await GetKulinarischeSeelePages(10, cursor);
       }
 
-      console.log("kategorien data:", apiData.data.posts);
+      console.log("kategorien data:", apiData);
       const newPosts = isSearching ? apiData.data.posts : apiData.data.recipes;
 
       // Replace posts instead of appending
@@ -169,8 +169,11 @@ const KulinarischeSeelePage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="bg-red-600 text-white rounded-md py-3 px-4 mb-6">
-        <Typography variant="h5" className="font-bold text-center">
+      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+        <Typography
+          variant="h4"
+          className="font-bold text-center text-[#FFD6D9]"
+        >
           {title}
         </Typography>
       </div>
@@ -264,10 +267,12 @@ const KulinarischeSeelePage = () => {
                     <div key={edge.node.id}>
                       <CustomPost
                         title={edge.node?.title}
-                        description={edge.node.postContentLyrik?.introText}
+                        image={edge.node?.featuredImage?.node?.sourceUrl}
+                        imageAlt={edge.node?.featuredImage?.node?.altText}
+                        description={edge.node.postContentRecipe?.introText}
                         onlyHeadings={onlyHeadings}
                         slug={edge.node.slug}
-                        routePrefix="shorts"
+                        routePrefix="kulinarische-seele"
                       />
                       {/* Divider except last */}
                       {!onlyHeadings && idx < posts?.edges?.length - 1 && (

@@ -17,7 +17,7 @@ export default function LiedTexteDialogContent({
   const [open, setOpen] = useState(true);
   const route = useRouter();
   const handleOpen = () => setOpen(!open);
-   const handleClose = () => {
+  const handleClose = () => {
     setOpen(false);
     route.push("/");
   };
@@ -26,10 +26,10 @@ export default function LiedTexteDialogContent({
   React.useEffect(() => {
     if (!open) return;
     const handleEsc = (e) => {
-      if (e.key === 'Escape') handleClose();
+      if (e.key === "Escape") handleClose();
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
   }, [open]);
 
   const navigateToHome = () => {
@@ -46,16 +46,16 @@ export default function LiedTexteDialogContent({
         className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
-         {open && (
-          <ModalIcons 
+        {open && (
+          <ModalIcons
             onClose={handleClose}
-            onFavorite={() => console.log('Favorite clicked')}
-            onLayers={() => console.log('Layers clicked')}
-            onShare={() => console.log('Share clicked')}
+            onFavorite={() => console.log("Favorite clicked")}
+            onLayers={() => console.log("Layers clicked")}
+            onShare={() => console.log("Share clicked")}
           />
         )}
         {/* Dialog Body */}
-        <DialogBody className="overflow-auto custom__modal_area px-[30px] py-[30px] flex-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1">
           <div>
             <div className="mb-4">
               <button

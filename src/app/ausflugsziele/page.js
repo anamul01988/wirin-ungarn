@@ -59,7 +59,7 @@ export default function Kategorien() {
           />
         )}
 
-        <DialogBody className=" px-[30px] py-[30px] custom__modal_area flex-1">
+        <DialogBody className="custom__modal_area flex-1">
           {/* {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}

@@ -169,8 +169,10 @@ const EinFachPage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="bg-red-600 rounded-md text-white py-3 px-4 mb-6">
-        <Typography variant="h5" className="font-bold text-center">
+      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+        <Typography
+          variant="h4"
+          className="font-bold text-center text-[#FFD6D9]">
           {title}
         </Typography>
       </div>

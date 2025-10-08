@@ -150,19 +150,22 @@ const WissenwertPostGrid = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
-      <div className="bg-red-600 text-white py-4 px-6 mb-6 rounded-lg">
-        <Typography variant="h4" className="font-bold text-center text-white">
+      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+        <Typography
+          variant="h4"
+          className="font-bold text-center text-[#FFD6D9]"
+        >
           {title}
         </Typography>
       </div>
 
       {/* Intro Text */}
-      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
+      <div className="mb-4">
         <Typography
           variant="paragraph"
-          className="text-gray-800 leading-relaxed text-sm"
+          className="text-[#2c2b2b] font-normal font-[400] leading-relaxed text-lg"
         >
           Entdecke unsere Artikel entweder visuell, indem du durch die
           Themenkacheln stöberst, oder finde gezielt, was du suchst: Nutze
@@ -171,7 +174,7 @@ const WissenwertPostGrid = ({
       </div>
 
       {/* Search Section */}
-      <div className="bg-gray-50 p-6 rounded-lg mb-6">
+      <div className="bg-gray-50 p-0 rounded-lg mb-6">
         <div className="flex flex-col sm:flex-row gap-4 items-center">
           <div className="flex-1">
             <Input
@@ -184,14 +187,14 @@ const WissenwertPostGrid = ({
               }}
               onKeyPress={handleKeyPress}
               crossOrigin={undefined}
-              className="!border-2 !border-gray-300 focus:!border-green-500 focus:!ring-2 focus:!ring-green-200 !rounded-lg"
+              className="!border-2 !border-gray-300 focus:!border-green-500 focus:!ring-2 focus:!ring-green-200 !rounded-lg h-[40px]"
             />
           </div>
           <Button
             color="green"
             onClick={handleSearch}
             disabled={isLoading}
-            className="px-8 py-2 bg-green-600 hover:bg-green-700"
+            className="px-8 py-2 bg-green-600 hover:bg-green-700 h-[40px]"
           >
             {isLoading ? "Suche..." : "Suche"}
           </Button>

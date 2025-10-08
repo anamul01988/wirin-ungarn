@@ -48,7 +48,7 @@ export default function CookieModal() {
           />
         )}
 
-        <DialogBody className="overflow-auto custom__modal_area px-[30px] py-[30px] flex-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1">
           {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}

@@ -45,7 +45,7 @@ export default function Wissenswert() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="bg-white outline-none relative border-2 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -57,7 +57,7 @@ export default function Wissenswert() {
           />
         )}
 
-        <DialogBody className="overflow-auto custom__modal_area px-[30px] py-[30px] custom__modal_area flex-1 border-0">
+        <DialogBody className="overflow-auto custom__modal_area flex-1 border-0">
           <div className="">
             <WissenswertPage />
           </div>

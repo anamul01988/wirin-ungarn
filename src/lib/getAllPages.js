@@ -628,6 +628,10 @@ export function GetKulinarischeSeelePages(first = 10, after = null) {
               uri
             }
            }
+            postContentRecipe{
+              introText
+            }
+
           }
         }
       }

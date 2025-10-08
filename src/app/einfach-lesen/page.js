@@ -23,7 +23,7 @@ export default function Einfach() {
     setOpen(true);
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     if (!open) return;
     const handleEsc = (e) => {
       if (e.key === "Escape") handleClose();
@@ -57,7 +57,7 @@ export default function Einfach() {
           />
         )}
 
-        <DialogBody className="overflow-auto custom__modal_area px-[30px] py-[30px] flex-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1">
           <div className="">
             <EinFachPage />
           </div>

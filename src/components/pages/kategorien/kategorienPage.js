@@ -158,7 +158,7 @@ const KategorienPage = () => {
   if (error) return <div>{error}</div>;
   // if (!cookieData || !cookieData.data || !cookieData.data.page)
   //   return <div>Keine Cookie-Daten gefunden.</div>;
-  console.log("kategorien data: cookieData 2222:", customPosts);
+  // console.log("kategorien data: cookieData 2222:", customPosts);
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
 
   return (
@@ -169,8 +169,11 @@ const KategorienPage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="bg-red-600 text-white py-3 px-4 mb-6">
-        <Typography variant="h5" className="font-bold text-center">
+      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+        <Typography
+          variant="h4"
+          className="font-bold text-center text-[#FFD6D9]"
+        >
           {title}
         </Typography>
       </div>

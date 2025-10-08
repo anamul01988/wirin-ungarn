@@ -164,8 +164,11 @@ const AusflugszielePage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="bg-red-600 text-white py-3 rounded-md px-4 mb-6">
-        <Typography variant="h5" className="font-bold text-center">
+      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+        <Typography
+          variant="h4"
+          className="font-bold text-center text-[#FFD6D9]"
+        >
           {title}
         </Typography>
       </div>
@@ -233,7 +236,10 @@ const AusflugszielePage = () => {
           </>
         )}
       </Typography>
-      <div className="p-6 max-w-5xl overflow-auto mx-auto" style={{ height: "calc(100vh - 500px)" }}>
+      <div
+        className="p-6 max-w-5xl overflow-auto mx-auto"
+        style={{ height: "calc(100vh - 500px)" }}
+      >
         {filtering === true ? (
           <div>
             <DefaultSpinner />

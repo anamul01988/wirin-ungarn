@@ -94,8 +94,8 @@ const LandingPage = () => {
 
       // Add hover buttons to cards
       const cardWrappers = gsap.utils.toArray(".card-wrapper");
-      console.log('Initial card wrappers found:', cardWrappers.length);
-      
+      console.log("Initial card wrappers found:", cardWrappers.length);
+
       cardWrappers.forEach((wrapper) => {
         const card = wrapper.querySelector(".card");
         const hoverButtons = document.createElement("div");
@@ -152,7 +152,7 @@ const LandingPage = () => {
             const url = urlMatch[1];
             imagePromises.push(
               new Promise((resolve) => {
-                const img = document.createElement('img');
+                const img = document.createElement("img");
                 img.src = url;
                 img.onload = () => {
                   const aspectRatio = img.naturalHeight / img.naturalWidth;
@@ -176,121 +176,128 @@ const LandingPage = () => {
 
       // If no images to load, add a timeout to ensure DOM is ready
       if (imagePromises.length === 0) {
-        imagePromises.push(new Promise(resolve => setTimeout(resolve, 100)));
+        imagePromises.push(new Promise((resolve) => setTimeout(resolve, 100)));
       }
 
       // Set up card animations after images load
-      Promise.all(imagePromises).then(() => {
-        console.log('Images loaded, setting up card animations');
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const horizontalMargin = 0.06;
-        const verticalMargin = 0.02;
+      Promise.all(imagePromises)
+        .then(() => {
+          console.log("Images loaded, setting up card animations");
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+          const horizontalMargin = 0.06;
+          const verticalMargin = 0.02;
 
-        const areaWidth = viewportWidth * (1 - 2 * horizontalMargin);
-        const areaHeight = viewportHeight * (1 - 2 * verticalMargin);
-        const startAreaX = viewportWidth * horizontalMargin;
-        const startAreaY = viewportHeight * verticalMargin;
+          const areaWidth = viewportWidth * (1 - 2 * horizontalMargin);
+          const areaHeight = viewportHeight * (1 - 2 * verticalMargin);
+          const startAreaX = viewportWidth * horizontalMargin;
+          const startAreaY = viewportHeight * verticalMargin;
 
-        const finalPositions = [];
-        const minDist = 300;
+          const finalPositions = [];
+          const minDist = 300;
 
-        // Function to find non-overlapping positions for cards
-        function findGoodPosition(cardHeight) {
-          const maxX = Math.max(0, areaWidth - 450);
-          const maxY = Math.max(0, areaHeight - cardHeight);
-          for (let attempts = 0; attempts < 50; attempts++) {
-            const x = startAreaX + Math.random() * maxX;
-            const y = startAreaY + Math.random() * maxY;
-            let tooClose = false;
-            for (let pos of finalPositions) {
-              const dx = x - pos.x;
-              const dy = y - pos.y;
-              if (Math.sqrt(dx * dx + dy * dy) < minDist) {
-                tooClose = true;
-                break;
+          // Function to find non-overlapping positions for cards
+          function findGoodPosition(cardHeight) {
+            const maxX = Math.max(0, areaWidth - 450);
+            const maxY = Math.max(0, areaHeight - cardHeight);
+            for (let attempts = 0; attempts < 50; attempts++) {
+              const x = startAreaX + Math.random() * maxX;
+              const y = startAreaY + Math.random() * maxY;
+              let tooClose = false;
+              for (let pos of finalPositions) {
+                const dx = x - pos.x;
+                const dy = y - pos.y;
+                if (Math.sqrt(dx * dx + dy * dy) < minDist) {
+                  tooClose = true;
+                  break;
+                }
+              }
+              if (!tooClose) {
+                return { x, y };
               }
             }
-            if (!tooClose) {
-              return { x, y };
-            }
+            return {
+              x: startAreaX + Math.random() * Math.max(0, maxX),
+              y: startAreaY + Math.random() * Math.max(0, maxY),
+            };
           }
-          return {
-            x: startAreaX + Math.random() * Math.max(0, maxX),
-            y: startAreaY + Math.random() * Math.max(0, maxY),
-          };
-        }
 
-        // Re-query card wrappers to ensure we have the latest elements
-        const currentCardWrappers = document.querySelectorAll('.card-wrapper');
-        console.log('Found card wrappers:', currentCardWrappers.length);
+          // Re-query card wrappers to ensure we have the latest elements
+          const currentCardWrappers =
+            document.querySelectorAll(".card-wrapper");
+          console.log("Found card wrappers:", currentCardWrappers.length);
 
-        if (currentCardWrappers.length === 0) {
-          console.warn('No card wrappers found for animation');
-          return;
-        }
+          if (currentCardWrappers.length === 0) {
+            console.warn("No card wrappers found for animation");
+            return;
+          }
 
-        // Create scroll-triggered animation timeline
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".content-section",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 2,
-            onUpdate: (self) => {
-              console.log('ScrollTrigger progress:', self.progress);
-            }
-          },
-        });
-
-        // Animate each card wrapper
-        currentCardWrappers.forEach((wrapper, index) => {
-          const cardHeight = wrapper.clientHeight || 400;
-          const pos = findGoodPosition(cardHeight);
-          finalPositions.push(pos);
-          const { startX, startY } = getStartPosition();
-
-          console.log(`Setting up card ${index}:`, { startX, startY, finalPos: pos });
-
-          gsap.set(wrapper, {
-            x: startX,
-            y: startY,
-            opacity: 0,
-            zIndex: index + 10,
+          // Create scroll-triggered animation timeline
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: ".content-section",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 2,
+              onUpdate: (self) => {
+                console.log("ScrollTrigger progress:", self.progress);
+              },
+            },
           });
 
-          tl.to(
-            wrapper,
-            {
-              opacity: 1,
-              duration: 2,
-              ease: "power2.out",
-            },
-            index * 1.5
-          );
+          // Animate each card wrapper
+          currentCardWrappers.forEach((wrapper, index) => {
+            const cardHeight = wrapper.clientHeight || 400;
+            const pos = findGoodPosition(cardHeight);
+            finalPositions.push(pos);
+            const { startX, startY } = getStartPosition();
 
-          tl.to(
-            wrapper,
-            {
-              x: pos.x,
-              y: pos.y,
-              duration: 4,
-              ease: "power2.out",
-            },
-            index * 1.5
-          );
-        });
+            console.log(`Setting up card ${index}:`, {
+              startX,
+              startY,
+              finalPos: pos,
+            });
 
-        // Refresh ScrollTrigger after setup
-        ScrollTrigger.refresh();
+            gsap.set(wrapper, {
+              x: startX,
+              y: startY,
+              opacity: 0,
+              zIndex: index + 10,
+            });
 
-        // Add window resize handler
-        window.addEventListener("resize", () => {
+            tl.to(
+              wrapper,
+              {
+                opacity: 1,
+                duration: 2,
+                ease: "power2.out",
+              },
+              index * 1.5
+            );
+
+            tl.to(
+              wrapper,
+              {
+                x: pos.x,
+                y: pos.y,
+                duration: 4,
+                ease: "power2.out",
+              },
+              index * 1.5
+            );
+          });
+
+          // Refresh ScrollTrigger after setup
           ScrollTrigger.refresh();
+
+          // Add window resize handler
+          window.addEventListener("resize", () => {
+            ScrollTrigger.refresh();
+          });
+        })
+        .catch((error) => {
+          console.error("Error setting up card animations:", error);
         });
-      }).catch((error) => {
-        console.error('Error setting up card animations:', error);
-      });
     }
   }, []);
 
@@ -427,10 +434,10 @@ const LandingPage = () => {
                 menuName: "LIEDTEXTE",
                 menuRoute: "/liedtexte",
               },
-              {
-                menuName: "KulTour Ungarn",
-                menuRoute: "/kultour-ungarn",
-              },
+              // {
+              //   menuName: "KulTour Ungarn",
+              //   menuRoute: "/kultour-ungarn",
+              // },
               // {
               //   menuName: "Vokabel-Entdecker",
               //   menuRoute: "/ungarisch-lernen/vokabel-entdecker",
@@ -473,6 +480,10 @@ const LandingPage = () => {
               {
                 menuName: "AUSFLUGSZIELE",
                 menuRoute: "/ausflugsziele",
+              },
+              {
+                menuName: "Veranstaltungskalender",
+                menuRoute: "/veranstaltungen",
               },
             ],
           },
