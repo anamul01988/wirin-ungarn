@@ -17,7 +17,7 @@ class ListSearch {
     this.state = {
       query: "",
       page: 0,
-      hitsPerPage: 20,
+      hitsPerPage: 10,
       postTypeFilter: config.postTypeFilter || null,
     };
     this.searchInput = document.getElementById("search-input");
