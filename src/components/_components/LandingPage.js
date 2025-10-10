@@ -8,6 +8,151 @@ import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import algoliasearch from "algoliasearch/lite";
+
+class ListSearch {
+  constructor(config) {
+    this.client = algoliasearch(config.appId, config.apiKey);
+    this.index = this.client.initIndex(config.indexName);
+    this.state = {
+      query: "",
+      page: 0,
+      hitsPerPage: 20,
+      postTypeFilter: config.postTypeFilter || null,
+    };
+    this.searchInput = document.getElementById("search-input");
+    this.searchBtn = document.getElementById("search-btn");
+    this.resultsContainer = document.getElementById("results-container");
+    this.paginationContainer = document.getElementById("pagination-container");
+    this.init();
+  }
+  init() {
+    this.searchBtn.addEventListener("click", () => this.performSearch());
+    this.searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        this.performSearch();
+      }
+    });
+    let debounceTimer;
+    this.searchInput.addEventListener("input", (e) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        this.state.query = e.target.value;
+        this.state.page = 0;
+        this.search();
+      }, 300);
+    });
+  }
+  performSearch() {
+    this.state.query = this.searchInput.value;
+    this.state.page = 0;
+    this.search();
+  }
+  async search() {
+    this.showLoading();
+    try {
+      const searchParams = {
+        page: this.state.page,
+        hitsPerPage: this.state.hitsPerPage,
+        attributesToRetrieve: ["objectID", "post_title", "permalink"],
+        attributesToHighlight: ["post_title"],
+        highlightPreTag: "<mark>",
+        highlightPostTag: "</mark>",
+      };
+      if (this.state.postTypeFilter) {
+        searchParams.filters = `post_type_label:"${this.state.postTypeFilter}"`;
+      }
+      const response = await this.index.search(this.state.query, searchParams);
+      this.renderResults(response.hits);
+      this.renderPagination(response);
+    } catch (error) {
+      console.error("Search error:", error);
+      this.showError();
+    }
+  }
+  showLoading() {
+    this.resultsContainer.innerHTML = `
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>Searching...</p>
+      </div>
+    `;
+  }
+  renderResults(hits) {
+    if (hits.length === 0) {
+      this.resultsContainer.innerHTML = `
+        <div class="no-results">
+          <h3>No results found</h3>
+          <p>Try different keywords</p>
+        </div>
+      `;
+      return;
+    }
+    const html = hits.map((hit) => this.createResultItem(hit)).join("");
+    this.resultsContainer.innerHTML = html;
+  }
+  createResultItem(hit) {
+    const title =
+      hit._highlightResult?.post_title?.value || hit.post_title || "Untitled";
+    const link = hit.permalink || "#";
+    return `
+      <a href="${link}" class="result-item">
+        <div class="result-title">${title}</div>
+        <div class="result-meta">${link}</div>
+      </a>
+    `;
+  }
+  renderPagination(response) {
+    const { page, nbPages } = response;
+    if (nbPages <= 1) {
+      this.paginationContainer.innerHTML = "";
+      return;
+    }
+    let html = "";
+    if (page > 0) {
+      html += `<button class="pagination-btn" onclick="listSearch.goToPage(${
+        page - 1
+      })">← Previous</button>`;
+    }
+    const maxPages = 7;
+    let startPage = Math.max(0, page - Math.floor(maxPages / 2));
+    let endPage = Math.min(nbPages, startPage + maxPages);
+    if (endPage - startPage < maxPages) {
+      startPage = Math.max(0, endPage - maxPages);
+    }
+    for (let i = startPage; i < endPage; i++) {
+      const activeClass = i === page ? "active" : "";
+      html += `
+        <button
+          class="pagination-btn ${activeClass}"
+          onclick="listSearch.goToPage(${i})"
+          ${i === page ? "disabled" : ""}
+        >
+          ${i + 1}
+        </button>
+      `;
+    }
+    if (page < nbPages - 1) {
+      html += `<button class="pagination-btn" onclick="listSearch.goToPage(${
+        page + 1
+      })">Next →</button>`;
+    }
+    this.paginationContainer.innerHTML = html;
+  }
+  goToPage(page) {
+    this.state.page = page;
+    this.search();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  showError() {
+    this.resultsContainer.innerHTML = `
+      <div class="no-results">
+        <h3>Something went wrong</h3>
+        <p>Please try again</p>
+      </div>
+    `;
+  }
+}
 
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
@@ -15,6 +160,7 @@ const LandingPage = () => {
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [openAiBtn, setOpenAiBtn] = useState(false);
+  const [listSearchInstance, setListSearchInstance] = useState(null);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
@@ -301,6 +447,21 @@ const LandingPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (openAiBtn && !listSearchInstance) {
+      const config = {
+        appId: "4BNRIJHLXZ",
+        apiKey: "0707974c58f2e7c53a70e1e58eeec381",
+        indexName: "wp_searchable_posts",
+        postTypeFilter: null,
+      };
+      const ls = new ListSearch(config);
+      window.listSearch = ls;
+      setListSearchInstance(ls);
+      console.log("List search initialized");
+    }
+  }, [openAiBtn, listSearchInstance]);
+
   const handleCloseTicker = () => {
     setTickerClosed(true);
     localStorage.setItem("tickerClosed", "true");
@@ -336,6 +497,87 @@ const LandingPage = () => {
         backgroundAttachment: "fixed",
       }}
     >
+      <style>{`
+        .algolia-list-search {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+        .search-box {
+          display: flex;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+        .search-box input[type="text"] {
+          flex-grow: 1;
+          padding: 8px;
+          font-size: 16px;
+        }
+        .search-box button {
+          padding: 8px 16px;
+          font-size: 16px;
+        }
+        .results-list {
+          list-style: none;
+          padding: 0;
+        }
+        .result-item {
+          display: block;
+          padding: 10px;
+          border-bottom: 1px solid #eee;
+          text-decoration: none;
+          color: #333;
+        }
+        .result-item:hover {
+          background-color: #f5f5f5;
+        }
+        .result-title {
+          font-weight: bold;
+        }
+        .result-meta {
+          color: #666;
+          font-size: 14px;
+        }
+        .pagination-container {
+          display: flex;
+          gap: 5px;
+          justify-content: center;
+          margin-top: 20px;
+        }
+        .pagination-btn {
+          padding: 5px 10px;
+          border: 1px solid #ddd;
+          background: white;
+          cursor: pointer;
+        }
+        .pagination-btn.active {
+          background: #007bff;
+          color: white;
+          border-color: #007bff;
+        }
+        .pagination-btn:disabled {
+          cursor: not-allowed;
+          opacity: 0.6;
+        }
+        .loading, .no-results {
+          text-align: center;
+          padding: 20px;
+        }
+        .loading-spinner {
+          width: 20px;
+          height: 20px;
+          border: 3px solid #f3f3f3;
+          border-top: 3px solid #007bff;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin: 0 auto 10px;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+
       <div className="aiBtn bg-[#4a7c59] rounded-md text-lg text-white hover:bg-[#426e4f]">
         {!openAiBtn && (
           <button
@@ -353,25 +595,42 @@ const LandingPage = () => {
         )}
 
         {openAiBtn && (
-          <div className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden">
-            <input
-              type="text"
-              style={{ width: "520px" }}
-              placeholder="SCHREIBE HIER WAS DU SUCHST, GERNE AUCH ALS FRAGE"
-              className="px-4 py-2 text-white placeholder-white bg-transparent outline-none"
-            />
-            <button
-              onClick={() => setOpenAiBtn(false)}
-              className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
-            >
-              <Image
-                src="/assets/search-icon-white.png"
-                alt="AI Icon"
-                width={24}
-                height={24}
+          <>
+            <div className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden">
+              <input
+                id="search-input"
+                type="text"
+                style={{ width: "520px" }}
+                placeholder="SCHREIBE HIER WAS DU SUCHST, GERNE AUCH ALS FRAGE"
+                className="px-4 py-2 text-white placeholder-white bg-transparent outline-none"
               />
-            </button>
-          </div>
+              <button
+                id="search-btn"
+                className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
+              >
+                <Image
+                  src="/assets/search-icon-white.png"
+                  alt="Search Icon"
+                  width={24}
+                  height={24}
+                />
+              </button>
+              <button
+                onClick={() => setOpenAiBtn(false)}
+                className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
+              >
+                ✕
+              </button>
+            </div>
+            <div
+              id="results-container"
+              className="results-list bg-white p-4 rounded-md mt-4"
+            ></div>
+            <div
+              id="pagination-container"
+              className="pagination-container"
+            ></div>
+          </>
         )}
       </div>
 
