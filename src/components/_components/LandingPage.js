@@ -33,11 +33,26 @@ class ListSearch {
         this.performSearch();
       }
     });
+
     let debounceTimer;
     this.searchInput.addEventListener("input", (e) => {
+      // Clear any pending debounce
       clearTimeout(debounceTimer);
+
+      // Get current query value
+      const query = e.target.value;
+
+      // Always update the state with the latest query
+      this.state.query = query;
+
+      // Clear results immediately if query is empty
+      if (query.trim() === "") {
+        this.clearResults();
+        return;
+      }
+
+      // Debounce the search
       debounceTimer = setTimeout(() => {
-        this.state.query = e.target.value;
         this.state.page = 0;
         this.search();
       }, 300);
@@ -46,9 +61,22 @@ class ListSearch {
   performSearch() {
     this.state.query = this.searchInput.value;
     this.state.page = 0;
+
+    // Handle empty query case
+    if (this.state.query.trim() === "") {
+      this.clearResults();
+      return;
+    }
+
     this.search();
   }
   async search() {
+    // If query is empty, clear results and return
+    if (this.state.query.trim() === "") {
+      this.clearResults();
+      return;
+    }
+
     this.showLoading();
     try {
       const searchParams = {
@@ -69,6 +97,13 @@ class ListSearch {
       console.error("Search error:", error);
       this.showError();
     }
+  }
+
+  clearResults() {
+    // Clear the results container
+    this.resultsContainer.innerHTML = "";
+    // Clear pagination
+    this.paginationContainer.innerHTML = "";
   }
   showLoading() {
     this.resultsContainer.innerHTML = `
@@ -448,19 +483,41 @@ const LandingPage = () => {
   }, []);
 
   useEffect(() => {
-    if (openAiBtn && !listSearchInstance) {
+    if (openAiBtn) {
+      // Initialize search if it doesn't exist yet or reinitialize it
       const config = {
         appId: "4BNRIJHLXZ",
         apiKey: "0707974c58f2e7c53a70e1e58eeec381",
         indexName: "wp_searchable_posts",
         postTypeFilter: null,
       };
+
+      // Clean up any previous instance
+      if (listSearchInstance) {
+        // No need to do anything for cleanup with current implementation
+      }
+
+      // Initialize new search instance
       const ls = new ListSearch(config);
       window.listSearch = ls;
       setListSearchInstance(ls);
       console.log("List search initialized");
+
+      // Focus on the search input
+      setTimeout(() => {
+        const searchInput = document.getElementById("search-input");
+        if (searchInput) {
+          searchInput.focus();
+        }
+      }, 100);
+    } else {
+      // Clean up when search is closed
+      if (listSearchInstance) {
+        window.listSearch = null;
+        setListSearchInstance(null);
+      }
     }
-  }, [openAiBtn, listSearchInstance]);
+  }, [openAiBtn]);
 
   const handleCloseTicker = () => {
     setTickerClosed(true);
@@ -597,13 +654,43 @@ const LandingPage = () => {
         {openAiBtn && (
           <>
             <div className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden">
-              <input
-                id="search-input"
-                type="text"
-                style={{ width: "520px" }}
-                placeholder="SCHREIBE HIER WAS DU SUCHST, GERNE AUCH ALS FRAGE"
-                className="px-4 py-2 text-white placeholder-white bg-transparent outline-none"
-              />
+              <div className="relative flex-1">
+                <input
+                  id="search-input"
+                  type="text"
+                  style={{ width: "520px" }}
+                  placeholder="SCHREIBE HIER WAS DU SUCHST, GERNE AUCH ALS FRAGE"
+                  className="w-full px-4 py-2 text-white placeholder-white bg-transparent outline-none"
+                  onChange={(e) => {
+                    if (listSearchInstance) {
+                      // This will trigger the input event listener in the ListSearch class
+                      // which handles the debounced search
+                    }
+                  }}
+                />
+                {/* Clear input button - only shows when there's text */}
+                {/* <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white opacity-70 hover:opacity-100"
+                  onClick={() => {
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput && searchInput.value) {
+                      searchInput.value = '';
+                      
+                      // Manually trigger input event to clear results
+                      const event = new Event('input', { bubbles: true });
+                      searchInput.dispatchEvent(event);
+                      
+                      // Force clear the results
+                      if (listSearchInstance) {
+                        listSearchInstance.state.query = '';
+                        listSearchInstance.clearResults();
+                      }
+                    }
+                  }}
+                >
+                  ⨯
+                </button> */}
+              </div>
               <button
                 id="search-btn"
                 className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
@@ -616,7 +703,20 @@ const LandingPage = () => {
                 />
               </button>
               <button
-                onClick={() => setOpenAiBtn(false)}
+                onClick={() => {
+                  // Reset the search when closing
+                  if (listSearchInstance) {
+                    const searchInput = document.getElementById("search-input");
+                    if (searchInput) {
+                      searchInput.value = "";
+                      // Manually trigger input event to clear results
+                      const event = new Event("input", { bubbles: true });
+                      searchInput.dispatchEvent(event);
+                    }
+                    listSearchInstance.clearResults();
+                  }
+                  setOpenAiBtn(false);
+                }}
                 className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
               >
                 ✕
