@@ -8,11 +8,11 @@ export default async function LiedTexteDetailsPage({ params }) {
   try {
     const apiData = await GetLiedtexteSinglePostBySlug(slug);
     console.log("apiData 222222222", apiData);
-    if (!apiData) {
-      console.log("No content data, calling notFound()");
-      notFound();
-    }
-    const texteDetails = apiData?.data?.lyrik?.nodes?.[0] || null;
+    // if (!apiData) {
+    //   console.log("No content data, calling notFound()");
+    //   notFound();
+    // }
+    const texteDetails = apiData?.data?.data?.lyrik || null;
 
     // if (!texteDetails) {
     //   return notFound();

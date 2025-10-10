@@ -32,9 +32,9 @@ export default function LiedTexteDialogContent({
     return () => window.removeEventListener("keydown", handleEsc);
   }, [open]);
 
-  const navigateToHome = () => {
-    route.push("/");
-  };
+  // const navigateToHome = () => {
+  //   route.push("/");
+  // };
   console.log("LiedTexteDialogContent content:", content);
   return (
     <>
@@ -57,7 +57,7 @@ export default function LiedTexteDialogContent({
         {/* Dialog Body */}
         <DialogBody className="overflow-auto custom__modal_area flex-1">
           <div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <button
                 onClick={navigateToHome}
                 className="absolute top-4 left-4 flex items-center justify-center text-blue-700 hover:text-blue-900 p-1 z-10"
@@ -78,7 +78,7 @@ export default function LiedTexteDialogContent({
                   />
                 </svg>
               </button>
-            </div>
+            </div> */}
             <h1 className="text-3xl font-bold mb-6">{title}</h1>
 
             <Typography
@@ -86,7 +86,7 @@ export default function LiedTexteDialogContent({
               color="blue-gray"
               className="text-sm leading-relaxed text-left mb-2"
             >
-              {content.introText}
+              {content?.introText}
             </Typography>
             {content?.postContent?.map((item, index) => (
               <div key={index} className="mb-2">
@@ -99,46 +99,28 @@ export default function LiedTexteDialogContent({
                           "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
                       }}
                     >
-                      {item?.secondIcon ?? (
-                        <div>
-                          {" "}
-                          <svg
-                            className="w-full h-auto text-orange-500"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 
+                      <div>
+                        <svg
+                          className="w-full h-auto text-orange-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 
              6.707a1 1 0 010-1.414l3-3a1 1 0 
              011.414 0l3 3a1 1 0 01-1.414 
              1.414L11 5.414V13a1 1 0 
              11-2 0V5.414L7.707 6.707a1 
              1 0 01-1.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                      )}
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </div>
 
                   <div className="flex-1 pl-3">
-                    <Typography
-                      variant="h5"
-                      color="blue-gray"
-                      className="font-bold leading-snug mb-3 cursor-pointer"
-                      // onClick={onOpenWissenswert}
-                    >
-                      {item.title}
-                    </Typography>
-                    {/* Hero Image */}
-                    {/* <div
-                  className="w-full h-56 md:h-72 bg-cover bg-center rounded-lg mb-6"
-                  style={{
-                    backgroundImage: `url('${fakeData.heroImage}')`,
-                  }}
-                ></div> */}
                     {/* Content */}
                     <Typography
                       variant="paragraph"
