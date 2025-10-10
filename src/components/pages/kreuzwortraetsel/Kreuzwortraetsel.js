@@ -1,10 +1,10 @@
-"use client";
+// venastaltusngskalendar.js"use client";
 import React, { useEffect, useState } from "react";
-import { SearchAllPosts, GetAusflugszielePages } from "@/lib/getAllPages";
+import { SearchAllPosts, GetKreuzwortratsel } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
-const AusflugszielePage = () => {
+const KreuzwortraetselPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
@@ -75,10 +75,12 @@ const AusflugszielePage = () => {
       if (isSearching) {
         apiData = await SearchAllPosts(search, 10, cursor);
       } else {
-        apiData = await GetAusflugszielePages(10, cursor);
+        apiData = await GetKreuzwortratsel(10, cursor);
       }
 
-      const newPosts = isSearching ? apiData.data.posts : apiData.data.listings;
+      const newPosts = isSearching
+        ? apiData.data.posts
+        : apiData.data.crosswords;
 
       // Replace posts instead of appending
       if (isSearching) {
@@ -108,8 +110,8 @@ const AusflugszielePage = () => {
     setIsSearching(true);
     try {
       const apiData = await SearchAllPosts(search);
-      setSearchResults(apiData.data.posts);
-      setSearchPageInfo(apiData.data.posts.pageInfo);
+      setSearchResults(apiData.data.crosswords);
+      setSearchPageInfo(apiData.data.crosswords.pageInfo);
       setSearchCurrentPage(1);
       setSearchPageHistory([]);
     } catch (err) {
@@ -131,10 +133,15 @@ const AusflugszielePage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const apiData = await GetAusflugszielePages();
+        const apiData = await GetKreuzwortratsel();
+        console.log(
+          "apiData 2221122222222111",
+          apiData?.data,
+          apiData?.data.crosswords
+        );
         setCookieData(apiData);
-        setCustomPosts(apiData.data.listings);
-        setPageInfo(apiData.data.listings.pageInfo);
+        setCustomPosts(apiData.data.crosswords);
+        setPageInfo(apiData.data.crosswords.pageInfo);
         setCurrentPage(1);
         setPageHistory([]);
       } catch (err) {
@@ -189,10 +196,7 @@ const AusflugszielePage = () => {
         variant="paragraph"
         className="text-green-800 font-bold leading-relaxed mb-6"
       >
-        Auf dieser Übersichtsseite findest du alle Artikel, die die
-        verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
-        durch die Beiträge stöbern oder die Filterfunktion nutzen, um gezielt
-        nach bestimmten Inhalten zu suchen.
+        {content}
       </Typography>
 
       {/* Search Box */}
@@ -237,8 +241,8 @@ const AusflugszielePage = () => {
         )}
       </Typography>
       <div
-        className="py-6 max-w-5xl overflow-auto mx-auto"
-        style={{ height: "calc(100vh - 500px)" }}
+        className="py-6 max-w-5xl mx-auto"
+        // style={{ height: "calc(100vh - 500px)" }}
       >
         {filtering === true ? (
           <div>
@@ -258,26 +262,29 @@ const AusflugszielePage = () => {
                 </Typography>
               </div>
             ) : (
-              (isSearching ? searchResults?.edges : customPosts?.edges)?.map(
-                (edge, idx) => {
-                  const posts = isSearching ? searchResults : customPosts;
-                  return (
-                    <div className="relative" key={edge.node.id}>
-                      <CustomPost
-                        title={edge.node?.title}
-                        description={edge.node.postContentLyrik?.introText}
-                        onlyHeadings={onlyHeadings}
-                        slug={edge.node.slug}
-                        routePrefix="ausflugsziele"
-                      />
-                      {/* Divider except last */}
-                      {!onlyHeadings && idx < posts?.edges?.length - 1 && (
-                        <hr className="my-6 border-gray-300" />
-                      )}
-                    </div>
-                  );
-                }
-              )
+              <div className="h-[530px] overflow-auto">
+                {(isSearching ? searchResults?.edges : customPosts?.edges)?.map(
+                  (edge, idx) => {
+                    const posts = isSearching ? searchResults : customPosts;
+                    return (
+                      <div className="relative" key={edge.node.id}>
+                        <CustomPost
+                          title={edge.node?.title}
+                          image={edge.node.featuredImage.node.sourceUrl}
+                          description={edge.node.postContentCrosswords?.excerpt}
+                          onlyHeadings={onlyHeadings}
+                          slug={edge.node.slug}
+                          routePrefix="kreuzwortraetsel"
+                        />
+                        {/* Divider except last */}
+                        {!onlyHeadings && idx < posts?.edges?.length - 1 && (
+                          <hr className="my-6 border-gray-300" />
+                        )}
+                      </div>
+                    );
+                  }
+                )}
+              </div>
             )}
 
             {/* Pagination Buttons - Only show if not searching with empty results */}
@@ -319,4 +326,4 @@ const AusflugszielePage = () => {
   );
 };
 
-export default AusflugszielePage;
+export default KreuzwortraetselPage;

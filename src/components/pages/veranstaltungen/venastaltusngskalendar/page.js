@@ -1,10 +1,10 @@
-"use client";
+// venastaltusngskalendar.js"use client";
 import React, { useEffect, useState } from "react";
-import { SearchAllPosts, GetAusflugszielePages } from "@/lib/getAllPages";
+import { SearchAllPosts, GetListingsVeranstaltungen } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
-const AusflugszielePage = () => {
+const VenastaltusngskalendarPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
@@ -75,7 +75,7 @@ const AusflugszielePage = () => {
       if (isSearching) {
         apiData = await SearchAllPosts(search, 10, cursor);
       } else {
-        apiData = await GetAusflugszielePages(10, cursor);
+        apiData = await GetListingsVeranstaltungen(10, cursor);
       }
 
       const newPosts = isSearching ? apiData.data.posts : apiData.data.listings;
@@ -131,7 +131,8 @@ const AusflugszielePage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const apiData = await GetAusflugszielePages();
+        const apiData = await GetListingsVeranstaltungen();
+        console.log("apiData 2221122222222111", apiData);
         setCookieData(apiData);
         setCustomPosts(apiData.data.listings);
         setPageInfo(apiData.data.listings.pageInfo);
@@ -189,10 +190,7 @@ const AusflugszielePage = () => {
         variant="paragraph"
         className="text-green-800 font-bold leading-relaxed mb-6"
       >
-        Auf dieser Übersichtsseite findest du alle Artikel, die die
-        verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
-        durch die Beiträge stöbern oder die Filterfunktion nutzen, um gezielt
-        nach bestimmten Inhalten zu suchen.
+        {content}
       </Typography>
 
       {/* Search Box */}
@@ -258,26 +256,28 @@ const AusflugszielePage = () => {
                 </Typography>
               </div>
             ) : (
-              (isSearching ? searchResults?.edges : customPosts?.edges)?.map(
-                (edge, idx) => {
-                  const posts = isSearching ? searchResults : customPosts;
-                  return (
-                    <div className="relative" key={edge.node.id}>
-                      <CustomPost
-                        title={edge.node?.title}
-                        description={edge.node.postContentLyrik?.introText}
-                        onlyHeadings={onlyHeadings}
-                        slug={edge.node.slug}
-                        routePrefix="ausflugsziele"
-                      />
-                      {/* Divider except last */}
-                      {!onlyHeadings && idx < posts?.edges?.length - 1 && (
-                        <hr className="my-6 border-gray-300" />
-                      )}
-                    </div>
-                  );
-                }
-              )
+              <div className="h-[330px] overflow-auto">
+                {(isSearching ? searchResults?.edges : customPosts?.edges)?.map(
+                  (edge, idx) => {
+                    const posts = isSearching ? searchResults : customPosts;
+                    return (
+                      <div className="relative" key={edge.node.id}>
+                        <CustomPost
+                          title={edge.node?.title}
+                          description={edge.node.listingFieldGroup?.description}
+                          onlyHeadings={onlyHeadings}
+                          slug={edge.node.slug}
+                          routePrefix="veranstaltungen"
+                        />
+                        {/* Divider except last */}
+                        {!onlyHeadings && idx < posts?.edges?.length - 1 && (
+                          <hr className="my-6 border-gray-300" />
+                        )}
+                      </div>
+                    );
+                  }
+                )}
+              </div>
             )}
 
             {/* Pagination Buttons - Only show if not searching with empty results */}
@@ -319,4 +319,4 @@ const AusflugszielePage = () => {
   );
 };
 
-export default AusflugszielePage;
+export default VenastaltusngskalendarPage;

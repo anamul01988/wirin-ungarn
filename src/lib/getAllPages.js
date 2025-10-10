@@ -474,6 +474,117 @@ export function GetAusflugszielePages(first = 10, after = null) {
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
+
+export function GetListingsVeranstaltungen(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetListingsVeranstaltungen($first: Int = 50, $after: String) {
+      pages(where: { title: "Veranstaltungskalender" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+      listings(
+        first: $first
+        after: $after
+        where: {
+          metaQuery: {
+            relation: AND
+            metaArray: [
+              {
+                key: "category"
+                value: "Veranstaltungen"
+                compare: EQUAL_TO
+              }
+            ]
+          }
+        }
+      ) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            date
+            listingFieldGroup {
+              subtitle
+              description
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+export function GetKreuzwortratsel(first = 10, after = null) {
+  const SEARCH_QUERY = `
+    query GetKreuzwortratsel($first: Int = 50, $after: String) {
+  pages(where: { title: "Kreuzworträtsel" }) {
+    nodes {
+      id
+      title
+      isContentNode
+      slug
+      content
+      status
+    }
+  }
+  crosswords(
+    first: $first
+    after: $after
+  ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        id
+        title
+        slug
+        # content
+        date
+        
+        postContentCrosswords {
+          excerpt
+        } 
+
+        featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+      }
+    }
+  }
+}
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
 // export function GetSprachkursPages(search = "") {
 //   const SEARCH_QUERY = `
 //       query GetSprachkursPageAndPosts($search: String) {
@@ -1323,6 +1434,89 @@ export async function GetAusflugszielePostBySlug(slug) {
 
     // If post exists, return it with a type indicator
     if (postData?.data?.listing) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching ausflugsziele post by slug:", error);
+    return null;
+  }
+}
+
+export async function GetkreuzwortraetselSinglePostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        crossword(id: "${slug}", idType: SLUG) {
+          id
+          databaseId
+          title
+          date
+          slug
+          postContentCrosswords {
+            excerpt
+          } 
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.crossword) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching ausflugsziele post by slug:", error);
+    return null;
+  }
+}
+
+export async function GetLiedtexteSinglePostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        lyrik(id: "${slug}", idType: SLUG) {
+          id
+          title
+          date
+          slug
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+            }  
+          }
+          postContentLyrik{
+            introText
+            postContent{
+              content
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.lyrik) {
       const result = {
         type: "post",
         data: postData,

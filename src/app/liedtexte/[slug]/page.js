@@ -1,13 +1,18 @@
 import { notFound } from "next/navigation";
 import LiedTexteDialogContent from "@/components/_components/LiedTexteDialogContent";
-import { GetLiedTextePages } from "@/lib/getAllPages";
+import { GetLiedtexteSinglePostBySlug } from "@/lib/getAllPages";
 
 export default async function LiedTexteDetailsPage({ params }) {
   const { slug } = await params;
 
   try {
-    const apiData = await GetLiedTextePages(slug);
-    const texteDetails = apiData?.data?.liedtexte?.nodes?.[0] || null;
+    const apiData = await GetLiedtexteSinglePostBySlug(slug);
+    console.log("apiData 222222222", apiData);
+    if (!apiData) {
+      console.log("No content data, calling notFound()");
+      notFound();
+    }
+    const texteDetails = apiData?.data?.lyrik?.nodes?.[0] || null;
 
     // if (!texteDetails) {
     //   return notFound();
@@ -18,7 +23,7 @@ export default async function LiedTexteDetailsPage({ params }) {
         <LiedTexteDialogContent
           title={texteDetails.title}
           content={texteDetails.postContentLyrik}
-          //   imageFeature={texteDetails.featuredImage}
+          imageFeature={texteDetails.featuredImage}
         />
       </div>
     );
