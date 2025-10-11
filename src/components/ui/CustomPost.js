@@ -11,7 +11,7 @@ const isHTML = (str) => {
 };
 
 // Utility function to truncate text to 300 words
-const truncateText = (text, maxWords = 80) => {
+export const truncateText = (text, maxWords = 80) => {
   if (typeof text !== "string") return text;
 
   // For HTML content, remove all HTML tags and entities
@@ -66,12 +66,15 @@ const CustomPost = ({
     // if (routePrefix === "wissenswert") {
     //   route.push(`/${routePrefix}/${slug}`);
     // }
+    if (routePrefix === "sprachkurs") {
+      route.push(`/${routePrefix}/${slug}`);
+    }
     if (routePrefix === "einfach-lesen") {
       route.push(`/${routePrefix}/${slug}`);
     }
-    if (routePrefix === "ausflugsziele") {
-      route.push(`/${routePrefix}/${slug}`);
-    }
+    // if (routePrefix === "ausflugsziele") {
+    //   route.push(`/${routePrefix}/${slug}`);
+    // }
     if (routePrefix === "liedtexte") {
       route.push(`/${routePrefix}/${slug}`);
     }

@@ -1233,6 +1233,43 @@ query sprachlektionByID {
       }
     }
 
+    if (routePrefix === "ausflugsziele") {
+      const customQuery = `
+        query {
+        listing(id: "${slug}", idType: URI) {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+        }
+      }
+      `;
+
+      const customData = await fetchPage(customQuery);
+
+      console.log("444444444", customData);
+
+      if (customData?.data?.post) {
+        return {
+          type: "post",
+          data: {
+            data: {
+              post: {
+                ...customData.data.post,
+                postContent: {
+                  shortsPostContent:
+                    customData?.data?.post?.postContent?.topicsPostContent,
+                },
+              },
+            },
+          },
+          customType: "sprachkurs",
+        };
+      }
+    }
+
     // Fall back to regular GetDynamicContent if no specialized handling
     return GetDynamicContent(slug);
   } catch (error) {
@@ -1517,6 +1554,50 @@ export async function GetLiedtexteSinglePostBySlug(slug) {
 
     // If post exists, return it with a type indicator
     if (postData?.data?.lyrik) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching ausflugsziele post by slug:", error);
+    return null;
+  }
+}
+
+export async function GetkulinarischeSinglePostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        recipe(id: "${slug}", idType: SLUG) {
+          id
+          title
+          date
+          slug
+          featuredImage {
+            node {
+              sourceUrl
+            }
+          }
+          postContentRecipe{
+            introText
+            postContent{
+              content
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.recipe) {
       const result = {
         type: "post",
         data: postData,

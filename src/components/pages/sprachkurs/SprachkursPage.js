@@ -156,7 +156,7 @@ const SprachkursPage = () => {
     );
   if (error) return <div>{error}</div>;
 
-  const { title, content } = cookieData.data.pages?.nodes[0] || {};
+  const { title, slug, content } = cookieData.data.pages?.nodes[0] || {};
   console.log("sprachkurs data: cookieData 2222:", customPosts);
   return (
     <div className="mx-auto">
