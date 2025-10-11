@@ -66,6 +66,9 @@ const CustomPost = ({
     // if (routePrefix === "wissenswert") {
     //   route.push(`/${routePrefix}/${slug}`);
     // }
+    if (routePrefix === "sprachkurs") {
+      route.push(`/${routePrefix}/${slug}`);
+    }
     if (routePrefix === "einfach-lesen") {
       route.push(`/${routePrefix}/${slug}`);
     }

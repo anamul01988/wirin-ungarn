@@ -1533,6 +1533,50 @@ export async function GetLiedtexteSinglePostBySlug(slug) {
   }
 }
 
+export async function GetkulinarischeSinglePostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        recipe(id: "${slug}", idType: SLUG) {
+          id
+          title
+          date
+          slug
+          featuredImage {
+            node {
+              sourceUrl
+            }
+          }
+          postContentRecipe{
+            introText
+            postContent{
+              content
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.recipe) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching ausflugsziele post by slug:", error);
+    return null;
+  }
+}
+
 export function GetDatenschutzPages() {
   return fetchPage(GET_PAGE_DATENSCHUTZ);
 }
