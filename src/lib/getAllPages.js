@@ -1233,6 +1233,43 @@ query sprachlektionByID {
       }
     }
 
+    if (routePrefix === "ausflugsziele") {
+      const customQuery = `
+        query {
+        listing(id: "${slug}", idType: URI) {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+        }
+      }
+      `;
+
+      const customData = await fetchPage(customQuery);
+
+      console.log("444444444", customData);
+
+      if (customData?.data?.post) {
+        return {
+          type: "post",
+          data: {
+            data: {
+              post: {
+                ...customData.data.post,
+                postContent: {
+                  shortsPostContent:
+                    customData?.data?.post?.postContent?.topicsPostContent,
+                },
+              },
+            },
+          },
+          customType: "sprachkurs",
+        };
+      }
+    }
+
     // Fall back to regular GetDynamicContent if no specialized handling
     return GetDynamicContent(slug);
   } catch (error) {

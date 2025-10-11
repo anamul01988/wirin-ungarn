@@ -27,6 +27,39 @@ const VenastaltusngskalendarPage = () => {
   const [loadingPage, setLoadingPage] = useState(false);
   const [pageHistory, setPageHistory] = useState([]); // Store page history for navigation
   const [searchPageHistory, setSearchPageHistory] = useState([]); // Store search page history
+  const isHTML = (str) => {
+  if (typeof str !== "string") return false;
+  return /<[a-z][\s\S]*>/i.test(str);
+};
+  const truncateText = (text, maxWords = 80) => {
+    if (typeof text !== "string") return text;
+
+    // For HTML content, remove all HTML tags and entities
+    if (isHTML(text)) {
+      // Remove HTML tags, entities, and clean up whitespace
+      const cleanText = text
+        .replace(/<[^>]*>/g, " ") // Remove all HTML tags
+        .replace(/&[^;]+;/g, " ") // Remove HTML entities like &#8211;
+        .replace(/\s+/g, " ") // Replace multiple spaces with single space
+        .trim(); // Remove leading/trailing whitespace
+
+      const words = cleanText.split(" ");
+
+      if (words.length <= maxWords) {
+        return cleanText;
+      }
+
+      const truncated = words.slice(0, maxWords).join(" ");
+      return truncated + "...";
+    } else {
+      // For plain text
+      const words = text.split(/\s+/);
+      if (words.length <= maxWords) {
+        return text;
+      }
+      return words.slice(0, maxWords).join(" ") + "...";
+    }
+  };
 
   const loadPage = async (direction) => {
     if (loadingPage) return;
@@ -189,9 +222,10 @@ const VenastaltusngskalendarPage = () => {
       <Typography
         variant="paragraph"
         className="text-green-800 font-bold leading-relaxed mb-6"
-      >
-        {content}
-      </Typography>
+        dangerouslySetInnerHTML={{
+          __html: truncateText(content),
+        }}
+      />
 
       {/* Search Box */}
       <div className="mb-6">
