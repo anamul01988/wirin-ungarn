@@ -32,8 +32,8 @@ body {
   /* color: var(--foreground); */
   color: #56646f;
   font-family: "Open Sans", sans-serif;
-  background-repeat: no-repeat;
-  background-size: 100% auto;
+  /* background-repeat: no-repeat; */
+  /* background-size: 100% auto; */
   background-position: center top;
   background-attachment: fixed;
   min-height: 100vh;
