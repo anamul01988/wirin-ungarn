@@ -6,6 +6,9 @@ import {
   Roboto_Condensed,
 } from "next/font/google";
 import "./globals.css";
+import "./favorite-button.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { ThemeProvider } from "@material-tailwind/react";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -41,6 +44,18 @@ export default function RootLayout({ children }) {
           <ReduxProvider>
             <ThemeProvider>
               <AuthProvider>{children}</AuthProvider>
+              <ToastContainer 
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
             </ThemeProvider>
           </ReduxProvider>
         </SessionProvider>

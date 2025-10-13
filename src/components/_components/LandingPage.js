@@ -9,6 +9,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import algoliasearch from "algoliasearch/lite";
+import { toggleFavorite } from "@/lib/utils/favoritesManager";
 
 class ListSearch {
   constructor(config) {
@@ -277,10 +278,36 @@ const LandingPage = () => {
       const cardWrappers = gsap.utils.toArray(".card-wrapper");
       console.log("Initial card wrappers found:", cardWrappers.length);
 
-      cardWrappers.forEach((wrapper) => {
+      cardWrappers.forEach((wrapper, index) => {
         const card = wrapper.querySelector(".card");
         const hoverButtons = document.createElement("div");
         hoverButtons.className = "hover-buttons";
+        
+        // Get the route for this card
+        const cardRoutes = [
+          "/zahlentrainer",
+          "/wie-spaet-ist-es",
+          "/kulinarische-seele",
+          "/kreuzwortraetsel",
+          "/wissenswert",
+          "/einfach-lesen",
+          "/sprachkurs",
+          "/wissenswert",
+          "/aus-dem-leben",
+          "/einfach-lesen"
+        ];
+        
+        // Check if this route is already favorited
+        let isFavorited = false;
+        try {
+          const existingFavoritesStr = localStorage.getItem('favouritePosts') || '[]';
+          const existingFavorites = JSON.parse(existingFavoritesStr);
+          isFavorited = existingFavorites.some(fav => fav.route === cardRoutes[index]);
+        } catch (error) {
+          console.error('Error checking favorites:', error);
+        }
+        
+        // Always use the same icon regardless of favorite status
         hoverButtons.innerHTML = `
           <button class="hover-plus"><img src="/assets/plus-icon.png" alt="+ button" style="width:40px; height:40px;"></button>
           <button class="hover-close"><img src="/assets/x-icon.png" alt="x button" style="width:40px; height:40px;"></button>
@@ -290,8 +317,64 @@ const LandingPage = () => {
         const plusBtn = hoverButtons.querySelector(".hover-plus");
         plusBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          // Add favorite functionality here
-          console.log("Added to favorites:", card);
+          
+          // Get the card data to save to favorites
+          const cardIndex = Array.from(cardWrappers).indexOf(wrapper);
+          const cardData = [
+            {
+              image: "/assets/tl-Zahlentrainer.avif",
+              title: "Zahlentrainer",
+              route: "/zahlentrainer",
+            },
+            {
+              image: "/assets/tl-Uhrzeittrainer.avif",
+              title: "Uhrzeittrainer",
+              route: "/wie-spaet-ist-es",
+            },
+            {
+              image: "/assets/tl-kulinarische-Selle.avif",
+              title: "Kulinarische Seele",
+              route: "/kulinarische-seele",
+            },
+            {
+              image: "/assets/tl-Raetsel.avif",
+              title: "Rätsel",
+              route: "/kreuzwortraetsel",
+            },
+            {
+              image: "/assets/tl-Ungarn-Insider.avif",
+              title: "Ungarn Insider",
+              route: "/wissenswert",
+            },
+            {
+              image: "/assets/tl-Zustand-in-einem-Wort.avif",
+              title: "Zustand in einem Wort",
+              route: "/einfach-lesen",
+            },
+            {
+              image: "/assets/tl-Plural.avif",
+              title: "Plural",
+              route: "/sprachkurs",
+            },
+            {
+              image: "/assets/tl-Makler-Tricks.avif",
+              title: "Makler Tricks",
+              route: "/wissenswert",
+            },
+            {
+              image: "/assets/tl-aus-dem-leben.avif",
+              title: "Aus dem Leben",
+              route: "/aus-dem-leben",
+            },
+            {
+              image: "/assets/tl-itt-ott.avif",
+              title: "Itt-Ott",
+              route: "/einfach-lesen",
+            },
+          ][cardIndex];
+          
+          // Use the toggleFavorite utility which will show toasts
+          toggleFavorite(cardData.route, cardData.title);
         });
 
         const closeBtn = hoverButtons.querySelector(".hover-close");
