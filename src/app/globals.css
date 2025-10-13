@@ -1074,3 +1074,7 @@ body {
   background: transparent !important;
   backdrop-filter: none !important;
 }
+
+.none{
+  display: none;
+}
