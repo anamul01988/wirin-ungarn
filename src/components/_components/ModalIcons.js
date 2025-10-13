@@ -1,6 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { isFavorited, toggleFavorite } from "@/lib/utils/favoritesManager";
+import { usePathname } from 'next/navigation';
 
 /**
  * Reusable Modal Icons Component
@@ -14,6 +16,8 @@ import React from "react";
  * @param {boolean} props.showShare - Whether to show share icon (default: true)
  * @param {Object} props.topIconsStyle - Custom style for top icons container (optional)
  * @param {Object} props.shareIconStyle - Custom style for share icon container (optional)
+ * @param {string} props.pageTitle - The title of the current page (for favorites)
+ * @param {string} props.customRoute - Custom route to use for favorites instead of current path
  */
 export default function ModalIcons({
   onClose,
@@ -26,7 +30,29 @@ export default function ModalIcons({
   topIconsStyle,
   shareIconStyle,
   type,
+  pageTitle,
+  customRoute
 }) {
+  const pathname = usePathname();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const actualRoute = customRoute || pathname;
+
+  useEffect(() => {
+    setIsFavorite(isFavorited(actualRoute));
+  }, [actualRoute]);
+
+  const handleFavoriteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const result = toggleFavorite(actualRoute, pageTitle);
+    setIsFavorite(result);
+    
+    if (onFavorite) {
+      onFavorite(result);
+    }
+  };
+
   const defaultTopIconsStyle = {
     top: "0rem",
     right: "-6.5rem",
@@ -56,8 +82,11 @@ export default function ModalIcons({
           <>
             {/* Love Icon */}
             {showFavorite && (
-              <div onClick={onFavorite} className="px-4 cursor-pointer py-1 rounded-full">
-                <img src="/assets/icons/favorit_e.png" alt="Love Icon" />
+              <div onClick={handleFavoriteClick} className="px-4 cursor-pointer py-1 rounded-full favorite-icon">
+                <img 
+                  src="/assets/icons/favorit_e.png"
+                  alt="Favorite Icon"
+                />
               </div>
             )}
 

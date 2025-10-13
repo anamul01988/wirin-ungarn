@@ -1,0 +1,33 @@
+/* Favorite button styles */
+.favorite-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: #c41e3a;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.2);
+}
+
+.favorite-btn.active {
+  color: #c41e3a;
+}
+
+.favorite-btn.active svg {
+  fill: #c41e3a;
+}
+
+.favorite-btn:not(.active) svg {
+  stroke: #c41e3a;
+}
+
+/* Heart icon filled styles */
+.heart-icon-filled {
+  filter: brightness(0) saturate(100%) invert(18%) sepia(72%) saturate(3793%) hue-rotate(342deg) brightness(91%) contrast(96%);
+}
