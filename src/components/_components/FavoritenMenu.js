@@ -31,15 +31,28 @@ const FavoritenMenu = () => {
   return (
     <div className="hover-menu calendar-hover-menu history-hover-menu favoriten-hover-menu">
       {favorites.length > 0 ? (
-        favorites.map((favorite, i) => (
-          <div
-            key={i}
-            className="menu-item history-item favoriten-item cursor-pointer"
-            onClick={() => route.push(favorite.route)}
-          >
-            <span className="history-title">{favorite.title}</span>
-          </div>
-        ))
+        favorites.map((favorite, i) => {
+          // Extract just the title part (after the last slash if it exists)
+          const titleOnly = favorite.title.includes('/') 
+            ? favorite.title.split('/').pop() 
+            : favorite.title;
+            
+          return (
+            <div
+              key={i}
+              className="menu-item history-item favoriten-item cursor-pointer"
+              onClick={() => route.push(favorite.route)}
+              title={favorite.title}
+            >
+              <span className="history-title">
+                {titleOnly.length > 20
+                  ? `${titleOnly.substring(0, 20)}...`
+                  : titleOnly
+                }
+              </span>
+            </div>
+          );
+        })
       ) : (
         <div className="menu-item history-item favoriten-item">
           <span className="history-title">Keine Favoriten</span>

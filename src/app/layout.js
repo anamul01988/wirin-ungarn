@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import "./favorite-button.css";
+import "./page-history.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,6 +15,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ReduxProvider from "@/lib/store/ReduxProvider";
 import SessionProvider from "@/components/providers/SessionProvider";
+import HistoryTracker from "@/components/_components/HistoryTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +45,11 @@ export default function RootLayout({ children }) {
         <SessionProvider>
           <ReduxProvider>
             <ThemeProvider>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider>
+                {children}
+                {/* Track user navigation history */}
+                <HistoryTracker />
+              </AuthProvider>
               <ToastContainer 
                 position="top-right"
                 autoClose={3000}

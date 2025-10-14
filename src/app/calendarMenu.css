@@ -42,7 +42,8 @@
   gap: 0px !important;
 }
 
-.history-hover-menu.calendar-hover-menu {
+.history-hover-menu.calendar-hover-menu,
+.favoriten-hover-menu.calendar-hover-menu {
   display: inline !important;
   flex-direction: initial !important;
 }
@@ -103,19 +104,13 @@
   margin-bottom: -2px;
 }
 
-
-
 /* History Item Styling */
-.calendar-hover-menu .history-item {
-  display: inline-block !important;
-  white-space: nowrap !important;
-}
-
 .history-hover-menu .history-item {
   border-top: 1px solid rgb(231 231 231);
   border-bottom: 1px solid rgb(231 231 231);
   border-radius: 4px !important;
   width: 100%;
+  display: flex !important;
 }
 
 .calendar-hover-menu .history-date {
@@ -123,7 +118,9 @@
   color: #c41e3a;
 }
 
-.calendar-hover-menu .history-title {
-  font-weight: 600;
+/* Favoriten Menu Styling */
+.favoriten-hover-menu {
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
-

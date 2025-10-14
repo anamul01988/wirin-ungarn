@@ -1,0 +1,66 @@
+/* PageHistory styles */
+.history-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  gap: 8px;
+  width: 100%;
+}
+
+.history-title {
+  font-weight: bold;
+  overflow: hidden;
+  max-width: 180px;
+  flex-grow: 1;
+}
+
+.history-date {
+  font-size: 12px;
+  color: #777;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.menu-footer {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #c41e3a;
+  font-weight: bold;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.menu-footer:hover {
+  background-color: #f0f0f0;
+}
+
+.history-hover-menu {
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* Scrollbar styling */
+.history-hover-menu::-webkit-scrollbar,
+.favoriten-hover-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-hover-menu::-webkit-scrollbar-track,
+.favoriten-hover-menu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.history-hover-menu::-webkit-scrollbar-thumb,
+.favoriten-hover-menu::-webkit-scrollbar-thumb {
+  background: #c41e3a;
+  border-radius: 10px;
+}
+
+.history-hover-menu::-webkit-scrollbar-thumb:hover,
+.favoriten-hover-menu::-webkit-scrollbar-thumb:hover {
+  background: #a01a30;
+}
