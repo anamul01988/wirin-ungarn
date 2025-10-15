@@ -1,9 +1,9 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { createComment } from "@/lib/getAllPages";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-export default function CollapsibleComment({postId}) {
+export default function CollapsibleComment({ postId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,9 +18,11 @@ export default function CollapsibleComment({postId}) {
       toast.error("Bitte geben Sie einen Kommentar ein");
       return;
     }
-    
+
     if (!user) {
-      toast.error("Sie müssen angemeldet sein, um einen Kommentar zu hinterlassen");
+      toast.error(
+        "Sie müssen angemeldet sein, um einen Kommentar zu hinterlassen"
+      );
       return;
     }
 
@@ -33,8 +35,15 @@ export default function CollapsibleComment({postId}) {
         postId
       );
 
-      if (response && response.data && response.data.createComment && response.data.createComment.success) {
-        toast.success("Deine Anmerkung zum Verbessern unserer Webseite.Your idea has been submitted.");
+      if (
+        response &&
+        response.data &&
+        response.data.createComment &&
+        response.data.createComment.success
+      ) {
+        toast.success(
+          "Deine Anmerkung zum Verbessern unserer Webseite.Your idea has been submitted."
+        );
         setComment("");
         setIsOpen(false);
       } else {
@@ -101,12 +110,14 @@ export default function CollapsibleComment({postId}) {
           />
 
           <div className="flex justify-end">
-            <button 
-              className={`bg-red-600 text-white px-6 py-2 font-semibold rounded hover:bg-red-700 transition ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+            <button
+              className={`bg-red-600 text-white px-6 py-2 font-semibold rounded hover:bg-red-700 transition ${
+                isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+              }`}
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'SENDEN...' : 'ABSENDEN'}
+              {isSubmitting ? "SENDEN..." : "ABSENDEN"}
             </button>
           </div>
         </div>

@@ -840,12 +840,6 @@ export function GetSprachkursPages(search = "") {
   return fetchPage(SEARCH_QUERY, { search });
 }
 
-
-
-
-
-
-
 // Configuration for custom post types and their specific fields
 const CUSTOM_POST_TYPES_CONFIG = {
   liedtexte: {
@@ -2073,7 +2067,7 @@ export async function createComment(author, authorEmail, content, commentOn) {
       author,
       authorEmail,
       content,
-      commentOn: parseInt(commentOn, 10)
+      commentOn: parseInt(commentOn, 10),
     });
 
     return response;
