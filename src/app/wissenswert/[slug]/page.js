@@ -22,13 +22,14 @@ export default async function WissenswertDynamicPage({ params }) {
     // console.log("contentData 222222222", contentData);
     // Handle post content
     if (contentData.type === "post") {
-      const { title, content, featuredImage, postContent } =
+      const { title, content, featuredImage, postContent,postId } =
         contentData.data.data.post;
       const imageUrl = featuredImage?.node?.sourceUrl || null;
 
       return (
         <div className="min-h-screen flex items-center justify-center">
           <DialogContent
+          postId={postId}
             title={title}
             content={content === null ? postContent?.introText : content}
             imageFeature={imageUrl}

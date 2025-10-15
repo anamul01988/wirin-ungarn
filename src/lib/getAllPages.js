@@ -840,6 +840,12 @@ export function GetSprachkursPages(search = "") {
   return fetchPage(SEARCH_QUERY, { search });
 }
 
+
+
+
+
+
+
 // Configuration for custom post types and their specific fields
 const CUSTOM_POST_TYPES_CONFIG = {
   liedtexte: {
@@ -2020,5 +2026,59 @@ export async function getContentByType(type, slug) {
       success: false,
       error: error.message,
     };
+  }
+}
+
+/**
+ * Create a comment for a post
+ * @param {string} author - The name of the comment author
+ * @param {string} authorEmail - The email of the comment author
+ * @param {string} content - The comment content
+ * @param {number} commentOn - The post ID to comment on
+ * @returns {Promise<Object>} - The response data containing success status and comment info
+ */
+export async function createComment(author, authorEmail, content, commentOn) {
+  const CREATE_COMMENT_MUTATION = `
+    mutation CreateComment(
+      $author: String!,
+      $authorEmail: String!,
+      $content: String!,
+      $commentOn: Int!
+    ) {
+      createComment(
+        input: {
+          author: $author,
+          authorEmail: $authorEmail,
+          content: $content,
+          commentOn: $commentOn
+        }
+      ) {
+        success
+        comment {
+          id
+          content
+          author {
+            node {
+              name
+            }
+          }
+          date
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await fetchPage(CREATE_COMMENT_MUTATION, {
+      author,
+      authorEmail,
+      content,
+      commentOn: parseInt(commentOn, 10)
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    throw error;
   }
 }

@@ -21,6 +21,7 @@ export default function DialogContent({
   singlePostContent = [],
   routePrefix,
   postContent, // Add postContent prop
+  postId,
 }) {
   const [open, setOpen] = useState(true);
 
@@ -379,7 +380,7 @@ export default function DialogContent({
                 <div className="border-t-2 border-[#436f4d] my-6"></div>
 
                 {/* Collapsible Comment Component */}
-                <CollapsibleComment />
+                <CollapsibleComment postId={postId} />
               </div>
             )}
           </div>

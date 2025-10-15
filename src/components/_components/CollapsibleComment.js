@@ -1,7 +1,52 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
+import { createComment } from "@/lib/getAllPages";
+import { toast } from 'react-toastify';
 
-export default function CollapsibleComment() {
+export default function CollapsibleComment({postId}) {
   const [isOpen, setIsOpen] = useState(false);
+  const [comment, setComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    if (!comment.trim()) {
+      toast.error("Bitte geben Sie einen Kommentar ein");
+      return;
+    }
+    
+    if (!user) {
+      toast.error("Sie müssen angemeldet sein, um einen Kommentar zu hinterlassen");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const response = await createComment(
+        user.name || "Anonymer Benutzer",
+        user.email || "anonym@example.com",
+        comment,
+        postId
+      );
+
+      if (response && response.data && response.data.createComment && response.data.createComment.success) {
+        toast.success("Deine Anmerkung zum Verbessern unserer Webseite.Your idea has been submitted.");
+        setComment("");
+        setIsOpen(false);
+      } else {
+        toast.error("Beim Senden des Kommentars ist ein Fehler aufgetreten");
+      }
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+      toast.error("Beim Senden des Kommentars ist ein Fehler aufgetreten");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="border border-[#436f4d]">
@@ -50,11 +95,18 @@ export default function CollapsibleComment() {
             placeholder="Hier tippen ..."
             className="w-full border border-gray-400 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
             rows={4}
+            value={comment}
+            onChange={handleCommentChange}
+            disabled={isSubmitting}
           />
 
           <div className="flex justify-end">
-            <button className="bg-red-600 text-white px-6 py-2 font-semibold rounded hover:bg-red-700 transition">
-              ABSENDEN
+            <button 
+              className={`bg-red-600 text-white px-6 py-2 font-semibold rounded hover:bg-red-700 transition ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'SENDEN...' : 'ABSENDEN'}
             </button>
           </div>
         </div>
