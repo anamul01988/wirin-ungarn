@@ -53,6 +53,7 @@ export default function Sprachkurs() {
       >
         {open && (
           <ModalIcons
+            type={"sprachkurs"}
             onClose={handleClose}
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}

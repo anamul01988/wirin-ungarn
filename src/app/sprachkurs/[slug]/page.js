@@ -8,7 +8,6 @@ export default async function SprachkursDetailsPage({ params }) {
   try {
     const apiData = await GetSprachkursPages(slug);
     const sprachkursDetails = apiData?.data?.sprachkurs?.nodes?.[0] || null;
-
     if (!sprachkursDetails) {
       return notFound();
     }
