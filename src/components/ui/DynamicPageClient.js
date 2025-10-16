@@ -30,6 +30,10 @@ export default function DynamicPageClient({ slug }) {
             ? "sprachkurs"
             : !routePrefix && currentUrl.includes("/kategorien/")
             ? "kategorien"
+            : !routePrefix && currentUrl.includes("/wissenswert/")
+            ? "wissenswert"
+            : !routePrefix && currentUrl.includes("/shorts/")
+            ? "shorts"
             : routePrefix;
 
         console.log("66", currentPrefix);
@@ -41,7 +45,9 @@ export default function DynamicPageClient({ slug }) {
         if (
           currentPrefix === "liedtexte" ||
           currentPrefix === "sprachkurs" ||
-          currentPrefix === "kategorien"
+          currentPrefix === "kategorien" ||
+          currentPrefix === "wissenswert" ||
+          currentPrefix === "shorts"
         ) {
           console.log("Using GetDynamicContentV2 for:", currentPrefix);
           data = await GetDynamicContentV2(slug, currentPrefix);
@@ -129,7 +135,44 @@ export default function DynamicPageClient({ slug }) {
         </div>
       );
     }
+    
+    // Special handling for wissenswert content
+    if (contentType === "wissenswert") {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <DialogContent
+            postId={contentData.data.data.post.postId}
+            title={title}
+            content={content === null ? postContent?.introText : content}
+            imageFeature={imageUrl}
+            singlePostContent={
+              postContent?.postContent?.length > 0
+                ? postContent?.postContent
+                : []
+            }
+            contentType="wissenswert"
+            routePrefix={routePrefix || detectedPrefix}
+          />
+        </div>
+      );
+    }
 
+    // Special handling for shorts content
+    if (contentType === "shorts") {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <DialogContent
+            postId={contentData.data.data.post.postId}
+            title={title}
+            content={content === null ? postContent?.shortsPostContent : content}
+            imageFeature={imageUrl}
+            contentType="shorts"
+            routePrefix={routePrefix || detectedPrefix}
+          />
+        </div>
+      );
+    }
+    
     // Default handling for other post types
     return (
       <div className="min-h-screen flex items-center justify-center">
