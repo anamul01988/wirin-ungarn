@@ -27,6 +27,7 @@ export default function DialogContent({
   singlePostContent = [],
   routePrefix,
   postContent, // Add postContent prop
+  postId,
 }) {
   const [open, setOpen] = useState(true);
 
@@ -556,7 +557,7 @@ export default function DialogContent({
               />
             )} */}
 
-            {/* {imageFeature && contentType !== "kulinarische-seele" && (
+            {imageFeature && contentType !== "kulinarische-seele" && (
               <div className="w-full mx-auto py-6">
                 <div className="flex justify-end">
                   <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
@@ -581,13 +582,12 @@ export default function DialogContent({
                   </button>
                 </div>
 
-  
                 <div className="border-t-2 border-[#436f4d] my-6"></div>
 
-            
-                <CollapsibleComment />
+                {/* Collapsible Comment Component */}
+                <CollapsibleComment postId={postId} />
               </div>
-            )} */}
+            )}
           </div>
         </DialogBody>
       </Dialog>

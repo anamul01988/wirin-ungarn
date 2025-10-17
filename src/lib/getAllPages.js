@@ -1045,6 +1045,94 @@ export async function GetDynamicContentV2(slug, routePrefix) {
   );
 
   try {
+    // Handle wissenswert content
+    if (routePrefix === "wissenswert") {
+      const wissenswertQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          postId
+          link
+          date
+          content
+          postContent {
+            postContent {
+              title
+              icon
+              content
+            }
+            postOrder
+            shortTitle
+            introText
+            shortsPostContent
+          }
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+    `;
+
+      const wissenswertData = await fetchPage(wissenswertQuery);
+      console.log("Wissenswert data:", wissenswertData);
+      
+      if (wissenswertData?.data?.post) {
+        return {
+          type: "post",
+          data: wissenswertData,
+          customType: "wissenswert"
+        };
+      }
+    }
+    
+    // Handle shorts content
+    if (routePrefix === "shorts") {
+      const shortsQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          postId
+          link
+          date
+          content
+          postContent {
+            shortsPostContent
+            introText
+            shortTitle
+          }
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+    `;
+
+      const shortsData = await fetchPage(shortsQuery);
+      console.log("Shorts data:", shortsData);
+      
+      if (shortsData?.data?.post) {
+        return {
+          type: "post",
+          data: shortsData,
+          customType: "shorts"
+        };
+      }
+    }
+    
     // Handle post with topicsPostContent (e.g. kategorien)
     if (routePrefix === "kategorien") {
       const topicsQuery = `
@@ -1287,31 +1375,66 @@ query sprachlektionByID {
 }
 
 export async function GetDynamicContent(slug) {
-  // console.log("slug 222222222", slug);
-  // if (slug === "einfach-lesen") {
-  //   try {
-  //     const postQuery = `
-  //       query {
-  //         post(id: "cG9zdDoxOTQ5NQ==", idType: SLUG) {
-  //           id
-  //           title
-  //           slug
-  //           content
-  //           featuredImage {
-  //             node {
-  //               sourceUrl
-  //             }
-  //           }
-  //         }
-  //       }
-  //     `;
-  //   } catch (error) {
-  //     console.error("Error fetching dynamic content:", error);
-  //     return null;
-  //   }
-  // }
+  console.log("GetDynamicContent called with slug:", slug);
   try {
-    // Try to fetch as a post first
+    // Try to detect if this is a post with extended fields (wissenswert or shorts)
+    const extendedPostQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          postId
+          link
+          date
+          content
+          postContent {
+            postContent {
+              title
+              icon
+              content
+            }
+            postOrder
+            shortTitle
+            introText
+            shortsPostContent
+          }
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+    `;
+    
+    const extendedPostData = await fetchPage(extendedPostQuery);
+    const post = extendedPostData?.data?.post;
+    
+    // Check if this is a wissenswert post by looking at postContent structure
+    if (post?.postContent?.postContent?.length > 0) {
+      console.log("Detected wissenswert post!");
+      return {
+        type: "post",
+        data: extendedPostData,
+        customType: "wissenswert"
+      };
+    }
+    
+    // Check if this is a shorts post
+    if (post?.postId && post?.postContent?.shortsPostContent) {
+      console.log("Detected shorts post!");
+      return {
+        type: "post",
+        data: extendedPostData,
+        customType: "shorts"
+      };
+    }
+    
+    // If not a wissenswert post, try as a regular post
     const postQuery = `
         query {
           post(id: "${slug}", idType: SLUG) {
@@ -1620,6 +1743,54 @@ export async function GetkulinarischeSinglePostBySlug(slug) {
     return null;
   } catch (error) {
     console.error("Error fetching ausflugsziele post by slug:", error);
+    return null;
+  }
+}
+
+export async function GetShortsPostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          postId
+          link
+          date
+          content
+          postContent {
+            shortsPostContent
+            introText
+            shortTitle
+          }
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+    console.log("Shorts postData:", postData);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.post) {
+      return {
+        type: "post",
+        data: postData,
+      };
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching shorts post by slug:", error);
     return null;
   }
 }
@@ -2030,5 +2201,59 @@ export async function getContentByType(type, slug) {
       success: false,
       error: error.message,
     };
+  }
+}
+
+/**
+ * Create a comment for a post
+ * @param {string} author - The name of the comment author
+ * @param {string} authorEmail - The email of the comment author
+ * @param {string} content - The comment content
+ * @param {number} commentOn - The post ID to comment on
+ * @returns {Promise<Object>} - The response data containing success status and comment info
+ */
+export async function createComment(author, authorEmail, content, commentOn) {
+  const CREATE_COMMENT_MUTATION = `
+    mutation CreateComment(
+      $author: String!,
+      $authorEmail: String!,
+      $content: String!,
+      $commentOn: Int!
+    ) {
+      createComment(
+        input: {
+          author: $author,
+          authorEmail: $authorEmail,
+          content: $content,
+          commentOn: $commentOn
+        }
+      ) {
+        success
+        comment {
+          id
+          content
+          author {
+            node {
+              name
+            }
+          }
+          date
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await fetchPage(CREATE_COMMENT_MUTATION, {
+      author,
+      authorEmail,
+      content,
+      commentOn: parseInt(commentOn, 10),
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    throw error;
   }
 }

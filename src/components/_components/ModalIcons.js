@@ -91,9 +91,9 @@ export default function ModalIcons({
             )}
 
             {/* Layers Icon */}
-            {showLayers && (
+            {showLayers && type !== "sprachkurs" && (
               <div onClick={onLayers} className="px-4 cursor-pointer py-1 rounded-full">
-                <img src="/assets/icons/plus.png" alt="Layers Icon" />
+                <img style={{width:'92%'}}  src="/assets/icons/plus.png" alt="Layers Icon" />
               </div>
             )}
           </>
