@@ -12,6 +12,12 @@ const nextConfig = {
         port: "",
         pathname: "/wiucontent/themes/grimag-child-theme/assets/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/a/**",
+      },
     ],
   },
   webpack: (config, { isServer }) => {

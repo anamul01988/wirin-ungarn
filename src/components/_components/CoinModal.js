@@ -5,33 +5,23 @@ import { Typography, Input, Button } from "@material-tailwind/react";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 
-const ProfileModal = () => {
+const CoinModal = () => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
     email: "",
-    phone: "",
-    joinDate: "",
+    status: "Active", // Default status
   });
 
-  console.log("user in profile modal:", user);
+  console.log("user in coin modal:", user);
+
   // Initialize form data when user data is available
   useEffect(() => {
     if (user) {
-      // Split the name into first and last name if it exists
-      const [firstName = "", lastName = ""] = (user.name || "").split(" ");
-
       setFormData({
-        firstName: user.firstName || firstName || "",
-        lastName: user.lastName || lastName || "",
         email: user.email || "",
-        phone: user.phone || "",
-        joinDate: user.createdAt
-          ? new Date(user.createdAt).toLocaleDateString("de-DE")
-          : "",
+        status: user.status || "Active", // Default to 'Active' if no status is provided
       });
     }
   }, [user]);
@@ -53,13 +43,8 @@ const ProfileModal = () => {
     // Reset form data to original user data
     if (user) {
       setFormData({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
         email: user.email || "",
-        phone: user.phone || "",
-        joinDate: user.createdAt
-          ? new Date(user.createdAt).toLocaleDateString("de-DE")
-          : "",
+        status: user.status || "Active",
       });
     }
   };
@@ -67,19 +52,19 @@ const ProfileModal = () => {
   const handleSave = async () => {
     setIsLoading(true);
     try {
-      // TODO: Implement API call to update user profile
-      console.log("Updating profile with data:", formData);
+      // TODO: Implement API call to update user coin status
+      console.log("Updating coin status with data:", formData);
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // For now, just show success message
-      alert("Profil erfolgreich aktualisiert!");
+      alert("Coin Status erfolgreich aktualisiert!");
       setIsEditing(false);
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("Error updating coin status:", error);
       alert(
-        "Fehler beim Aktualisieren des Profils. Bitte versuchen Sie es erneut."
+        "Fehler beim Aktualisieren des Coin-Status. Bitte versuchen Sie es erneut."
       );
     } finally {
       setIsLoading(false);
@@ -94,11 +79,11 @@ const ProfileModal = () => {
           variant="h4"
           className="font-bold text-center text-[#FFD6D9]"
         >
-          Profil
+          Coin Status
         </Typography>
       </div>
 
-      {/* Profile Content */}
+      {/* Coin Content */}
       <div className="bg-white rounded-lg shadow-lg p-8">
         {/* Profile Header */}
         <div className="flex items-center justify-between mb-8">
@@ -130,10 +115,10 @@ const ProfileModal = () => {
             </div>
             <div>
               <Typography variant="h5" className="font-bold text-gray-800">
-                {formData.firstName} {formData.lastName}
+                {user?.name || "User"}
               </Typography>
               <Typography variant="small" className="text-gray-500">
-                Mitglied seit {formData.joinDate}
+                Status: {formData.status}
               </Typography>
             </div>
           </div>
@@ -151,104 +136,45 @@ const ProfileModal = () => {
           </Button>
         </div>
 
-        {/* Profile Form */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* First Name */}
+        {/* Coin Form */}
+        <div className="grid grid-cols-1 gap-6">
+          {/* Email - Read Only */}
           <div>
             <Typography
               variant="small"
               className="font-medium text-gray-700 mb-2"
             >
-              Vorname
-            </Typography>
-            <Input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
-            />
-          </div>
-
-          {/* Last Name */}
-          <div>
-            <Typography
-              variant="small"
-              className="font-medium text-gray-700 mb-2"
-            >
-              Nachname
-            </Typography>
-            <Input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
-            />
-          </div>
-
-          {/* Email - Editable */}
-          <div>
-            <Typography
-              variant="small"
-              className="font-medium text-gray-700 mb-2"
-            >
-              E-Mail <span className="text-red-500">*</span>
+              E-Mail
             </Typography>
             <Input
               type="email"
               name="email"
               value={formData.email}
-              onChange={handleInputChange}
-              disabled={!isEditing}
+              disabled={true}
               crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
+              className="!border-gray-300 !bg-gray-50"
             />
-            {isEditing && (
-              <Typography variant="small" className="text-gray-500 mt-1">
-                Sie können Ihre E-Mail-Adresse ändern
-              </Typography>
-            )}
           </div>
 
-          {/* Phone */}
+          {/* Status */}
           <div>
             <Typography
               variant="small"
               className="font-medium text-gray-700 mb-2"
             >
-              Telefon
+              Status
             </Typography>
-            <Input
-              type="tel"
-              name="phone"
-              value={formData.phone}
+            <select
+              name="status"
+              value={formData.status}
               onChange={handleInputChange}
               disabled={!isEditing}
-              crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
-            />
-          </div>
-
-          {/* Join Date - Read Only */}
-          <div className="md:col-span-2">
-            <Typography
-              variant="small"
-              className="font-medium text-gray-700 mb-2"
+              className="w-full border-gray-300 rounded-lg focus:border-red-500 disabled:bg-gray-50"
             >
-              Mitglied seit
-            </Typography>
-            <Input
-              type="text"
-              value={formData.joinDate}
-              disabled={true}
-              crossOrigin={undefined}
-              className="!border-gray-300 !bg-gray-50"
-            />
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Pending">Pending</option>
+            </select>
           </div>
         </div>
 
@@ -277,8 +203,8 @@ const ProfileModal = () => {
         {/* Info Message */}
         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <Typography variant="small" className="text-blue-800">
-            <strong>Hinweis:</strong> Nur die E-Mail-Adresse kann geändert
-            werden. Für andere Änderungen wenden Sie sich bitte an den Support.
+            <strong>Hinweis:</strong> Der Status kann jederzeit geändert werden.
+            Die E-Mail-Adresse ist schreibgeschützt.
           </Typography>
         </div>
       </div>
@@ -286,4 +212,4 @@ const ProfileModal = () => {
   );
 };
 
-export default ProfileModal;
+export default CoinModal;
