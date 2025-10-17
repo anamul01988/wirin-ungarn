@@ -24,6 +24,8 @@ export default async function LiedTexteDetailsPage({ params }) {
           title={texteDetails.title}
           content={texteDetails.postContentLyrik}
           imageFeature={texteDetails.featuredImage}
+          // icon={texteDetails.postContentLyrik.postContent.icon}
+          contentType="liedtexte"
         />
       </div>
     );

@@ -20,7 +20,7 @@ export default async function SprachkursDetailsPage({ params }) {
         <DialogContent
           title={sprachkursDetails.title}
           content={
-            sprachkursDetails.content ||
+            sprachkursDetails.postContentSprachlektion ||
             `<p>Content for sprachkurs: ${sprachkursDetails.title}</p>`
           }
           imageFeature={

@@ -6,7 +6,7 @@ export default async function kulinarischeSinglePage({ params }) {
 
   try {
     const contentData = await GetkulinarischeSinglePostBySlug(slug);
-    console.log("contentData 222222222", contentData);
+    // console.log("contentData 222222222", contentData);
     if (!contentData) {
       console.log("No content data, calling notFound()");
       notFound();
@@ -23,7 +23,7 @@ export default async function kulinarischeSinglePage({ params }) {
         <div className="min-h-screen flex items-center justify-center">
           <DialogContent
             title={title}
-            content={postContentRecipe?.introText}
+            content={postContentRecipe}
             imageFeature={imageUrl}
             contentType="kulinarische-seele"
           />

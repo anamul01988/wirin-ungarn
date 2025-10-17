@@ -4,6 +4,16 @@
 // export default nextConfig;
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "wir-in-ungarn.hu",
+        port: "",
+        pathname: "/wiucontent/themes/grimag-child-theme/assets/images/**",
+      },
+    ],
+  },
   webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

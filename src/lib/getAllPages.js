@@ -818,6 +818,13 @@ export function GetSprachkursPages(search = "") {
             date
             slug
             content
+            postContentSprachlektion {
+              postContent {
+                title
+                icon
+                content
+              }
+            }
             featuredImage {
               node {
                 sourceUrl
@@ -1543,6 +1550,7 @@ export async function GetLiedtexteSinglePostBySlug(slug) {
           postContentLyrik{
             introText
             postContent{
+              icon
               content
             }
           }
@@ -1587,6 +1595,8 @@ export async function GetkulinarischeSinglePostBySlug(slug) {
           postContentRecipe{
             introText
             postContent{
+              icon
+              title
               content
             }
           }

@@ -30,13 +30,13 @@ export default async function WissenswertDynamicPage({ params }) {
         <div className="min-h-screen flex items-center justify-center">
           <DialogContent
             title={title}
-            content={content === null ? postContent?.introText : content}
+            content={postContent || content || "<p>No content available.</p>"}
             imageFeature={imageUrl}
-            singlePostContent={
-              postContent?.postContent?.length > 0
-                ? postContent?.postContent
-                : []
-            }
+            // singlePostContent={
+            //   postContent?.postContent?.length > 0
+            //     ? postContent?.postContent
+            //     : []
+            // }
             contentType="wissenswert"
           />
         </div>

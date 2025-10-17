@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import ModalIcons from "./ModalIcons";
 export default function LiedTexteDialogContent({
   title,
@@ -88,6 +89,7 @@ export default function LiedTexteDialogContent({
             >
               {content?.introText}
             </Typography>
+
             {content?.postContent?.map((item, index) => (
               <div key={index} className="mb-2">
                 <div className="flex pt-10 items-start justify-start mb-2">
@@ -100,22 +102,32 @@ export default function LiedTexteDialogContent({
                       }}
                     >
                       <div>
-                        <svg
-                          className="w-full h-auto text-orange-500"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 
+                        {item.icon && item.icon.length > 0 ? (
+                          <Image
+                            src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
+                            alt={item.icon[0]}
+                            width={70}
+                            height={70}
+                            className="w-full h-auto"
+                          />
+                        ) : (
+                          <svg
+                            className="w-full h-auto text-orange-500"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 
              6.707a1 1 0 010-1.414l3-3a1 1 0 
              011.414 0l3 3a1 1 0 01-1.414 
              1.414L11 5.414V13a1 1 0 
              11-2 0V5.414L7.707 6.707a1 
              1 0 01-1.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        )}
                       </div>
                     </div>
                   </div>
