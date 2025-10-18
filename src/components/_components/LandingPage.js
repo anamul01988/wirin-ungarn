@@ -282,7 +282,7 @@ const LandingPage = () => {
         const card = wrapper.querySelector(".card");
         const hoverButtons = document.createElement("div");
         hoverButtons.className = "hover-buttons";
-        
+
         // Get the route for this card
         const cardRoutes = [
           "/zahlentrainer",
@@ -294,19 +294,22 @@ const LandingPage = () => {
           "/sprachkurs",
           "/wissenswert",
           "/aus-dem-leben",
-          "/einfach-lesen"
+          "/einfach-lesen",
         ];
-        
+
         // Check if this route is already favorited
         let isFavorited = false;
         try {
-          const existingFavoritesStr = localStorage.getItem('favouritePosts') || '[]';
+          const existingFavoritesStr =
+            localStorage.getItem("favouritePosts") || "[]";
           const existingFavorites = JSON.parse(existingFavoritesStr);
-          isFavorited = existingFavorites.some(fav => fav.route === cardRoutes[index]);
+          isFavorited = existingFavorites.some(
+            (fav) => fav.route === cardRoutes[index]
+          );
         } catch (error) {
-          console.error('Error checking favorites:', error);
+          console.error("Error checking favorites:", error);
         }
-        
+
         // Always use the same icon regardless of favorite status
         hoverButtons.innerHTML = `
           <button class="hover-plus"><img src="/assets/plus-icon.png" alt="+ button" style="width:40px; height:40px;"></button>
@@ -317,7 +320,7 @@ const LandingPage = () => {
         const plusBtn = hoverButtons.querySelector(".hover-plus");
         plusBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          
+
           // Get the card data to save to favorites
           const cardIndex = Array.from(cardWrappers).indexOf(wrapper);
           const cardData = [
@@ -372,7 +375,7 @@ const LandingPage = () => {
               route: "/einfach-lesen",
             },
           ][cardIndex];
-          
+
           // Use the toggleFavorite utility which will show toasts
           toggleFavorite(cardData.route, cardData.title);
         });
@@ -900,6 +903,22 @@ const LandingPage = () => {
               //   menuName: "Verbarium",
               //   menuRoute: "/verbarium",
               // },
+              {
+                menuName: "Ungarisch lernen",
+                menuRoute: "/ungarisch-lernen",
+              },
+              {
+                menuName: "Zahlentrainer",
+                menuRoute: "/zahlentrainer",
+              },
+              {
+                menuName: "Kultour ungarn",
+                menuRoute: "/kultour-ungarn",
+              },
+              {
+                menuName: "Anki-karten",
+                menuRoute: "/anki-karten",
+              },
             ],
           },
           {
