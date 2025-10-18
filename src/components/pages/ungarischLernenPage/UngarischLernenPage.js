@@ -1,12 +1,8 @@
 "use client";
-import React, { useState } from "react";
-import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
+import React from "react";
+import { Typography } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
 const UngarischLernenPage = () => {
-  const [onlyHeadings, setOnlyHeadings] = useState(false);
-  const [search, setSearch] = useState("");
-  const [filteredPosts, setFilteredPosts] = useState([]);
-
   // Fake data for Hungarian learning content
   const fakeData = {
     title: "Ungarisch Lernen",
@@ -21,7 +17,8 @@ const UngarischLernenPage = () => {
             slug: "grammatikkurs",
             featuredImage: {
               node: {
-                sourceUrl: "/images/grammar-course.jpg",
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/CAGRA-.ungarische-Grammatik-1.jpg",
               },
             },
             postContentSprachlektion: {
@@ -37,7 +34,8 @@ const UngarischLernenPage = () => {
             slug: "kreuzwortraetsel",
             featuredImage: {
               node: {
-                sourceUrl: "/images/crossword-puzzle.jpg",
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2024/12/CAKWR-Kreuzwortratsel-rect.jpg",
               },
             },
             postContentSprachlektion: {
@@ -53,7 +51,8 @@ const UngarischLernenPage = () => {
             slug: "ungarisch-impulse",
             featuredImage: {
               node: {
-                sourceUrl: "/images/hungarian-impulses.jpg",
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/impulse_desk.jpg",
               },
             },
             postContentSprachlektion: {
@@ -69,7 +68,8 @@ const UngarischLernenPage = () => {
             slug: "suffixhero",
             featuredImage: {
               node: {
-                sourceUrl: "/images/suffix-hero.jpg",
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/CASUF-SuffixHero-desk.jpg",
               },
             },
             postContentSprachlektion: {
@@ -78,42 +78,98 @@ const UngarischLernenPage = () => {
             },
           },
         },
+        {
+          node: {
+            id: "5",
+            title: "Zahlentrainer",
+            slug: "zahlentrainer",
+            featuredImage: {
+              node: {
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/CAMEM-memoria-desk.jpg",
+              },
+            },
+            postContentSprachlektion: {
+              postContent:
+                "Unser Audio-Zahlentrainer hilft dir, ungarische Zahlen (Brüche, Telefonnummern, Gewichte, etc.) effektiv zu lernen. Im Alltag in Ungarn begegnest du Zahlen ständig: beim Einkaufen, im Restaurant, im öffentlichen Verkehr oder in Gesprächen. Mit guten Zahlenkenntnissen verstehst du Preise, Uhrzeiten und Daten besser und fühlst dich sicherer in der Kommunikation. Das Lern-Tool bietet verschiedene Levels von Zahlen und die Auswahl von 4 Geschwindigkeiten, so dass du es auf deinen Wissensstand anpassen kannst.",
+            },
+          },
+        },
+        {
+          node: {
+            id: "6",
+            title: "Memory-Spiel",
+            slug: "memory-spiel",
+            featuredImage: {
+              node: {
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2025/03/CAKTU-KulTour-Ungarn-Desktop.jpg",
+              },
+            },
+            postContentSprachlektion: {
+              postContent:
+                "Mit unserem Memory-Spiel könnt ihr jetzt euer Gedächtnis trainieren und dabei ungarische Wörter und ihre Aussprache spielerisch entdecken. Wählt aus Kategorien wie Zahlen, Farben, Tieren oder auch Suffixen und Nachstellungen, deckt Karten auf und findet die passenden Paare. Dank der Audiofunktion lernt ihr auch die richtige Aussprache! Probiere es doch einfach mal aus.",
+            },
+          },
+        },
+        {
+          node: {
+            id: "7",
+            title: "KulTour Ungarn",
+            slug: "kultour-ungarn",
+            featuredImage: {
+              node: {
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2025/03/CAVOE-Vokabel-Entdecker.jpg",
+              },
+            },
+            postContentSprachlektion: {
+              postContent:
+                "Teste dein Wissen über Ungarn mit unserem spannenden Quiz ! Tauche ein in die faszinierende Welt der ungarischen Kultur, Geschichte und Geografie, etc.. Von berühmten Persönlichkeiten über traditionelle Bräuche bis hin zu kulinarischen Spezialitäten - dieses Quiz deckt alle Facetten des Landes ab. Ob du Anfänger oder Ungarn-Experte bist, hier findest du herausfordernde Fragen, die dein Wissen erweitern und deine Neugier auf dieses vielfältige Land wecken.",
+            },
+          },
+        },
+        {
+          node: {
+            id: "8",
+            title: "Vokabel-Entdecker",
+            slug: "vokabel-aufkleber",
+            featuredImage: {
+              node: {
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2025/03/CAADL-Aus-demLeben.jpg",
+              },
+            },
+            postContentSprachlektion: {
+              postContent:
+                "Entdecke spielerisch neue Wörter! Klicke auf ungarische Begriffe, höre die Aussprache und finde die passende Übersetzung. Wähle aus 40 spannenden Themen und erweitere deinen Wortschatz Schritt für Schritt. Perfekt für alle, die Sprachen lernen und dabei Spaß haben möchten. Starte jetzt und entdecke, wie einfach Lernen sein kann!",
+            },
+          },
+        },
+
+        {
+          node: {
+            id: "9",
+            title: "Aus dem Leben",
+            slug: "suffixhero",
+            featuredImage: {
+              node: {
+                sourceUrl:
+                  "https://wir-in-ungarn.hu/wiucontent/uploads/2025/02/CAVER-Verbarium-mobile.jpg",
+              },
+            },
+            postContentSprachlektion: {
+              postContent:
+                "Ungarisch direkt aus dem Alltag lernen: Mit Fotos von echten Schildern, Plakaten oder auch Wurfzetteln oder Speisekarten erklären wir lebensnah und verständlich, was draufsteht – inklusive spannender Grammatik, Wortschatz und kultureller Hintergrundinfos!",
+            },
+          },
+        },
       ],
     },
   };
 
-  // Simple search function for fake data
-  const handleSearch = () => {
-    if (!search.trim()) {
-      setFilteredPosts([]);
-      return;
-    }
-
-    const filtered = fakeData.posts.edges.filter(
-      (edge) =>
-        edge.node.title.toLowerCase().includes(search.toLowerCase()) ||
-        edge.node.postContentSprachlektion.postContent
-          .toLowerCase()
-          .includes(search.toLowerCase())
-    );
-    setFilteredPosts(filtered);
-  };
-
-  const clearSearch = () => {
-    setSearch("");
-    setFilteredPosts([]);
-  };
-
-  // Get posts to display (filtered or all)
-  const postsToShow =
-    filteredPosts.length > 0 ? filteredPosts : fakeData.posts.edges;
   return (
     <div className="mx-auto">
-      {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
-      <div
-        className="prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: content }}
-      /> */}
       {/* Header */}
       <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
@@ -122,17 +178,6 @@ const UngarischLernenPage = () => {
         >
           {fakeData.title}
         </Typography>
-      </div>
-
-      {/* Checkbox */}
-      <div className="flex items-center justify-end mb-4">
-        <Checkbox
-          color="red"
-          checked={onlyHeadings}
-          onChange={(e) => setOnlyHeadings(e.target.checked)}
-          label="ausschließlich Überschriften anzeigen"
-          crossOrigin={undefined} // needed for React strict mode
-        />
       </div>
 
       {/* Description */}
@@ -146,69 +191,27 @@ const UngarischLernenPage = () => {
         Herausforderungen spielend!
       </Typography>
 
-      {/* Search Box */}
-      <div className="mb-6">
-        <Typography variant="small" className="font-medium mb-2">
-          Diese Seite durchsuchen
-        </Typography>
-        <div className="flex lg:flex-nowrap md:flex-wrap gap-5">
-          <Input
-            type="text"
-            label="Suche..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            crossOrigin={undefined}
-          />
-          <Button color="red" onClick={handleSearch}>
-            SUCHE
-          </Button>
-          {filteredPosts.length > 0 && (
-            <Button color="gray" onClick={clearSearch} className="px-4 py-2">
-              Clear
-            </Button>
-          )}
-        </div>
-      </div>
-
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
-        {filteredPosts.length > 0 ? (
-          <>
-            Suchergebnisse - Angezeigt werden {filteredPosts.length} Beiträge.
-          </>
-        ) : (
-          <>Angezeigt werden {fakeData.posts.edges.length} Beiträge.</>
-        )}
+        Angezeigt werden {fakeData.posts.edges.length} Beiträge.
       </Typography>
       <div className="py-6 max-w-5xl mx-auto">
-        {search.trim() && filteredPosts.length === 0 ? (
-          <div className="text-center py-8">
-            <Typography variant="h6" color="gray" className="mb-4">
-              Keine Suchergebnisse gefunden
-            </Typography>
-            <Typography variant="paragraph" color="gray">
-              Versuchen Sie es mit anderen Suchbegriffen oder schauen Sie sich
-              alle verfügbaren Artikel an.
-            </Typography>
+        {fakeData.posts.edges.map((edge, idx) => (
+          <div key={edge.node.id}>
+            <CustomPost
+              title={edge.node?.title}
+              image={edge.node?.featuredImage?.node?.sourceUrl}
+              description={edge.node.postContentSprachlektion?.postContent}
+              onlyHeadings={false}
+              slug={edge.node.slug}
+              routePrefix="sprachkurs"
+            />
+            {/* Divider except last */}
+            {idx < fakeData.posts.edges.length - 1 && (
+              <hr className="my-6 border-gray-300" />
+            )}
           </div>
-        ) : (
-          postsToShow.map((edge, idx) => (
-            <div key={edge.node.id}>
-              <CustomPost
-                title={edge.node?.title}
-                image={edge.node?.featuredImage?.node?.sourceUrl}
-                description={edge.node.postContentSprachlektion?.postContent}
-                onlyHeadings={onlyHeadings}
-                slug={edge.node.slug}
-                routePrefix="sprachkurs"
-              />
-              {/* Divider except last */}
-              {!onlyHeadings && idx < postsToShow.length - 1 && (
-                <hr className="my-6 border-gray-300" />
-              )}
-            </div>
-          ))
-        )}
+        ))}
       </div>
     </div>
   );
