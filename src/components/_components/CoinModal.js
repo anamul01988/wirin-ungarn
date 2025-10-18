@@ -6,9 +6,18 @@ import { useAuth } from "@/contexts/AuthContext";
 import { fetchPage } from "@/lib/getAllPages";
 
 export function GetUserCreditHistory(userId) {
+  // Determine the appropriate ID type based on the user ID format
+  let idType = "DATABASE_ID";
+
+  // If it's an OAuth fallback ID, we might need to use a different approach
+  if (typeof userId === "string" && userId.startsWith("oauth_")) {
+    // For OAuth fallback IDs, try using the ID directly or as a string
+    idType = "ID";
+  }
+
   const SEARCH_QUERY = `
     query GetUserCreditHistory($id: ID!) {
-      user(id: $id, idType: DATABASE_ID) {
+      user(id: $id, idType: ${idType}) {
         id
         creditHistoryProfile {
           creditHistory {
@@ -27,12 +36,33 @@ export function GetUserCreditHistory(userId) {
 }
 
 const decryptId = (id) => {
-  // Decode base64 and extract the numeric part
+  // Handle different ID formats
   try {
-    const decoded = atob(id); // "user:301"
-    const parts = decoded.split(":");
-    return parts[1] || id;
+    // Check if it's a base64 encoded ID (like "dXNlcjozMDE=")
+    if (id.includes("=") || /^[A-Za-z0-9+/]+=*$/.test(id)) {
+      const decoded = atob(id); // "user:301"
+      const parts = decoded.split(":");
+      return parts[1] || id;
+    }
+
+    // Check if it's an OAuth fallback ID (like "oauth_google_1760806012534")
+    if (id.startsWith("oauth_")) {
+      // For OAuth fallback IDs, we need to handle them differently
+      // Extract the numeric part or use the full ID
+      const parts = id.split("_");
+      const numericPart = parts[parts.length - 1];
+
+      // If the last part is numeric, use it; otherwise use the full ID
+      if (/^\d+$/.test(numericPart)) {
+        return numericPart;
+      }
+      return id;
+    }
+
+    // For regular numeric IDs, return as is
+    return id;
   } catch {
+    // If decoding fails, return the original ID
     return id;
   }
 };
@@ -41,19 +71,36 @@ const CoinModal = () => {
   const { user } = useAuth();
   const [creditHistory, setCreditHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchCreditHistory = async () => {
       if (!user?.id) return;
       setLoading(true);
+      setError(null);
+
       const decryptedId = decryptId(user.id);
+      console.log("Original user ID:", user.id);
+      console.log("Decrypted ID:", decryptedId);
+
       try {
         const data = await GetUserCreditHistory(decryptedId);
         console.log("Credit history data:", data);
-        setCreditHistory(
-          data?.data?.user?.creditHistoryProfile?.creditHistory || []
-        );
+
+        if (data?.errors) {
+          console.error("GraphQL errors:", data.errors);
+          setError(
+            "Failed to load credit history. This might be because you're a new OAuth user."
+          );
+          setCreditHistory([]);
+        } else {
+          setCreditHistory(
+            data?.data?.user?.creditHistoryProfile?.creditHistory || []
+          );
+        }
       } catch (err) {
         console.error("Error fetching credit history via fetchPage:", err);
+        setError("Failed to load credit history. Please try again later.");
         setCreditHistory([]);
       }
       setLoading(false);
@@ -75,6 +122,15 @@ const CoinModal = () => {
       <Typography variant="h4" className="font-bold text-green-700 mb-4">
         my current account balance:
       </Typography>
+
+      {error && (
+        <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded-md">
+          <Typography variant="small" className="text-yellow-800">
+            {error}
+          </Typography>
+        </div>
+      )}
+
       <div className="overflow-x-auto mb-6">
         <table className="min-w-full border-collapse">
           <thead>
