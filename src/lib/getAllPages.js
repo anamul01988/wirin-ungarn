@@ -752,14 +752,27 @@ export function GetKulinarischeSeelePages(first = 10, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-export function SearchAllPosts(search = "", first = 10, after = null) {
+export function SearchAllPosts(
+  search = "",
+  first = 10,
+  after = null,
+  postType = null
+) {
+  // Build the where clause based on whether postType is provided
+  let whereClause = `search: $search`;
+
+  // Add post type filter if provided
+  if (postType) {
+    whereClause += `, postTypeIn: ${postType.toUpperCase()}`;
+  }
+
   const SEARCH_QUERY = `
     query SearchAllPosts($search: String, $first: Int = 10, $after: String) {
       posts(
         first: $first
         after: $after
         where: {
-          search: $search
+          ${whereClause}
         }
       ) {
         pageInfo {
@@ -1082,16 +1095,16 @@ export async function GetDynamicContentV2(slug, routePrefix) {
 
       const wissenswertData = await fetchPage(wissenswertQuery);
       console.log("Wissenswert data:", wissenswertData);
-      
+
       if (wissenswertData?.data?.post) {
         return {
           type: "post",
           data: wissenswertData,
-          customType: "wissenswert"
+          customType: "wissenswert",
         };
       }
     }
-    
+
     // Handle shorts content
     if (routePrefix === "shorts") {
       const shortsQuery = `
@@ -1123,16 +1136,16 @@ export async function GetDynamicContentV2(slug, routePrefix) {
 
       const shortsData = await fetchPage(shortsQuery);
       console.log("Shorts data:", shortsData);
-      
+
       if (shortsData?.data?.post) {
         return {
           type: "post",
           data: shortsData,
-          customType: "shorts"
+          customType: "shorts",
         };
       }
     }
-    
+
     // Handle post with topicsPostContent (e.g. kategorien)
     if (routePrefix === "kategorien") {
       const topicsQuery = `
@@ -1410,30 +1423,30 @@ export async function GetDynamicContent(slug) {
         }
       }
     `;
-    
+
     const extendedPostData = await fetchPage(extendedPostQuery);
     const post = extendedPostData?.data?.post;
-    
+
     // Check if this is a wissenswert post by looking at postContent structure
     if (post?.postContent?.postContent?.length > 0) {
       console.log("Detected wissenswert post!");
       return {
         type: "post",
         data: extendedPostData,
-        customType: "wissenswert"
+        customType: "wissenswert",
       };
     }
-    
+
     // Check if this is a shorts post
     if (post?.postId && post?.postContent?.shortsPostContent) {
       console.log("Detected shorts post!");
       return {
         type: "post",
         data: extendedPostData,
-        customType: "shorts"
+        customType: "shorts",
       };
     }
-    
+
     // If not a wissenswert post, try as a regular post
     const postQuery = `
         query {
