@@ -1,8 +1,9 @@
 // venastaltusngskalendar.js"use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { SearchAllPosts, GetKreuzwortratsel } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
+import algoliasearch from "algoliasearch/lite";
 import CustomPost from "@/components/ui/CustomPost";
 const KreuzwortraetselPage = () => {
   const [cookieData, setCookieData] = useState(null);
@@ -14,6 +15,13 @@ const KreuzwortraetselPage = () => {
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
+  
+  // Algolia search client
+  const algoliaClient = useRef(null);
+  const searchIndex = useRef(null);
+  const [algoliaResults, setAlgoliaResults] = useState([]);
+  const [algoliaSearching, setAlgoliaSearching] = useState(false);
+  const [searchDebounce, setSearchDebounce] = useState(null);
   const [pageInfo, setPageInfo] = useState({
     hasNextPage: false,
     endCursor: null,
@@ -73,7 +81,8 @@ const KreuzwortraetselPage = () => {
 
       let apiData;
       if (isSearching) {
-        apiData = await SearchAllPosts(search, 10, cursor);
+        // Add post type filter to search parameters
+        apiData = await SearchAllPosts(search, 10, cursor, window.kreuzwortratselPostTypeFilter);
       } else {
         apiData = await GetKreuzwortratsel(10, cursor);
       }
@@ -108,13 +117,52 @@ const KreuzwortraetselPage = () => {
 
     setFiltering(true);
     setIsSearching(true);
+    
     try {
-      const apiData = await SearchAllPosts(search);
-      setSearchResults(apiData.data.crosswords);
-      setSearchPageInfo(apiData.data.crosswords.pageInfo);
+      // If we already have Algolia results, use them
+      if (algoliaResults.length > 0) {
+        // Filter results to include only Crosswords items
+        const filteredResults = algoliaResults.filter(hit => 
+          hit.post_type_label === window.kreuzwortratselPostTypeFilter
+        );
+        
+        // Create a structure compatible with your existing code
+        const processedResults = {
+          edges: filteredResults.map(hit => ({
+            node: {
+              id: hit.objectID,
+              title: hit.post_title,
+              slug: hit.permalink ? hit.permalink.split('/').filter(Boolean).pop() : '',
+              featuredImage: {
+                node: {
+                  sourceUrl: hit.featured_image_url || '',
+                  altText: hit.post_title || ''
+                }
+              },
+              postContentCrosswords: {
+                excerpt: hit.post_excerpt || ''
+              }
+            }
+          })),
+          pageInfo: {
+            hasNextPage: false,
+            endCursor: null
+          }
+        };
+        
+        setSearchResults(processedResults);
+        setSearchPageInfo(processedResults.pageInfo);
+      } else {
+        // Fall back to the original search method with post type filter
+        const apiData = await SearchAllPosts(search, 10, null, window.kreuzwortratselPostTypeFilter);
+        setSearchResults(apiData.data.posts);
+        setSearchPageInfo(apiData.data.posts.pageInfo);
+      }
+      
       setSearchCurrentPage(1);
       setSearchPageHistory([]);
     } catch (err) {
+      console.error("Search error:", err);
       setError("Fehler beim Suchen.");
     } finally {
       setFiltering(false);
@@ -128,7 +176,73 @@ const KreuzwortraetselPage = () => {
     setSearchPageInfo({ hasNextPage: false, endCursor: null });
     setSearchCurrentPage(1);
     setSearchPageHistory([]);
+    setAlgoliaResults([]);
   };
+
+  // Algolia search with debouncing
+  useEffect(() => {
+    // Clear previous debounce timeout
+    if (searchDebounce) {
+      clearTimeout(searchDebounce);
+    }
+    
+    // Skip if search is empty or search index not initialized
+    if (!search.trim() || !searchIndex.current) {
+      setAlgoliaResults([]);
+      return;
+    }
+    
+    // Set debounce timeout
+    const debounceTimer = setTimeout(async () => {
+      setAlgoliaSearching(true);
+      
+      try {
+        const searchParams = {
+          hitsPerPage: 10,
+          attributesToRetrieve: ['objectID', 'post_title', 'permalink', 'post_excerpt', 'post_type', 'post_type_label'],
+          attributesToHighlight: ['post_title', 'post_excerpt'],
+          highlightPreTag: '<strong>',
+          highlightPostTag: '</strong>',
+          filters: window.kreuzwortratselPostTypeFilter ? `post_type_label:"${window.kreuzwortratselPostTypeFilter}"` : ''
+        };
+        
+        const response = await searchIndex.current.search(search, searchParams);
+        console.log('Algolia search results:', response);
+        setAlgoliaResults(response.hits);
+        
+        // Also use hits for the main search results when appropriate
+        if (response.hits.length > 0) {
+          setIsSearching(true);
+        }
+      } catch (error) {
+        console.error('Algolia search error:', error);
+      } finally {
+        setAlgoliaSearching(false);
+      }
+    }, 300); // 300ms debounce
+    
+    setSearchDebounce(debounceTimer);
+    
+    // Cleanup timeout on component unmount
+    return () => {
+      if (searchDebounce) {
+        clearTimeout(searchDebounce);
+      }
+    };
+  }, [search]);
+
+  // Initialize Algolia client with post type filter
+  useEffect(() => {
+    // Initialize Algolia client
+    algoliaClient.current = algoliasearch(
+      '4BNRIJHLXZ',
+      '0707974c58f2e7c53a70e1e58eeec381'
+    );
+    searchIndex.current = algoliaClient.current.initIndex('wp_searchable_posts');
+    
+    // Store the post type filter for use in search
+    window.kreuzwortratselPostTypeFilter = 'Crosswords';
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -171,7 +285,7 @@ const KreuzwortraetselPage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
           variant="h4"
           className="font-bold text-center text-[#FFD6D9]"
@@ -205,19 +319,39 @@ const KreuzwortraetselPage = () => {
           Diese Seite durchsuchen
         </Typography>
         <div className="flex lg:flex-nowrap md:flex-wrap gap-5">
-          <Input
-            type="text"
-            label="Suche..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            crossOrigin={undefined}
-          />
-          {/* <Button color="red" onClick={() => alert(`Searching for: ${search}`)}>
-            SUCHE
-          </Button> */}
-          <Button color="red" onClick={handleSearch} disabled={filtering}>
-            {filtering ? "Suche..." : "SUCHE"}
+          <div className="relative w-full">
+            <Input
+              type="text"
+              label="Suche..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              crossOrigin={undefined}
+              className={algoliaSearching ? "opacity-70" : ""}
+            />
+            {search && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                title="Suche löschen"
+              >
+                ✕
+              </button>
+            )}
+            {algoliaSearching && (
+              <div className="absolute right-8 top-1/2 -translate-y-1/2">
+                <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+          </div>
+          
+          <Button 
+            color="red" 
+            onClick={handleSearch} 
+            disabled={filtering || algoliaSearching}
+          >
+            {filtering || algoliaSearching ? "Suche..." : "SUCHE"}
           </Button>
+          
           {isSearching && (
             <Button color="gray" onClick={clearSearch} className="px-4 py-2">
               Clear
@@ -225,6 +359,47 @@ const KreuzwortraetselPage = () => {
           )}
         </div>
       </div>
+      
+      {/* Algolia search results preview */}
+      {search && algoliaResults.length > 0 && (
+        <div className="border rounded-md mb-4 bg-gray-50">
+          <div className="p-3 border-b bg-gray-100">
+            <Typography variant="small" className="font-bold">
+              {algoliaResults.length} schnelle Suchergebnisse gefunden
+            </Typography>
+          </div>
+          <ul className="divide-y">
+            {algoliaResults.slice(0, 5).map(hit => (
+              <li key={hit.objectID} className="p-3 hover:bg-gray-100">
+                <a href={hit.permalink} className="block">
+                  <Typography 
+                    variant="paragraph" 
+                    className="font-medium text-red-600"
+                    dangerouslySetInnerHTML={{ __html: hit._highlightResult?.post_title?.value || hit.post_title }}
+                  />
+                  {hit._highlightResult?.post_excerpt?.value && (
+                    <Typography 
+                      variant="small" 
+                      className="text-gray-600 line-clamp-2"
+                      dangerouslySetInnerHTML={{ __html: hit._highlightResult.post_excerpt.value }}
+                    />
+                  )}
+                  <Typography variant="small" className="text-gray-500 mt-1">
+                    {hit.permalink}
+                  </Typography>
+                </a>
+              </li>
+            ))}
+          </ul>
+          {algoliaResults.length > 5 && (
+            <div className="p-3 border-t bg-gray-100 text-center">
+              <Typography variant="small" className="text-red-600 font-medium">
+                Weitere {algoliaResults.length - 5} Ergebnisse verfügbar
+              </Typography>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
