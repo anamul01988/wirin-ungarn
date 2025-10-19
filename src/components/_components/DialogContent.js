@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -44,13 +43,13 @@ export default function DialogContent({
     "contentType:",
     contentType
   );
-  if (contentType === "sprachkurs") {
-    console.log("Sprachkurs postContent:", postContent);
-  }
+  // if (contentType === "sprachkurs") {
+  //   console.log("Sprachkurs postContent:", postContent);
+  // }
 
-  const navigateToPreviousPage = () => {
-    route.back();
-  };
+  // const navigateToPreviousPage = () => {
+  //   route.back();
+  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -71,7 +70,14 @@ export default function DialogContent({
     typeof content === "string" && content?.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
 
-  console.log("DialogContent content:", content);
+  // console.log("DialogContent content:", content);
+  // console.log(
+  //   "routePrefix & contentType:",
+  //   routePrefix,
+  //   contentType,
+  //   typeof routePrefix,
+  //   typeof contentType
+  // );
 
   return (
     <>
@@ -288,6 +294,17 @@ export default function DialogContent({
                   aria-label={imageAlt || title}
                 ></div>
               </>
+            )}
+            {contentType === "einfach-lesen" && (
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <p
+                  className="text-gray-700 italic"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+                <p className="text-center text-[32px] font-bold mt-4">
+                  Hello vai ! render here as you wish )::
+                </p>
+              </div>
             )}
             {contentType === "wissenswert" && (
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
@@ -546,16 +563,15 @@ export default function DialogContent({
               )}
 
             {/* Render Contact Form or regular content */}
-            {/* {contentType !== "kulinarische-seele" &&
-            hasContactForm &&
-            isContactPage ? (
+            {hasContactForm && isContactPage ? (
               <ContactForm formHtml={content} />
-            ) : (
-              <div
-                className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: content }}
-              />
-            )} */}
+            ) : null}
+
+            {routePrefix == null && contentType === "page" && (
+              <div className="prose prose-lg max-w-none">
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+              </div>
+            )}
 
             {imageFeature && contentType !== "kulinarische-seele" && (
               <div className="w-full mx-auto py-6">

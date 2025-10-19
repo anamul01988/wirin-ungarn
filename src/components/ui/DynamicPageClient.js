@@ -52,8 +52,12 @@ export default function DynamicPageClient({ slug }) {
           console.log("Using GetDynamicContentV2 for:", currentPrefix);
           data = await GetDynamicContentV2(slug, currentPrefix);
         } else {
-          console.log("Using standard GetDynamicContent");
+          // console.log("Using standard GetDynamicContent", slug);
           data = await GetDynamicContent(slug);
+          // console.log(
+          //   "Using standard GetDynamicContent data 33333333ww222",
+          //   data
+          // );
         }
 
         setContentData(data);
@@ -135,7 +139,7 @@ export default function DynamicPageClient({ slug }) {
         </div>
       );
     }
-    
+
     // Special handling for wissenswert content
     if (contentType === "wissenswert") {
       return (
@@ -164,7 +168,9 @@ export default function DynamicPageClient({ slug }) {
           <DialogContent
             postId={contentData.data.data.post.postId}
             title={title}
-            content={content === null ? postContent?.shortsPostContent : content}
+            content={
+              content === null ? postContent?.shortsPostContent : content
+            }
             imageFeature={imageUrl}
             contentType="shorts"
             routePrefix={routePrefix || detectedPrefix}
@@ -172,7 +178,7 @@ export default function DynamicPageClient({ slug }) {
         </div>
       );
     }
-    
+
     // Default handling for other post types
     return (
       <div className="min-h-screen flex items-center justify-center">

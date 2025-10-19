@@ -6,6 +6,7 @@ export default async function EinfachDynamicPage({ params }) {
 
   try {
     const contentData = await GetEinfachLesenPostBySlug(slug);
+    // console.log("contentData 222222222", contentData);
 
     if (!contentData) {
       console.log("No content data, calling notFound()");
