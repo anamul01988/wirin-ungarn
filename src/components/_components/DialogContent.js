@@ -71,7 +71,8 @@ export default function DialogContent({
     typeof content === "string" && content?.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
 
-  console.log("DialogContent content:", content);
+  console.log("DialogContent content:", content)
+  console.log("routePrefix & contentType:", routePrefix, contentType, typeof routePrefix, typeof contentType);
 
   return (
     <>
@@ -546,16 +547,17 @@ export default function DialogContent({
               )}
 
             {/* Render Contact Form or regular content */}
-            {/* {contentType !== "kulinarische-seele" &&
-            hasContactForm &&
-            isContactPage ? (
+            {hasContactForm && isContactPage ? (
               <ContactForm formHtml={content} />
-            ) : (
-              <div
-                className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: content }}
-              />
-            )} */}
+            ) : null}
+
+            {routePrefix == null &&
+              contentType === 'page' && 
+              (
+                <div className="prose prose-lg max-w-none">
+                  <div dangerouslySetInnerHTML={{ __html: content }} />
+                </div>
+              )}
 
             {imageFeature && contentType !== "kulinarische-seele" && (
               <div className="w-full mx-auto py-6">

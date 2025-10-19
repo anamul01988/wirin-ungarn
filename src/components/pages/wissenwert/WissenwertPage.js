@@ -6,8 +6,8 @@ import {
   SearchAllPosts,
 } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
-import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
-import CustomPost from "@/components/ui/CustomPost";
+// import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
+// import CustomPost from "@/components/ui/CustomPost";
 import WissenwertPostGrid from "@/components/ui/WissenwertPost";
 
 const WissenswertPage = () => {
