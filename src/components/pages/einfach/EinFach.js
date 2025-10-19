@@ -81,7 +81,8 @@ const EinFachPage = () => {
 
       let apiData;
       if (isSearching) {
-        apiData = await SearchAllPosts(search, 10, cursor);
+        // Add post type filter to search parameters
+        apiData = await SearchAllPosts(search, 10, cursor, window.einfachPostTypeFilter);
       } else {
         apiData = await GetEinFachPages(10, cursor);
       }
@@ -119,9 +120,14 @@ const EinFachPage = () => {
     try {
       // If we already have Algolia results, use them
       if (algoliaResults.length > 0) {
+        // Filter results to include only Einfache Lesungen items
+        const filteredResults = algoliaResults.filter(hit => 
+          hit.post_type_label === window.einfachPostTypeFilter
+        );
+        
         // Create a structure compatible with your existing code
         const processedResults = {
-          edges: algoliaResults.map(hit => ({
+          edges: filteredResults.map(hit => ({
             node: {
               id: hit.objectID,
               title: hit.post_title,
@@ -144,8 +150,8 @@ const EinFachPage = () => {
         setSearchResults(processedResults);
         setSearchPageInfo(processedResults.pageInfo);
       } else {
-        // Fall back to the original search method
-        const apiData = await SearchAllPosts(search);
+        // Fall back to the original search method with post type filter
+        const apiData = await SearchAllPosts(search, 10, null, window.einfachPostTypeFilter);
         setSearchResults(apiData.data.posts);
         setSearchPageInfo(apiData.data.posts.pageInfo);
       }
@@ -190,10 +196,11 @@ const EinFachPage = () => {
       try {
         const searchParams = {
           hitsPerPage: 10,
-          attributesToRetrieve: ['objectID', 'post_title', 'permalink', 'post_excerpt'],
+          attributesToRetrieve: ['objectID', 'post_title', 'permalink', 'post_excerpt', 'post_type', 'post_type_label'],
           attributesToHighlight: ['post_title', 'post_excerpt'],
           highlightPreTag: '<strong>',
-          highlightPostTag: '</strong>'
+          highlightPostTag: '</strong>',
+          filters: window.einfachPostTypeFilter ? `post_type_label:"${window.einfachPostTypeFilter}"` : ''
         };
         
         const response = await searchIndex.current.search(search, searchParams);
@@ -221,7 +228,7 @@ const EinFachPage = () => {
     };
   }, [search]);
 
-  // Initialize Algolia client
+  // Initialize Algolia client with post type filter
   useEffect(() => {
     // Initialize Algolia client
     algoliaClient.current = algoliasearch(
@@ -229,6 +236,9 @@ const EinFachPage = () => {
       '0707974c58f2e7c53a70e1e58eeec381'
     );
     searchIndex.current = algoliaClient.current.initIndex('wp_searchable_posts');
+    
+    // Store the post type filter for use in search
+    window.einfachPostTypeFilter = 'Einfache Lesungen';
   }, []);
   
   useEffect(() => {
