@@ -15,7 +15,7 @@ const LiedTextePage = () => {
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
-  
+
   // Algolia search client
   const algoliaClient = useRef(null);
   const searchIndex = useRef(null);
@@ -81,7 +81,13 @@ const LiedTextePage = () => {
 
       let apiData;
       if (isSearching) {
-        apiData = await SearchAllPosts(search, 10, cursor);
+        // Add post type filter to search parameters
+        apiData = await SearchAllPosts(
+          search,
+          10,
+          cursor,
+          window.liedtextePostTypeFilter
+        );
       } else {
         apiData = await GetLiedTextePages(10, cursor);
       }
@@ -116,43 +122,55 @@ const LiedTextePage = () => {
 
     setFiltering(true);
     setIsSearching(true);
-    
+
     try {
       // If we already have Algolia results, use them
       if (algoliaResults.length > 0) {
+        // Filter results to include only Liedtexte items
+        const filteredResults = algoliaResults.filter(
+          (hit) => hit.post_type_label === window.liedtextePostTypeFilter
+        );
+
         // Create a structure compatible with your existing code
         const processedResults = {
-          edges: algoliaResults.map(hit => ({
+          edges: filteredResults.map((hit) => ({
             node: {
               id: hit.objectID,
               title: hit.post_title,
-              slug: hit.permalink ? hit.permalink.split('/').filter(Boolean).pop() : '',
+              slug: hit.permalink
+                ? hit.permalink.split("/").filter(Boolean).pop()
+                : "",
               featuredImage: {
                 node: {
-                  sourceUrl: hit.featured_image_url || '',
-                  altText: hit.post_title || ''
-                }
+                  sourceUrl: hit.featured_image_url || "",
+                  altText: hit.post_title || "",
+                },
               },
               postContentLyrik: {
-                postContent: hit.post_excerpt || ''
-              }
-            }
+                postContent: hit.post_excerpt || "",
+              },
+            },
           })),
           pageInfo: {
             hasNextPage: false,
-            endCursor: null
-          }
+            endCursor: null,
+          },
         };
-        
+
         setSearchResults(processedResults);
         setSearchPageInfo(processedResults.pageInfo);
       } else {
-        // Fall back to the original search method
-        const apiData = await SearchAllPosts(search);
+        // Fall back to the original search method with post type filter
+        const apiData = await SearchAllPosts(
+          search,
+          10,
+          null,
+          window.liedtextePostTypeFilter
+        );
         setSearchResults(apiData.data.posts);
         setSearchPageInfo(apiData.data.posts.pageInfo);
       }
-      
+
       setSearchCurrentPage(1);
       setSearchPageHistory([]);
     } catch (err) {
@@ -172,50 +190,60 @@ const LiedTextePage = () => {
     setSearchPageHistory([]);
     setAlgoliaResults([]);
   };
-  
+
   // Algolia search with debouncing
   useEffect(() => {
     // Clear previous debounce timeout
     if (searchDebounce) {
       clearTimeout(searchDebounce);
     }
-    
+
     // Skip if search is empty or search index not initialized
     if (!search.trim() || !searchIndex.current) {
       setAlgoliaResults([]);
       return;
     }
-    
+
     // Set debounce timeout
     const debounceTimer = setTimeout(async () => {
       setAlgoliaSearching(true);
-      
+
       try {
         const searchParams = {
           hitsPerPage: 10,
-          attributesToRetrieve: ['objectID', 'post_title', 'permalink', 'post_excerpt'],
-          attributesToHighlight: ['post_title', 'post_excerpt'],
-          highlightPreTag: '<strong>',
-          highlightPostTag: '</strong>'
+          attributesToRetrieve: [
+            "objectID",
+            "post_title",
+            "permalink",
+            "post_excerpt",
+            "post_type",
+            "post_type_label",
+          ],
+          attributesToHighlight: ["post_title", "post_excerpt"],
+          highlightPreTag: "<strong>",
+          highlightPostTag: "</strong>",
+          filters: window.liedtextePostTypeFilter
+            ? `post_type_label:"${window.liedtextePostTypeFilter}"`
+            : "",
         };
-        
+
         const response = await searchIndex.current.search(search, searchParams);
-        console.log('Algolia search results:', response);
+        console.log("Algolia search results:", response);
         setAlgoliaResults(response.hits);
-        
+
         // Also use hits for the main search results when appropriate
         if (response.hits.length > 0) {
           setIsSearching(true);
         }
       } catch (error) {
-        console.error('Algolia search error:', error);
+        console.error("Algolia search error:", error);
       } finally {
         setAlgoliaSearching(false);
       }
     }, 300); // 300ms debounce
-    
+
     setSearchDebounce(debounceTimer);
-    
+
     // Cleanup timeout on component unmount
     return () => {
       if (searchDebounce) {
@@ -224,14 +252,19 @@ const LiedTextePage = () => {
     };
   }, [search]);
 
-  // Initialize Algolia client
+  // Initialize Algolia client with post type filter
   useEffect(() => {
     // Initialize Algolia client
     algoliaClient.current = algoliasearch(
-      '4BNRIJHLXZ',
-      '0707974c58f2e7c53a70e1e58eeec381'
+      "4BNRIJHLXZ",
+      "0707974c58f2e7c53a70e1e58eeec381"
     );
-    searchIndex.current = algoliaClient.current.initIndex('wp_searchable_posts');
+    searchIndex.current = algoliaClient.current.initIndex(
+      "wp_searchable_posts"
+    );
+
+    // Store the post type filter for use in search
+    window.liedtextePostTypeFilter = "Liedtexte";
   }, []);
 
   useEffect(() => {
@@ -332,15 +365,15 @@ const LiedTextePage = () => {
               </div>
             )}
           </div>
-          
-          <Button 
-            color="red" 
-            onClick={handleSearch} 
+
+          <Button
+            color="red"
+            onClick={handleSearch}
             disabled={filtering || algoliaSearching}
           >
             {filtering || algoliaSearching ? "Suche..." : "SUCHE"}
           </Button>
-          
+
           {isSearching && (
             <Button color="gray" onClick={clearSearch} className="px-4 py-2">
               Clear
@@ -358,19 +391,25 @@ const LiedTextePage = () => {
             </Typography>
           </div>
           <ul className="divide-y">
-            {algoliaResults.slice(0, 5).map(hit => (
+            {algoliaResults.slice(0, 5).map((hit) => (
               <li key={hit.objectID} className="p-3 hover:bg-gray-100">
                 <a href={hit.permalink} className="block">
-                  <Typography 
-                    variant="paragraph" 
+                  <Typography
+                    variant="paragraph"
                     className="font-medium text-red-600"
-                    dangerouslySetInnerHTML={{ __html: hit._highlightResult?.post_title?.value || hit.post_title }}
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        hit._highlightResult?.post_title?.value ||
+                        hit.post_title,
+                    }}
                   />
                   {hit._highlightResult?.post_excerpt?.value && (
-                    <Typography 
-                      variant="small" 
+                    <Typography
+                      variant="small"
                       className="text-gray-600 line-clamp-2"
-                      dangerouslySetInnerHTML={{ __html: hit._highlightResult.post_excerpt.value }}
+                      dangerouslySetInnerHTML={{
+                        __html: hit._highlightResult.post_excerpt.value,
+                      }}
                     />
                   )}
                   <Typography variant="small" className="text-gray-500 mt-1">
@@ -389,7 +428,7 @@ const LiedTextePage = () => {
           )}
         </div>
       )}
-      
+
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
