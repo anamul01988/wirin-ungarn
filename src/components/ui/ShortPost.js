@@ -152,7 +152,7 @@ const ShortPostGrid = ({
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header */}
-      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      <div className=" mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
           variant="h4"
           className="font-bold text-center text-[#FFD6D9]"
@@ -165,7 +165,7 @@ const ShortPostGrid = ({
       <div className="mb-4">
         <Typography
           variant="paragraph"
-          className="text-[#2c2b2b] font-normal font-[400] leading-relaxed text-lg"
+          className="text-[#2c2b2b] font-normal leading-relaxed text-lg"
         >
           Entdecke unsere Shorts entweder visuell, indem du durch die
           Themenkacheln stöberst, oder finde gezielt, was du suchst: Nutze
