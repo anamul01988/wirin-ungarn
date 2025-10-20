@@ -4,72 +4,72 @@ import { FaVolumeUp } from "react-icons/fa";
 // Sample data structure matching your CSV format
 const SAMPLE_DATA = [
   {
-    time: "12:00",
+    time: "12.00",
     image: "clock_1200.jpg",
     options: [
-      { text: "tizenkét óra", audio: "12_00_1.mp3", correct: true },
-      { text: "dél", audio: "12_00_2.mp3", correct: true },
-      { text: "éjfél", audio: "12_00_3.mp3", correct: false },
-      { text: "fél egy", audio: "12_30.mp3", correct: false },
-      { text: "negyed egy", audio: "12_15.mp3", correct: false },
+      { text: "tizenkét óra", audio: "12_00-1.ogg", correct: true },
+      { text: "dél", audio: "12_00-2.ogg", correct: true },
+      { text: "éjfél", audio: "12_00-3.ogg", correct: false },
+      { text: "fél egy", audio: "12_30.ogg", correct: false },
+      { text: "negyed egy", audio: "12_15.ogg", correct: false },
     ],
   },
   {
-    time: "1:00",
+    time: "1.00",
     image: "clock_0100.jpg",
     options: [
-      { text: "egy óra", audio: "01_00_1.mp3", correct: true },
-      { text: "kettő óra", audio: "02_00.mp3", correct: false },
-      { text: "fél kettő", audio: "01_30.mp3", correct: false },
-      { text: "negyed kettő", audio: "01_15.mp3", correct: false },
+      { text: "egy óra", audio: "01_00-1.ogg", correct: true },
+      { text: "kettő óra", audio: "02_00.ogg", correct: false },
+      { text: "fél kettő", audio: "01_30.ogg", correct: false },
+      { text: "negyed kettő", audio: "01_15.ogg", correct: false },
     ],
   },
   {
-    time: "9:37",
+    time: "9.37",
     image: "clock_0937.jpg",
     options: [
       {
         text: "pontosan kilenc óra harminchat perc",
-        audio: "09_37_1.mp3",
+        audio: "09_37-1.ogg",
         correct: true,
       },
-      { text: "fél tíz", audio: "09_30.mp3", correct: false },
-      { text: "kilenc harminc", audio: "09_30_2.mp3", correct: false },
+      { text: "fél tíz", audio: "09_30.ogg", correct: false },
+      { text: "kilenc harminc", audio: "09_30-2.ogg", correct: false },
       {
         text: "kilenc óra harminchat perc",
-        audio: "09_37_2.mp3",
+        audio: "09_37-2.ogg",
         correct: true,
       },
     ],
   },
   {
-    time: "2:10",
+    time: "2.10",
     image: "clock_0210.jpg",
     options: [
-      { text: "két óra tíz perc", audio: "02_10_1.mp3", correct: true },
-      { text: "negyed három", audio: "02_15.mp3", correct: false },
-      { text: "fél három", audio: "02_30.mp3", correct: false },
-      { text: "tíz perc múlva két", audio: "02_10_2.mp3", correct: false },
+      { text: "két óra tíz perc", audio: "02_10-1.ogg", correct: true },
+      { text: "negyed három", audio: "02_15.ogg", correct: false },
+      { text: "fél három", audio: "02_30.ogg", correct: false },
+      { text: "tíz perc múlva két", audio: "02_10-2.ogg", correct: false },
     ],
   },
   {
-    time: "3:45",
+    time: "3.45",
     image: "clock_0345.jpg",
     options: [
-      { text: "három óra negyvenöt perc", audio: "03_45_1.mp3", correct: true },
-      { text: "negyed négy", audio: "03_45_2.mp3", correct: true },
-      { text: "fél négy", audio: "03_30.mp3", correct: false },
-      { text: "három harminc", audio: "03_30_2.mp3", correct: false },
+      { text: "három óra negyvenöt perc", audio: "03_45-1.ogg", correct: true },
+      { text: "negyed négy", audio: "03_45-2.ogg", correct: true },
+      { text: "fél négy", audio: "03_30.ogg", correct: false },
+      { text: "három harminc", audio: "03_30-2.ogg", correct: false },
     ],
   },
   {
-    time: "6:30",
+    time: "6.30",
     image: "clock_0630.jpg",
     options: [
-      { text: "hat óra harminc perc", audio: "06_30_1.mp3", correct: true },
-      { text: "fél hét", audio: "06_30_2.mp3", correct: true },
-      { text: "hat óra", audio: "06_00.mp3", correct: false },
-      { text: "negyed hét", audio: "06_15.mp3", correct: false },
+      { text: "hat óra harminc perc", audio: "06_30-1.ogg", correct: true },
+      { text: "fél hét", audio: "06_30-2.ogg", correct: true },
+      { text: "hat óra", audio: "06_00.ogg", correct: false },
+      { text: "negyed hét", audio: "06_15.ogg", correct: false },
     ],
   },
 ];
@@ -153,7 +153,7 @@ const TimetellingGame = () => {
 
     // Simulated audio playback
     const audio = new Audio();
-    audio.src = `/assets/audio/${audioFile}`;
+    audio.src = `/images_audio/audio/${audioFile}`;
     audio
       .play()
       .catch((err) => console.log("Audio playback not available in demo"));
@@ -395,10 +395,10 @@ const TimetellingGame = () => {
       <div className="game-container">
         <div className="clock-section">
           <img
-            src={`https://via.placeholder.com/400/ff6b35/ffffff?text=${currentQuestion.time.replace(
-              ":",
-              "%3A"
-            )}`}
+            // src={`/images_audio/images/${currentQuestion.image.replace(":", "%3A")}.jpg`}
+            // src={`/images_audio/images/${currentQuestion.time}.jpg`}
+            src={`/images_audio/images/${currentQuestion.time}.jpg`}
+            // src="/images_audio/images/2.10.jpg"
             alt={`Clock showing ${currentQuestion.time}`}
             className="clock-image"
           />
