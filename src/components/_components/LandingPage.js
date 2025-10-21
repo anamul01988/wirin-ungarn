@@ -754,28 +754,6 @@ const LandingPage = () => {
                     }
                   }}
                 />
-                {/* Clear input button - only shows when there's text */}
-                {/* <button
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white opacity-70 hover:opacity-100"
-                  onClick={() => {
-                    const searchInput = document.getElementById('search-input');
-                    if (searchInput && searchInput.value) {
-                      searchInput.value = '';
-                      
-                      // Manually trigger input event to clear results
-                      const event = new Event('input', { bubbles: true });
-                      searchInput.dispatchEvent(event);
-                      
-                      // Force clear the results
-                      if (listSearchInstance) {
-                        listSearchInstance.state.query = '';
-                        listSearchInstance.clearResults();
-                      }
-                    }
-                  }}
-                >
-                  ⨯
-                </button> */}
               </div>
               <button
                 id="search-btn"
