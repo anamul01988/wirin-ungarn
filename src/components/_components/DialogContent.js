@@ -36,17 +36,6 @@ export default function DialogContent({
     route.push("/");
   };
 
-  // Log routePrefix and other props for debugging
-  console.log(
-    "DialogContent received routePrefix:",
-    routePrefix,
-    "contentType:",
-    contentType
-  );
-  // if (contentType === "sprachkurs") {
-  //   console.log("Sprachkurs postContent:", postContent);
-  // }
-
   // const navigateToPreviousPage = () => {
   //   route.back();
   // };
