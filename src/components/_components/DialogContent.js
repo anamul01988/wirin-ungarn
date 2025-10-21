@@ -37,13 +37,13 @@ export default function DialogContent({
   const navigateToHome = () => {
     route.push("/");
   };
-  
+
   const handleNextPost = () => {
     if (nextPostSlug && routePrefix) {
       route.push(`/${routePrefix}/${nextPostSlug}`);
     }
   };
-  
+
   const handlePrevPost = () => {
     if (prevPostSlug && routePrefix) {
       route.push(`/${routePrefix}/${prevPostSlug}`);
@@ -655,7 +655,7 @@ export default function DialogContent({
                   <div className="flex justify-between items-center gap-4">
                     {/* Previous Button */}
                     {prevPostSlug ? (
-                      <button 
+                      <button
                         onClick={handlePrevPost}
                         className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
                       >
@@ -680,10 +680,10 @@ export default function DialogContent({
                     ) : (
                       <div></div>
                     )}
-                    
+
                     {/* Next Button */}
                     {nextPostSlug && (
-                      <button 
+                      <button
                         onClick={handleNextPost}
                         className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
                       >
