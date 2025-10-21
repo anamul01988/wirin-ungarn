@@ -685,7 +685,6 @@ const LandingPage = () => {
           display: flex;
           gap: 5px;
           justify-content: center;
-          margin-top: 20px;
         }
         .pagination-btn {
           padding: 5px 10px;
@@ -739,7 +738,10 @@ const LandingPage = () => {
 
         {openAiBtn && (
           <>
-            <div className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden" style={{ width: "600px" }}>
+            <div
+              className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden"
+              style={{ width: "600px" }}
+            >
               <div className="relative" style={{ width: "520px" }}>
                 <input
                   id="search-input"
@@ -757,7 +759,7 @@ const LandingPage = () => {
               </div>
               <button
                 id="search-btn"
-                className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white flex-shrink-0"
+                className="bg-[#4a7c59] hover:bg-[#426e4f] px-2 py-2 text-white flex-shrink-0"
               >
                 <Image
                   src="/assets/search-icon-white.png"
