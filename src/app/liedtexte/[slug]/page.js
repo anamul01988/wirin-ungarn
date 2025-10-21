@@ -1,31 +1,33 @@
 import { notFound } from "next/navigation";
 import LiedTexteDialogContent from "@/components/_components/LiedTexteDialogContent";
-import { GetLiedtexteSinglePostBySlug } from "@/lib/getAllPages";
+import { GetDynamicContentV2 } from "@/lib/getAllPages";
 
 export default async function LiedTexteDetailsPage({ params }) {
   const { slug } = await params;
 
   try {
-    const apiData = await GetLiedtexteSinglePostBySlug(slug);
-    console.log("apiData 222222222", apiData);
-    // if (!apiData) {
-    //   console.log("No content data, calling notFound()");
-    //   notFound();
-    // }
-    const texteDetails = apiData?.data?.data?.lyrik || null;
+    // Use GetDynamicContentV2 with 'liedtexte' prefix to get next/previous navigation
+    const contentData = await GetDynamicContentV2(slug, "liedtexte");
+    
+    if (!contentData || !contentData.data?.data?.post) {
+      return notFound();
+    }
 
-    // if (!texteDetails) {
-    //   return notFound();
-    // }
+    const texteDetails = contentData.data.data.post;
+    const postContent = texteDetails.postContent;
+
     console.log("texteDetails", texteDetails);
+
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LiedTexteDialogContent
           title={texteDetails.title}
-          content={texteDetails.postContentLyrik}
+          content={postContent?.liedtexteContent || texteDetails.postContentLyrik}
           imageFeature={texteDetails.featuredImage}
-          // icon={texteDetails.postContentLyrik.postContent.icon}
           contentType="liedtexte"
+          routePrefix="liedtexte"
+          nextPostSlug={contentData.nextPostSlug}
+          prevPostSlug={contentData.prevPostSlug}
         />
       </div>
     );

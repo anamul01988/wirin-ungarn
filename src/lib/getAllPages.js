@@ -1246,7 +1246,7 @@ export async function GetDynamicContentV2(slug, routePrefix) {
     if (routePrefix === "liedtexte") {
       const customQuery = `
         query GetLiedtexteBySlug {
-          liedtexte(id: "${slug}", idType: SLUG) {
+          lyrik(id: "${slug}", idType: SLUG) {
             id
             title
             slug
@@ -1255,6 +1255,8 @@ export async function GetDynamicContentV2(slug, routePrefix) {
             featuredImage {
               node {
                 sourceUrl
+                altText
+                title
               }
             }
             postContentLyrik {
@@ -1270,22 +1272,85 @@ export async function GetDynamicContentV2(slug, routePrefix) {
         }
       `;
 
-      const customData = await fetchPage(customQuery);
+      // First, get all liedtexte posts to find the current post's position
+      const allLiedtexteQuery = `
+        query GetAllLiedtextePages {
+          pages(where: { name: "liedtexte" }) {
+            nodes {
+              title
+              slug
+              content
+              date
+              id
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
+            }
+          }
+          liedtexte(
+            first: 100
+            where: {
+              orderby: { field: DATE, order: DESC }
+            }
+          ) {
+            edges {
+              node {
+                id
+                title
+                slug
+                date
+              }
+            }
+          }
+        }
+      `;
 
-      if (customData?.data?.liedtexte) {
+      // Fetch both queries
+      const [customData, allLiedtexteData] = await Promise.all([
+        fetchPage(customQuery),
+        fetchPage(allLiedtexteQuery),
+      ]);
+
+      console.log("liedtexte data:", customData);
+
+      if (customData?.data?.lyrik) {
+        let nextPostSlug = null;
+        let prevPostSlug = null;
+
+        // Find the next and previous post in the list
+        const allLiedtextePosts = allLiedtexteData?.data?.liedtexte?.edges || [];
+        const currentIndex = allLiedtextePosts.findIndex(
+          (edge) => edge.node.slug === slug
+        );
+
+        // Get the next post (which is the one after current index)
+        if (currentIndex !== -1 && currentIndex < allLiedtextePosts.length - 1) {
+          nextPostSlug = allLiedtextePosts[currentIndex + 1].node.slug;
+        }
+
+        // Get the previous post (which is the one before current index)
+        if (currentIndex > 0) {
+          prevPostSlug = allLiedtextePosts[currentIndex - 1].node.slug;
+        }
+
         return {
           type: "post",
           data: {
             data: {
               post: {
-                ...customData.data.liedtexte,
+                ...customData.data.lyrik,
                 postContent: {
-                  shortsPostContent: customData.data.liedtexte.content,
+                  liedtexteContent: customData.data.lyrik.postContentLyrik,
+                  shortsPostContent: customData.data.lyrik.content,
                 },
               },
             },
           },
           customType: "liedtexte",
+          nextPostSlug: nextPostSlug,
+          prevPostSlug: prevPostSlug,
         };
       }
     }
@@ -1487,6 +1552,109 @@ query sprachlektionByID {
             },
           },
           customType: "sprachkurs",
+        };
+      }
+    }
+
+    // Handle einfach-lesen content
+    if (routePrefix === "einfach-lesen") {
+      const customQuery = `
+        query GetEinfachLesenBySlug {
+          einfachLesen(id: "${slug}", idType: URI) {
+            id
+            databaseId
+            title
+            date
+            slug
+            content
+            featuredImage {
+              node {
+                sourceUrl
+                title
+              }
+            }
+          }
+        }
+      `;
+
+      // First, get all einfach lesen posts to find the current post's position
+      const allEinfachLesenQuery = `
+        query GetAllEinfachLesenPages {
+          pages(where: { name: "Einfach Lesen" }) {
+            nodes {
+              title
+              slug
+              content
+              date
+              id
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
+            }
+          }
+          einfacheLesungen(
+            first: 100
+            where: {
+              orderby: { field: DATE, order: DESC }
+            }
+          ) {
+            edges {
+              node {
+                id
+                title
+                slug
+                date
+              }
+            }
+          }
+        }
+      `;
+
+      // Fetch both queries
+      const [customData, allEinfachLesenData] = await Promise.all([
+        fetchPage(customQuery),
+        fetchPage(allEinfachLesenQuery),
+      ]);
+
+      console.log("einfach-lesen data:", customData);
+
+      if (customData?.data?.einfachLesen) {
+        let nextPostSlug = null;
+        let prevPostSlug = null;
+
+        // Find the next and previous post in the list
+        const allEinfachLesenPosts = allEinfachLesenData?.data?.einfacheLesungen?.edges || [];
+        const currentIndex = allEinfachLesenPosts.findIndex(
+          (edge) => edge.node.slug === slug
+        );
+
+        // Get the next post (which is the one after current index)
+        if (currentIndex !== -1 && currentIndex < allEinfachLesenPosts.length - 1) {
+          nextPostSlug = allEinfachLesenPosts[currentIndex + 1].node.slug;
+        }
+
+        // Get the previous post (which is the one before current index)
+        if (currentIndex > 0) {
+          prevPostSlug = allEinfachLesenPosts[currentIndex - 1].node.slug;
+        }
+
+        return {
+          type: "post",
+          data: {
+            data: {
+              post: {
+                ...customData.data.einfachLesen,
+                postContent: {
+                  shortsPostContent: customData.data.einfachLesen.content,
+                },
+              },
+            },
+          },
+          customType: "einfach-lesen",
+          nextPostSlug: nextPostSlug,
+          prevPostSlug: prevPostSlug,
         };
       }
     }
