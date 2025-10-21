@@ -123,6 +123,8 @@ export default function ContactForm({ formHtml }) {
     );
   }
 
+  console.log("contact form html", formHtml);
+
   return (
     <>
       <Toast
