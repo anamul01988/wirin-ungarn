@@ -685,7 +685,6 @@ const LandingPage = () => {
           display: flex;
           gap: 5px;
           justify-content: center;
-          margin-top: 20px;
         }
         .pagination-btn {
           padding: 5px 10px;
@@ -739,14 +738,17 @@ const LandingPage = () => {
 
         {openAiBtn && (
           <>
-            <div className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden">
-              <div className="relative flex-1">
+            <div
+              className="flex items-center bg-[#4a7c59] rounded-md shadow-lg overflow-hidden"
+              style={{ width: "600px" }}
+            >
+              <div className="relative" style={{ width: "520px" }}>
                 <input
                   id="search-input"
                   type="text"
-                  style={{ width: "520px" }}
                   placeholder="SCHREIBE HIER WAS DU SUCHST, GERNE AUCH ALS FRAGE"
-                  className="w-full px-4 py-2 text-white placeholder-white bg-transparent outline-none"
+                  className="px-4 py-2 text-white placeholder-white bg-transparent outline-none"
+                  style={{ width: "520px" }}
                   onChange={(e) => {
                     if (listSearchInstance) {
                       // This will trigger the input event listener in the ListSearch class
@@ -754,32 +756,10 @@ const LandingPage = () => {
                     }
                   }}
                 />
-                {/* Clear input button - only shows when there's text */}
-                {/* <button
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white opacity-70 hover:opacity-100"
-                  onClick={() => {
-                    const searchInput = document.getElementById('search-input');
-                    if (searchInput && searchInput.value) {
-                      searchInput.value = '';
-                      
-                      // Manually trigger input event to clear results
-                      const event = new Event('input', { bubbles: true });
-                      searchInput.dispatchEvent(event);
-                      
-                      // Force clear the results
-                      if (listSearchInstance) {
-                        listSearchInstance.state.query = '';
-                        listSearchInstance.clearResults();
-                      }
-                    }
-                  }}
-                >
-                  ⨯
-                </button> */}
               </div>
               <button
                 id="search-btn"
-                className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
+                className="bg-[#4a7c59] hover:bg-[#426e4f] px-2 py-2 text-white flex-shrink-0"
               >
                 <Image
                   src="/assets/search-icon-white.png"
@@ -803,7 +783,7 @@ const LandingPage = () => {
                   }
                   setOpenAiBtn(false);
                 }}
-                className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white"
+                className="bg-[#4a7c59] hover:bg-[#426e4f] px-3 py-2 text-white flex-shrink-0"
               >
                 ✕
               </button>
@@ -811,6 +791,7 @@ const LandingPage = () => {
             <div
               id="results-container"
               className="results-list bg-white p-4 rounded-md mt-4"
+              style={{ width: "600px" }}
             ></div>
             <div
               id="pagination-container"

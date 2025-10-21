@@ -1,16 +1,20 @@
 import { notFound } from "next/navigation";
 import DialogContent from "@/components/_components/DialogContent";
-import { GetSprachkursPages } from "@/lib/getAllPages";
+import { GetDynamicContentV2 } from "@/lib/getAllPages";
 
 export default async function SprachkursDetailsPage({ params }) {
   const { slug } = await params;
 
   try {
-    const apiData = await GetSprachkursPages(slug);
-    const sprachkursDetails = apiData?.data?.sprachkurs?.nodes?.[0] || null;
-    if (!sprachkursDetails) {
+    // Use GetDynamicContentV2 with 'sprachkurs' prefix to get next/previous navigation
+    const contentData = await GetDynamicContentV2(slug, "sprachkurs");
+
+    if (!contentData || !contentData.data?.data?.post) {
       return notFound();
     }
+
+    const sprachkursDetails = contentData.data.data.post;
+    const postContent = sprachkursDetails.postContent;
 
     console.log("sprachkursDetails", sprachkursDetails);
 
@@ -29,9 +33,12 @@ export default async function SprachkursDetailsPage({ params }) {
             sprachkursDetails.featuredImage?.node?.altText ||
             sprachkursDetails.title
           }
-          excerpt={null}
           date={sprachkursDetails.date}
           contentType="sprachkurs"
+          routePrefix="sprachkurs"
+          postContent={postContent}
+          nextPostSlug={contentData.nextPostSlug}
+          prevPostSlug={contentData.prevPostSlug}
         />
       </div>
     );

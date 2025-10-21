@@ -13,6 +13,9 @@ import ModalIcons from "./ModalIcons";
 export default function LiedTexteDialogContent({
   title,
   content,
+  routePrefix,
+  nextPostSlug,
+  prevPostSlug,
   //   imageFeature = "",
 }) {
   const [open, setOpen] = useState(true);
@@ -21,6 +24,20 @@ export default function LiedTexteDialogContent({
   const handleClose = () => {
     setOpen(false);
     route.push("/");
+  };
+
+  // Navigate to next post
+  const handleNextPost = () => {
+    if (nextPostSlug && routePrefix) {
+      route.push(`/${routePrefix}/${nextPostSlug}`);
+    }
+  };
+
+  // Navigate to previous post
+  const handlePrevPost = () => {
+    if (prevPostSlug && routePrefix) {
+      route.push(`/${routePrefix}/${prevPostSlug}`);
+    }
   };
 
   // Escape key closes modal
@@ -149,6 +166,64 @@ export default function LiedTexteDialogContent({
               className="prose prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: content }}
             /> */}
+
+            {/* Next/Previous Post Navigation */}
+            {(prevPostSlug || nextPostSlug) && (
+              <div className="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
+                <div>
+                  {prevPostSlug ? (
+                    <button
+                      onClick={handlePrevPost}
+                      className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                      Previous post
+                    </button>
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
+                <div>
+                  {nextPostSlug && (
+                    <button
+                      onClick={handleNextPost}
+                      className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
+                    >
+                      <span className="mr-2 text-sm font-semibold">
+                        Next Post
+                      </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </DialogBody>
       </Dialog>

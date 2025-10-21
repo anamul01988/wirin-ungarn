@@ -158,13 +158,7 @@ const AusflugszielePage = () => {
   console.log("ausflugsziele data: cookieData 2222:", customPosts);
   return (
     <div className="mx-auto">
-      {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
-      <div
-        className="prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: content }}
-      /> */}
-      {/* Header */}
-      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
           variant="h4"
           className="font-bold text-center text-[#FFD6D9]"
@@ -279,42 +273,41 @@ const AusflugszielePage = () => {
                 }
               )
             )}
-
-            {/* Pagination Buttons - Only show if not searching with empty results */}
-            {!(
-              isSearching &&
-              (!searchResults?.edges || searchResults.edges.length === 0)
-            ) && (
-              <div className="flex justify-center gap-4 mt-8">
-                <Button
-                  color="red"
-                  onClick={() => loadPage("previous")}
-                  disabled={
-                    (isSearching
-                      ? searchPageHistory.length === 0
-                      : pageHistory.length === 0) || loadingPage
-                  }
-                  className="px-6 py-2"
-                >
-                  {loadingPage ? "Lade..." : "Previous"}
-                </Button>
-                <Button
-                  color="red"
-                  onClick={() => loadPage("next")}
-                  disabled={
-                    !(isSearching
-                      ? searchPageInfo.hasNextPage
-                      : pageInfo.hasNextPage) || loadingPage
-                  }
-                  className="px-6 py-2"
-                >
-                  {loadingPage ? "Lade..." : "Next"}
-                </Button>
-              </div>
-            )}
           </>
         )}
       </div>
+      {/* Pagination Buttons - Only show if not searching with empty results */}
+      {!(
+        isSearching &&
+        (!searchResults?.edges || searchResults.edges.length === 0)
+      ) && (
+        <div className="flex justify-center gap-4 mt-8">
+          <Button
+            color="red"
+            onClick={() => loadPage("previous")}
+            disabled={
+              (isSearching
+                ? searchPageHistory.length === 0
+                : pageHistory.length === 0) || loadingPage
+            }
+            className="px-6 py-2"
+          >
+            {loadingPage ? "Lade..." : "Previous"}
+          </Button>
+          <Button
+            color="red"
+            onClick={() => loadPage("next")}
+            disabled={
+              !(isSearching
+                ? searchPageInfo.hasNextPage
+                : pageInfo.hasNextPage) || loadingPage
+            }
+            className="px-6 py-2"
+          >
+            {loadingPage ? "Lade..." : "Next"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

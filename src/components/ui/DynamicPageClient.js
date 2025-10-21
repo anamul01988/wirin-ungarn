@@ -49,15 +49,9 @@ export default function DynamicPageClient({ slug }) {
           currentPrefix === "wissenswert" ||
           currentPrefix === "shorts"
         ) {
-          console.log("Using GetDynamicContentV2 for:", currentPrefix);
           data = await GetDynamicContentV2(slug, currentPrefix);
         } else {
-          // console.log("Using standard GetDynamicContent", slug);
           data = await GetDynamicContent(slug);
-          // console.log(
-          //   "Using standard GetDynamicContent data 33333333ww222",
-          //   data
-          // );
         }
 
         setContentData(data);
@@ -135,6 +129,8 @@ export default function DynamicPageClient({ slug }) {
             contentType={contentType}
             routePrefix={routePrefix || detectedPrefix}
             postContent={postContent} // Pass the entire postContent object for sprachkursContent
+            nextPostSlug={contentData.nextPostSlug}
+            prevPostSlug={contentData.prevPostSlug}
           />
         </div>
       );
@@ -174,6 +170,8 @@ export default function DynamicPageClient({ slug }) {
             imageFeature={imageUrl}
             contentType="shorts"
             routePrefix={routePrefix || detectedPrefix}
+            nextPostSlug={contentData.nextPostSlug}
+            prevPostSlug={contentData.prevPostSlug}
           />
         </div>
       );

@@ -1,48 +1,36 @@
 import { notFound } from "next/navigation";
-import { GetEinfachLesenPostBySlug } from "@/lib/getAllPages";
+import { GetDynamicContentV2 } from "@/lib/getAllPages";
 import DialogContent from "@/components/_components/DialogContent";
+
 export default async function EinfachDynamicPage({ params }) {
   const { slug } = await params;
 
   try {
-    const contentData = await GetEinfachLesenPostBySlug(slug);
-    // console.log("contentData 222222222", contentData);
+    // Use GetDynamicContentV2 with 'einfach-lesen' prefix to get next/previous navigation
+    const contentData = await GetDynamicContentV2(slug, "einfach-lesen");
 
-    if (!contentData) {
-      console.log("No content data, calling notFound()");
-      notFound();
+    if (!contentData || !contentData.data?.data?.post) {
+      return notFound();
     }
 
-    // Handle post content
-    if (contentData.type === "post") {
-      console.log("Processing as post type");
-      const { title, content, featuredImage } =
-        contentData?.data?.data.einfachLesen;
-      const imageUrl = featuredImage?.node?.sourceUrl || null;
+    const postDetails = contentData.data.data.post;
+    const postContent = postDetails.postContent;
 
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <DialogContent
-            title={title}
-            content={content}
-            imageFeature={imageUrl}
-            contentType="einfach-lesen"
-          />
-        </div>
-      );
-    }
+    console.log("einfach-lesen postDetails", postDetails);
 
-    // Handle page content
-    if (contentData.type === "page") {
-      const { title, content } = contentData.data.page;
-
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <DialogContent title={title} content={content} />
-        </div>
-      );
-    }
-    notFound();
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <DialogContent
+          title={postDetails.title}
+          content={postDetails.content}
+          imageFeature={postDetails.featuredImage?.node?.sourceUrl || null}
+          contentType="einfach-lesen"
+          routePrefix="einfach-lesen"
+          nextPostSlug={contentData.nextPostSlug}
+          prevPostSlug={contentData.prevPostSlug}
+        />
+      </div>
+    );
   } catch (error) {
     console.error("Error fetching content:", error);
     notFound();

@@ -1107,41 +1107,94 @@ export async function GetDynamicContentV2(slug, routePrefix) {
 
     // Handle shorts content
     if (routePrefix === "shorts") {
-      const shortsQuery = `
-      query {
-        post(id: "${slug}", idType: SLUG) {
-          id
-          title
-          slug
-          postId
-          link
-          date
-          content
-          postContent {
-            shortsPostContent
-            introText
-            shortTitle
-          }
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
+      // First, get all shorts posts to find the current post's position
+      const allShortsQuery = `
+        query {
+          posts(
+            first: 100
+            where: {
+              metaQuery: {
+                relation: AND
+                metaArray: [
+                  {
+                    key: "post_layout"
+                    value: "shorts"
+                    compare: EQUAL_TO
+                  }
+                ]
+              }
+              orderby: { field: DATE, order: DESC }
+            }
+          ) {
+            edges {
+              node {
+                id
+                title
+                slug
+                date
+              }
             }
           }
         }
-      }
-    `;
+      `;
 
-      const shortsData = await fetchPage(shortsQuery);
-      console.log("Shorts data:", shortsData);
+      const shortsQuery = `
+        query {
+          post(id: "${slug}", idType: SLUG) {
+            id
+            title
+            slug
+            postId
+            link
+            date
+            content
+            postContent {
+              shortsPostContent
+              introText
+              shortTitle
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      `;
 
+      // Fetch both queries
+      const [shortsData, allShortsData] = await Promise.all([
+        fetchPage(shortsQuery),
+        fetchPage(allShortsQuery),
+      ]);
       if (shortsData?.data?.post) {
+        let nextPostSlug = null;
+        let prevPostSlug = null;
+
+        // Find the next and previous post in the list
+        const allShortsPosts = allShortsData?.data?.posts?.edges || [];
+        const currentIndex = allShortsPosts.findIndex(
+          (edge) => edge.node.slug === slug
+        );
+
+        // Get the next post (which is the one after current index)
+        if (currentIndex !== -1 && currentIndex < allShortsPosts.length - 1) {
+          nextPostSlug = allShortsPosts[currentIndex + 1].node.slug;
+        }
+
+        // Get the previous post (which is the one before current index)
+        if (currentIndex > 0) {
+          prevPostSlug = allShortsPosts[currentIndex - 1].node.slug;
+        }
         return {
           type: "post",
           data: shortsData,
           customType: "shorts",
+          nextPostSlug: nextPostSlug,
+          prevPostSlug: prevPostSlug,
         };
       }
     }
@@ -1193,7 +1246,7 @@ export async function GetDynamicContentV2(slug, routePrefix) {
     if (routePrefix === "liedtexte") {
       const customQuery = `
         query GetLiedtexteBySlug {
-          liedtexte(id: "${slug}", idType: SLUG) {
+          lyrik(id: "${slug}", idType: SLUG) {
             id
             title
             slug
@@ -1202,6 +1255,8 @@ export async function GetDynamicContentV2(slug, routePrefix) {
             featuredImage {
               node {
                 sourceUrl
+                altText
+                title
               }
             }
             postContentLyrik {
@@ -1217,22 +1272,89 @@ export async function GetDynamicContentV2(slug, routePrefix) {
         }
       `;
 
-      const customData = await fetchPage(customQuery);
+      // First, get all liedtexte posts to find the current post's position
+      const allLiedtexteQuery = `
+        query GetAllLiedtextePages {
+          pages(where: { name: "liedtexte" }) {
+            nodes {
+              title
+              slug
+              content
+              date
+              id
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
+            }
+          }
+          liedtexte(
+            first: 100
+            where: {
+              orderby: { field: DATE, order: DESC }
+            }
+          ) {
+            edges {
+              node {
+                id
+                title
+                slug
+                date
+              }
+            }
+          }
+        }
+      `;
 
-      if (customData?.data?.liedtexte) {
+      // Fetch both queries
+      const [customData, allLiedtexteData] = await Promise.all([
+        fetchPage(customQuery),
+        fetchPage(allLiedtexteQuery),
+      ]);
+
+      console.log("liedtexte data:", customData);
+
+      if (customData?.data?.lyrik) {
+        let nextPostSlug = null;
+        let prevPostSlug = null;
+
+        // Find the next and previous post in the list
+        const allLiedtextePosts =
+          allLiedtexteData?.data?.liedtexte?.edges || [];
+        const currentIndex = allLiedtextePosts.findIndex(
+          (edge) => edge.node.slug === slug
+        );
+
+        // Get the next post (which is the one after current index)
+        if (
+          currentIndex !== -1 &&
+          currentIndex < allLiedtextePosts.length - 1
+        ) {
+          nextPostSlug = allLiedtextePosts[currentIndex + 1].node.slug;
+        }
+
+        // Get the previous post (which is the one before current index)
+        if (currentIndex > 0) {
+          prevPostSlug = allLiedtextePosts[currentIndex - 1].node.slug;
+        }
+
         return {
           type: "post",
           data: {
             data: {
               post: {
-                ...customData.data.liedtexte,
+                ...customData.data.lyrik,
                 postContent: {
-                  shortsPostContent: customData.data.liedtexte.content,
+                  liedtexteContent: customData.data.lyrik.postContentLyrik,
+                  shortsPostContent: customData.data.lyrik.content,
                 },
               },
             },
           },
           customType: "liedtexte",
+          nextPostSlug: nextPostSlug,
+          prevPostSlug: prevPostSlug,
         };
       }
     }
@@ -1262,11 +1384,73 @@ query sprachlektionByID {
 }
       `;
 
-      const customData = await fetchPage(customQuery);
+      // First, get all sprachkurs posts to find the current post's position
+      const allSprachkursQuery = `
+        query GetAllSprachkursPages {
+          pages(where: { name: "sprachkurs" }) {
+            nodes {
+              title
+              slug
+              content
+              date
+              id
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
+            }
+          }
+          sprachkurs(
+            first: 100
+            where: {
+              orderby: { field: DATE, order: DESC }
+            }
+          ) {
+            edges {
+              node {
+                id
+                title
+                slug
+                date
+              }
+            }
+          }
+        }
+      `;
+
+      // Fetch both queries
+      const [customData, allSprachkursData] = await Promise.all([
+        fetchPage(customQuery),
+        fetchPage(allSprachkursQuery),
+      ]);
 
       console.log("33333333", customData);
 
       if (customData?.data?.sprachlektion) {
+        let nextPostSlug = null;
+        let prevPostSlug = null;
+
+        // Find the next and previous post in the list
+        const allSprachkursPosts =
+          allSprachkursData?.data?.sprachkurs?.edges || [];
+        const currentIndex = allSprachkursPosts.findIndex(
+          (edge) => edge.node.slug === slug
+        );
+
+        // Get the next post (which is the one after current index)
+        if (
+          currentIndex !== -1 &&
+          currentIndex < allSprachkursPosts.length - 1
+        ) {
+          nextPostSlug = allSprachkursPosts[currentIndex + 1].node.slug;
+        }
+
+        // Get the previous post (which is the one before current index)
+        if (currentIndex > 0) {
+          prevPostSlug = allSprachkursPosts[currentIndex - 1].node.slug;
+        }
+
         return {
           type: "post",
           data: {
@@ -1289,6 +1473,8 @@ query sprachlektionByID {
             },
           },
           customType: "sprachkurs",
+          nextPostSlug: nextPostSlug,
+          prevPostSlug: prevPostSlug,
         };
       }
     }
@@ -1374,6 +1560,113 @@ query sprachlektionByID {
             },
           },
           customType: "sprachkurs",
+        };
+      }
+    }
+
+    // Handle einfach-lesen content
+    if (routePrefix === "einfach-lesen") {
+      const customQuery = `
+        query GetEinfachLesenBySlug {
+          einfachLesen(id: "${slug}", idType: URI) {
+            id
+            databaseId
+            title
+            date
+            slug
+            content
+            featuredImage {
+              node {
+                sourceUrl
+                title
+              }
+            }
+          }
+        }
+      `;
+
+      // First, get all einfach lesen posts to find the current post's position
+      const allEinfachLesenQuery = `
+        query GetAllEinfachLesenPages {
+          pages(where: { name: "Einfach Lesen" }) {
+            nodes {
+              title
+              slug
+              content
+              date
+              id
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
+            }
+          }
+          einfacheLesungen(
+            first: 100
+            where: {
+              orderby: { field: DATE, order: DESC }
+            }
+          ) {
+            edges {
+              node {
+                id
+                title
+                slug
+                date
+              }
+            }
+          }
+        }
+      `;
+
+      // Fetch both queries
+      const [customData, allEinfachLesenData] = await Promise.all([
+        fetchPage(customQuery),
+        fetchPage(allEinfachLesenQuery),
+      ]);
+
+      console.log("einfach-lesen data:", customData);
+
+      if (customData?.data?.einfachLesen) {
+        let nextPostSlug = null;
+        let prevPostSlug = null;
+
+        // Find the next and previous post in the list
+        const allEinfachLesenPosts =
+          allEinfachLesenData?.data?.einfacheLesungen?.edges || [];
+        const currentIndex = allEinfachLesenPosts.findIndex(
+          (edge) => edge.node.slug === slug
+        );
+
+        // Get the next post (which is the one after current index)
+        if (
+          currentIndex !== -1 &&
+          currentIndex < allEinfachLesenPosts.length - 1
+        ) {
+          nextPostSlug = allEinfachLesenPosts[currentIndex + 1].node.slug;
+        }
+
+        // Get the previous post (which is the one before current index)
+        if (currentIndex > 0) {
+          prevPostSlug = allEinfachLesenPosts[currentIndex - 1].node.slug;
+        }
+
+        return {
+          type: "post",
+          data: {
+            data: {
+              post: {
+                ...customData.data.einfachLesen,
+                postContent: {
+                  shortsPostContent: customData.data.einfachLesen.content,
+                },
+              },
+            },
+          },
+          customType: "einfach-lesen",
+          nextPostSlug: nextPostSlug,
+          prevPostSlug: prevPostSlug,
         };
       }
     }
