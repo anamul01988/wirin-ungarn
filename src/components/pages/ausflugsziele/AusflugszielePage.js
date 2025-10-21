@@ -158,12 +158,6 @@ const AusflugszielePage = () => {
   console.log("ausflugsziele data: cookieData 2222:", customPosts);
   return (
     <div className="mx-auto">
-      {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
-      <div
-        className="prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: content }}
-      /> */}
-      {/* Header */}
       <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
           variant="h4"
