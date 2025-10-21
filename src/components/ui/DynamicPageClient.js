@@ -49,15 +49,9 @@ export default function DynamicPageClient({ slug }) {
           currentPrefix === "wissenswert" ||
           currentPrefix === "shorts"
         ) {
-          console.log("Using GetDynamicContentV2 for:", currentPrefix);
           data = await GetDynamicContentV2(slug, currentPrefix);
         } else {
-          // console.log("Using standard GetDynamicContent", slug);
           data = await GetDynamicContent(slug);
-          // console.log(
-          //   "Using standard GetDynamicContent data 33333333ww222",
-          //   data
-          // );
         }
 
         setContentData(data);
