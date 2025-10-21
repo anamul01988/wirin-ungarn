@@ -8,7 +8,7 @@ export default async function EinfachDynamicPage({ params }) {
   try {
     // Use GetDynamicContentV2 with 'einfach-lesen' prefix to get next/previous navigation
     const contentData = await GetDynamicContentV2(slug, "einfach-lesen");
-    
+
     if (!contentData || !contentData.data?.data?.post) {
       return notFound();
     }

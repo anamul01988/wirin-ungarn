@@ -1320,13 +1320,17 @@ export async function GetDynamicContentV2(slug, routePrefix) {
         let prevPostSlug = null;
 
         // Find the next and previous post in the list
-        const allLiedtextePosts = allLiedtexteData?.data?.liedtexte?.edges || [];
+        const allLiedtextePosts =
+          allLiedtexteData?.data?.liedtexte?.edges || [];
         const currentIndex = allLiedtextePosts.findIndex(
           (edge) => edge.node.slug === slug
         );
 
         // Get the next post (which is the one after current index)
-        if (currentIndex !== -1 && currentIndex < allLiedtextePosts.length - 1) {
+        if (
+          currentIndex !== -1 &&
+          currentIndex < allLiedtextePosts.length - 1
+        ) {
           nextPostSlug = allLiedtextePosts[currentIndex + 1].node.slug;
         }
 
@@ -1428,13 +1432,17 @@ query sprachlektionByID {
         let prevPostSlug = null;
 
         // Find the next and previous post in the list
-        const allSprachkursPosts = allSprachkursData?.data?.sprachkurs?.edges || [];
+        const allSprachkursPosts =
+          allSprachkursData?.data?.sprachkurs?.edges || [];
         const currentIndex = allSprachkursPosts.findIndex(
           (edge) => edge.node.slug === slug
         );
 
         // Get the next post (which is the one after current index)
-        if (currentIndex !== -1 && currentIndex < allSprachkursPosts.length - 1) {
+        if (
+          currentIndex !== -1 &&
+          currentIndex < allSprachkursPosts.length - 1
+        ) {
           nextPostSlug = allSprachkursPosts[currentIndex + 1].node.slug;
         }
 
@@ -1625,13 +1633,17 @@ query sprachlektionByID {
         let prevPostSlug = null;
 
         // Find the next and previous post in the list
-        const allEinfachLesenPosts = allEinfachLesenData?.data?.einfacheLesungen?.edges || [];
+        const allEinfachLesenPosts =
+          allEinfachLesenData?.data?.einfacheLesungen?.edges || [];
         const currentIndex = allEinfachLesenPosts.findIndex(
           (edge) => edge.node.slug === slug
         );
 
         // Get the next post (which is the one after current index)
-        if (currentIndex !== -1 && currentIndex < allEinfachLesenPosts.length - 1) {
+        if (
+          currentIndex !== -1 &&
+          currentIndex < allEinfachLesenPosts.length - 1
+        ) {
           nextPostSlug = allEinfachLesenPosts[currentIndex + 1].node.slug;
         }
 

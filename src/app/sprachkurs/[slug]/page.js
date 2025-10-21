@@ -8,7 +8,7 @@ export default async function SprachkursDetailsPage({ params }) {
   try {
     // Use GetDynamicContentV2 with 'sprachkurs' prefix to get next/previous navigation
     const contentData = await GetDynamicContentV2(slug, "sprachkurs");
-    
+
     if (!contentData || !contentData.data?.data?.post) {
       return notFound();
     }

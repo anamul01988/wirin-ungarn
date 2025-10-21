@@ -433,11 +433,15 @@ const LiedTextePage = () => {
       {search && algoliaResults.length === 0 && !algoliaSearching && (
         <div className="border rounded-md mb-4 bg-gray-50">
           <div className="p-4 text-center">
-            <Typography variant="paragraph" className="text-gray-600 font-medium">
+            <Typography
+              variant="paragraph"
+              className="text-gray-600 font-medium"
+            >
               Keine Suchergebnisse gefunden
             </Typography>
             <Typography variant="small" className="text-gray-500 mt-2">
-              Versuchen Sie andere Suchbegriffe oder überprüfen Sie die Schreibweise.
+              Versuchen Sie andere Suchbegriffe oder überprüfen Sie die
+              Schreibweise.
             </Typography>
           </div>
         </div>
