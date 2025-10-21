@@ -163,6 +163,8 @@ export default function DynamicPageClient({ slug }) {
 
     // Special handling for shorts content
     if (contentType === "shorts") {
+      console.log('4444444444444444444444444', contentData);
+      
       return (
         <div className="min-h-screen flex items-center justify-center">
           <DialogContent
@@ -174,6 +176,8 @@ export default function DynamicPageClient({ slug }) {
             imageFeature={imageUrl}
             contentType="shorts"
             routePrefix={routePrefix || detectedPrefix}
+            nextPostSlug={contentData.nextPostSlug}
+            prevPostSlug={contentData.prevPostSlug}
           />
         </div>
       );

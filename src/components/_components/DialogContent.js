@@ -27,6 +27,8 @@ export default function DialogContent({
   routePrefix,
   postContent, // Add postContent prop
   postId,
+  nextPostSlug, // Add nextPostSlug prop
+  prevPostSlug, // Add prevPostSlug prop
 }) {
   const [open, setOpen] = useState(true);
 
@@ -35,14 +37,21 @@ export default function DialogContent({
   const navigateToHome = () => {
     route.push("/");
   };
+  
+  const handleNextPost = () => {
+    if (nextPostSlug && routePrefix) {
+      route.push(`/${routePrefix}/${nextPostSlug}`);
+    }
+  };
+  
+  const handlePrevPost = () => {
+    if (prevPostSlug && routePrefix) {
+      route.push(`/${routePrefix}/${prevPostSlug}`);
+    }
+  };
 
   // Log routePrefix and other props for debugging
-  console.log(
-    "DialogContent received routePrefix:",
-    routePrefix,
-    "contentType:",
-    contentType
-  );
+  console.log("contentsssssssssssss", content);
   // if (contentType === "sprachkurs") {
   //   console.log("Sprachkurs postContent:", postContent);
   // }
@@ -371,6 +380,73 @@ export default function DialogContent({
                 ))}
               </div>
             )}
+
+            {contentType === "shorts" && (
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <p
+                  className="text-gray-700 italic"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+                {content?.postContent?.map((item, index) => (
+                  <div key={index} className="mb-2">
+                    <div className="flex pt-0 items-start justify-start mb-2">
+                      <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
+                        <div
+                          className="w-full h-full cursor-pointer"
+                          style={{
+                            background:
+                              "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+                          }}
+                        >
+                          <div>
+                            {item.icon && item.icon.length > 0 ? (
+                              <Image
+                                src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
+                                alt={item.icon[0]}
+                                width={70}
+                                height={70}
+                                className="w-full h-auto"
+                              />
+                            ) : (
+                              <svg
+                                className="w-full h-auto text-orange-500"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 
+             6.707a1 1 0 010-1.414l3-3a1 1 0 
+             011.414 0l3 3a1 1 0 01-1.414 
+             1.414L11 5.414V13a1 1 0 
+             11-2 0V5.414L7.707 6.707a1 
+             1 0 01-1.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex-1 pl-3">
+                        <h3 className="font-semibold text-20px text-[#436f4d] mb-2">
+                          {item.title}
+                        </h3>
+                        {/* Content */}
+                        <Typography
+                          variant="paragraph"
+                          color="blue-gray"
+                          className="text-sm leading-relaxed text-left mb-2"
+                          dangerouslySetInnerHTML={{ __html: item.content }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {contentType === "sprachkurs" && (
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
@@ -575,28 +651,63 @@ export default function DialogContent({
 
             {imageFeature && contentType !== "kulinarische-seele" && (
               <div className="w-full mx-auto py-6">
-                <div className="flex justify-end">
-                  <button className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition">
-                    <span className="mr-2 text-sm font-semibold">
-                      Die Ursprünge der Ungarischen Sprache: Ein <br /> Blick in
-                      die Geschichte
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4 text-[#436f4d]"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                </div>
+                {(prevPostSlug || nextPostSlug) && (
+                  <div className="flex justify-between items-center gap-4">
+                    {/* Previous Button */}
+                    {prevPostSlug ? (
+                      <button 
+                        onClick={handlePrevPost}
+                        className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-4 h-4 text-[#436f4d]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 19l-7-7 7-7"
+                          />
+                        </svg>
+                        <span className="ml-2 text-sm font-semibold">
+                          Previous Post
+                        </span>
+                      </button>
+                    ) : (
+                      <div></div>
+                    )}
+                    
+                    {/* Next Button */}
+                    {nextPostSlug && (
+                      <button 
+                        onClick={handleNextPost}
+                        className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
+                      >
+                        <span className="mr-2 text-sm font-semibold">
+                          Next Post
+                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-4 h-4 text-[#436f4d]"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                )}
 
                 <div className="border-t-2 border-[#436f4d] my-6"></div>
 

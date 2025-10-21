@@ -1107,41 +1107,101 @@ export async function GetDynamicContentV2(slug, routePrefix) {
 
     // Handle shorts content
     if (routePrefix === "shorts") {
-      const shortsQuery = `
-      query {
-        post(id: "${slug}", idType: SLUG) {
-          id
-          title
-          slug
-          postId
-          link
-          date
-          content
-          postContent {
-            shortsPostContent
-            introText
-            shortTitle
-          }
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
+      // First, get all shorts posts to find the current post's position
+      const allShortsQuery = `
+        query {
+          posts(
+            first: 100
+            where: {
+              metaQuery: {
+                relation: AND
+                metaArray: [
+                  {
+                    key: "post_layout"
+                    value: "shorts"
+                    compare: EQUAL_TO
+                  }
+                ]
+              }
+              orderby: { field: DATE, order: DESC }
+            }
+          ) {
+            edges {
+              node {
+                id
+                title
+                slug
+                date
+              }
             }
           }
         }
-      }
-    `;
+      `;
 
-      const shortsData = await fetchPage(shortsQuery);
+      const shortsQuery = `
+        query {
+          post(id: "${slug}", idType: SLUG) {
+            id
+            title
+            slug
+            postId
+            link
+            date
+            content
+            postContent {
+              shortsPostContent
+              introText
+              shortTitle
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      `;
+
+      // Fetch both queries
+      const [shortsData, allShortsData] = await Promise.all([
+        fetchPage(shortsQuery),
+        fetchPage(allShortsQuery)
+      ]);
+
       console.log("Shorts data:", shortsData);
 
       if (shortsData?.data?.post) {
+        let nextPostSlug = null;
+        let prevPostSlug = null;
+        
+        // Find the next and previous post in the list
+        const allShortsPosts = allShortsData?.data?.posts?.edges || [];
+        const currentIndex = allShortsPosts.findIndex(
+          edge => edge.node.slug === slug
+        );
+        
+        // Get the next post (which is the one after current index)
+        if (currentIndex !== -1 && currentIndex < allShortsPosts.length - 1) {
+          nextPostSlug = allShortsPosts[currentIndex + 1].node.slug;
+        }
+        
+        // Get the previous post (which is the one before current index)
+        if (currentIndex > 0) {
+          prevPostSlug = allShortsPosts[currentIndex - 1].node.slug;
+        }
+
+        console.log("Next post slug:", nextPostSlug);
+        console.log("Previous post slug:", prevPostSlug);
+
         return {
           type: "post",
           data: shortsData,
           customType: "shorts",
+          nextPostSlug: nextPostSlug,
+          prevPostSlug: prevPostSlug,
         };
       }
     }
