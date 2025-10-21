@@ -36,6 +36,8 @@ export default async function WissenswertDynamicPage({ params }) {
             content={postContent || content || "<p>No content available.</p>"}
             imageFeature={imageUrl}
             contentType="wissenswert"
+            routePrefix="wissenswert"
+            currentSlug={slug}
           />
         </div>
       );

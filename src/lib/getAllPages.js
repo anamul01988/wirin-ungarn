@@ -1550,6 +1550,285 @@ export async function GetWissenswertPostBySlug(slug) {
   }
 }
 
+export async function GetWissenswertPostWithNavigation(slug) {
+  try {
+    const postQuery = `
+      query {
+        post(id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          postId
+          link
+          date
+          content
+          postContent {
+            postContent {
+              title
+              icon
+              content
+            }
+            postOrder
+            shortTitle
+            introText
+            shortsPostContent
+          }
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+          # Get next and previous posts
+          next {
+            id
+            title
+            slug
+            postId
+            link
+            date
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+            postContent {
+              shortTitle
+              introText
+            }
+          }
+          previous {
+            id
+            title
+            slug
+            postId
+            link
+            date
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+            postContent {
+              shortTitle
+              introText
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+    console.log("postData with navigation:", postData);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.post) {
+      return {
+        type: "post",
+        data: postData,
+        navigation: {
+          next: postData?.data?.post?.next || null,
+          previous: postData?.data?.post?.previous || null,
+        }
+      };
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching wissenswert post with navigation:", error);
+    return null;
+  }
+}
+
+export async function GetNextPreviousPosts(currentPostDate, postType = "informative") {
+  try {
+    // Parse the current post date to get proper format
+    const currentDate = new Date(currentPostDate);
+    const currentDateString = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+    
+    const query = `
+      query GetNextPreviousPosts {
+        # Get next post (newer than current)
+        nextPosts: posts(
+          first: 1
+          where: {
+            metaQuery: {
+              relation: AND
+              metaArray: [
+                {
+                  key: "post_layout"
+                  value: "${postType}"
+                  compare: EQUAL_TO
+                }
+              ]
+            }
+            dateQuery: {
+              after: "${currentDateString}"
+            }
+            orderby: { field: DATE, order: ASC }
+          }
+        ) {
+          nodes {
+            id
+            title
+            slug
+            postId
+            link
+            date
+            postContent {
+              shortTitle
+              introText
+              shortsPostContent
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+        
+        # Get previous post (older than current)
+        previousPosts: posts(
+          first: 1
+          where: {
+            metaQuery: {
+              relation: AND
+              metaArray: [
+                {
+                  key: "post_layout"
+                  value: "${postType}"
+                  compare: EQUAL_TO
+                }
+              ]
+            }
+            dateQuery: {
+              before: "${currentDateString}"
+            }
+            orderby: { field: DATE, order: DESC }
+          }
+        ) {
+          nodes {
+            id
+            title
+            slug
+            postId
+            link
+            date
+            postContent {
+              shortTitle
+              introText
+              shortsPostContent
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const data = await fetchPage(query);
+    
+    return {
+      next: data?.data?.nextPosts?.nodes?.[0] || null,
+      previous: data?.data?.previousPosts?.nodes?.[0] || null,
+    };
+  } catch (error) {
+    console.error("Error fetching next/previous posts:", error);
+    return {
+      next: null,
+      previous: null,
+    };
+  }
+}
+
+// Alternative approach: Get all posts and find next/previous based on current post
+export async function GetPostNavigation(currentSlug, postType = "informative") {
+  try {
+    const query = `
+      query GetAllPostsForNavigation {
+        posts(
+          first: 100
+          where: {
+            metaQuery: {
+              relation: AND
+              metaArray: [
+                {
+                  key: "post_layout"
+                  value: "${postType}"
+                  compare: EQUAL_TO
+                }
+              ]
+            }
+            orderby: { field: DATE, order: DESC }
+          }
+        ) {
+          nodes {
+            id
+            title
+            slug
+            postId
+            link
+            date
+            postContent {
+              shortTitle
+              introText
+              shortsPostContent
+            }
+            featuredImage {
+              node {
+                sourceUrl
+                altText
+                title
+                uri
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const data = await fetchPage(query);
+    const posts = data?.data?.posts?.nodes || [];
+    
+    // Find current post index
+    const currentIndex = posts.findIndex(post => post.slug === currentSlug);
+    
+    if (currentIndex === -1) {
+      return { next: null, previous: null };
+    }
+    
+    return {
+      next: posts[currentIndex - 1] || null, // Previous in array is newer (next)
+      previous: posts[currentIndex + 1] || null, // Next in array is older (previous)
+    };
+  } catch (error) {
+    console.error("Error fetching post navigation:", error);
+    return {
+      next: null,
+      previous: null,
+    };
+  }
+}
+
 export async function GetEinfachLesenPostBySlug(slug) {
   try {
     const postQuery = `

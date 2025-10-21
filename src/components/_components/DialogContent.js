@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import CollapsibleComment from "./CollapsibleComment";
 import ContactForm from "./ContactForm";
 import ModalIcons from "./ModalIcons";
+import PostNavigation from "./PostNavigation";
 import Image from "next/image";
 export default function DialogContent({
   title,
@@ -27,6 +28,7 @@ export default function DialogContent({
   routePrefix,
   postContent, // Add postContent prop
   postId,
+  currentSlug, // Add currentSlug prop for navigation
 }) {
   const [open, setOpen] = useState(true);
 
@@ -599,6 +601,16 @@ export default function DialogContent({
                 </div>
 
                 <div className="border-t-2 border-[#436f4d] my-6"></div>
+
+                {/* Post Navigation */}
+                {currentSlug && routePrefix && (
+                  <PostNavigation 
+                    currentSlug={currentSlug}
+                    postType="informative"
+                    routePrefix={routePrefix}
+                    className="mb-6"
+                  />
+                )}
 
                 {/* Collapsible Comment Component */}
                 <CollapsibleComment postId={postId} />
