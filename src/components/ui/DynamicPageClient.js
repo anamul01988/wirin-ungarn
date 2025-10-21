@@ -129,6 +129,8 @@ export default function DynamicPageClient({ slug }) {
             contentType={contentType}
             routePrefix={routePrefix || detectedPrefix}
             postContent={postContent} // Pass the entire postContent object for sprachkursContent
+            nextPostSlug={contentData.nextPostSlug}
+            prevPostSlug={contentData.prevPostSlug}
           />
         </div>
       );

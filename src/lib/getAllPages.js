@@ -1315,11 +1315,69 @@ query sprachlektionByID {
 }
       `;
 
-      const customData = await fetchPage(customQuery);
+      // First, get all sprachkurs posts to find the current post's position
+      const allSprachkursQuery = `
+        query GetAllSprachkursPages {
+          pages(where: { name: "sprachkurs" }) {
+            nodes {
+              title
+              slug
+              content
+              date
+              id
+              featuredImage {
+                node {
+                  sourceUrl
+                }
+              }
+            }
+          }
+          sprachkurs(
+            first: 100
+            where: {
+              orderby: { field: DATE, order: DESC }
+            }
+          ) {
+            edges {
+              node {
+                id
+                title
+                slug
+                date
+              }
+            }
+          }
+        }
+      `;
+
+      // Fetch both queries
+      const [customData, allSprachkursData] = await Promise.all([
+        fetchPage(customQuery),
+        fetchPage(allSprachkursQuery),
+      ]);
 
       console.log("33333333", customData);
 
       if (customData?.data?.sprachlektion) {
+        let nextPostSlug = null;
+        let prevPostSlug = null;
+
+        // Find the next and previous post in the list
+        const allSprachkursPosts = allSprachkursData?.data?.sprachkurs?.edges || [];
+        const currentIndex = allSprachkursPosts.findIndex(
+          (edge) => edge.node.slug === slug
+        );
+
+        // Get the next post (which is the one after current index)
+        if (currentIndex !== -1 && currentIndex < allSprachkursPosts.length - 1) {
+          nextPostSlug = allSprachkursPosts[currentIndex + 1].node.slug;
+        }
+
+        // Get the previous post (which is the one before current index)
+        if (currentIndex > 0) {
+          prevPostSlug = allSprachkursPosts[currentIndex - 1].node.slug;
+        }
+
         return {
           type: "post",
           data: {
@@ -1342,6 +1400,8 @@ query sprachlektionByID {
             },
           },
           customType: "sprachkurs",
+          nextPostSlug: nextPostSlug,
+          prevPostSlug: prevPostSlug,
         };
       }
     }
