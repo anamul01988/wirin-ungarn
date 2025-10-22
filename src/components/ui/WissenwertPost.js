@@ -120,16 +120,13 @@ const WissenwertPostGrid = ({
 }) => {
   const [filteredPosts, setFilteredPosts] = useState(posts);
 
-  // Filter posts based on active filter
+  // Update filtered posts when posts change (filtering is handled at API level)
   useEffect(() => {
-    if (activeFilter === "all" || !activeFilter) {
-      setFilteredPosts(posts);
-    } else {
-      setFilteredPosts(posts.filter((post) => post.category === activeFilter));
-    }
-  }, [posts, activeFilter]);
+    setFilteredPosts(posts);
+  }, [posts]);
 
   const filterTags = [
+    { key: "all", label: "Alle" },
     { key: "burokratie", label: "Bürokratie / Ämter" },
     { key: "verkehr", label: "Verkehr / Mobilität" },
     { key: "immobilien", label: "Immobilien / Miete" },
