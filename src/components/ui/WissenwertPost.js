@@ -110,6 +110,7 @@ const WissenwertPostGrid = ({
   currentPage,
   totalPages,
   isLoading = false,
+  isSearchLoading = false,
   searchValue = "",
   onSearchChange,
   activeFilter = "all",
@@ -193,7 +194,7 @@ const WissenwertPostGrid = ({
             disabled={isLoading}
             className="px-8 py-2 bg-green-600 hover:bg-green-700 h-[40px]"
           >
-            {isLoading ? "Suche..." : "Suche"}
+            {isSearchLoading ? "Suche..." : "Suche"}
           </Button>
           <Button
             color="gray"

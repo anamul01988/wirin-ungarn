@@ -253,6 +253,7 @@ const WissenswertPage = () => {
       currentPage={currentPageNum}
       totalPages={Math.ceil((currentPosts?.edges?.length || 0) / 10)}
       isLoading={filtering}
+      isSearchLoading={isSearching}
       loadingPage={loadingPage}
       searchValue={search}
       onSearchChange={setSearch}
