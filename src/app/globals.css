@@ -1075,6 +1075,46 @@ body {
   backdrop-filter: none !important;
 }
 
-.none{
+.none {
   display: none;
+}
+
+/* Fixed modal width for Sprachkurs page - above 1030px screen size */
+@media screen and (min-width: 1030px) {
+  /* Target the Sprachkurs modal specifically */
+  .sprachkurs-modal {
+    max-width: 1024px !important;
+    width: 1024px !important;
+  }
+
+  /* Also target its parent container if needed */
+  .sprachkurs-modal[role="dialog"] {
+    max-width: 1024px !important;
+    width: 1024px !important;
+  }
+}
+
+@media screen and (max-width: 1029px) {
+  .sprachkurs-modal {
+    max-width: calc(100vw - 160px) !important;
+    width: calc(100vw - 160px) !important;
+  }
+
+  .sprachkurs-modal[role="dialog"] {
+    max-width: calc(100vw - 160px) !important;
+    width: calc(100vw - 160px) !important;
+  }
+}
+
+/* For smaller screens (tablets and below) */
+@media screen and (max-width: 768px) {
+  .sprachkurs-modal {
+    max-width: calc(100vw - 100px) !important;
+    width: calc(100vw - 100px) !important;
+  }
+
+  .sprachkurs-modal[role="dialog"] {
+    max-width: calc(100vw - 100px) !important;
+    width: calc(100vw - 100px) !important;
+  }
 }
