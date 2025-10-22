@@ -21,6 +21,7 @@ const WissenswertPage = () => {
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [pageInfo, setPageInfo] = useState({
     hasNextPage: false,
     endCursor: null,
@@ -82,7 +83,7 @@ const WissenswertPage = () => {
       if (isSearching) {
         apiData = await SearchAllPosts(search, 10, cursor);
       } else {
-        apiData = await GetShortPages(10, cursor);
+        apiData = await GetWessenwertPages(10, cursor, selectedCategoryId);
       }
       const newPosts = apiData.data.posts;
 
@@ -137,11 +138,14 @@ const WissenswertPage = () => {
   // Helper function to transform posts data for the new component
   const transformPostsData = (posts) => {
     if (!posts?.edges) return [];
-
+    console.log("posts 2221122222222111", posts);
     return posts.edges.map((edge) => ({
       id: edge.node.id,
       title: edge.node.title,
-      description: edge.node.postContent?.postContent?.[0]?.content || "",
+      description:
+        edge.node.postContent?.postContent?.[0]?.content ||
+        edge.node.postContent?.shortTitle ||
+        "",
       image: edge.node.featuredImage?.node?.sourceUrl || null,
       imageAlt: edge.node.featuredImage?.node?.altText || edge.node.title,
       slug: edge.node.slug,
@@ -153,6 +157,43 @@ const WissenswertPage = () => {
   // Handle filter change
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
+
+    // Map filter keys to category IDs
+    const categoryMap = {
+      burokratie: 605,
+      verkehr: 606,
+      immobilien: 607,
+      kultur: 608,
+      arbeit: 609,
+      all: null,
+    };
+
+    const categoryId = categoryMap[filter] || null;
+    setSelectedCategoryId(categoryId);
+
+    // Reset pagination when filter changes
+    setCurrentPage(1);
+    setPageHistory([]);
+
+    // Load new data with the selected category
+    loadFilteredData(categoryId);
+  };
+
+  // Load filtered data
+  const loadFilteredData = async (categoryId) => {
+    setFiltering(true);
+    try {
+      const apiData = await GetWessenwertPages(10, null, categoryId);
+      console.log("apiData 2221122222222111", apiData);
+      setCustomPosts(apiData.data.posts);
+      setPageInfo(apiData.data.posts.pageInfo);
+      setCurrentPage(1);
+      setPageHistory([]);
+    } catch (err) {
+      setError("Fehler beim Laden der gefilterten Daten.");
+    } finally {
+      setFiltering(false);
+    }
   };
 
   // Handle search from the new component
@@ -169,7 +210,7 @@ const WissenswertPage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const apiData = await GetWessenwertPages();
+        const apiData = await GetWessenwertPages(10, null, null);
         console.log("shorts data:", apiData.data.posts);
         console.log("shorts data: alll 222222", apiData);
         setCookieData(apiData);
@@ -200,6 +241,8 @@ const WissenswertPage = () => {
   const currentPageInfo = isSearching ? searchPageInfo : pageInfo;
   const currentPageHistory = isSearching ? searchPageHistory : pageHistory;
 
+  console.log("currentPosts 2221122222222111", currentPosts);
+
   return (
     <WissenwertPostGrid
       posts={transformPostsData(currentPosts)}
@@ -210,6 +253,7 @@ const WissenswertPage = () => {
       currentPage={currentPageNum}
       totalPages={Math.ceil((currentPosts?.edges?.length || 0) / 10)}
       isLoading={filtering}
+      isSearchLoading={isSearching}
       loadingPage={loadingPage}
       searchValue={search}
       onSearchChange={setSearch}

@@ -110,6 +110,7 @@ const WissenwertPostGrid = ({
   currentPage,
   totalPages,
   isLoading = false,
+  isSearchLoading = false,
   searchValue = "",
   onSearchChange,
   activeFilter = "all",
@@ -120,16 +121,13 @@ const WissenwertPostGrid = ({
 }) => {
   const [filteredPosts, setFilteredPosts] = useState(posts);
 
-  // Filter posts based on active filter
+  // Update filtered posts when posts change (filtering is handled at API level)
   useEffect(() => {
-    if (activeFilter === "all" || !activeFilter) {
-      setFilteredPosts(posts);
-    } else {
-      setFilteredPosts(posts.filter((post) => post.category === activeFilter));
-    }
-  }, [posts, activeFilter]);
+    setFilteredPosts(posts);
+  }, [posts]);
 
   const filterTags = [
+    { key: "all", label: "Alle" },
     { key: "burokratie", label: "Bürokratie / Ämter" },
     { key: "verkehr", label: "Verkehr / Mobilität" },
     { key: "immobilien", label: "Immobilien / Miete" },
@@ -196,7 +194,7 @@ const WissenwertPostGrid = ({
             disabled={isLoading}
             className="px-8 py-2 bg-green-600 hover:bg-green-700 h-[40px]"
           >
-            {isLoading ? "Suche..." : "Suche"}
+            {isSearchLoading ? "Suche..." : "Suche"}
           </Button>
           <Button
             color="gray"

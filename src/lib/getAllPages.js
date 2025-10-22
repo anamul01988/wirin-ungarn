@@ -319,9 +319,49 @@ export function GetKategorienPages(first = 10, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-export function GetWessenwertPages(first = 5, after = null) {
+export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
+  // Build the where clause conditionally
+  const whereClause = categoryId
+    ? `where: {
+        categoryId: $categoryId
+        metaQuery: {
+          relation: OR
+          metaArray: [
+            {
+              key: "post_layout"
+              value: "informative"
+              compare: EQUAL_TO
+            }
+            {
+              key: "post_layout"
+              value: "shorts"
+              compare: EQUAL_TO
+            }
+          ]
+        }
+      }`
+    : `where: {
+        metaQuery: {
+          relation: OR
+          metaArray: [
+            {
+              key: "post_layout"
+              value: "informative"
+              compare: EQUAL_TO
+            }
+            {
+              key: "post_layout"
+              value: "shorts"
+              compare: EQUAL_TO
+            }
+          ]
+        }
+      }`;
+
   const SEARCH_QUERY = `
-    query GetWessenwertPosts($first: Int = 5, $after: String) {
+    query GetWessenwertPosts($first: Int = 5, $after: String${
+      categoryId ? ", $categoryId: Int" : ""
+    }) {
       pages(where: { name: "wissenswert" }) {
         nodes {
           id
@@ -335,18 +375,7 @@ export function GetWessenwertPages(first = 5, after = null) {
       posts(
         first: $first
         after: $after
-        where: {
-         metaQuery: {
-          relation: AND
-          metaArray: [
-          {
-            key: "post_layout"
-            value: "informative"
-            compare: EQUAL_TO
-          }
-        ]
-      }
-    }
+        ${whereClause}
       ) {
         pageInfo {
           hasNextPage
@@ -386,7 +415,13 @@ export function GetWessenwertPages(first = 5, after = null) {
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, { first, after });
+  // Only pass categoryId if it's not null
+  const variables = { first, after };
+  if (categoryId !== null) {
+    variables.categoryId = categoryId;
+  }
+
+  return fetchPage(SEARCH_QUERY, variables);
 }
 
 export function GetEinFachPages(first = 10, after = null) {

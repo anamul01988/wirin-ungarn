@@ -813,14 +813,14 @@ const LandingPage = () => {
                 menuName: "WISSEENWERT",
                 menuRoute: "/wissenswert",
               },
-              {
-                menuName: "SHORTS",
-                menuRoute: "/shorts",
-              },
               // {
-              //   menuName: "KATEGORIEN",
-              //   menuRoute: "/kategorien",
+              //   menuName: "SHORTS",
+              //   menuRoute: "/shorts",
               // },
+              {
+                menuName: "KATEGORIEN",
+                menuRoute: "/kategorien",
+              },
             ],
           },
           {
@@ -896,10 +896,10 @@ const LandingPage = () => {
                 menuName: "Kultour ungarn",
                 menuRoute: "/kultour-ungarn",
               },
-              {
-                menuName: "Anki-karten",
-                menuRoute: "/anki-karten",
-              },
+              // {
+              //   menuName: "Anki-karten",
+              //   menuRoute: "/anki-karten",
+              // },
             ],
           },
           {
