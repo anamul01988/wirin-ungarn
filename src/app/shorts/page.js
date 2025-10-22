@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 // import CookieDetails from "@/components/pages/cookie/CookieDetails";
 import ShortsPage from "@/components/pages/shorts/ShortsPage";
 import ModalIcons from "@/components/_components/ModalIcons";
+import Breadcrumb from "@/components/_components/Breadcrumb";
 
 export default function Shorts() {
   const [open, setOpen] = useState(false);
@@ -59,6 +60,11 @@ export default function Shorts() {
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1 border-0">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+
           <div className="">
             <ShortsPage />
           </div>

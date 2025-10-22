@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { isFavorited, toggleFavorite } from "@/lib/utils/favoritesManager";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 /**
  * Reusable Modal Icons Component
@@ -31,11 +31,34 @@ export default function ModalIcons({
   shareIconStyle,
   type,
   pageTitle,
-  customRoute
+  customRoute,
 }) {
   const pathname = usePathname();
   const [isFavorite, setIsFavorite] = useState(false);
   const actualRoute = customRoute || pathname;
+
+  // Routes that should not show heart and plus/layer icons
+  const routesWithoutIcons = [
+    "/wie-spaet-ist-es",
+    "/vokabel-aufkleber",
+    "/neuigkeiten-bei-wir-in-ungarn",
+    "/uber-uns",
+    "/philosophie",
+    "/kontakt",
+    "/datenschutz",
+    "/ungarn-inside",
+    "/transparenz",
+    "/wiu-muenzen",
+    "/karriere",
+    "/cookie-richtlinie-eu",
+    "/soziale-projekte",
+    "/kooperationen",
+    "/anki-karten",
+    "/impressum",
+  ];
+  const shouldHideIcons = routesWithoutIcons.some(
+    (route) => actualRoute.includes(route) || pathname.includes(route)
+  );
 
   useEffect(() => {
     setIsFavorite(isFavorited(actualRoute));
@@ -44,10 +67,10 @@ export default function ModalIcons({
   const handleFavoriteClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const result = toggleFavorite(actualRoute, pageTitle);
     setIsFavorite(result);
-    
+
     if (onFavorite) {
       onFavorite(result);
     }
@@ -78,22 +101,29 @@ export default function ModalIcons({
           <img src="/assets/icons/close.png" alt="Close Icon" />
         </div>
 
-        {type !== "impressum" && (
+        {type !== "impressum" && !shouldHideIcons && (
           <>
             {/* Love Icon */}
             {showFavorite && (
-              <div onClick={handleFavoriteClick} className="px-4 cursor-pointer py-1 rounded-full favorite-icon">
-                <img 
-                  src="/assets/icons/favorit_e.png"
-                  alt="Favorite Icon"
-                />
+              <div
+                onClick={handleFavoriteClick}
+                className="px-4 cursor-pointer py-1 rounded-full favorite-icon"
+              >
+                <img src="/assets/icons/favorit_e.png" alt="Favorite Icon" />
               </div>
             )}
 
             {/* Layers Icon */}
             {showLayers && type !== "sprachkurs" && (
-              <div onClick={onLayers} className="px-4 cursor-pointer py-1 rounded-full">
-                <img style={{width:'92%'}}  src="/assets/icons/plus.png" alt="Layers Icon" />
+              <div
+                onClick={onLayers}
+                className="px-4 cursor-pointer py-1 rounded-full"
+              >
+                <img
+                  style={{ width: "92%" }}
+                  src="/assets/icons/plus.png"
+                  alt="Layers Icon"
+                />
               </div>
             )}
           </>
@@ -111,7 +141,10 @@ export default function ModalIcons({
                 ...shareIconStyle,
               }}
             >
-              <div onClick={onShare} className="px-4 cursor-pointer rounded-full">
+              <div
+                onClick={onShare}
+                className="px-4 cursor-pointer rounded-full"
+              >
                 <img src="/assets/icons/share.png" alt="Share Icon" />
               </div>
             </div>

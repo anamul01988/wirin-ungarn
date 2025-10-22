@@ -5,6 +5,7 @@ import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import EinFachPage from "@/components/pages/einfach/EinFach";
 import ModalIcons from "@/components/_components/ModalIcons";
+import Breadcrumb from "@/components/_components/Breadcrumb";
 
 export default function Einfach() {
   const [open, setOpen] = useState(false);
@@ -58,6 +59,11 @@ export default function Einfach() {
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+          
           <div className="">
             <EinFachPage />
           </div>

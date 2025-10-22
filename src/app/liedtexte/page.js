@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 // import CookieDetails from "@/components/pages/cookie/CookieDetails";
 import LiedTextePage from "@/components/pages/liedtexte/LiedTextePage";
 import ModalIcons from "@/components/_components/ModalIcons";
+import Breadcrumb from "@/components/_components/Breadcrumb";
 
 export default function Liedtexte() {
   const [open, setOpen] = useState(false);
@@ -59,6 +60,11 @@ export default function Liedtexte() {
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+
           <div className="">
             <LiedTextePage />
           </div>

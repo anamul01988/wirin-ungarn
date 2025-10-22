@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 // import KategorienPage from "@/components/pages/kategorien/kategorienPage";
 import KulinarischeSeelePage from "@/components/pages/kulinarischeSeele/KulinarischeSeelePage";
 import ModalIcons from "@/components/_components/ModalIcons";
+import Breadcrumb from "@/components/_components/Breadcrumb";
 
 export default function Kategorien() {
   const [open, setOpen] = useState(false);
@@ -60,6 +61,11 @@ export default function Kategorien() {
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+
           <div className="">
             <KulinarischeSeelePage />
           </div>
