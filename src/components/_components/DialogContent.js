@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import CollapsibleComment from "./CollapsibleComment";
 import ContactForm from "./ContactForm";
 import ModalIcons from "./ModalIcons";
+import Breadcrumb from "./Breadcrumb";
 import Image from "next/image";
 export default function DialogContent({
   title,
@@ -109,6 +110,11 @@ export default function DialogContent({
 
         {/* Dialog Body */}
         <DialogBody className="overflow-auto custom__modal_area flex-1">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+
           <div>
             <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1>
 

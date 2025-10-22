@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import ModalIcons from "@/components/_components/ModalIcons";
+import Breadcrumb from "@/components/_components/Breadcrumb";
 import WissenswertPage from "@/components/pages/wissenwert/WissenwertPage";
 
 export default function Wissenswert() {
@@ -58,6 +59,11 @@ export default function Wissenswert() {
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1 border-0">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+
           <div className="">
             <WissenswertPage />
           </div>

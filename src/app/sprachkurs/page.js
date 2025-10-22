@@ -5,6 +5,7 @@ import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import SprachkursPage from "@/components/pages/sprachkurs/SprachkursPage";
 import ModalIcons from "@/components/_components/ModalIcons";
+import Breadcrumb from "@/components/_components/Breadcrumb";
 // import SprachkursPage from "@/components/pages/sprachkurs/SprachkursPage";
 // import CookieDetails from "@/components/pages/cookie/CookieDetails";
 // import KategorienPage from "@/components/pages/kategorien/kategorienPage";
@@ -62,6 +63,11 @@ export default function Sprachkurs() {
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+
           {/* {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import PhilosopiesDetails from "@/components/pages/philosopies/philosopiesDetails";
 import UberUnsDetails from "@/components/pages/uberUns/UberunsDetails";
 import ModalIcons from "@/components/_components/ModalIcons";
+import Breadcrumb from "@/components/_components/Breadcrumb";
 
 export default function PhilosophieModal() {
   const [open, setOpen] = useState(false);
@@ -50,6 +51,11 @@ export default function PhilosophieModal() {
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+
           <UberUnsDetails onBack={handleBackToMenu} />
         </DialogBody>
       </Dialog>

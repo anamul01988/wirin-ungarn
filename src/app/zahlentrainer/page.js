@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import ModalIcons from "@/components/_components/ModalIcons";
+import Breadcrumb from "@/components/_components/Breadcrumb";
 import TimetellingGame from "@/components/pages/timetellingGame/TimetellingGame";
 
 export default function ZahlentrainerModal() {
@@ -49,6 +50,11 @@ export default function ZahlentrainerModal() {
         )}
 
         <DialogBody className="overflow-auto flex-1">
+          {/* Breadcrumb */}
+          <div className="mb-4 px-4 pt-4">
+            <Breadcrumb className="text-sm" />
+          </div>
+
           <TimetellingGame />
         </DialogBody>
       </Dialog>
