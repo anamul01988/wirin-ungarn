@@ -1080,7 +1080,7 @@ body {
 }
 
 /* Fixed modal width for Sprachkurs page - above 1030px screen size */
-@media screen and (min-width: 1030px) {
+@media screen and (min-width: 1194px) {
   /* Target the Sprachkurs modal specifically */
   .sprachkurs-modal {
     max-width: 1024px !important;
@@ -1097,7 +1097,7 @@ body {
 }
 
 /* Modal shrinks from 1030px down to 768px */
-@media screen and (max-width: 1029px) and (min-width: 769px) {
+@media screen and (max-width: 1193px) and (min-width: 769px) {
   .sprachkurs-modal {
     max-width: calc(100vw - 160px) !important;
     width: calc(100vw - 160px) !important;
