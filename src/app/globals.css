@@ -1084,17 +1084,20 @@ body {
   /* Target the Sprachkurs modal specifically */
   .sprachkurs-modal {
     max-width: 1024px !important;
+    min-width: 1024px !important;
     width: 1024px !important;
   }
 
   /* Also target its parent container if needed */
   .sprachkurs-modal[role="dialog"] {
     max-width: 1024px !important;
+    min-width: 1024px !important;
     width: 1024px !important;
   }
 }
 
-@media screen and (max-width: 1029px) {
+/* Modal shrinks from 1030px down to 768px */
+@media screen and (max-width: 1029px) and (min-width: 769px) {
   .sprachkurs-modal {
     max-width: calc(100vw - 160px) !important;
     width: calc(100vw - 160px) !important;
@@ -1106,7 +1109,7 @@ body {
   }
 }
 
-/* For smaller screens (tablets and below) */
+/* For smaller screens (tablets and below) - 768px and below */
 @media screen and (max-width: 768px) {
   .sprachkurs-modal {
     max-width: calc(100vw - 100px) !important;
