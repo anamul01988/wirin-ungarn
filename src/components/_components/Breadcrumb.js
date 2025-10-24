@@ -8,7 +8,7 @@ import { Typography } from "@material-tailwind/react";
 const Breadcrumb = ({
   customItems = null,
   showHome = true,
-  separator = "›",
+  separator = "/",
   className = "",
 }) => {
   const pathname = usePathname();
