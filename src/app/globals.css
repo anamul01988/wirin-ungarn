@@ -1003,35 +1003,8 @@ body {
 
 /* Apply to your modal scroll area */
 .custom__modal_area {
-  scrollbar-width: thin; /* For Firefox */
-  /* scrollbar-color: red #f1f1f1; 
-  scrollbar-gutter: stable;
-  box-sizing: border-box;
-  padding-right: 2px; */
-  /* margin-top: 10px !important;
-  margin-bottom: 10px !important; */
+  scrollbar-width: thin; 
 }
-/* For Chrome, Edge, and Safari - Fixed scrollbar positioning */
-
-/* .custom__modal_area ::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 16px;
-  margin: 2px 0;
-}
-
-.custom__modal_area ::-webkit-scrollbar-thumb {
-  background: red;
-  width: 6px;
-  border-radius: 16px;
-  background-clip: content-box; 
-}
-
-.custom__modal_area ::-webkit-scrollbar-thumb:hover {
-  background: #b30000;
-  border-radius: 16px;
-  border: 1px solid transparent;
-  background-clip: content-box;
-} */
 
 /* Override Material Tailwind Dialog backdrop styles using data attributes */
 [data-dialog] {
