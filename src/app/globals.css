@@ -1003,49 +1003,7 @@ body {
 
 /* Apply to your modal scroll area */
 .custom__modal_area {
-  scrollbar-width: thin; 
-}
-
-/* Override Material Tailwind Dialog backdrop styles using data attributes */
-[data-dialog] {
-  /* background: transparent !important; */
-  backdrop-filter: none !important;
-}
-
-/* Target the backdrop element specifically */
-[data-dialog] + div[class*="fixed"] {
-  background: transparent !important;
-  backdrop-filter: none !important;
-}
-
-/* Override any backdrop with grid place-items-center */
-[class*="grid"][class*="place-items-center"][class*="fixed"][class*="w-screen"][class*="h-screen"] {
-  background: transparent !important;
-  backdrop-filter: none !important;
-}
-
-/* More specific targeting for dialog backdrop */
-.dialog-container [class*="grid"][class*="place-items-center"] {
-  background: transparent !important;
-  backdrop-filter: none !important;
-}
-
-/* Target the specific backdrop that appears after dialog */
-.dialog-container > div > div[class*="fixed"] {
-  background: transparent !important;
-  backdrop-filter: none !important;
-}
-
-/* Target backdrop using data-dialog-backdrop attribute */
-[data-dialog-backdrop] {
-  background: transparent !important;
-  backdrop-filter: none !important;
-}
-
-/* More specific targeting for backdrop with all the classes */
-[data-dialog-backdrop].grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60.backdrop-blur-sm {
-  background: transparent !important;
-  backdrop-filter: none !important;
+  scrollbar-width: thin;
 }
 
 .none {
@@ -1071,6 +1029,27 @@ body {
 
 [role="dialog"] {
   max-width: calc(100vw - 170px) !important;
+}
+
+/* Modal backdrop styles - target the backdrop behind modals */
+.grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60.backdrop-blur-sm {
+  backdrop-filter: blur(0px) !important;
+  --tw-bg-opacity: 0.4 !important;
+}
+
+.grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60 {
+  backdrop-filter: blur(0px) !important;
+  --tw-bg-opacity: 0.4 !important;
+}
+
+/* Target any backdrop blur elements */
+.backdrop-blur-sm {
+  backdrop-filter: blur(0px) !important;
+}
+
+/* Change bg-opacity-60 to 40% opacity */
+.bg-opacity-60 {
+  --tw-bg-opacity: 0.4 !important;
 }
 
 /* For smaller screens (tablets and below) - 768px and below */
