@@ -1353,6 +1353,8 @@ export async function GetDynamicContentV2(slug, routePrefix) {
       if (customData?.data?.lyrik) {
         let nextPostSlug = null;
         let prevPostSlug = null;
+        let nextPostTitle = null;
+        let prevPostTitle = null;
 
         // Find the next and previous post in the list
         const allLiedtextePosts =
@@ -1367,11 +1369,13 @@ export async function GetDynamicContentV2(slug, routePrefix) {
           currentIndex < allLiedtextePosts.length - 1
         ) {
           nextPostSlug = allLiedtextePosts[currentIndex + 1].node.slug;
+          nextPostTitle = allLiedtextePosts[currentIndex + 1].node.title;
         }
 
         // Get the previous post (which is the one before current index)
         if (currentIndex > 0) {
           prevPostSlug = allLiedtextePosts[currentIndex - 1].node.slug;
+          prevPostTitle = allLiedtextePosts[currentIndex - 1].node.title;
         }
 
         return {
@@ -1390,6 +1394,8 @@ export async function GetDynamicContentV2(slug, routePrefix) {
           customType: "liedtexte",
           nextPostSlug: nextPostSlug,
           prevPostSlug: prevPostSlug,
+          nextPostTitle: nextPostTitle,
+          prevPostTitle: prevPostTitle,
         };
       }
     }
@@ -1465,6 +1471,8 @@ query sprachlektionByID {
       if (customData?.data?.sprachlektion) {
         let nextPostSlug = null;
         let prevPostSlug = null;
+        let nextPostTitle = null;
+        let prevPostTitle = null;
 
         // Find the next and previous post in the list
         const allSprachkursPosts =
@@ -1479,11 +1487,13 @@ query sprachlektionByID {
           currentIndex < allSprachkursPosts.length - 1
         ) {
           nextPostSlug = allSprachkursPosts[currentIndex + 1].node.slug;
+          nextPostTitle = allSprachkursPosts[currentIndex + 1].node.title;
         }
 
         // Get the previous post (which is the one before current index)
         if (currentIndex > 0) {
           prevPostSlug = allSprachkursPosts[currentIndex - 1].node.slug;
+          prevPostTitle = allSprachkursPosts[currentIndex - 1].node.title;
         }
 
         return {
@@ -1510,6 +1520,8 @@ query sprachlektionByID {
           customType: "sprachkurs",
           nextPostSlug: nextPostSlug,
           prevPostSlug: prevPostSlug,
+          nextPostTitle: nextPostTitle,
+          prevPostTitle: prevPostTitle,
         };
       }
     }
@@ -1666,6 +1678,8 @@ query sprachlektionByID {
       if (customData?.data?.einfachLesen) {
         let nextPostSlug = null;
         let prevPostSlug = null;
+        let nextPostTitle = null;
+        let prevPostTitle = null;
 
         // Find the next and previous post in the list
         const allEinfachLesenPosts =
@@ -1680,11 +1694,13 @@ query sprachlektionByID {
           currentIndex < allEinfachLesenPosts.length - 1
         ) {
           nextPostSlug = allEinfachLesenPosts[currentIndex + 1].node.slug;
+          nextPostTitle = allEinfachLesenPosts[currentIndex + 1].node.title;
         }
 
         // Get the previous post (which is the one before current index)
         if (currentIndex > 0) {
           prevPostSlug = allEinfachLesenPosts[currentIndex - 1].node.slug;
+          prevPostTitle = allEinfachLesenPosts[currentIndex - 1].node.title;
         }
 
         return {
@@ -1702,6 +1718,8 @@ query sprachlektionByID {
           customType: "einfach-lesen",
           nextPostSlug: nextPostSlug,
           prevPostSlug: prevPostSlug,
+          nextPostTitle: nextPostTitle,
+          prevPostTitle: prevPostTitle,
         };
       }
     }
