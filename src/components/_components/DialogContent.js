@@ -30,6 +30,8 @@ export default function DialogContent({
   postId,
   nextPostSlug, // Add nextPostSlug prop
   prevPostSlug, // Add prevPostSlug prop
+  nextPostTitle, // Add nextPostTitle prop
+  prevPostTitle, // Add prevPostTitle prop
 }) {
   const [open, setOpen] = useState(true);
 
@@ -37,6 +39,14 @@ export default function DialogContent({
   const handleOpen = () => setOpen(!open);
   const navigateToHome = () => {
     route.push("/");
+  };
+
+  // Truncate title helper function
+  const truncateTitle = (title, maxLength = 30) => {
+    if (!title) return "";
+    return title.length > maxLength
+      ? `${title.substring(0, maxLength)}...`
+      : title;
   };
 
   const handleNextPost = () => {
@@ -666,10 +676,11 @@ export default function DialogContent({
                       <button
                         onClick={handlePrevPost}
                         className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
+                        title={prevPostTitle || "Previous post"}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="w-4 h-4 text-[#436f4d]"
+                          className="w-4 h-4 text-[#436f4d] mr-2"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -681,8 +692,8 @@ export default function DialogContent({
                             d="M15 19l-7-7 7-7"
                           />
                         </svg>
-                        <span className="ml-2 text-sm font-semibold">
-                          Previous Post
+                        <span className="text-sm font-semibold">
+                          {truncateTitle(prevPostTitle, 25)}
                         </span>
                       </button>
                     ) : (
@@ -694,9 +705,10 @@ export default function DialogContent({
                       <button
                         onClick={handleNextPost}
                         className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
+                        title={nextPostTitle || "Next post"}
                       >
                         <span className="mr-2 text-sm font-semibold">
-                          Next Post
+                          {truncateTitle(nextPostTitle, 25)}
                         </span>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

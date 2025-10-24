@@ -28,6 +28,8 @@ export default async function EinfachDynamicPage({ params }) {
           routePrefix="einfach-lesen"
           nextPostSlug={contentData.nextPostSlug}
           prevPostSlug={contentData.prevPostSlug}
+          nextPostTitle={contentData.nextPostTitle}
+          prevPostTitle={contentData.prevPostTitle}
         />
       </div>
     );

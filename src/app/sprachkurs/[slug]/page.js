@@ -39,6 +39,8 @@ export default async function SprachkursDetailsPage({ params }) {
           postContent={postContent}
           nextPostSlug={contentData.nextPostSlug}
           prevPostSlug={contentData.prevPostSlug}
+          nextPostTitle={contentData.nextPostTitle}
+          prevPostTitle={contentData.prevPostTitle}
         />
       </div>
     );

@@ -1055,7 +1055,8 @@ body {
 /* Fixed modal width for Sprachkurs page - above 1030px screen size */
 @media screen and (min-width: 1030px) {
   /* Also target its parent container if needed */
-  [role="dialog"] {
+  /* Exclude ImpressumModal from fixed width */
+  [role="dialog"]:not([data-dialog="impressum-modal"]) {
     max-width: 870px !important;
     min-width: 870px !important;
     width: 870px !important;
