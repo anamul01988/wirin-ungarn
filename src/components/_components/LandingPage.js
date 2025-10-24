@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./style.css";
 import ImpressumtModal from "../ui/ImpressumModal";
-import { footerLinks } from "@/lib/utils/utils";
+import { commonCardChipData, footerLinks } from "@/lib/utils/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
@@ -10,6 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import algoliasearch from "algoliasearch/lite";
 import { toggleFavorite } from "@/lib/utils/favoritesManager";
+import CommonCardChip from "../ui/CommonCardChip";
 
 class ListSearch {
   constructor(config) {
@@ -193,11 +194,13 @@ class ListSearch {
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
   const [allowImpressumModal, setAllowImpressumModal] = useState(false);
+  const [allowPostSlider, setAllowPostSlider] = useState(false);
+  const [postSliderDetails, setPostSliderDetails] = useState({});
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [openAiBtn, setOpenAiBtn] = useState(false);
   const [listSearchInstance, setListSearchInstance] = useState(null);
-
+  const [postCards, setPostCards] = useState(commonCardChipData);
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
   const handleOpen = () => setOpen(!open);
@@ -1009,93 +1012,42 @@ const LandingPage = () => {
         id="cardsContainer"
         ref={cardsContainerRef}
       >
-        {[
-          {
-            image: "/assets/tl-Zahlentrainer.avif",
-            title: "Zahlentrainer",
-            route: "/zahlentrainer",
-          },
-          {
-            image: "/assets/tl-Uhrzeittrainer.avif",
-            title: "Uhrzeittrainer",
-            route: "/wie-spaet-ist-es",
-          },
-          {
-            image: "/assets/tl-kulinarische-Selle.avif",
-            title: "Kulinarische Seele",
-            route: "/kulinarische-seele",
-          },
-          {
-            image: "/assets/tl-Raetsel.avif",
-            title: "Rätsel",
-            route: "/kreuzwortraetsel",
-          },
-          {
-            image: "/assets/tl-Ungarn-Insider.avif",
-            title: "Ungarn Insider",
-            route: "/wissenswert",
-          },
-          {
-            image: "/assets/tl-Zustand-in-einem-Wort.avif",
-            title: "Zustand in einem Wort",
-            route: "/einfach-lesen",
-          },
-          {
-            image: "/assets/tl-Plural.avif",
-            title: "Plural",
-            route: "/sprachkurs",
-          },
-          {
-            image: "/assets/tl-Makler-Tricks.avif",
-            title: "Makler Tricks",
-            route: "/wissenswert",
-          },
-          {
-            image: "/assets/tl-aus-dem-leben.avif",
-            title: "Aus dem Leben",
-            route: "/aus-dem-leben",
-          },
-          {
-            image: "/assets/tl-itt-ott.avif",
-            title: "Itt-Ott",
-            route: "/einfach-lesen",
-          },
-        ].map((card, index) => (
+        {postCards.map((card, index) => (
           <div key={index} className="card-wrapper">
             <div
               className="card"
               onClick={() => {
-                const modal = document.getElementById("modal");
-                document.getElementById(
-                  "modalTitle"
-                ).textContent = `${card.title}`;
-                document.getElementById(
-                  "modalText"
-                ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
-
-                // Add a button to navigate to the page
-                const buttonContainer =
-                  modal.querySelector(".modal-content div");
-                if (buttonContainer) {
-                  // Clear existing buttons first
-                  const existingNavigateBtn =
-                    buttonContainer.querySelector(".navigate-btn");
-                  if (existingNavigateBtn) {
-                    existingNavigateBtn.remove();
-                  }
-
-                  // Create and add the navigation button
-                  const navigateBtn = document.createElement("button");
-                  navigateBtn.className = "close-modal navigate-btn";
-                  navigateBtn.style.backgroundColor = "#4a7c59";
-                  navigateBtn.textContent = "Zur Seite";
-                  navigateBtn.onclick = () => {
-                    route.push(card.route);
-                  };
-                  buttonContainer.appendChild(navigateBtn);
-                }
-
-                modal.style.display = "flex";
+                setAllowPostSlider(true);
+                setPostSliderDetails(card);
+                handleOpen();
+                //   const modal = document.getElementById("modal");
+                //   document.getElementById(
+                //     "modalTitle"
+                //   ).textContent = `${card.title}`;
+                //   document.getElementById(
+                //     "modalText"
+                //   ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
+                //   // Add a button to navigate to the page
+                //   const buttonContainer =
+                //     modal.querySelector(".modal-content div");
+                //   if (buttonContainer) {
+                //     // Clear existing buttons first
+                //     const existingNavigateBtn =
+                //       buttonContainer.querySelector(".navigate-btn");
+                //     if (existingNavigateBtn) {
+                //       existingNavigateBtn.remove();
+                //     }
+                //     // Create and add the navigation button
+                //     const navigateBtn = document.createElement("button");
+                //     navigateBtn.className = "close-modal navigate-btn";
+                //     navigateBtn.style.backgroundColor = "#4a7c59";
+                //     navigateBtn.textContent = "Zur Seite";
+                //     navigateBtn.onclick = () => {
+                //       route.push(card.route);
+                //     };
+                //     buttonContainer.appendChild(navigateBtn);
+                //   }
+                //   modal.style.display = "flex";
               }}
             >
               <div
@@ -1302,6 +1254,15 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
+
+      {allowPostSlider && (
+        <CommonCardChip
+          open={open}
+          setOpen={setOpen}
+          handleOpen={handleOpen}
+          postDetails={postSliderDetails}
+        />
+      )}
 
       {/* Impressum Modal */}
       {allowImpressumModal && (
