@@ -1017,6 +1017,9 @@ const LandingPage = () => {
             <div
               className="card"
               onClick={() => {
+                if (allowImpressumModal === true) {
+                  setAllowImpressumModal(false);
+                }
                 setAllowPostSlider(true);
                 setPostSliderDetails(card);
                 handleOpen();
