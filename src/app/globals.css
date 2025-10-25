@@ -1044,7 +1044,6 @@ body {
   --tw-bg-opacity: 0.4 !important;
 }
 
-/* Target any backdrop blur elements */
 .backdrop-blur-sm {
   backdrop-filter: blur(0px) !important;
 }
