@@ -53,7 +53,6 @@ export default function DynamicPageClient({ slug }) {
         } else {
           data = await GetDynamicContent(slug);
         }
-
         setContentData(data);
         setLoading(false);
       } catch (err) {
@@ -131,6 +130,7 @@ export default function DynamicPageClient({ slug }) {
             postContent={postContent} // Pass the entire postContent object for sprachkursContent
             nextPostSlug={contentData.nextPostSlug}
             prevPostSlug={contentData.prevPostSlug}
+            postId={contentData.data.data.post.postId}
           />
         </div>
       );
