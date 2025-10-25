@@ -8,10 +8,15 @@ export default function CollapsibleComment({ postId }) {
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
-  const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, operation: '', answer: '' });
-  const [captchaInput, setCaptchaInput] = useState('');
-  const [guestName, setGuestName] = useState('');
-  
+  const [captcha, setCaptcha] = useState({
+    num1: 0,
+    num2: 0,
+    operation: "",
+    answer: "",
+  });
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [guestName, setGuestName] = useState("");
+
   // Generate a simple math captcha when component loads or user changes
   useEffect(() => {
     if (!user) {
@@ -19,33 +24,37 @@ export default function CollapsibleComment({ postId }) {
     }
   }, [user]);
 
+  console.log("22222222222", postId);
+
   // Function to generate a random math problem
   const generateCaptcha = () => {
     const num1 = Math.floor(Math.random() * 10);
     const num2 = Math.floor(Math.random() * 10);
     const isAddition = Math.random() > 0.5;
-    const operation = isAddition ? '+' : '-';
+    const operation = isAddition ? "+" : "-";
     const answer = isAddition ? num1 + num2 : num1 - num2;
-    
+
     setCaptcha({ num1, num2, operation, answer: answer.toString() });
-    setCaptchaInput('');
+    setCaptchaInput("");
   };
 
   const handleCommentChange = (e) => {
     setComment(e.target.value);
   };
-  
+
   const handleCaptchaChange = (e) => {
     setCaptchaInput(e.target.value);
   };
-  
+
   const handleGuestNameChange = (e) => {
     setGuestName(e.target.value);
   };
 
   const handleSubmit = async () => {
     if (!comment.trim()) {
-      toast.error("Bitte geben Sie einen Kommentar ein", { style: { zIndex: 100 } });
+      toast.error("Bitte geben Sie einen Kommentar ein", {
+        style: { zIndex: 100 },
+      });
       return;
     }
 
@@ -53,13 +62,18 @@ export default function CollapsibleComment({ postId }) {
     if (!user) {
       // Validate guest name
       if (!guestName.trim()) {
-        toast.error("Bitte geben Sie Ihren Namen ein", { style: { zIndex: 100 } });
+        toast.error("Bitte geben Sie Ihren Namen ein", {
+          style: { zIndex: 100 },
+        });
         return;
       }
-      
+
       // Validate captcha
       if (captchaInput !== captcha.answer) {
-        toast.error("Die Captcha-Antwort ist falsch. Bitte versuchen Sie es erneut.", { style: { zIndex: 100 } });
+        toast.error(
+          "Die Captcha-Antwort ist falsch. Bitte versuchen Sie es erneut.",
+          { style: { zIndex: 100 } }
+        );
         generateCaptcha(); // Generate a new captcha
         return;
       }
@@ -92,11 +106,15 @@ export default function CollapsibleComment({ postId }) {
         }
         setIsOpen(false);
       } else {
-        toast.error("Beim Senden des Kommentars ist ein Fehler aufgetreten", { style: { zIndex: 100 } });
+        toast.error("Beim Senden des Kommentars ist ein Fehler aufgetreten", {
+          style: { zIndex: 100 },
+        });
       }
     } catch (error) {
       console.error("Error submitting comment:", error);
-      toast.error("Beim Senden des Kommentars ist ein Fehler aufgetreten", { style: { zIndex: 100 } });
+      toast.error("Beim Senden des Kommentars ist ein Fehler aufgetreten", {
+        style: { zIndex: 100 },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -144,12 +162,15 @@ export default function CollapsibleComment({ postId }) {
             haben könnte. Aber wir als Gemeinschaft schaffen es sicher das immer
             weiter zu optimieren.
           </p>
-          
+
           {/* Show guest info fields if user is not logged in */}
           {!user && (
             <div className="space-y-3">
               <div>
-                <label htmlFor="guestName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="guestName"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Name
                 </label>
                 <input
@@ -162,11 +183,15 @@ export default function CollapsibleComment({ postId }) {
                   disabled={isSubmitting}
                 />
               </div>
-              
+
               {/* Simple Math Captcha */}
               <div>
-                <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 mb-1">
-                  Captcha: Was ist {captcha.num1} {captcha.operation} {captcha.num2}?
+                <label
+                  htmlFor="captcha"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Captcha: Was ist {captcha.num1} {captcha.operation}{" "}
+                  {captcha.num2}?
                 </label>
                 <input
                   type="text"

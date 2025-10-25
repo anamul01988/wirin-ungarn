@@ -16,12 +16,13 @@ export default async function SprachkursDetailsPage({ params }) {
     const sprachkursDetails = contentData.data.data.post;
     const postContent = sprachkursDetails.postContent;
 
-    console.log("sprachkursDetails", sprachkursDetails);
+    console.log("sprachkursDetails", contentData);
 
     return (
       <div className="min-h-screen flex items-center justify-center">
         <DialogContent
           title={sprachkursDetails.title}
+          postId={sprachkursDetails?.databaseId}
           content={
             sprachkursDetails.postContentSprachlektion ||
             `<p>Content for sprachkurs: ${sprachkursDetails.title}</p>`

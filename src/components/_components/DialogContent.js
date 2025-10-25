@@ -62,7 +62,7 @@ export default function DialogContent({
   };
 
   // Log routePrefix and other props for debugging
-  console.log("contentsssssssssssss", content);
+  console.log("contentsssssssssssss", postId);
   // if (contentType === "sprachkurs") {
   //   console.log("Sprachkurs postContent:", postContent);
   // }
