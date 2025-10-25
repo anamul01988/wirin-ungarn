@@ -1010,25 +1010,27 @@ body {
   display: none;
 }
 
-/* Fixed modal width for Sprachkurs page - above 1030px screen size */
-@media screen and (min-width: 1030px) {
-  /* Also target its parent container if needed */
-  /* Exclude ImpressumModal from fixed width */
+/* Fixed modal width for Sprachkurs page - above 1160px screen size */
+@media screen and (min-width: 1200px) {
   [role="dialog"]:not([data-dialog="impressum-modal"]) {
-    max-width: 870px !important;
-    min-width: 870px !important;
-    width: 870px !important;
+    max-width: 1030px !important;
+    min-width: 1000px !important;
+    width: 100% !important;
   }
 }
 
-@media screen and (max-width: 920px) and (min-width: 769px) {
-  .md\:min-w-\[83\.333333\%\] {
-    min-width: 80.333333%;
+@media screen and (max-width: 1199px) and (min-width: 920px) {
+  [role="dialog"]:not([data-dialog="impressum-modal"]) {
+    min-width: 80% !important;
   }
 }
 
-[role="dialog"] {
-  max-width: calc(100vw - 170px) !important;
+@media screen and (max-width: 919px) and (min-width: 768px) {
+  [role="dialog"]:not([data-dialog="impressum-modal"]) {
+    max-width: 612px !important;
+    min-width: 612px !important;
+    width: 100% !important;
+  }
 }
 
 /* Modal backdrop styles - target the backdrop behind modals */
@@ -1050,11 +1052,4 @@ body {
 /* Change bg-opacity-60 to 40% opacity */
 .bg-opacity-60 {
   --tw-bg-opacity: 0.4 !important;
-}
-
-/* For smaller screens (tablets and below) - 768px and below */
-@media screen and (max-width: 768px) {
-  [role="dialog"] {
-    max-width: calc(100vw - 100px) !important;
-  }
 }
