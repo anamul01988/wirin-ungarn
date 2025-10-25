@@ -1049,7 +1049,6 @@ body {
   backdrop-filter: blur(0px) !important;
 }
 
-/* Change bg-opacity-60 to 40% opacity */
 .bg-opacity-60 {
   --tw-bg-opacity: 0.4 !important;
 }
