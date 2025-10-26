@@ -5,7 +5,8 @@ import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import ModalIcons from "@/components/_components/ModalIcons";
 import Breadcrumb from "@/components/_components/Breadcrumb";
-import TimetellingGame from "@/components/pages/timetellingGame/TimetellingGame";
+// import TimetellingGame from "@/components/pages/timetellingGame/TimetellingGame";
+import HungarianNumberGame from "@/components/pages/zhaltrainer/ZhaltrainerNumberGame";
 
 export default function ZahlentrainerModal() {
   const [open, setOpen] = useState(false);
@@ -55,7 +56,7 @@ export default function ZahlentrainerModal() {
             <Breadcrumb className="text-sm" />
           </div>
 
-          <TimetellingGame />
+          <HungarianNumberGame />
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">

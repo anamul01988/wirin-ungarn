@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import ModalIcons from "@/components/_components/ModalIcons";
-import VocabGame from "@/components/pages/vocabGame/VocabGame";
+import HungarianQuiz from "@/components/pages/kulturUngarn/KulturUngarnQuize";
+import Breadcrumb from "@/components/_components/Breadcrumb";
+// import VocabGame from "@/components/pages/vocabGame/VocabGame";
 
 export default function KultourUngarnModal() {
   const [open, setOpen] = useState(false);
@@ -47,9 +49,13 @@ export default function KultourUngarnModal() {
             onShare={() => console.log("Share clicked")}
           />
         )}
+        <div className="mb-4 px-4 pt-4">
+          <Breadcrumb className="text-sm" />
+        </div>
 
         <DialogBody className="overflow-auto flex-1">
-          <VocabGame />
+          {/* <VocabGame /> */}
+          <HungarianQuiz />
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">

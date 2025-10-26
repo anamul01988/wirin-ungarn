@@ -6,7 +6,7 @@ import {
   // Button,
   Typography,
 } from "@material-tailwind/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import CollapsibleComment from "./CollapsibleComment";
 import ContactForm from "./ContactForm";
 import ModalIcons from "./ModalIcons";
@@ -14,6 +14,7 @@ import Breadcrumb from "./Breadcrumb";
 import Image from "next/image";
 import "plyr-react/plyr.css";
 import EinfachLesenAccordion from "./EinfachLesenAccordion";
+import TimetellingGame from "../pages/timetellingGame/TimetellingGame";
 export default function DialogContent({
   title,
   content,
@@ -38,6 +39,7 @@ export default function DialogContent({
   const [open, setOpen] = useState(true);
 
   const route = useRouter();
+  const pathname = usePathname();
   const handleOpen = () => setOpen(!open);
   const navigateToHome = () => {
     route.push("/");
@@ -64,7 +66,7 @@ export default function DialogContent({
   };
 
   // Log routePrefix and other props for debugging
-  console.log("contentsssssssssssss", postId);
+  console.log("contentsssssssssssss", postId, pathname);
   // if (contentType === "sprachkurs") {
   //   console.log("Sprachkurs postContent:", postContent);
   // }
@@ -754,13 +756,32 @@ export default function DialogContent({
               <ContactForm formHtml={content} />
             ) : null}
 
-            {routePrefix == null &&
-              contentType === "page" &&
-              !hasContactForm && (
-                <div className="prose prose-lg max-w-none">
-                  <div dangerouslySetInnerHTML={{ __html: content }} />
-                </div>
-              )}
+            {pathname === "/wie-spaet-ist-es/" &&
+            routePrefix == null &&
+            contentType === "page" ? (
+              <div className="prose prose-lg max-w-none">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      content.length > 203
+                        ? content.slice(0, 200) + "..."
+                        : content,
+                  }}
+                />
+                <TimetellingGame />
+              </div>
+            ) : (
+              <>
+                {" "}
+                {routePrefix == null &&
+                  contentType === "page" &&
+                  !hasContactForm && (
+                    <div className="prose prose-lg max-w-none">
+                      <div dangerouslySetInnerHTML={{ __html: content }} />
+                    </div>
+                  )}
+              </>
+            )}
 
             {imageFeature && contentType !== "kulinarische-seele" && (
               <div className="w-full mx-auto py-6">
