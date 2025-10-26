@@ -135,7 +135,16 @@ export default function Home() {
                 className="header-btn register"
                 onClick={handleLoginClick}
               >
-                <span className="ht_text">Anmelden</span>
+                <span
+                  className="ht_text flex gap-5"
+                  style={{ marginRight: "2px" }}
+                >
+                  Anmelden
+                  <span className="ind_icon" aria-hidden="true">
+                    {" "}
+                    &#128273;{" "}
+                  </span>
+                </span>
               </button>
             </div>
           )}
