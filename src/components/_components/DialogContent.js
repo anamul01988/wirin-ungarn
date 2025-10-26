@@ -12,6 +12,8 @@ import ContactForm from "./ContactForm";
 import ModalIcons from "./ModalIcons";
 import Breadcrumb from "./Breadcrumb";
 import Image from "next/image";
+import "plyr-react/plyr.css";
+import EinfachLesenAccordion from "./EinfachLesenAccordion";
 export default function DialogContent({
   title,
   content,
@@ -320,7 +322,7 @@ export default function DialogContent({
                 ></div>
               </>
             )}
-            {contentType === "einfach-lesen" && (
+            {/* {contentType === "einfach-lesen" && (
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
                   className="text-gray-700 italic"
@@ -330,7 +332,100 @@ export default function DialogContent({
                   Hello vai ! render here as you wish )::
                 </p>
               </div>
+            )} */}
+            {contentType === "einfach-lesen" && (
+              <div className="mb-6">
+                {/* Learning Tip Section */}
+                <section className="border-2 border-[#cc2233] mb-6">
+                  <div
+                    className="cursor-pointer relative"
+                    onClick={(e) => {
+                      const contentWrapper = e.currentTarget.nextElementSibling;
+                      const h3 = e.currentTarget.querySelector("h3");
+                      contentWrapper.classList.toggle("hidden");
+                      h3.classList.toggle("active");
+                    }}
+                  >
+                    <h3 className="text-lg p-3 text-[#cc2233] relative pr-10">
+                      Lerntipp: Wie Du diese Texte optimal zum Sprachenlernen
+                      nutzt
+                      <span className="absolute right-3 top-3 text-xl transition-transform plus-icon">
+                        +
+                      </span>
+                    </h3>
+                  </div>
+                  <div className="hidden p-3">
+                    <div className="content">
+                      <p className="text-[#cc2233]">
+                        Diese Texte sind ideal zum parallelen Lesen und Hören
+                        geeignet. Mit{" "}
+                        <a
+                          href="https://wir-in-ungarn.hu/linguist-webseiten-ubersetzer/"
+                          className="underline"
+                        >
+                          Browser-Erweiterungen wie "Linguist"
+                        </a>{" "}
+                        oder ähnlichen Übersetzungstools kannst du beim Zuhören
+                        unbekannte Wörter oder Textpassagen schnell und bequem
+                        übersetzen - einfach durch Markieren oder Anklicken des
+                        gewünschten Wortes bzw. der Textpassage. So verbesserst
+                        du gleichzeitig dein Hörverständnis und erweiterst
+                        deinen Wortschatz. Die verschiedenen
+                        Schwierigkeitsstufen (A1, A2, B1) ermöglichen es dir,
+                        schrittweise deine Sprachkenntnisse zu vertiefen. Höre
+                        die Texte mehrmals und sprich ruhig laut mit - das
+                        fördert zusätzlich deine Aussprache.
+                      </p>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Lesson Card - FULL WIDTH */}
+                <div className="w-full border border-gray-300 rounded-lg bg-white shadow-md overflow-hidden p-4">
+                  {/* Featured Image and Content */}
+                  <div className="flex flex-wrap">
+                    {imageFeature && (
+                      <div className="w-full md:w-1/4 md:float-left md:mr-4 mb-4 md:mb-0">
+                        <img
+                          src={imageFeature}
+                          alt={imageAlt || title}
+                          className="w-full h-auto rounded-lg"
+                        />
+                      </div>
+                    )}
+
+                    <div className="w-full md:w-[calc(75%-16px)] md:float-left">
+                      <h1 className="text-2xl font-semibold text-gray-800 mb-2">
+                        {title}
+                      </h1>
+                      {customFields?.germanTitle && (
+                        <h2 className="text-lg text-gray-600">
+                          {customFields.germanTitle}
+                        </h2>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Clear floats */}
+                  <div className="clear-both"></div>
+
+                  {/* Level Contents Accordion */}
+                  {customFields?.levelContents &&
+                    customFields.levelContents.length > 0 && (
+                      <div className="w-full mt-5">
+                        {customFields.levelContents.map((level, index) => (
+                          <EinfachLesenAccordion
+                            key={index}
+                            level={level}
+                            isFirst={index === 0}
+                          />
+                        ))}
+                      </div>
+                    )}
+                </div>
+              </div>
             )}
+
             {contentType === "wissenswert" && (
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p

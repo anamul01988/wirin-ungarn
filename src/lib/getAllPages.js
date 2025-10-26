@@ -1628,6 +1628,22 @@ query sprachlektionByID {
                 title
               }
             }
+          einfachLesenFields {
+            germanTitle
+            levelContents {
+              levelTitle
+              levelContent
+              audioFile {
+                node {
+                  mediaItemUrl
+                  title
+                  id
+                  fileSize
+                  mimeType
+                }
+              }
+            }
+           }
           }
         }
       `;
@@ -1913,6 +1929,25 @@ export async function GetEinfachLesenPostBySlug(slug) {
               title
             }
           }
+
+          einfachLesenFields {
+            germanTitle
+            levelContents {
+              levelTitle
+              levelContent
+              audioFile {
+                node {
+                  mediaItemUrl
+                  title
+                  id
+                  fileSize
+                  mimeType
+                }
+              }
+            }
+          }
+
+
         }
       }
     `;
