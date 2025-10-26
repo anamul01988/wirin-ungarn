@@ -274,6 +274,17 @@ const LandingPage = () => {
         )
         .to(".scroll-indicator", { opacity: 0.7, duration: 1 }, "-=0.3");
 
+      // Fade out panel on scroll
+      gsap.to(".panel", {
+        opacity: 0.3,
+        scrollTrigger: {
+          trigger: ".content-section",
+          start: "top bottom",
+          end: "top+=800 bottom",
+          scrub: 2,
+        },
+      });
+
       // Add hover buttons to cards
       const cardWrappers = gsap.utils.toArray(".card-wrapper");
       console.log("Initial card wrappers found:", cardWrappers.length);
@@ -629,6 +640,227 @@ const LandingPage = () => {
     }
   };
 
+  const scrollbarContainerRef = useRef(null);
+  const trackRef = useRef(null);
+  const thumbRef = useRef(null);
+  const arrowUpRef = useRef(null);
+  const arrowDownRef = useRef(null);
+
+  // Custom Scrollbar implementation
+  useEffect(() => {
+    const scrollbarContainer = scrollbarContainerRef.current;
+    const track = trackRef.current;
+    const thumb = thumbRef.current;
+    const arrowUp = arrowUpRef.current;
+    const arrowDown = arrowDownRef.current;
+
+    if (!scrollbarContainer || !track || !thumb || !arrowUp || !arrowDown) return;
+
+    let isDragging = false;
+    let startY = 0;
+    let startTop = 0;
+
+    const updateScrollbar = () => {
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+
+      if (documentHeight <= viewportHeight) {
+        scrollbarContainer.classList.add("hidden");
+        return;
+      }
+      scrollbarContainer.classList.remove("hidden");
+    };
+
+    const updateThumbPosition = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const maxScroll = documentHeight - viewportHeight;
+
+      if (maxScroll <= 0) return;
+
+      const scrollPercent = scrollTop / maxScroll;
+      const trackHeight = track.clientHeight;
+      const thumbHeight = thumb.clientHeight;
+      const maxThumbTop = trackHeight - thumbHeight;
+      const thumbTop = scrollPercent * maxThumbTop;
+
+      thumb.style.top = thumbTop + "px";
+      track.setAttribute("aria-valuenow", Math.round(scrollPercent * 100));
+    };
+
+    const scrollByPercent = (percent) => {
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const maxScroll = documentHeight - viewportHeight;
+
+      if (maxScroll <= 0) return;
+
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollAmount = (maxScroll * percent) / 100;
+      const newScrollTop = Math.max(0, Math.min(currentScroll + scrollAmount, maxScroll));
+
+      window.scrollTo({
+        top: newScrollTop,
+        behavior: "smooth",
+      });
+    };
+
+    const startDrag = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      isDragging = true;
+      thumb.classList.add("dragging");
+
+      const clientY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+      const thumbRect = thumb.getBoundingClientRect();
+      const trackRect = track.getBoundingClientRect();
+
+      startY = clientY;
+      startTop = thumbRect.top - trackRect.top;
+
+      document.body.style.userSelect = "none";
+      document.body.style.cursor = "grabbing";
+    };
+
+    const drag = (e) => {
+      if (!isDragging) return;
+
+      e.preventDefault();
+
+      const clientY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+      const deltaY = clientY - startY;
+
+      const trackHeight = track.clientHeight;
+      const thumbHeight = thumb.clientHeight;
+      const maxThumbTop = trackHeight - thumbHeight;
+      let newThumbTop = startTop + deltaY;
+      newThumbTop = Math.max(0, Math.min(newThumbTop, maxThumbTop));
+
+      thumb.style.top = newThumbTop + "px";
+
+      const scrollPercent = newThumbTop / maxThumbTop;
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const maxScroll = documentHeight - viewportHeight;
+      const newScrollTop = scrollPercent * maxScroll;
+
+      window.scrollTo({
+        top: newScrollTop,
+        behavior: "auto",
+      });
+    };
+
+    const stopDrag = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      thumb.classList.remove("dragging");
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+    };
+
+    const trackClick = (e) => {
+      if (e.target === thumb || thumb.contains(e.target)) {
+        return;
+      }
+
+      const trackRect = track.getBoundingClientRect();
+      const clickY = e.clientY - trackRect.top;
+      const trackHeight = track.clientHeight;
+      const thumbHeight = thumb.clientHeight;
+      const maxThumbTop = trackHeight - thumbHeight;
+      let newThumbTop = clickY - thumbHeight / 2;
+      newThumbTop = Math.max(0, Math.min(newThumbTop, maxThumbTop));
+
+      const scrollPercent = newThumbTop / maxThumbTop;
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const maxScroll = documentHeight - viewportHeight;
+      const newScrollTop = scrollPercent * maxScroll;
+
+      window.scrollTo({
+        top: newScrollTop,
+        behavior: "smooth",
+      });
+    };
+
+    // Event listeners
+    arrowUp.addEventListener("click", (e) => {
+      e.preventDefault();
+      scrollByPercent(-10);
+    });
+
+    arrowDown.addEventListener("click", (e) => {
+      e.preventDefault();
+      scrollByPercent(10);
+    });
+
+    thumb.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        scrollByPercent(-5);
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        scrollByPercent(5);
+      } else if (e.key === "PageUp") {
+        e.preventDefault();
+        scrollByPercent(-25);
+      } else if (e.key === "PageDown") {
+        e.preventDefault();
+        scrollByPercent(25);
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else if (e.key === "End") {
+        e.preventDefault();
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+      }
+    });
+
+    thumb.addEventListener("mousedown", (e) => startDrag(e));
+    thumb.addEventListener("touchstart", (e) => startDrag(e));
+    document.addEventListener("mousemove", (e) => drag(e));
+    document.addEventListener("touchmove", (e) => drag(e));
+    document.addEventListener("mouseup", () => stopDrag());
+    document.addEventListener("touchend", () => stopDrag());
+    track.addEventListener("click", (e) => trackClick(e));
+
+    let scrollTimeout;
+    const handleScroll = () => {
+      if (!isDragging) {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          updateThumbPosition();
+        }, 10);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", () => {
+      updateScrollbar();
+      updateThumbPosition();
+    });
+
+    updateScrollbar();
+    updateThumbPosition();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", () => {
+        updateScrollbar();
+        updateThumbPosition();
+      });
+      thumb.removeEventListener("mousedown", startDrag);
+      thumb.removeEventListener("touchstart", startDrag);
+      document.removeEventListener("mousemove", drag);
+      document.removeEventListener("touchmove", drag);
+      document.removeEventListener("mouseup", stopDrag);
+      document.removeEventListener("touchend", stopDrag);
+      track.removeEventListener("click", trackClick);
+    };
+  }, []);
+
   return (
     <div
       className="landing-page__container"
@@ -641,6 +873,129 @@ const LandingPage = () => {
       }}
     >
       <style>{`
+        /* Custom Scrollbar Container */
+        .scrollbar-container {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 70vh;
+            max-height: 600px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        /* Arrow Buttons */
+        .arrow-button {
+            width: 30px;
+            height: 30px;
+            background: #2c2c2c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            z-index: 5;
+            transition: background 0.2s;
+            border: none;
+        }
+        
+        .arrow-button:hover {
+            background: #3c3c3c;
+        }
+
+        .arrow-button:active {
+            background: #1c1c1c;
+        }
+
+        .arrow-button:focus {
+            outline: 2px solid #4a7c59;
+            outline-offset: 2px;
+        }
+
+        .arrow-button.up {
+            border-radius: 12px 12px 0 0;
+        }
+
+        .arrow-button.down {
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Arrow Icons */
+        .arrow-icon {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+        }
+
+        .arrow-icon.up {
+            border-bottom: 8px solid #ffffff;
+        }
+
+        .arrow-icon.down {
+            border-top: 8px solid #ffffff;
+        }
+
+        .arrow-button:hover .arrow-icon.up {
+            border-bottom-color: #4a7c59;
+        }
+
+        .arrow-button:hover .arrow-icon.down {
+            border-top-color: #c41e3a;
+        }
+
+        /* Scrollbar Track */
+        .scrollbar-track {
+            flex: 1;
+            width: 30px;
+            background: #ffffff;
+            border-left: 3px solid #2c2c2c;
+            border-right: 3px solid #2c2c2c;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 
+                inset 0 2px 4px rgba(0, 0, 0, 0.1),
+                0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+        }
+
+        /* Scrollbar Thumb with Image */
+        .scrollbar-thumb {
+            position: absolute;
+            width: 50px;
+            min-height: 50px;
+            cursor: grab;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.2s;
+            background-image: url(/assets/sliderbutton.png);
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 10;
+        }
+
+        .scrollbar-thumb:hover {
+            opacity: 1;
+        }
+
+        .scrollbar-thumb:active {
+            cursor: grabbing;
+        }
+
+        .scrollbar-thumb.dragging {
+            cursor: grabbing;
+            opacity: 1;
+        }
+
+        /* Hide scrollbar when content doesn't overflow */
+        .scrollbar-container.hidden {
+            display: none;
+        }
+
         .algolia-list-search {
           max-width: 800px;
           margin: 0 auto;
@@ -802,171 +1157,179 @@ const LandingPage = () => {
       </div>
 
       {/* Sidebar */}
-      <nav className="sidebar">
-        {[
-          {
-            title: "Information",
-            text: "alles über Ungarn",
-            slug: "information",
-            menu: [
-              {
-                menuName: "WISSEENWERT",
-                menuRoute: "/wissenswert",
-              },
-              // {
-              //   menuName: "SHORTS",
-              //   menuRoute: "/shorts",
-              // },
-              {
-                menuName: "KATEGORIEN",
-                menuRoute: "/kategorien",
-              },
-            ],
-          },
-          {
-            title: "Sprache",
-            text: "einfach lernen",
-            slug: "sprache",
-            menu: [
-              {
-                menuName: "GRAMMATIKKURS",
-                menuRoute: "/sprachkurs",
-              },
-              {
-                menuName: "Kreuzworträtsel",
-                menuRoute: "/kreuzwortraetsel",
-              },
-              // {
-              //   menuName: "Ungarisch-Impulse",
-              //   menuRoute: "/ungarisch-impulse",
-              // },
-              {
-                menuName: "SuffixHero",
-                menuRoute: "/suffixhero",
-              },
-              // {
-              //   menuName: "Zahlentrainer",
-              //   menuRoute: "/zahlentrainer",
-              // },
-              {
-                menuName: "memória",
-                menuRoute: "/memoria",
-              },
-              {
-                menuName: "Vokabel-Aufkleber",
-                menuRoute: "/vokabel-aufkleber",
-              },
-              {
-                menuName: "LIEDTEXTE",
-                menuRoute: "/liedtexte",
-              },
-              // {
-              //   menuName: "KulTour Ungarn",
-              //   menuRoute: "/kultour-ungarn",
-              // },
-              // {
-              //   menuName: "Vokabel-Entdecker",
-              //   menuRoute: "/ungarisch-lernen/vokabel-entdecker",
-              // },
-              {
-                menuName: "aus dem Leben",
-                menuRoute: "/aus-dem-leben",
-              },
-              {
-                menuName: "EINFACH LESEN",
-                menuRoute: "/einfach-lesen",
-              },
-              {
-                menuName: "Wie spät ist es?",
-                menuRoute: "/wie-spaet-ist-es",
-              },
-              // {
-              //   menuName: "Verbarium",
-              //   menuRoute: "/verbarium",
-              // },
-              {
-                menuName: "Ungarisch lernen",
-                menuRoute: "/ungarisch-lernen",
-              },
-              {
-                menuName: "Zahlentrainer",
-                menuRoute: "/zahlentrainer",
-              },
-              {
-                menuName: "Kultour ungarn",
-                menuRoute: "/kultour-ungarn",
-              },
-              // {
-              //   menuName: "Anki-karten",
-              //   menuRoute: "/anki-karten",
-              // },
-            ],
-          },
-          {
-            title: "Ungarn",
-            text: "Land & Leute",
-            slug: "ungarn",
-            menu: [
-              // {
-              //   menuName: "Land & Leute",
-              //   menuRoute: "/land-leute",
-              // },
-              {
-                menuName: "Ungarn-insider",
-                menuRoute: "insider_custom",
-              },
-              {
-                menuName: "kulinarische Seele",
-                menuRoute: "/kulinarische-seele",
-              },
-              {
-                menuName: "AUSFLUGSZIELE",
-                menuRoute: "/ausflugsziele",
-              },
-              {
-                menuName: "Veranstaltungskalender",
-                menuRoute: "/veranstaltungen",
-              },
-            ],
-          },
-          {
-            title: "Community",
-            text: "Gemeinsam",
-            slug: "community",
-            menu: [
-              // {
-              //   menuName: "Gemeinsam",
-              //   menuRoute: "/gemeinsam",
-              // },
-            ],
-          },
-        ].map((item, i) => (
-          <div key={i} className="nav-item">
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-            {item.slug !== "community" && (
-              <div className="hover-menu">
-                {chunkArray(item.menu, 6).map((column, columnIndex) => (
-                  <div key={columnIndex} className="menu-column">
-                    {column.map((menuItem, j) => (
-                      <div
-                        key={j}
-                        className="menu-item cursor-pointer"
-                        {...(menuItem.menuRoute === "insider_custom"
-                          ? { onClick: routerServerGlobal }
-                          : { onClick: () => route.push(menuItem.menuRoute) })}
-                      >
-                        {item.slug === "sprache"
-                          ? menuItem.menuName
-                          : menuItem.menuName}
+      <nav className="sidebar" aria-label="Hauptnavigation">
+        <ul>
+          {[
+            {
+              title: "Information",
+              text: "alles über Ungarn",
+              slug: "information",
+              menu: [
+                {
+                  menuName: "WISSEENWERT",
+                  menuRoute: "/wissenswert",
+                },
+                // {
+                //   menuName: "SHORTS",
+                //   menuRoute: "/shorts",
+                // },
+                {
+                  menuName: "KATEGORIEN",
+                  menuRoute: "/kategorien",
+                },
+              ],
+            },
+            {
+              title: "Sprache",
+              text: "einfach lernen",
+              slug: "sprache",
+              menu: [
+                {
+                  menuName: "GRAMMATIKKURS",
+                  menuRoute: "/sprachkurs",
+                },
+                {
+                  menuName: "Kreuzworträtsel",
+                  menuRoute: "/kreuzwortraetsel",
+                },
+                // {
+                //   menuName: "Ungarisch-Impulse",
+                //   menuRoute: "/ungarisch-impulse",
+                // },
+                {
+                  menuName: "SuffixHero",
+                  menuRoute: "/suffixhero",
+                },
+                // {
+                //   menuName: "Zahlentrainer",
+                //   menuRoute: "/zahlentrainer",
+                // },
+                {
+                  menuName: "memória",
+                  menuRoute: "/memoria",
+                },
+                {
+                  menuName: "Vokabel-Aufkleber",
+                  menuRoute: "/vokabel-aufkleber",
+                },
+                {
+                  menuName: "LIEDTEXTE",
+                  menuRoute: "/liedtexte",
+                },
+                // {
+                //   menuName: "KulTour Ungarn",
+                //   menuRoute: "/kultour-ungarn",
+                // },
+                // {
+                //   menuName: "Vokabel-Entdecker",
+                //   menuRoute: "/ungarisch-lernen/vokabel-entdecker",
+                // },
+                {
+                  menuName: "aus dem Leben",
+                  menuRoute: "/aus-dem-leben",
+                },
+                {
+                  menuName: "EINFACH LESEN",
+                  menuRoute: "/einfach-lesen",
+                },
+                {
+                  menuName: "Wie spät ist es?",
+                  menuRoute: "/wie-spaet-ist-es",
+                },
+                // {
+                //   menuName: "Verbarium",
+                //   menuRoute: "/verbarium",
+                // },
+                {
+                  menuName: "Ungarisch lernen",
+                  menuRoute: "/ungarisch-lernen",
+                },
+                {
+                  menuName: "Zahlentrainer",
+                  menuRoute: "/zahlentrainer",
+                },
+                {
+                  menuName: "Kultour ungarn",
+                  menuRoute: "/kultour-ungarn",
+                },
+                // {
+                //   menuName: "Anki-karten",
+                //   menuRoute: "/anki-karten",
+                // },
+              ],
+            },
+            {
+              title: "Ungarn",
+              text: "Land & Leute",
+              slug: "ungarn",
+              menu: [
+                // {
+                //   menuName: "Land & Leute",
+                //   menuRoute: "/land-leute",
+                // },
+                {
+                  menuName: "Ungarn-insider",
+                  menuRoute: "insider_custom",
+                },
+                {
+                  menuName: "kulinarische Seele",
+                  menuRoute: "/kulinarische-seele",
+                },
+                {
+                  menuName: "AUSFLUGSZIELE",
+                  menuRoute: "/ausflugsziele",
+                },
+                {
+                  menuName: "Veranstaltungskalender",
+                  menuRoute: "/veranstaltungen",
+                },
+              ],
+            },
+            {
+              title: "Community",
+              text: "Gemeinsam",
+              slug: "community",
+              menu: [
+                // {
+                //   menuName: "Gemeinsam",
+                //   menuRoute: "/gemeinsam",
+                // },
+              ],
+            },
+          ].map((item, i) => (
+            <li key={i}>
+              <button className="nav-item" type="button">
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                {item.slug !== "community" && (
+                  <ul className="hover-menu">
+                    {chunkArray(item.menu, 6).map((column, columnIndex) => (
+                      <div key={columnIndex} className="menu-column">
+                        {column.map((menuItem, j) => (
+                          <li key={j} className="menu-item">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (menuItem.menuRoute === "insider_custom") {
+                                  routerServerGlobal();
+                                } else {
+                                  route.push(menuItem.menuRoute);
+                                }
+                              }}
+                            >
+                              {menuItem.menuName}
+                            </button>
+                          </li>
+                        ))}
                       </div>
                     ))}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+                  </ul>
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
       </nav>
 
       {/* Cards */}
@@ -1311,6 +1674,46 @@ const LandingPage = () => {
           handleOpen={handleOpen}
         />
       )}
+
+      {/* Custom Scrollbar */}
+      <aside 
+        className="scrollbar-container" 
+        ref={scrollbarContainerRef}
+        aria-label="Custom Scrollbar"
+      >
+        <button 
+          type="button" 
+          className="arrow-button up" 
+          ref={arrowUpRef}
+          aria-label="Nach oben scrollen"
+        >
+          <span className="arrow-icon up" aria-hidden="true"></span>
+        </button>
+        <div 
+          className="scrollbar-track" 
+          ref={trackRef}
+          role="scrollbar" 
+          aria-controls="main-content" 
+          aria-valuenow="0" 
+          aria-valuemin="0" 
+          aria-valuemax="100"
+        >
+          <div 
+            className="scrollbar-thumb" 
+            ref={thumbRef}
+            tabIndex="0" 
+            aria-label="Scroll-Position"
+          ></div>
+        </div>
+        <button 
+          type="button" 
+          className="arrow-button down" 
+          ref={arrowDownRef}
+          aria-label="Nach unten scrollen"
+        >
+          <span className="arrow-icon down" aria-hidden="true"></span>
+        </button>
+      </aside>
     </div>
   );
 };
