@@ -1014,7 +1014,7 @@ body {
 @media screen and (min-width: 1200px) {
   [role="dialog"]:not([data-dialog="impressum-modal"]) {
     max-width: 1030px !important;
-    min-width: 1000px !important;
+    min-width: 1030px !important;
     width: 100% !important;
   }
 }
