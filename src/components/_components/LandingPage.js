@@ -654,7 +654,8 @@ const LandingPage = () => {
     const arrowUp = arrowUpRef.current;
     const arrowDown = arrowDownRef.current;
 
-    if (!scrollbarContainer || !track || !thumb || !arrowUp || !arrowDown) return;
+    if (!scrollbarContainer || !track || !thumb || !arrowUp || !arrowDown)
+      return;
 
     let isDragging = false;
     let startY = 0;
@@ -672,7 +673,8 @@ const LandingPage = () => {
     };
 
     const updateThumbPosition = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
       const documentHeight = document.documentElement.scrollHeight;
       const viewportHeight = window.innerHeight;
       const maxScroll = documentHeight - viewportHeight;
@@ -696,9 +698,13 @@ const LandingPage = () => {
 
       if (maxScroll <= 0) return;
 
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      const currentScroll =
+        window.pageYOffset || document.documentElement.scrollTop;
       const scrollAmount = (maxScroll * percent) / 100;
-      const newScrollTop = Math.max(0, Math.min(currentScroll + scrollAmount, maxScroll));
+      const newScrollTop = Math.max(
+        0,
+        Math.min(currentScroll + scrollAmount, maxScroll)
+      );
 
       window.scrollTo({
         top: newScrollTop,
@@ -713,7 +719,9 @@ const LandingPage = () => {
       isDragging = true;
       thumb.classList.add("dragging");
 
-      const clientY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+      const clientY = e.type.includes("touch")
+        ? e.touches[0].clientY
+        : e.clientY;
       const thumbRect = thumb.getBoundingClientRect();
       const trackRect = track.getBoundingClientRect();
 
@@ -729,7 +737,9 @@ const LandingPage = () => {
 
       e.preventDefault();
 
-      const clientY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+      const clientY = e.type.includes("touch")
+        ? e.touches[0].clientY
+        : e.clientY;
       const deltaY = clientY - startY;
 
       const trackHeight = track.clientHeight;
@@ -814,7 +824,10 @@ const LandingPage = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else if (e.key === "End") {
         e.preventDefault();
-        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth",
+        });
       }
     });
 
@@ -1252,10 +1265,10 @@ const LandingPage = () => {
                   menuName: "Kultour ungarn",
                   menuRoute: "/kultour-ungarn",
                 },
-                // {
-                //   menuName: "Anki-karten",
-                //   menuRoute: "/anki-karten",
-                // },
+                {
+                  menuName: "Anki-karten",
+                  menuRoute: "/anki-karten",
+                },
               ],
             },
             {
@@ -1676,38 +1689,38 @@ const LandingPage = () => {
       )}
 
       {/* Custom Scrollbar */}
-      <aside 
-        className="scrollbar-container" 
+      <aside
+        className="scrollbar-container"
         ref={scrollbarContainerRef}
         aria-label="Custom Scrollbar"
       >
-        <button 
-          type="button" 
-          className="arrow-button up" 
+        <button
+          type="button"
+          className="arrow-button up"
           ref={arrowUpRef}
           aria-label="Nach oben scrollen"
         >
           <span className="arrow-icon up" aria-hidden="true"></span>
         </button>
-        <div 
-          className="scrollbar-track" 
+        <div
+          className="scrollbar-track"
           ref={trackRef}
-          role="scrollbar" 
-          aria-controls="main-content" 
-          aria-valuenow="0" 
-          aria-valuemin="0" 
+          role="scrollbar"
+          aria-controls="main-content"
+          aria-valuenow="0"
+          aria-valuemin="0"
           aria-valuemax="100"
         >
-          <div 
-            className="scrollbar-thumb" 
+          <div
+            className="scrollbar-thumb"
             ref={thumbRef}
-            tabIndex="0" 
+            tabIndex="0"
             aria-label="Scroll-Position"
           ></div>
         </div>
-        <button 
-          type="button" 
-          className="arrow-button down" 
+        <button
+          type="button"
+          className="arrow-button down"
           ref={arrowDownRef}
           aria-label="Nach unten scrollen"
         >

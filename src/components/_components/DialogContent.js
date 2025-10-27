@@ -332,16 +332,17 @@ export default function DialogContent({
             {imageFeature &&
               routePrefix !== "sprachkurs" &&
               routePrefix !== "einfach-lesen" && (
-                <div className="w-full mb-3 flex justify-center items-center h-56 md:h-72 rounded-[32px] overflow-hidden relative">
-                  <Image
-                    src={imageFeature}
-                    alt={imageAlt || title}
-                    width={600}
-                    height={400}
-                    className="rounded-[32px] object-contain"
-                    priority={false}
-                  />
-                </div>
+                <div
+                  className="mb-3 h-56 md:h-68 rounded-[28px] overflow-hidden relative max-w-2xl mx-auto"
+                  style={{
+                    backgroundImage: `url('${imageFeature}')`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                  role="img"
+                  // aria-label={imageAlt || title}
+                ></div>
               )}
 
             {/* {contentType === "einfach-lesen" && (
