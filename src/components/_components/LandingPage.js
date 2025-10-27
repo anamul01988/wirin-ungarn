@@ -22,12 +22,10 @@ class ListSearch {
       postTypeFilter: config.postTypeFilter || null,
     };
     this.mobileMode = mobileMode;
-    this.searchInput = mobileMode 
+    this.searchInput = mobileMode
       ? document.getElementById("mobile-search-input")
       : document.getElementById("search-input");
-    this.searchBtn = mobileMode 
-      ? null 
-      : document.getElementById("search-btn");
+    this.searchBtn = mobileMode ? null : document.getElementById("search-btn");
     this.resultsContainer = mobileMode
       ? document.getElementById("mobile-results-container")
       : document.getElementById("results-container");
@@ -40,7 +38,7 @@ class ListSearch {
     if (this.searchBtn) {
       this.searchBtn.addEventListener("click", () => this.performSearch());
     }
-    
+
     if (this.searchInput) {
       this.searchInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
@@ -138,7 +136,7 @@ class ListSearch {
   }
   renderResults(hits) {
     if (!this.resultsContainer) return;
-    
+
     if (hits.length === 0) {
       this.resultsContainer.innerHTML = `
         <div class="no-results">
@@ -164,7 +162,7 @@ class ListSearch {
   }
   renderPagination(response) {
     if (!this.paginationContainer) return;
-    
+
     const { page, nbPages } = response;
     if (nbPages <= 1) {
       this.paginationContainer.innerHTML = "";
@@ -613,7 +611,8 @@ const LandingPage = () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
               // Recalculate card image heights on resize
-              const allCardWrappers = document.querySelectorAll(".card-wrapper");
+              const allCardWrappers =
+                document.querySelectorAll(".card-wrapper");
               allCardWrappers.forEach((wrapper) => {
                 const imageDiv = wrapper.querySelector(".card-image");
                 if (imageDiv) {
@@ -686,8 +685,10 @@ const LandingPage = () => {
       // Small delay to ensure DOM elements are ready
       setTimeout(() => {
         const searchInput = document.getElementById("mobile-search-input");
-        const resultsContainer = document.getElementById("mobile-results-container");
-        
+        const resultsContainer = document.getElementById(
+          "mobile-results-container"
+        );
+
         if (searchInput && resultsContainer) {
           const config = {
             appId: "4BNRIJHLXZ",
@@ -700,7 +701,7 @@ const LandingPage = () => {
             const ls = new ListSearch(config, true); // Pass true for mobile mode
             window.mobileListSearch = ls;
             console.log("Mobile List search initialized");
-            
+
             // Focus on the mobile search input
             searchInput.focus();
           } catch (error) {
@@ -1197,13 +1198,13 @@ const LandingPage = () => {
           />
           <div
             id="mobile-results-container"
-            style={{ 
-              maxHeight: "400px", 
+            style={{
+              maxHeight: "400px",
               overflowY: "auto",
               backgroundColor: "white",
               padding: "10px",
               borderRadius: "8px",
-              marginTop: "10px"
+              marginTop: "10px",
             }}
           ></div>
         </div>
