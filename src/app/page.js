@@ -84,7 +84,7 @@ export default function Home() {
       //   width: "100%",
       // }}
     >
-      <header className="header w-full">
+      <header className="header w-full desktop-header">
         <nav className="header-buttons">
           <button className="header-btn">
             <span className="ht_text">Währungsrechner</span> EUR ⇔ HUF

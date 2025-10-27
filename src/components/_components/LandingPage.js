@@ -197,12 +197,17 @@ const LandingPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openAiBtn, setOpenAiBtn] = useState(false);
   const [listSearchInstance, setListSearchInstance] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchBarActive, setSearchBarActive] = useState(false);
+  const [activeFooterMenu, setActiveFooterMenu] = useState(null);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
   const handleOpen = () => setOpen(!open);
   const route = useRouter();
   const cardsContainerRef = useRef(null);
+  const cardStackRef = useRef(null);
 
   // Helper function to split array into chunks of specified size
   const chunkArray = (array, chunkSize) => {
@@ -654,7 +659,8 @@ const LandingPage = () => {
     const arrowUp = arrowUpRef.current;
     const arrowDown = arrowDownRef.current;
 
-    if (!scrollbarContainer || !track || !thumb || !arrowUp || !arrowDown) return;
+    if (!scrollbarContainer || !track || !thumb || !arrowUp || !arrowDown)
+      return;
 
     let isDragging = false;
     let startY = 0;
@@ -672,7 +678,8 @@ const LandingPage = () => {
     };
 
     const updateThumbPosition = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
       const documentHeight = document.documentElement.scrollHeight;
       const viewportHeight = window.innerHeight;
       const maxScroll = documentHeight - viewportHeight;
@@ -696,9 +703,13 @@ const LandingPage = () => {
 
       if (maxScroll <= 0) return;
 
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      const currentScroll =
+        window.pageYOffset || document.documentElement.scrollTop;
       const scrollAmount = (maxScroll * percent) / 100;
-      const newScrollTop = Math.max(0, Math.min(currentScroll + scrollAmount, maxScroll));
+      const newScrollTop = Math.max(
+        0,
+        Math.min(currentScroll + scrollAmount, maxScroll)
+      );
 
       window.scrollTo({
         top: newScrollTop,
@@ -713,7 +724,9 @@ const LandingPage = () => {
       isDragging = true;
       thumb.classList.add("dragging");
 
-      const clientY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+      const clientY = e.type.includes("touch")
+        ? e.touches[0].clientY
+        : e.clientY;
       const thumbRect = thumb.getBoundingClientRect();
       const trackRect = track.getBoundingClientRect();
 
@@ -729,7 +742,9 @@ const LandingPage = () => {
 
       e.preventDefault();
 
-      const clientY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+      const clientY = e.type.includes("touch")
+        ? e.touches[0].clientY
+        : e.clientY;
       const deltaY = clientY - startY;
 
       const trackHeight = track.clientHeight;
@@ -814,7 +829,10 @@ const LandingPage = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else if (e.key === "End") {
         e.preventDefault();
-        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth",
+        });
       }
     });
 
@@ -861,6 +879,158 @@ const LandingPage = () => {
     };
   }, []);
 
+  // Mobile Card Stack Swipe Functionality
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const cardStack = cardStackRef.current;
+    if (!cardStack) return;
+
+    const cards = Array.from(cardStack.querySelectorAll(".mobile-card"));
+    if (cards.length === 0) return;
+
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isDragging = false;
+
+    const handleTouchStart = (e) => {
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      currentX = startX;
+      currentY = startY;
+      isDragging = false;
+    };
+
+    const handleTouchMove = (e) => {
+      if (!e.touches[0]) return;
+
+      const touch = e.touches[0];
+      currentX = touch.clientX;
+      currentY = touch.clientY;
+
+      const deltaX = currentX - startX;
+      const deltaY = currentY - startY;
+
+      // Only start dragging if horizontal movement is greater than vertical
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+        isDragging = true;
+        e.preventDefault();
+
+        const activeCard = cards[currentCardIndex];
+        const leftIndicator = document.getElementById("swipeLeft");
+        const rightIndicator = document.getElementById("swipeRight");
+
+        if (activeCard) {
+          const rotation = deltaX * 0.05;
+          gsap.set(activeCard, {
+            x: deltaX,
+            rotation: rotation,
+          });
+
+          // Show swipe indicators
+          if (leftIndicator && rightIndicator) {
+            if (deltaX < -50) {
+              leftIndicator.style.opacity = Math.min(Math.abs(deltaX) / 200, 1);
+              rightIndicator.style.opacity = 0;
+            } else if (deltaX > 50) {
+              rightIndicator.style.opacity = Math.min(deltaX / 200, 1);
+              leftIndicator.style.opacity = 0;
+            } else {
+              leftIndicator.style.opacity = 0;
+              rightIndicator.style.opacity = 0;
+            }
+          }
+        }
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      if (!isDragging) return;
+
+      const deltaX = currentX - startX;
+      const activeCard = cards[currentCardIndex];
+      const leftIndicator = document.getElementById("swipeLeft");
+      const rightIndicator = document.getElementById("swipeRight");
+
+      if (!activeCard) return;
+
+      // Hide indicators
+      if (leftIndicator) leftIndicator.style.opacity = 0;
+      if (rightIndicator) rightIndicator.style.opacity = 0;
+
+      // Swipe threshold
+      const threshold = 100;
+
+      if (Math.abs(deltaX) > threshold) {
+        // Card swiped off screen
+        const direction = deltaX > 0 ? 1 : -1;
+        const exitX = direction * (window.innerWidth + 200);
+
+        gsap.to(activeCard, {
+          x: exitX,
+          rotation: direction * 45,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          onComplete: () => {
+            // Move to next card
+            const nextIndex = (currentCardIndex + 1) % cards.length;
+            setCurrentCardIndex(nextIndex);
+
+            // Reset the swiped card
+            gsap.set(activeCard, {
+              x: 0,
+              rotation: 0,
+              opacity: 1,
+            });
+
+            // Update card classes
+            cards.forEach((card, index) => {
+              card.classList.remove("active", "next", "hidden");
+
+              if (index === nextIndex) {
+                card.classList.add("active");
+              } else if (index === (nextIndex + 1) % cards.length) {
+                card.classList.add("next");
+              } else {
+                card.classList.add("hidden");
+              }
+            });
+          },
+        });
+      } else {
+        // Snap back to center
+        gsap.to(activeCard, {
+          x: 0,
+          rotation: 0,
+          duration: 0.3,
+          ease: "elastic.out(1, 0.5)",
+        });
+      }
+
+      isDragging = false;
+    };
+
+    // Add event listeners to the card stack
+    cardStack.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
+    cardStack.addEventListener("touchmove", handleTouchMove, {
+      passive: false,
+    });
+    cardStack.addEventListener("touchend", handleTouchEnd, { passive: false });
+
+    // Cleanup
+    return () => {
+      cardStack.removeEventListener("touchstart", handleTouchStart);
+      cardStack.removeEventListener("touchmove", handleTouchMove);
+      cardStack.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [currentCardIndex]);
+
   return (
     <div
       className="landing-page__container"
@@ -872,6 +1042,70 @@ const LandingPage = () => {
         backgroundAttachment: "fixed",
       }}
     >
+      {/* Mobile Header */}
+      <header className="mobile-header">
+        <div className="mobile-logo">
+          <img
+            src="/assets/WIU-logo.png"
+            alt="Wir in Ungarn"
+            style={{ width: "200px" }}
+          />
+        </div>
+        <div className="mobile-icons">
+          <img
+            src="/assets/search-icon-white.png"
+            alt="Search"
+            className="search-icon"
+            onClick={() => setSearchBarActive(!searchBarActive)}
+            style={{ cursor: "pointer" }}
+          />
+          <img
+            src="/assets/favorit.png"
+            alt="Wishlist"
+            className="wishlist-icon"
+            style={{ cursor: "pointer" }}
+          />
+          <img
+            src="/assets/icons/close.png"
+            alt="User"
+            className="user-icon"
+            style={{ cursor: "pointer" }}
+          />
+          <img
+            src="/assets/icons/layers.png"
+            alt="Menu"
+            className="mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(true)}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+
+        <div className={`search-bar ${searchBarActive ? "active" : ""}`}>
+          <input type="text" placeholder="Suchen..." />
+        </div>
+      </header>
+
+      {/* Overlay & Slide Menu */}
+      <div
+        className={`overlay ${mobileMenuOpen ? "active" : ""}`}
+        onClick={() => setMobileMenuOpen(false)}
+      ></div>
+      <nav className={`mobile-menu ${mobileMenuOpen ? "active" : ""}`}>
+        <div
+          className="menu-close"
+          onClick={() => setMobileMenuOpen(false)}
+          style={{ cursor: "pointer", fontSize: "24px", textAlign: "right" }}
+        >
+          ✕
+        </div>
+        <Link href="/posts/">Neueste Beiträge</Link>
+        <Link href="/philosophie/">Philosophie</Link>
+        <Link href="/ueber-uns/">Über uns</Link>
+        <Link href="/kontakt/">Kontakt</Link>
+        <Link href="/impressum/">Impressum</Link>
+        <Link href="/datenschutz/">Datenschutz</Link>
+      </nav>
+
       <style>{`
         /* Custom Scrollbar Container */
         .scrollbar-container {
@@ -1365,12 +1599,10 @@ const LandingPage = () => {
             Die Suche oben rechts beantwortet dir auch komplette Fragen.
           </p> */}
 
-          
-            <img 
-              src="/assets/startmessage-creative-stack.png" 
-              alt="Kreatives Kartenstapel Bild - Willkommen bei Wir in Ungarn"
-            />
-         
+          <img
+            src="/assets/startmessage-creative-stack.png"
+            alt="Kreatives Kartenstapel Bild - Willkommen bei Wir in Ungarn"
+          />
         </div>
       </section>
 
@@ -1473,7 +1705,7 @@ const LandingPage = () => {
                 modal.style.display = "flex";
               }}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   e.currentTarget.click();
                 }
@@ -1570,7 +1802,9 @@ const LandingPage = () => {
                         </a>
                       </span>
                       {i < arr.length - 1 && (
-                        <span className="ticker-separator" aria-hidden="true">|</span>
+                        <span className="ticker-separator" aria-hidden="true">
+                          |
+                        </span>
                       )}
                     </React.Fragment>
                   ))}
@@ -1590,7 +1824,9 @@ const LandingPage = () => {
                         </a>
                       </span>
                       {i < arr.length - 1 && (
-                        <span className="ticker-separator" aria-hidden="true">|</span>
+                        <span className="ticker-separator" aria-hidden="true">
+                          |
+                        </span>
                       )}
                     </React.Fragment>
                   ))}
@@ -1628,11 +1864,15 @@ const LandingPage = () => {
                       {link.title}
                     </Link>
                     {index < primaryLinks.length - 1 && (
-                      <span className="text-white" aria-hidden="true">|</span>
+                      <span className="text-white" aria-hidden="true">
+                        |
+                      </span>
                     )}
                   </React.Fragment>
                 ))}
-                <span className="text-white" aria-hidden="true">|</span>
+                <span className="text-white" aria-hidden="true">
+                  |
+                </span>
 
                 {/* More Button */}
                 <div className="relative">
@@ -1704,42 +1944,42 @@ const LandingPage = () => {
       )}
 
       {/* Custom Scrollbar */}
-      <aside 
-        className="scrollbar-container" 
+      <aside
+        className="scrollbar-container"
         id="scrollbarContainer"
         ref={scrollbarContainerRef}
         aria-label="Custom Scrollbar"
       >
-        <button 
-          type="button" 
-          className="arrow-button up" 
+        <button
+          type="button"
+          className="arrow-button up"
           id="arrowUp"
           ref={arrowUpRef}
           aria-label="Nach oben scrollen"
         >
           <span className="arrow-icon up" aria-hidden="true"></span>
         </button>
-        <div 
-          className="scrollbar-track" 
+        <div
+          className="scrollbar-track"
           id="track"
           ref={trackRef}
-          role="scrollbar" 
-          aria-controls="main-content" 
-          aria-valuenow="0" 
-          aria-valuemin="0" 
+          role="scrollbar"
+          aria-controls="main-content"
+          aria-valuenow="0"
+          aria-valuemin="0"
           aria-valuemax="100"
         >
-          <div 
-            className="scrollbar-thumb" 
+          <div
+            className="scrollbar-thumb"
             id="thumb"
             ref={thumbRef}
-            tabIndex={0} 
+            tabIndex={0}
             aria-label="Scroll-Position"
           ></div>
         </div>
-        <button 
-          type="button" 
-          className="arrow-button down" 
+        <button
+          type="button"
+          className="arrow-button down"
           id="arrowDown"
           ref={arrowDownRef}
           aria-label="Nach unten scrollen"
@@ -1747,6 +1987,199 @@ const LandingPage = () => {
           <span className="arrow-icon down" aria-hidden="true"></span>
         </button>
       </aside>
+
+      {/* Discovery Deck - Mobile Card Stack */}
+      <div className="discovery-deck">
+        <div className="card-stack" id="cardStack" ref={cardStackRef}>
+          {/* Swipe Indicators */}
+          <div className="swipe-indicator left" id="swipeLeft">
+            ❌
+          </div>
+          <div className="swipe-indicator right" id="swipeRight">
+            ✓
+          </div>
+
+          {[
+            {
+              image: "/assets/tl-Zahlentrainer.avif",
+              title: "Zahlentrainer",
+              route: "/zahlentrainer",
+            },
+            {
+              image: "/assets/tl-Uhrzeittrainer.avif",
+              title: "Uhrzeittrainer",
+              route: "/wie-spaet-ist-es",
+            },
+            {
+              image: "/assets/tl-kulinarische-Selle.avif",
+              title: "Kulinarische Seele",
+              route: "/kulinarische-seele",
+            },
+            {
+              image: "/assets/tl-Raetsel.avif",
+              title: "Rätsel",
+              route: "/kreuzwortraetsel",
+            },
+            {
+              image: "/assets/tl-Ungarn-Insider.avif",
+              title: "Ungarn Insider",
+              route: "/wissenswert",
+            },
+            {
+              image: "/assets/tl-Zustand-in-einem-Wort.avif",
+              title: "Zustand in einem Wort",
+              route: "/einfach-lesen",
+            },
+            {
+              image: "/assets/tl-Plural.avif",
+              title: "Plural",
+              route: "/sprachkurs",
+            },
+            {
+              image: "/assets/tl-Makler-Tricks.avif",
+              title: "Makler Tricks",
+              route: "/wissenswert",
+            },
+            {
+              image: "/assets/tl-aus-dem-leben.avif",
+              title: "Aus dem Leben",
+              route: "/aus-dem-leben",
+            },
+            {
+              image: "/assets/tl-itt-ott.avif",
+              title: "Itt-Ott",
+              route: "/einfach-lesen",
+            },
+          ].map((card, index) => (
+            <div
+              key={index}
+              className={`mobile-card ${
+                index === currentCardIndex
+                  ? "active"
+                  : index === (currentCardIndex + 1) % 10
+                  ? "next"
+                  : "hidden"
+              }`}
+              data-index={index}
+              style={{
+                transform: `rotate(${Math.random() * 4 - 2}deg)`,
+              }}
+            >
+              <img
+                src={card.image}
+                alt={card.title}
+                className="card-image"
+                draggable="false"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile Footer */}
+      <footer className="mobile-footer">
+        <div
+          className="footer-menu-item"
+          data-menu="info"
+          onClick={() =>
+            setActiveFooterMenu(activeFooterMenu === "info" ? null : "info")
+          }
+        >
+          Information
+        </div>
+        <div
+          className="footer-menu-item"
+          data-menu="lang"
+          onClick={() =>
+            setActiveFooterMenu(activeFooterMenu === "lang" ? null : "lang")
+          }
+        >
+          Sprache
+        </div>
+        <div
+          className="footer-menu-item"
+          data-menu="hungary"
+          onClick={() =>
+            setActiveFooterMenu(
+              activeFooterMenu === "hungary" ? null : "hungary"
+            )
+          }
+        >
+          Ungarn
+        </div>
+        <div
+          className="footer-menu-item"
+          data-menu="community"
+          onClick={() =>
+            setActiveFooterMenu(
+              activeFooterMenu === "community" ? null : "community"
+            )
+          }
+        >
+          Community
+        </div>
+      </footer>
+
+      {/* Dropdown Menus (appear above footer) */}
+      <div
+        className={`footer-dropdown ${
+          activeFooterMenu === "info" ? "active" : ""
+        }`}
+        id="menu-info"
+      >
+        <div className="menu-column">
+          <Link href="/wissenswert">WISSEENWERT</Link>
+          <Link href="/kategorien">KATEGORIEN</Link>
+        </div>
+      </div>
+
+      <div
+        className={`footer-dropdown ${
+          activeFooterMenu === "lang" ? "active" : ""
+        }`}
+        id="menu-lang"
+      >
+        <div className="menu-column">
+          <Link href="/sprachkurs">GRAMMATIKKURS</Link>
+          <Link href="/kreuzwortraetsel">Kreuzworträtsel</Link>
+          <Link href="/suffixhero">SuffixHero</Link>
+          <Link href="/memoria">memória</Link>
+          <Link href="/vokabel-aufkleber">Vokabel-Aufkleber</Link>
+          <Link href="/liedtexte">LIEDTEXTE</Link>
+        </div>
+        <div className="menu-column">
+          <Link href="/aus-dem-leben">aus dem Leben</Link>
+          <Link href="/einfach-lesen">EINFACH LESEN</Link>
+          <Link href="/wie-spaet-ist-es">Wie spät ist es?</Link>
+          <Link href="/ungarisch-lernen">Ungarisch lernen</Link>
+          <Link href="/zahlentrainer">Zahlentrainer</Link>
+          <Link href="/kultour-ungarn">Kultour ungarn</Link>
+        </div>
+      </div>
+
+      <div
+        className={`footer-dropdown ${
+          activeFooterMenu === "hungary" ? "active" : ""
+        }`}
+        id="menu-hungary"
+      >
+        <div className="menu-column">
+          <Link href="/kulinarische-seele">kulinarische Seele</Link>
+          <Link href="/ausflugsziele">AUSFLUGSZIELE</Link>
+          <Link href="/veranstaltungen">Veranstaltungskalender</Link>
+        </div>
+      </div>
+
+      <div
+        className={`footer-dropdown ${
+          activeFooterMenu === "community" ? "active" : ""
+        }`}
+        id="menu-community"
+      >
+        <div className="menu-column">
+          <Link href="#">Gemeinsam</Link>
+        </div>
+      </div>
     </div>
   );
 };
