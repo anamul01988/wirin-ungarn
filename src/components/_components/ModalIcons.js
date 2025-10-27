@@ -42,7 +42,7 @@ export default function ModalIcons({
     "/wie-spaet-ist-es",
     "/vokabel-aufkleber",
     "/neuigkeiten-bei-wir-in-ungarn",
-    "/uber-uns",
+    "/ueber-uns",
     "/philosophie",
     "/kontakt",
     "/datenschutz",
