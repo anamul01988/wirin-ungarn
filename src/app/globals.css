@@ -179,7 +179,8 @@ body {
   position: fixed;
   left: 20px;
   top: 12%;
-  width: 200px;
+  width: clamp(128px, 12vw, 200px);
+  min-width: 128px;
   z-index: 50;
 }
 
@@ -233,14 +234,14 @@ body {
 }
 
 .nav-item h3 {
-  font-size: 19px;
+  font-size: clamp(14px, 1.2vw, 19px);
   font-weight: bold;
   margin-bottom: 2px;
   text-transform: uppercase;
 }
 
 .nav-item p {
-  font-size: 14px;
+  font-size: clamp(11px, 0.9vw, 14px);
   opacity: 0.9;
 }
 
@@ -252,7 +253,7 @@ body {
   background: #4a7c59;
   border-radius: 8px;
   outline: 5px solid #ffffff;
-  min-width: 250px;
+  min-width: clamp(180px, 15vw, 250px);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -309,7 +310,7 @@ body {
 .menu-column {
   display: flex;
   flex-direction: column;
-  min-width: 190px;
+  min-width: clamp(140px, 12vw, 190px);
 }
 
 .menu-item {
@@ -320,7 +321,7 @@ body {
   border-top: 1px solid rgb(231 231 231);
   border-bottom: 1px solid rgb(231 231 231);
   transition: background 0.2s;
-  font-size: 14px;
+  font-size: clamp(11px, 0.9vw, 14px);
   border-radius: 4px;
   list-style: none;
 }
@@ -329,7 +330,7 @@ body {
   background: none;
   border: none;
   color: #56646f;
-  font-size: 14px;
+  font-size: clamp(11px, 0.9vw, 14px);
   text-transform: uppercase;
   cursor: pointer;
   width: 100%;
@@ -368,7 +369,8 @@ body {
   bottom: 91px;
   /* z-index: 49; */
   z-index: 49;
-  width: 410px;
+  width: clamp(200px, 25vw, 410px);
+  max-width: 410px;
 }
 
 .main-logo img {
@@ -894,7 +896,7 @@ body {
 
 .card-wrapper {
   position: absolute;
-  width: 450px;
+  width: clamp(280px, 28vw, 450px);
   pointer-events: auto;
   opacity: 0;
 }

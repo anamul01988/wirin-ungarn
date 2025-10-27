@@ -468,7 +468,8 @@ const LandingPage = () => {
                 img.src = url;
                 img.onload = () => {
                   const aspectRatio = img.naturalHeight / img.naturalWidth;
-                  const containerWidth = 450;
+                  // Get actual container width from wrapper element
+                  const containerWidth = wrapper.offsetWidth || 450;
                   const newHeight = aspectRatio * containerWidth;
                   imageDiv.style.height = `${newHeight}px`;
                   resolve();
@@ -506,11 +507,12 @@ const LandingPage = () => {
           const startAreaY = viewportHeight * verticalMargin;
 
           const finalPositions = [];
-          const minDist = 300;
+          // Make minimum distance responsive based on viewport width
+          const minDist = Math.max(150, viewportWidth * 0.15);
 
           // Function to find non-overlapping positions for cards
-          function findGoodPosition(cardHeight) {
-            const maxX = Math.max(0, areaWidth - 450);
+          function findGoodPosition(cardHeight, cardWidth) {
+            const maxX = Math.max(0, areaWidth - cardWidth);
             const maxY = Math.max(0, areaHeight - cardHeight);
             for (let attempts = 0; attempts < 50; attempts++) {
               const x = startAreaX + Math.random() * maxX;
@@ -560,7 +562,8 @@ const LandingPage = () => {
           // Animate each card wrapper
           currentCardWrappers.forEach((wrapper, index) => {
             const cardHeight = wrapper.clientHeight || 400;
-            const pos = findGoodPosition(cardHeight);
+            const cardWidth = wrapper.clientWidth || 450;
+            const pos = findGoodPosition(cardHeight, cardWidth);
             finalPositions.push(pos);
             const { startX, startY } = getStartPosition();
 
@@ -568,6 +571,8 @@ const LandingPage = () => {
               startX,
               startY,
               finalPos: pos,
+              cardWidth,
+              cardHeight,
             });
 
             gsap.set(wrapper, {
@@ -602,9 +607,34 @@ const LandingPage = () => {
           // Refresh ScrollTrigger after setup
           ScrollTrigger.refresh();
 
-          // Add window resize handler
+          // Add window resize handler to recalculate card dimensions
+          let resizeTimeout;
           window.addEventListener("resize", () => {
-            ScrollTrigger.refresh();
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+              // Recalculate card image heights on resize
+              const allCardWrappers = document.querySelectorAll(".card-wrapper");
+              allCardWrappers.forEach((wrapper) => {
+                const imageDiv = wrapper.querySelector(".card-image");
+                if (imageDiv) {
+                  const styleAttr = imageDiv.getAttribute("style");
+                  const urlMatch = styleAttr
+                    ? styleAttr.match(/url\(['"]?([^'"]+)['"]?\)/)
+                    : null;
+                  if (urlMatch) {
+                    const img = new Image();
+                    img.src = urlMatch[1];
+                    img.onload = () => {
+                      const aspectRatio = img.naturalHeight / img.naturalWidth;
+                      const containerWidth = wrapper.offsetWidth || 450;
+                      const newHeight = aspectRatio * containerWidth;
+                      imageDiv.style.height = `${newHeight}px`;
+                    };
+                  }
+                }
+              });
+              ScrollTrigger.refresh();
+            }, 250);
           });
         })
         .catch((error) => {
