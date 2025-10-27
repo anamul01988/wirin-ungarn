@@ -1,7 +1,3 @@
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {};
-
-// export default nextConfig;
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: true,
@@ -12,6 +8,12 @@ const nextConfig = {
         hostname: "wir-in-ungarn.hu",
         port: "",
         pathname: "/wiucontent/themes/grimag-child-theme/assets/images/**",
+      },
+      {
+        protocol: "https",
+        hostname: "wir-in-ungarn.hu",
+        port: "",
+        pathname: "/wiucontent/uploads/**", // ✅ Added this line
       },
       {
         protocol: "https",

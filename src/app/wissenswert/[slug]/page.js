@@ -1,13 +1,5 @@
 // import { redirect } from "next/navigation";
 
-// export default async function WissenswertDynamicPage({ params }) {
-//   const { slug } = params;
-
-//   // Redirect to the root slug URL
-//   redirect(`/${slug}`);
-// }
-// import { redirect } from "next/navigation";
-
 // export default async function PostPage({ params }) {
 //   const { slug } = params;
 //   redirect(`/${slug}`);
@@ -24,6 +16,11 @@ export default async function WissenswertDynamicPage({ params }) {
   try {
     const contentData = await GetWissenswertPostBySlug(slug);
     console.log("content data333eeeee333", contentData.data?.data.post);
+    // if (!contentData) {
+    //   notFound();
+    // }
+    // console.log("contentData 222222222", contentData);
+    // Handle post content
     if (contentData.type === "post") {
       const { title, content, featuredImage, postContent } =
         contentData.data.data.post;
@@ -35,6 +32,11 @@ export default async function WissenswertDynamicPage({ params }) {
             title={title}
             content={postContent || content || "<p>No content available.</p>"}
             imageFeature={imageUrl}
+            // singlePostContent={
+            //   postContent?.postContent?.length > 0
+            //     ? postContent?.postContent
+            //     : []
+            // }
             contentType="wissenswert"
           />
         </div>

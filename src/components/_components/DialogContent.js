@@ -130,7 +130,12 @@ export default function DialogContent({
           </div>
 
           <div>
-            <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1>
+            {routePrefix !== "einfach-lesen" && (
+              <h1 className="text-3xl font-semibold text-black mb-6">
+                {title}
+              </h1>
+            )}
+            {/* <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1> */}
 
             {/* {contentType === "wissenswert" && (
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
@@ -312,7 +317,7 @@ export default function DialogContent({
               </div>
             )} */}
 
-            {imageFeature && (
+            {/* {imageFeature && (
               <>
                 <div
                   className="w-full h-56 md:h-72 bg-cover bg-center rounded-lg mb-6"
@@ -323,7 +328,22 @@ export default function DialogContent({
                   aria-label={imageAlt || title}
                 ></div>
               </>
-            )}
+            )} */}
+            {imageFeature &&
+              routePrefix !== "sprachkurs" &&
+              routePrefix !== "einfach-lesen" && (
+                <div className="w-full mb-3 flex justify-center items-center h-56 md:h-72 rounded-[32px] overflow-hidden relative">
+                  <Image
+                    src={imageFeature}
+                    alt={imageAlt || title}
+                    width={600}
+                    height={400}
+                    className="rounded-[32px] object-contain"
+                    priority={false}
+                  />
+                </div>
+              )}
+
             {/* {contentType === "einfach-lesen" && (
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p

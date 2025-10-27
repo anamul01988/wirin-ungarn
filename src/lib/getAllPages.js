@@ -1859,6 +1859,7 @@ export async function GetDynamicContent(slug) {
   }
 }
 export async function GetWissenswertPostBySlug(slug) {
+  console.log("GetWissenswertPostBySlug called with slug:", slug);
   try {
     const postQuery = `
       query {
@@ -1866,7 +1867,6 @@ export async function GetWissenswertPostBySlug(slug) {
           id
           title
           slug
-          postId
           link
           date
           content
@@ -1894,7 +1894,7 @@ export async function GetWissenswertPostBySlug(slug) {
     `;
 
     const postData = await fetchPage(postQuery);
-    console.log("postData 222222222", postData);
+    console.log("postData 222222222 checking", postData);
 
     // If post exists, return it with a type indicator
     if (postData?.data?.post) {

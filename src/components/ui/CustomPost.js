@@ -124,8 +124,8 @@ const CustomPost = ({
 
       return (
         <div className="space-y-4">
-          {/* <div className="border-l-4 border-green-200 pl-4"> */}
-          <div className="pl-4">
+          {/* <div className="border-l-4 border-green-200 pl-0"> */}
+          <div className="pl-0">
             <div className="flex items-center gap-2 mb-2">
               {/* {firstItem.icon && firstItem.icon.length > 0 && (
                 <div className="flex items-center gap-1">
@@ -165,7 +165,7 @@ const CustomPost = ({
 
       return (
         <div className="space-y-4">
-          <div className="pl-4">
+          <div className="pl-0">
             {/* <h6 className="font-semibold text-purple-800 mb-2 text-sm">
               {firstItem.title}
             </h6> */}
