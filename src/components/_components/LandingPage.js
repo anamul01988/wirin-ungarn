@@ -12,7 +12,7 @@ import algoliasearch from "algoliasearch/lite";
 import { toggleFavorite } from "@/lib/utils/favoritesManager";
 
 class ListSearch {
-  constructor(config) {
+  constructor(config, mobileMode = false) {
     this.client = algoliasearch(config.appId, config.apiKey);
     this.index = this.client.initIndex(config.indexName);
     this.state = {
@@ -21,46 +21,62 @@ class ListSearch {
       hitsPerPage: 20,
       postTypeFilter: config.postTypeFilter || null,
     };
-    this.searchInput = document.getElementById("search-input");
-    this.searchBtn = document.getElementById("search-btn");
-    this.resultsContainer = document.getElementById("results-container");
-    this.paginationContainer = document.getElementById("pagination-container");
+    this.mobileMode = mobileMode;
+    this.searchInput = mobileMode 
+      ? document.getElementById("mobile-search-input")
+      : document.getElementById("search-input");
+    this.searchBtn = mobileMode 
+      ? null 
+      : document.getElementById("search-btn");
+    this.resultsContainer = mobileMode
+      ? document.getElementById("mobile-results-container")
+      : document.getElementById("results-container");
+    this.paginationContainer = mobileMode
+      ? null
+      : document.getElementById("pagination-container");
     this.init();
   }
   init() {
-    this.searchBtn.addEventListener("click", () => this.performSearch());
-    this.searchInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        this.performSearch();
-      }
-    });
+    if (this.searchBtn) {
+      this.searchBtn.addEventListener("click", () => this.performSearch());
+    }
+    
+    if (this.searchInput) {
+      this.searchInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          this.performSearch();
+        }
+      });
 
-    let debounceTimer;
-    this.searchInput.addEventListener("input", (e) => {
-      // Clear any pending debounce
-      clearTimeout(debounceTimer);
+      let debounceTimer;
+      this.searchInput.addEventListener("input", (e) => {
+        // Clear any pending debounce
+        clearTimeout(debounceTimer);
 
-      // Get current query value
-      const query = e.target.value;
+        // Get current query value
+        const query = e.target.value;
 
-      // Always update the state with the latest query
-      this.state.query = query;
+        // Always update the state with the latest query
+        this.state.query = query;
 
-      // Clear results immediately if query is empty
-      if (query.trim() === "") {
-        this.clearResults();
-        return;
-      }
+        // Clear results immediately if query is empty
+        if (query.trim() === "") {
+          this.clearResults();
+          return;
+        }
 
-      // Debounce the search
-      debounceTimer = setTimeout(() => {
-        this.state.page = 0;
-        this.search();
-      }, 300);
-    });
+        // Debounce the search
+        debounceTimer = setTimeout(() => {
+          this.state.page = 0;
+          this.search();
+        }, 300);
+      });
+    }
   }
   performSearch() {
-    this.state.query = this.searchInput.value;
+    if (this.searchInput) {
+      this.state.query = this.searchInput.value;
+    }
     this.state.page = 0;
 
     // Handle empty query case
@@ -102,19 +118,27 @@ class ListSearch {
 
   clearResults() {
     // Clear the results container
-    this.resultsContainer.innerHTML = "";
+    if (this.resultsContainer) {
+      this.resultsContainer.innerHTML = "";
+    }
     // Clear pagination
-    this.paginationContainer.innerHTML = "";
+    if (this.paginationContainer) {
+      this.paginationContainer.innerHTML = "";
+    }
   }
   showLoading() {
-    this.resultsContainer.innerHTML = `
-      <div class="loading">
-        <div class="loading-spinner"></div>
-        <p>Searching...</p>
-      </div>
-    `;
+    if (this.resultsContainer) {
+      this.resultsContainer.innerHTML = `
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          <p>Searching...</p>
+        </div>
+      `;
+    }
   }
   renderResults(hits) {
+    if (!this.resultsContainer) return;
+    
     if (hits.length === 0) {
       this.resultsContainer.innerHTML = `
         <div class="no-results">
@@ -139,6 +163,8 @@ class ListSearch {
     `;
   }
   renderPagination(response) {
+    if (!this.paginationContainer) return;
+    
     const { page, nbPages } = response;
     if (nbPages <= 1) {
       this.paginationContainer.innerHTML = "";
@@ -181,12 +207,14 @@ class ListSearch {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   showError() {
-    this.resultsContainer.innerHTML = `
-      <div class="no-results">
-        <h3>Something went wrong</h3>
-        <p>Please try again</p>
-      </div>
-    `;
+    if (this.resultsContainer) {
+      this.resultsContainer.innerHTML = `
+        <div class="no-results">
+          <h3>Something went wrong</h3>
+          <p>Please try again</p>
+        </div>
+      `;
+    }
   }
 }
 
@@ -201,6 +229,7 @@ const LandingPage = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
   const [activeFooterMenu, setActiveFooterMenu] = useState(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [showFavorites, setShowFavorites] = useState(false);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
@@ -620,6 +649,44 @@ const LandingPage = () => {
       }
     }
   }, [openAiBtn]);
+
+  // Initialize mobile search when search bar is active
+  useEffect(() => {
+    if (searchBarActive && typeof window !== "undefined") {
+      // Small delay to ensure DOM elements are ready
+      setTimeout(() => {
+        const searchInput = document.getElementById("mobile-search-input");
+        const resultsContainer = document.getElementById("mobile-results-container");
+        
+        if (searchInput && resultsContainer) {
+          const config = {
+            appId: "4BNRIJHLXZ",
+            apiKey: "0707974c58f2e7c53a70e1e58eeec381",
+            indexName: "wp_searchable_posts",
+            postTypeFilter: null,
+          };
+
+          try {
+            const ls = new ListSearch(config, true); // Pass true for mobile mode
+            window.mobileListSearch = ls;
+            console.log("Mobile List search initialized");
+            
+            // Focus on the mobile search input
+            searchInput.focus();
+          } catch (error) {
+            console.error("Error initializing mobile search:", error);
+          }
+        }
+      }, 100);
+    }
+
+    return () => {
+      // Clean up on unmount
+      if (window.mobileListSearch) {
+        window.mobileListSearch = null;
+      }
+    };
+  }, [searchBarActive]);
 
   const handleCloseTicker = () => {
     setTickerClosed(true);
@@ -1053,35 +1120,62 @@ const LandingPage = () => {
         </div>
         <div className="mobile-icons">
           <img
-            src="/assets/search-icon-white.png"
+            src="/assets/icons/search-icon.jpeg"
             alt="Search"
             className="search-icon"
             onClick={() => setSearchBarActive(!searchBarActive)}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", width: "25px", height: "25px" }}
           />
           <img
-            src="/assets/favorit.png"
+            src="/assets/icons/Wishlist-icon.jpeg"
             alt="Wishlist"
             className="wishlist-icon"
-            style={{ cursor: "pointer" }}
+            onClick={() => {
+              // Navigate to profile page with favorites
+              route.push("/profile");
+            }}
+            style={{ cursor: "pointer", width: "25px", height: "25px" }}
           />
           <img
-            src="/assets/icons/close.png"
+            src="/assets/icons/user-icon.jpeg"
             alt="User"
             className="user-icon"
-            style={{ cursor: "pointer" }}
+            onClick={() => {
+              // Navigate to profile page
+              route.push("/profile");
+            }}
+            style={{ cursor: "pointer", width: "25px", height: "25px" }}
           />
           <img
-            src="/assets/icons/layers.png"
+            src="/assets/icons/hamberger-menu.jpeg"
             alt="Menu"
             className="mobile-menu-btn"
-            onClick={() => setMobileMenuOpen(true)}
-            style={{ cursor: "pointer" }}
+            onClick={() => {
+              // Toggle mobile menu to show footer navigation
+              setMobileMenuOpen(!mobileMenuOpen);
+            }}
+            style={{ cursor: "pointer", width: "25px", height: "25px" }}
           />
         </div>
 
         <div className={`search-bar ${searchBarActive ? "active" : ""}`}>
-          <input type="text" placeholder="Suchen..." />
+          <input
+            type="text"
+            placeholder="Suchen..."
+            id="mobile-search-input"
+            autoComplete="off"
+          />
+          <div
+            id="mobile-results-container"
+            style={{ 
+              maxHeight: "400px", 
+              overflowY: "auto",
+              backgroundColor: "white",
+              padding: "10px",
+              borderRadius: "8px",
+              marginTop: "10px"
+            }}
+          ></div>
         </div>
       </header>
 
@@ -1306,6 +1400,57 @@ const LandingPage = () => {
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
+        }
+        
+        /* Mobile search results styling */
+        #mobile-results-container {
+          border: 2px solid #ddd;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        #mobile-results-container .result-item {
+          display: block;
+          padding: 12px;
+          border-bottom: 1px solid #eee;
+          text-decoration: none;
+          color: #333;
+          transition: background-color 0.2s;
+        }
+        
+        #mobile-results-container .result-item:hover {
+          background-color: #f5f5f5;
+        }
+        
+        #mobile-results-container .result-item:last-child {
+          border-bottom: none;
+        }
+        
+        #mobile-results-container .result-title {
+          font-weight: bold;
+          margin-bottom: 4px;
+        }
+        
+        #mobile-results-container .result-meta {
+          color: #666;
+          font-size: 12px;
+        }
+        
+        #mobile-results-container .loading,
+        #mobile-results-container .no-results {
+          text-align: center;
+          padding: 20px;
+          color: #666;
+        }
+        
+        #mobile-results-container .loading-spinner {
+          width: 20px;
+          height: 20px;
+          border: 3px solid #f3f3f3;
+          border-top: 3px solid #4a7c59;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin: 0 auto 10px;
         }
       `}</style>
 
