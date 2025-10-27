@@ -91,13 +91,13 @@ export default function Home() {
           </button>
 
           <div className="calendar-item">
-            <button className="header-btn flex items-center gap-1">
+            <button className="header-btn" style={{ marginTop: "2px" }}>
               <span className="ht_text">06.08. Zsuzsanna</span>{" "}
               <Image
                 src="/assets/calendar.png"
                 alt="calendar"
                 width={15}
-                height={15}
+                height={17}
               />
             </button>
             <CalendarMenu />
@@ -140,10 +140,10 @@ export default function Home() {
                   style={{ marginRight: "2px" }}
                 >
                   Anmelden
-                  <span className="ind_icon" aria-hidden="true">
-                    {" "}
-                    &#128273;{" "}
-                  </span>
+                </span>
+                <span className="ind_icon" aria-hidden="true">
+                  {" "}
+                  &#128273;{" "}
                 </span>
               </button>
             </div>

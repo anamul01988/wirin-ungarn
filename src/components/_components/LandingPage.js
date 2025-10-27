@@ -1339,9 +1339,9 @@ const LandingPage = () => {
         </div>
       </div> */}
 
-      <div className="hero-section">
+      <section className="hero-section" aria-label="Willkommensbereich">
         <div className="panel">
-          <h1 className="top-text">Schön, dass du hier bist bei</h1>
+          {/* <h1 className="top-text">Schön, dass du hier bist bei</h1>
 
           <div className="hero_logo">
             <img src="/assets/WIU-logo.png" alt="Main Logo" />
@@ -1363,14 +1363,23 @@ const LandingPage = () => {
             <span className="plus_icon"></span> bekommst Du mehr aus diesem
             Themenbereich. Und wenn du etwas ganz Bestimmtes wissen möchtest:
             Die Suche oben rechts beantwortet dir auch komplette Fragen.
-          </p>
+          </p> */}
+
+          
+            <img 
+              src="/assets/startmessage-creative-stack.png" 
+              alt="Kreatives Kartenstapel Bild - Willkommen bei Wir in Ungarn"
+            />
+         
         </div>
-      </div>
+      </section>
 
       <div
         className="cards-container"
         id="cardsContainer"
         ref={cardsContainerRef}
+        role="region"
+        aria-label="Themen Karten"
       >
         {[
           {
@@ -1424,9 +1433,12 @@ const LandingPage = () => {
             route: "/einfach-lesen",
           },
         ].map((card, index) => (
-          <div key={index} className="card-wrapper">
+          <article key={index} className="card-wrapper">
             <div
               className="card"
+              tabIndex={0}
+              role="button"
+              aria-label={`${card.title} Karte öffnen`}
               onClick={() => {
                 const modal = document.getElementById("modal");
                 document.getElementById(
@@ -1460,13 +1472,21 @@ const LandingPage = () => {
 
                 modal.style.display = "flex";
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  e.currentTarget.click();
+                }
+              }}
             >
               <div
                 className="card-image"
                 style={{ backgroundImage: `url('${card.image}')` }}
+                role="img"
+                aria-label={card.title}
               ></div>
             </div>
-          </div>
+          </article>
         ))}
       </div>
 
@@ -1515,17 +1535,19 @@ const LandingPage = () => {
       </div>
 
       {/* Logo */}
-      <div className="main-logo">
-        <img src="/assets/WIU-logo.png" alt="Wir In Ungarn Logo" />
-      </div>
+      <aside className="main-logo" aria-label="Website Logo">
+        <img src="/assets/WIU-logo.png" alt="Wir In Ungarn Hauptlogo" />
+      </aside>
 
       {/* Footer */}
       <footer className="footer">
         <div className="footer-content">
           {/* Ticker */}
           {!tickerClosed && (
-            <div
+            <aside
               className="ticker-container"
+              id="newsTickerContainer"
+              aria-label="Nachrichten Ticker"
               style={{
                 margin: "0",
                 outline: "5px solid #ffffff",
@@ -1548,7 +1570,7 @@ const LandingPage = () => {
                         </a>
                       </span>
                       {i < arr.length - 1 && (
-                        <span className="ticker-separator">|</span>
+                        <span className="ticker-separator" aria-hidden="true">|</span>
                       )}
                     </React.Fragment>
                   ))}
@@ -1568,20 +1590,21 @@ const LandingPage = () => {
                         </a>
                       </span>
                       {i < arr.length - 1 && (
-                        <span className="ticker-separator">|</span>
+                        <span className="ticker-separator" aria-hidden="true">|</span>
                       )}
                     </React.Fragment>
                   ))}
                 </div>
               </div>
               <button
+                type="button"
                 className="close-button"
                 onClick={handleCloseTicker}
-                aria-label="Schließen"
+                aria-label="Ticker schließen"
               >
                 ✕
               </button>
-            </div>
+            </aside>
           )}
 
           {/* <div>
@@ -1592,7 +1615,7 @@ const LandingPage = () => {
 
           {/* Footer Links */}
 
-          <div className="relative">
+          <nav aria-label="Footer Navigation" className="relative">
             {/* Main Footer Links */}
             <div className="bg-[#4a7c59] p-3 rounded-lg border-[5px] border-white shadow-lg">
               <div className="flex flex-wrap items-center">
@@ -1605,17 +1628,20 @@ const LandingPage = () => {
                       {link.title}
                     </Link>
                     {index < primaryLinks.length - 1 && (
-                      <span className="text-white">|</span>
+                      <span className="text-white" aria-hidden="true">|</span>
                     )}
                   </React.Fragment>
                 ))}
-                <span className="text-white">|</span>
+                <span className="text-white" aria-hidden="true">|</span>
 
                 {/* More Button */}
                 <div className="relative">
                   <button
+                    type="button"
                     onClick={() => setIsOpen(!isOpen)}
                     className="text-white hover:text-gray-200 transition-colors text-sm font-medium flex items-center gap-1 px-1"
+                    aria-expanded={isOpen}
+                    aria-label="Weitere Links anzeigen"
                   >
                     more
                     <svg
@@ -1630,6 +1656,7 @@ const LandingPage = () => {
                       className={`transition-transform duration-200 ${
                         isOpen ? "rotate-180" : ""
                       }`}
+                      aria-hidden="true"
                     >
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
@@ -1642,6 +1669,7 @@ const LandingPage = () => {
                       <div
                         className="fixed inset-0 z-10"
                         onClick={() => setIsOpen(false)}
+                        aria-hidden="true"
                       />
 
                       {/* Menu */}
@@ -1662,7 +1690,7 @@ const LandingPage = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </nav>
         </div>
       </footer>
 
@@ -1678,12 +1706,14 @@ const LandingPage = () => {
       {/* Custom Scrollbar */}
       <aside 
         className="scrollbar-container" 
+        id="scrollbarContainer"
         ref={scrollbarContainerRef}
         aria-label="Custom Scrollbar"
       >
         <button 
           type="button" 
           className="arrow-button up" 
+          id="arrowUp"
           ref={arrowUpRef}
           aria-label="Nach oben scrollen"
         >
@@ -1691,6 +1721,7 @@ const LandingPage = () => {
         </button>
         <div 
           className="scrollbar-track" 
+          id="track"
           ref={trackRef}
           role="scrollbar" 
           aria-controls="main-content" 
@@ -1700,14 +1731,16 @@ const LandingPage = () => {
         >
           <div 
             className="scrollbar-thumb" 
+            id="thumb"
             ref={thumbRef}
-            tabIndex="0" 
+            tabIndex={0} 
             aria-label="Scroll-Position"
           ></div>
         </div>
         <button 
           type="button" 
           className="arrow-button down" 
+          id="arrowDown"
           ref={arrowDownRef}
           aria-label="Nach unten scrollen"
         >
