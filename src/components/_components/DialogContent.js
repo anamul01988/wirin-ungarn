@@ -894,9 +894,7 @@ export default function DialogContent({
                 <CollapsibleComment postId={postId} />
               </div>
             )}
-            {routeName.includes("/suffixhero/") && (
-              <SuffixHeroGrammarExplanations />
-            )}
+            {routeName === "/suffixhero/" && <SuffixHeroGrammarExplanations />}
           </div>
         </DialogBody>
       </Dialog>
