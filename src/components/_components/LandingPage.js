@@ -1630,10 +1630,10 @@ const LandingPage = () => {
                 //   menuName: "KulTour Ungarn",
                 //   menuRoute: "/kultour-ungarn",
                 // },
-                // {
-                //   menuName: "Vokabel-Entdecker",
-                //   menuRoute: "/ungarisch-lernen/vokabel-entdecker",
-                // },
+                {
+                  menuName: "Vokabel-Entdecker",
+                  menuRoute: "/ungarisch-lernen/vokabel-entdecker",
+                },
                 {
                   menuName: "aus dem Leben",
                   menuRoute: "/aus-dem-leben",

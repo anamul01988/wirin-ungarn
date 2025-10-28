@@ -46,7 +46,7 @@ const KontactDetails = () => {
             "py-2",
             "px-4",
             "rounded-md",
-            "hover:bg-red-600"
+            "hover:bg-[#CC2233]"
           );
         }
       }

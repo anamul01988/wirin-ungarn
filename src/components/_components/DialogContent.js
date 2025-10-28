@@ -15,6 +15,7 @@ import Image from "next/image";
 import "plyr-react/plyr.css";
 import EinfachLesenAccordion from "./EinfachLesenAccordion";
 import TimetellingGame from "../pages/timetellingGame/TimetellingGame";
+import SuffixHeroGrammarExplanations from "./SuffixHeroStatic";
 export default function DialogContent({
   title,
   content,
@@ -29,12 +30,14 @@ export default function DialogContent({
   contentType,
   singlePostContent = [],
   routePrefix,
+  routeName,
   postContent, // Add postContent prop
   postId,
   nextPostSlug, // Add nextPostSlug prop
   prevPostSlug, // Add prevPostSlug prop
   nextPostTitle, // Add nextPostTitle prop
   prevPostTitle, // Add prevPostTitle prop
+  // backupShortsPostContent,
 }) {
   const [open, setOpen] = useState(true);
 
@@ -455,63 +458,82 @@ export default function DialogContent({
                   className="text-gray-700 italic"
                   dangerouslySetInnerHTML={{ __html: content?.introText }}
                 />
-                {content?.postContent?.map((item, index) => (
-                  <div key={index} className="mb-2">
-                    <div className="flex pt-0 items-start justify-start mb-2">
-                      <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
-                        <div
-                          className="w-full h-full cursor-pointer"
-                          style={{
-                            background:
-                              "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-                          }}
-                        >
-                          <div>
-                            {item.icon && item.icon.length > 0 ? (
-                              <Image
-                                src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
-                                alt={item.icon[0]}
-                                width={70}
-                                height={70}
-                                className="w-full h-auto"
-                              />
-                            ) : (
-                              <svg
-                                className="w-full h-auto text-orange-500"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 
+                {content?.postContent?.length > 0 ? (
+                  <>
+                    {" "}
+                    {content?.postContent?.map((item, index) => (
+                      <div key={index} className="mb-2">
+                        <div className="flex pt-0 items-start justify-start mb-2">
+                          <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
+                            <div
+                              className="w-full h-full cursor-pointer"
+                              style={{
+                                background:
+                                  "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+                              }}
+                            >
+                              <div>
+                                {item.icon && item.icon.length > 0 ? (
+                                  <Image
+                                    src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
+                                    alt={item.icon[0]}
+                                    width={70}
+                                    height={70}
+                                    className="w-full h-auto"
+                                  />
+                                ) : (
+                                  <svg
+                                    className="w-full h-auto text-orange-500"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 
              6.707a1 1 0 010-1.414l3-3a1 1 0 
              011.414 0l3 3a1 1 0 01-1.414 
              1.414L11 5.414V13a1 1 0 
              11-2 0V5.414L7.707 6.707a1 
              1 0 01-1.414 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            )}
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex-1 pl-3">
+                            <h3 className="font-semibold text-20px text-[#436f4d] mb-2">
+                              {item.title}
+                            </h3>
+                            {/* Content */}
+                            <Typography
+                              variant="paragraph"
+                              color="blue-gray"
+                              className="text-sm leading-relaxed text-left mb-2"
+                              dangerouslySetInnerHTML={{ __html: item.content }}
+                            />
                           </div>
                         </div>
                       </div>
-
-                      <div className="flex-1 pl-3">
-                        <h3 className="font-semibold text-20px text-[#436f4d] mb-2">
-                          {item.title}
-                        </h3>
-                        {/* Content */}
-                        <Typography
-                          variant="paragraph"
-                          color="blue-gray"
-                          className="text-sm leading-relaxed text-left mb-2"
-                          dangerouslySetInnerHTML={{ __html: item.content }}
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    {content?.shortsPostContent && (
+                      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <p
+                          className="text-gray-700 italic"
+                          dangerouslySetInnerHTML={{
+                            __html: content?.shortsPostContent,
+                          }}
                         />
                       </div>
-                    </div>
-                  </div>
-                ))}
+                    )}
+                  </>
+                )}
               </div>
             )}
 
@@ -871,6 +893,9 @@ export default function DialogContent({
                 {/* Collapsible Comment Component */}
                 <CollapsibleComment postId={postId} />
               </div>
+            )}
+            {routeName.includes("/suffixhero/") && (
+              <SuffixHeroGrammarExplanations />
             )}
           </div>
         </DialogBody>

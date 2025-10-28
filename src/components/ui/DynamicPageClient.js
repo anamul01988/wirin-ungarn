@@ -2,16 +2,18 @@
 
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { notFound } from "next/navigation";
+import { notFound, usePathname } from "next/navigation";
 import DialogContent from "@/components/_components/DialogContent";
 import { GetDynamicContent, GetDynamicContentV2 } from "@/lib/getAllPages";
+import { current } from "@reduxjs/toolkit";
+import SuffixHeroGrammarExplanations from "../_components/SuffixHeroStatic";
 
 export default function DynamicPageClient({ slug }) {
   const [contentData, setContentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [detectedPrefix, setDetectedPrefix] = useState(null);
-
+  const pathName = usePathname();
   // Get routePrefix from Redux
   const routePrefix = useSelector((state) => state.route.routePrefix);
 
@@ -202,6 +204,7 @@ export default function DynamicPageClient({ slug }) {
           content={content}
           contentType="page"
           routePrefix={routePrefix}
+          routeName={pathName}
         />
       </div>
     );

@@ -1,0 +1,114 @@
+.anki_karten-container {
+  /* max-width: 900px;
+  margin: 0 auto; */
+  line-height: 1.6;
+  color: #333;
+}
+
+.anki_karten-intro-text {
+  color: #555;
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+
+.anki_karten-description-text {
+  color: #666;
+  margin-bottom: 0px;
+}
+
+.anki_karten-section-title {
+  color: #34495e;
+  margin: 10px 0 10px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.anki_karten-content-text {
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.anki_karten-feature-list {
+  margin: 20px 0 25px 20px;
+  padding-left: 0;
+}
+
+.anki_karten-feature-list li {
+  margin-bottom: 15px;
+  color: #555;
+  line-height: 1.7;
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.anki_karten-feature-list li strong {
+  color: #2c3e50;
+}
+
+.anki_karten-summary-text {
+  color: #555;
+  margin: 25px 0;
+}
+
+.anki_karten-set-card {
+  border-radius: 8px;
+  padding: 0px;
+  margin: 10px 0;
+}
+
+.anki_karten-card-title {
+  color: #c62828;
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
+.anki_karten-card-content {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.anki_karten-download-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70px;
+  max-width: 70px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.anki_karten-download-icon:hover {
+  transform: translateY(-2px);
+}
+
+.anki_karten-download-text {
+  color: #c62828;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.anki_karten-card-description {
+  flex: 1;
+  color: #444;
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 500;
+}
+
+.anki_karten-section-header {
+  color: #2c3e50;
+  margin: 10px 0 0px;
+  /* /font-weight: 600;/ */
+}
+
+.anki_karten-subsection-title {
+  color: #34495e;
+  /* /font-weight: 600;/
+    /font-size: 16px;/ */
+}
+
+.anki_karten-download-icon a {
+  display: block;
+}

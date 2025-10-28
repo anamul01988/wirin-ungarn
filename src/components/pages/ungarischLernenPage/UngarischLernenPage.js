@@ -171,7 +171,7 @@ const UngarischLernenPage = () => {
   return (
     <div className="mx-auto">
       {/* Header */}
-      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center text-[#fff]">
         <Typography
           variant="h4"
           className="font-bold text-center text-[#FFD6D9]"

@@ -28,9 +28,9 @@ const VenastaltusngskalendarPage = () => {
   const [pageHistory, setPageHistory] = useState([]); // Store page history for navigation
   const [searchPageHistory, setSearchPageHistory] = useState([]); // Store search page history
   const isHTML = (str) => {
-  if (typeof str !== "string") return false;
-  return /<[a-z][\s\S]*>/i.test(str);
-};
+    if (typeof str !== "string") return false;
+    return /<[a-z][\s\S]*>/i.test(str);
+  };
   const truncateText = (text, maxWords = 80) => {
     if (typeof text !== "string") return text;
 
@@ -198,7 +198,7 @@ const VenastaltusngskalendarPage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] flex items-center justify-center text-[#fff]">
         <Typography
           variant="h4"
           className="font-bold text-center text-[#FFD6D9]"

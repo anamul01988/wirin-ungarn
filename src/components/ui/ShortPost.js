@@ -259,7 +259,7 @@ const ShortPostGrid = ({
               color="red"
               onClick={() => onPageChange && onPageChange("previous")}
               disabled={!hasPreviousPage || loadingPage}
-              className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-3 bg-[#CC2233] hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loadingPage ? "Lade..." : "Previous"}
             </Button>
@@ -267,7 +267,7 @@ const ShortPostGrid = ({
               color="red"
               onClick={() => onPageChange && onPageChange("next")}
               disabled={!hasNextPage || loadingPage}
-              className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-3 bg-[#CC2233] hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loadingPage ? "Lade..." : "Next"}
             </Button>

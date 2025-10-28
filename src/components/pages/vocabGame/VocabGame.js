@@ -1,3 +1,4 @@
+import { Typography } from "@material-tailwind/react";
 import React, { useState, useEffect } from "react";
 
 const vocabularyData = {
@@ -145,6 +146,14 @@ function VocabGame() {
 
   return (
     <div style={styles.container}>
+      <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] text-[#fff] flex items-center justify-center">
+        <Typography
+          variant="h4"
+          className="font-bold text-center text-[#FFD6D9]"
+        >
+          Vokabel-Entdecker
+        </Typography>
+      </div>
       <div style={styles.instructBox}>
         <div
           style={styles.instructHeader}
@@ -216,7 +225,7 @@ function VocabGame() {
 const styles = {
   container: {
     fontFamily: "Arial, sans-serif",
-    maxWidth: "800px",
+    // maxWidth: "800px",
     margin: "0 auto",
     padding: "20px",
   },

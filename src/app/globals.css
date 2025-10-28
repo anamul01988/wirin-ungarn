@@ -1438,6 +1438,28 @@ body {
   }
 }
 
+.sentence_block {
+  margin-bottom: 30px;
+}
+.hu_text {
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+  margin: 5px 0px;
+}
+.de_direct_text {
+  color: #436f4d;
+  font-size: 18px;
+  font-style: italic;
+  margin: 5px 0px;
+}
+.de_correct_text {
+  font-style: italic;
+  margin: 5px 0px;
+  font-size: 18px;
+  color: #333;
+}
+
 /* ===========================================
    DESKTOP VERSION (KEEP ORIGINAL VISIBLE)
    =========================================== */

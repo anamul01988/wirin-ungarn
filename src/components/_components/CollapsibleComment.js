@@ -217,7 +217,7 @@ export default function CollapsibleComment({ postId }) {
 
           <div className="flex justify-end">
             <button
-              className={`bg-red-600 text-white px-6 py-2 font-semibold rounded hover:bg-red-700 transition ${
+              className={`bg-[#CC2233] text-white px-6 py-2 font-semibold rounded hover:bg-red-700 transition ${
                 isSubmitting ? "opacity-70 cursor-not-allowed" : ""
               }`}
               onClick={handleSubmit}

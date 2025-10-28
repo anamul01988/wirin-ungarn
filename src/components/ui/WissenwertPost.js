@@ -150,7 +150,7 @@ const WissenwertPostGrid = ({
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header */}
-      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#CC2233] flex items-center justify-center">
+      <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] bg-[#CC2233] flex items-center justify-center">
         <Typography variant="h4" className="font-bold text-center text-white">
           {title}
         </Typography>
@@ -255,7 +255,7 @@ const WissenwertPostGrid = ({
               color="red"
               onClick={() => onPageChange && onPageChange("previous")}
               disabled={!hasPreviousPage || loadingPage}
-              className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-3 bg-[#CC2233] hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loadingPage ? "Lade..." : "Previous"}
             </Button>
@@ -263,7 +263,7 @@ const WissenwertPostGrid = ({
               color="red"
               onClick={() => onPageChange && onPageChange("next")}
               disabled={!hasNextPage || loadingPage}
-              className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-3 bg-[#CC2233] hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loadingPage ? "Lade..." : "Next"}
             </Button>
