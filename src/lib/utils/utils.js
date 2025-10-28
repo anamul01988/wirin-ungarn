@@ -179,31 +179,76 @@ export const philosopiesDetails = {
   },
 };
 export const footerLinks = [
-  { title: "Neueste Beiträge", key: "posts", endpoint: "/posts", primary: true },
+  {
+    title: "Neueste Beiträge",
+    key: "posts",
+    endpoint: "/posts",
+    primary: true,
+  },
   {
     title: "Neuigkeiten",
     key: "news",
     endpoint: "/neuigkeiten-bei-wir-in-ungarn",
-    primary: true
+    primary: true,
   },
   { title: "Über uns", key: "about", endpoint: "/uber-uns", primary: true },
-  { title: "Philosophie", key: "philosophie", endpoint: "/philosophie", primary: true },
+  {
+    title: "Philosophie",
+    key: "philosophie",
+    endpoint: "/philosophie",
+    primary: true,
+  },
   { title: "Kontakt", key: "kontakt", endpoint: "/kontakt", primary: true },
-  { title: "Impressum", key: "impressum", endpoint: "/impressum", primary: true },
-  { title: "Datenschutz", key: "datenschutz", endpoint: "/datenschutz", primary: true },
-  
-  { title: "Ungarn-Insider", key: "insider", endpoint: "/ungarn-insider", primary: false },
-  { title: "Transparenz", key: "transparenz", endpoint: "/transparenz", primary: false },
-  { title: "WIU-Münzen", key: "wiu-muenzen", endpoint: "/wiu-muenzen", primary: false },
+  {
+    title: "Impressum",
+    key: "impressum",
+    endpoint: "/impressum",
+    primary: true,
+  },
+  {
+    title: "Datenschutz",
+    key: "datenschutz",
+    endpoint: "/datenschutz",
+    primary: true,
+  },
+
+  {
+    title: "Ungarn-Insider",
+    key: "insider",
+    endpoint: "/ungarn-insider",
+    primary: false,
+  },
+  {
+    title: "Transparenz",
+    key: "transparenz",
+    endpoint: "/transparenz",
+    primary: false,
+  },
+  {
+    title: "WIU-Münzen",
+    key: "wiu-muenzen",
+    endpoint: "/wiu-muenzen",
+    primary: false,
+  },
   { title: "Karriere", key: "karriere", endpoint: "/karriere", primary: false },
   {
     title: "Cookie-Richtlinie",
     key: "cookies",
     endpoint: "/cookie-richtlinie-eu",
-    primary: false
+    primary: false,
   },
-  { title: "Soziale Projekte", key: "projekte", endpoint: "/soziale-projekte", primary: false },
-  { title: "Kooperationen", key: "kooperationen", endpoint: "/kooperationen", primary: false },
+  {
+    title: "Soziale Projekte",
+    key: "projekte",
+    endpoint: "/soziale-projekte",
+    primary: false,
+  },
+  {
+    title: "Kooperationen",
+    key: "kooperationen",
+    endpoint: "/kooperationen",
+    primary: false,
+  },
 ];
 
 export const karriere = {
@@ -620,3 +665,66 @@ export const kontactData = {
     },
   },
 };
+
+export const landingCards = [
+  {
+    id: 1,
+    image: "/assets/tl-Zahlentrainer.avif",
+    title: "Zahlentrainer",
+    route: "/zahlentrainer",
+  },
+  {
+    id: 2,
+    image: "/assets/tl-Uhrzeittrainer.avif",
+    title: "Uhrzeittrainer",
+    route: "/wie-spaet-ist-es",
+  },
+  {
+    id: 3,
+    image: "/assets/tl-kulinarische-Selle.avif",
+    title: "Kulinarische Seele",
+    route: "/kulinarische-seele",
+  },
+  {
+    id: 4,
+    image: "/assets/tl-Raetsel.avif",
+    title: "Rätsel",
+    route: "/kreuzwortraetsel",
+  },
+  {
+    id: 5,
+    image: "/assets/tl-Ungarn-Insider.avif",
+    title: "Ungarn Insider",
+    route: "/wissenswert",
+  },
+  {
+    id: 6,
+    image: "/assets/tl-Zustand-in-einem-Wort.avif",
+    title: "Zustand in einem Wort",
+    route: "/einfach-lesen",
+  },
+  {
+    id: 7,
+    image: "/assets/tl-Plural.avif",
+    title: "Plural",
+    route: "/sprachkurs",
+  },
+  {
+    id: 8,
+    image: "/assets/tl-Makler-Tricks.avif",
+    title: "Makler Tricks",
+    route: "/wissenswert",
+  },
+  {
+    id: 9,
+    image: "/assets/tl-aus-dem-leben.avif",
+    title: "Aus dem Leben",
+    route: "/aus-dem-leben",
+  },
+  {
+    id: 10,
+    image: "/assets/tl-itt-ott.avif",
+    title: "Itt-Ott",
+    route: "/einfach-lesen",
+  },
+];

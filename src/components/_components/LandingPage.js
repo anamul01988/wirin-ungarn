@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./style.css";
 import ImpressumtModal from "../ui/ImpressumModal";
-import { footerLinks } from "@/lib/utils/utils";
+import { footerLinks, landingCards } from "@/lib/utils/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
@@ -10,6 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import algoliasearch from "algoliasearch/lite";
 import { toggleFavorite } from "@/lib/utils/favoritesManager";
+import CommonCardChip from "../ui/CommonCardChip";
 
 class ListSearch {
   constructor(config, mobileMode = false) {
@@ -219,6 +220,9 @@ class ListSearch {
 const LandingPage = () => {
   const [tickerClosed, setTickerClosed] = useState(false);
   const [allowImpressumModal, setAllowImpressumModal] = useState(false);
+  const [postCards, setPostCards] = useState(landingCards);
+  const [allowPostSlider, setAllowPostSlider] = useState(false);
+  const [postSliderDetails, setPostSliderDetails] = useState({});
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [openAiBtn, setOpenAiBtn] = useState(false);
@@ -1848,37 +1852,43 @@ const LandingPage = () => {
               role="button"
               aria-label={`${card.title} Karte öffnen`}
               onClick={() => {
-                const modal = document.getElementById("modal");
-                document.getElementById(
-                  "modalTitle"
-                ).textContent = `${card.title}`;
-                document.getElementById(
-                  "modalText"
-                ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
+                // const modal = document.getElementById("modal");
+                // document.getElementById(
+                //   "modalTitle"
+                // ).textContent = `${card.title}`;
+                // document.getElementById(
+                //   "modalText"
+                // ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
 
-                // Add a button to navigate to the page
-                const buttonContainer =
-                  modal.querySelector(".modal-content div");
-                if (buttonContainer) {
-                  // Clear existing buttons first
-                  const existingNavigateBtn =
-                    buttonContainer.querySelector(".navigate-btn");
-                  if (existingNavigateBtn) {
-                    existingNavigateBtn.remove();
-                  }
+                // // Add a button to navigate to the page
+                // const buttonContainer =
+                //   modal.querySelector(".modal-content div");
+                // if (buttonContainer) {
+                //   // Clear existing buttons first
+                //   const existingNavigateBtn =
+                //     buttonContainer.querySelector(".navigate-btn");
+                //   if (existingNavigateBtn) {
+                //     existingNavigateBtn.remove();
+                //   }
 
-                  // Create and add the navigation button
-                  const navigateBtn = document.createElement("button");
-                  navigateBtn.className = "close-modal navigate-btn";
-                  navigateBtn.style.backgroundColor = "#4a7c59";
-                  navigateBtn.textContent = "Zur Seite";
-                  navigateBtn.onclick = () => {
-                    route.push(card.route);
-                  };
-                  buttonContainer.appendChild(navigateBtn);
+                //   // Create and add the navigation button
+                //   const navigateBtn = document.createElement("button");
+                //   navigateBtn.className = "close-modal navigate-btn";
+                //   navigateBtn.style.backgroundColor = "#4a7c59";
+                //   navigateBtn.textContent = "Zur Seite";
+                //   navigateBtn.onclick = () => {
+                //     route.push(card.route);
+                //   };
+                //   buttonContainer.appendChild(navigateBtn);
+                // }
+
+                // modal.style.display = "flex";
+                if (allowImpressumModal === true) {
+                  setAllowImpressumModal(false);
                 }
-
-                modal.style.display = "flex";
+                setAllowPostSlider(true);
+                setPostSliderDetails(card);
+                handleOpen();
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -2109,6 +2119,15 @@ const LandingPage = () => {
           </nav>
         </div>
       </footer>
+
+      {allowPostSlider && (
+        <CommonCardChip
+          open={open}
+          setOpen={setOpen}
+          handleOpen={handleOpen}
+          postDetails={postSliderDetails}
+        />
+      )}
 
       {/* Impressum Modal */}
       {allowImpressumModal && (
