@@ -1712,7 +1712,7 @@ const LandingPage = () => {
             },
           ].map((item, i) => (
             <li key={i}>
-              <button className="nav-item" type="button">
+              <div className="nav-item">
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
                 {item.slug !== "community" && (
@@ -1740,7 +1740,7 @@ const LandingPage = () => {
                     ))}
                   </ul>
                 )}
-              </button>
+              </div>
             </li>
           ))}
         </ul>

@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 // import SubMenu from "../pages/home/SubMenu";
 import ModalIcons from "../_components/ModalIcons";
-import PostsSlider from "../pages/home/PostsSlider";
-// import PostsSlider from "../pages/home/postsSlider";
+import PostsSlider from "../pages/home/postsSlider";
 
 // CSS styles specific to this modal component
 const modalStyles = `
@@ -81,6 +80,7 @@ export default function CommonCardChip({
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(!open);
   const route = useRouter();
+  const carouselRef = useRef(null);
 
   // Inject CSS styles when component mounts
   React.useEffect(() => {
@@ -156,7 +156,8 @@ export default function CommonCardChip({
           className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl flex flex-col"
           style={{
             // maxHeight: "calc(80vh - 400px)",
-            height: "calc(80vh - 80px)",
+            // height: "calc(80vh - 80px)",
+            height: "calc(60vh - 80px)",
             background: "#fff !important",
             // height: "100%",
             // minHeight: "300px",
@@ -186,9 +187,11 @@ export default function CommonCardChip({
             <>
               {/* Prev */}
               <button
-                onClick={() =>
-                  document.querySelector(".submenu-carousel .prev-btn").click()
-                }
+                onClick={() => {
+                  if (carouselRef.current) {
+                    carouselRef.current.goToPrev();
+                  }
+                }}
                 className="absolute left-[-11rem] top-1/2 -translate-y-1/2 text-white rounded-full p-4 z-50"
                 aria-label="Previous"
               >
@@ -201,9 +204,11 @@ export default function CommonCardChip({
 
               {/* Next */}
               <button
-                onClick={() =>
-                  document.querySelector(".submenu-carousel .next-btn").click()
-                }
+                onClick={() => {
+                  if (carouselRef.current) {
+                    carouselRef.current.goToNext();
+                  }
+                }}
                 className="absolute right-[-11rem] top-1/2 -translate-y-1/2 text-white rounded-full p-4 z-50"
                 aria-label="Next"
               >
@@ -218,6 +223,7 @@ export default function CommonCardChip({
 
           <DialogBody className="overflow-auto flex-1">
             <PostsSlider
+              ref={carouselRef}
               postDetails={postDetails}
               onTitleClick={handleShowDetails}
             />

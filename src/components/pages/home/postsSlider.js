@@ -1,11 +1,30 @@
 "use client";
 import { Carousel } from "@material-tailwind/react";
 import { landingCards, slideData } from "@/lib/utils/utils";
+import { useRouter } from "next/navigation";
+import { useImperativeHandle, forwardRef, useRef } from "react";
 
-const PostsSlider = ({ onTitleClick, postDetails }) => {
+const PostsSlider = forwardRef(({ onTitleClick, postDetails }, ref) => {
+  const router = useRouter();
+  const carouselRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    goToPrev: () => {
+      const prevBtn = document.querySelector(".submenu-carousel .prev-btn");
+      if (prevBtn) prevBtn.click();
+    },
+    goToNext: () => {
+      const nextBtn = document.querySelector(".submenu-carousel .next-btn");
+      if (nextBtn) nextBtn.click();
+    },
+  }));
+
+  const handleImageClick = (route) => {
+    router.push(route);
+  };
   console.log("postDetails 2222222222", postDetails, landingCards);
 
-  // Reorder the array to put the matching item first
+  // Reorder the array to put the matching item first with circular order
   const getOrderedData = () => {
     if (postDetails && postDetails.title) {
       const matchingIndex = landingCards.findIndex(
@@ -13,11 +32,10 @@ const PostsSlider = ({ onTitleClick, postDetails }) => {
       );
 
       if (matchingIndex >= 0) {
-        // Create a new array with the matching item first
-        const reorderedData = [
-          landingCards[matchingIndex],
-          ...landingCards.filter((_, index) => index !== matchingIndex),
-        ];
+        // Create a new array with the matching item first, followed by items after it, then items before it
+        const itemsBefore = landingCards.slice(0, matchingIndex);
+        const itemsFromMatching = landingCards.slice(matchingIndex);
+        const reorderedData = [...itemsFromMatching, ...itemsBefore];
         return reorderedData;
       }
     }
@@ -46,22 +64,30 @@ const PostsSlider = ({ onTitleClick, postDetails }) => {
         </div>
       )}
       prevArrow={({ handlePrev }) => (
-        <button onClick={handlePrev} className="hidden prev-btn" />
+        <button
+          onClick={handlePrev}
+          className="prev-btn"
+          style={{ visibility: "hidden", position: "absolute" }}
+        />
       )}
       nextArrow={({ handleNext }) => (
-        <button onClick={handleNext} className="hidden next-btn" />
+        <button
+          onClick={handleNext}
+          className="next-btn"
+          style={{ visibility: "hidden", position: "absolute" }}
+        />
       )}
     >
       {orderedData.map((item, idx) => (
         <div key={idx} className="relative h-full w-full">
           <div
-            className="relative h-64 w-full cursor-pointer overflow-hidden rounded-lg"
+            className="relative h-full w-full cursor-pointer overflow-hidden rounded-lg"
             onClick={() => handleImageClick(item.route)}
           >
             <img
               src={item.image}
               alt={item.title}
-              className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+              className="h-full w-full object-contain hover:scale-105 transition-transform duration-300"
             />
             {/* Overlay with title */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
@@ -72,6 +98,8 @@ const PostsSlider = ({ onTitleClick, postDetails }) => {
       ))}
     </Carousel>
   );
-};
+});
+
+PostsSlider.displayName = "PostsSlider";
 
 export default PostsSlider;

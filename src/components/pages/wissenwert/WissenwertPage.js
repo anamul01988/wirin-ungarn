@@ -162,9 +162,9 @@ const WissenswertPage = () => {
     const categoryMap = {
       burokratie: 605,
       verkehr: 606,
-      immobilien: 607,
-      kultur: 608,
-      arbeit: 609,
+      immobilien: 608,
+      kultur: 609,
+      arbeit: 610,
       all: null,
     };
 
