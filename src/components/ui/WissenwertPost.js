@@ -1,11 +1,85 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setRoutePrefix } from "@/lib/store/routeSlice";
+import algoliasearch from "algoliasearch/lite";
 import "./WissenwertPost.css";
+
+// Algolia Search Class for Wissenswert
+class WissenwertAlgoliaSearch {
+  constructor(onResults, onLoading) {
+    this.client = algoliasearch(
+      "4BNRIJHLXZ",
+      "0707974c58f2e7c53a70e1e58eeec381"
+    );
+    this.index = this.client.initIndex("wp_searchable_posts");
+    this.onResults = onResults;
+    this.onLoading = onLoading;
+    this.currentQuery = "";
+  }
+
+  async search(query, category = "all") {
+    this.currentQuery = query;
+
+    // If query is empty, return empty results
+    if (!query || query.trim() === "") {
+      this.onResults([]);
+      return;
+    }
+
+    this.onLoading(true);
+
+    try {
+      const searchParams = {
+        hitsPerPage: 10,
+        attributesToRetrieve: [
+          "objectID",
+          "post_title",
+          "permalink",
+          "post_excerpt",
+          "post_type",
+          "post_type_label",
+        ],
+        attributesToHighlight: ["post_title", "post_excerpt"],
+        highlightPreTag: "<strong>",
+        highlightPostTag: "</strong>",
+        filters: 'post_type_label:"Posts"', // Only wissenswert posts
+      };
+
+      const response = await this.index.search(query, searchParams);
+      console.log("Algolia search results:", response);
+
+      // Transform Algolia results to match the expected format
+      const transformedHits = response.hits.map((hit) => ({
+        id: hit.objectID,
+        title: hit.post_title || "Untitled",
+        highlightedTitle:
+          hit._highlightResult?.post_title?.value || hit.post_title,
+        excerpt: hit.post_excerpt || "",
+        highlightedExcerpt: hit._highlightResult?.post_excerpt?.value || "",
+        slug: this.extractSlug(hit.permalink),
+        route: hit.permalink || "#",
+        permalink: hit.permalink || "#",
+      }));
+
+      this.onResults(transformedHits);
+    } catch (error) {
+      console.error("Algolia search error:", error);
+      this.onResults([]);
+    } finally {
+      this.onLoading(false);
+    }
+  }
+
+  extractSlug(permalink) {
+    if (!permalink) return "";
+    const parts = permalink.split("/").filter(Boolean);
+    return parts[parts.length - 1] || "";
+  }
+}
 
 // Utility function to check if content contains HTML
 const isHTML = (str) => {
@@ -120,6 +194,25 @@ const WissenwertPostGrid = ({
   loadingPage = false,
 }) => {
   const [filteredPosts, setFilteredPosts] = useState(posts);
+  const [algoliaResults, setAlgoliaResults] = useState([]);
+  const [isAlgoliaLoading, setIsAlgoliaLoading] = useState(false);
+  const [showAlgoliaResults, setShowAlgoliaResults] = useState(false);
+  const algoliaSearchRef = useRef(null);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  // Initialize Algolia search
+  useEffect(() => {
+    algoliaSearchRef.current = new WissenwertAlgoliaSearch(
+      (results) => {
+        setAlgoliaResults(results);
+        setShowAlgoliaResults(results.length > 0);
+      },
+      (loading) => {
+        setIsAlgoliaLoading(loading);
+      }
+    );
+  }, []);
 
   // Update filtered posts when posts change (filtering is handled at API level)
   useEffect(() => {
@@ -135,7 +228,29 @@ const WissenwertPostGrid = ({
     { key: "arbeit", label: "Arbeit / Finanzen" },
   ];
 
+  // Handle search input changes with debouncing for Algolia
+  const handleSearchInputChange = (value) => {
+    if (onSearchChange) {
+      onSearchChange(value);
+    }
+
+    // Trigger Algolia search with debouncing
+    if (algoliaSearchRef.current) {
+      // Clear results if empty
+      if (!value || value.trim() === "") {
+        setShowAlgoliaResults(false);
+        setAlgoliaResults([]);
+        return;
+      }
+
+      algoliaSearchRef.current.search(value, activeFilter);
+    }
+  };
+
   const handleSearch = () => {
+    // Hide Algolia results when performing regular search
+    setShowAlgoliaResults(false);
+
     if (onSearch) {
       onSearch(searchValue);
     }
@@ -145,6 +260,13 @@ const WissenwertPostGrid = ({
     if (e.key === "Enter") {
       handleSearch();
     }
+  };
+
+  const handleAlgoliaResultClick = (result) => {
+    dispatch(setRoutePrefix("wissenswert"));
+    setTimeout(() => {
+      router.push(`/wissenswert/${result.slug}`);
+    }, 10);
   };
 
   return (
@@ -170,13 +292,13 @@ const WissenwertPostGrid = ({
 
       {/* Search Section */}
       <div className="bg-gray-50 p-0 rounded-lg mb-6">
-        <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <div className="flex-1">
+        <div className="flex flex-col sm:flex-row gap-4 items-center relative">
+          <div className="flex-1 relative w-full">
             <Input
               type="text"
               placeholder="Suche..."
               value={searchValue}
-              onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+              onChange={(e) => handleSearchInputChange(e.target.value)}
               labelProps={{
                 className: "hidden",
               }}
@@ -184,6 +306,49 @@ const WissenwertPostGrid = ({
               crossOrigin={undefined}
               className="!border-2 !border-gray-300 focus:!border-green-500 focus:!ring-2 focus:!ring-green-200 !rounded-lg h-[40px]"
             />
+
+            {/* Algolia Search Results Dropdown */}
+            {showAlgoliaResults && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-green-500 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
+                {isAlgoliaLoading ? (
+                  <div className="p-4 text-center text-gray-500">
+                    Suche läuft...
+                  </div>
+                ) : algoliaResults.length > 0 ? (
+                  <div className="py-2">
+                    {algoliaResults.map((result, index) => (
+                      <div
+                        key={result.id || index}
+                        onClick={() => handleAlgoliaResultClick(result)}
+                        className="px-4 py-3 hover:bg-green-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+                      >
+                        <div
+                          className="font-semibold text-green-600 text-sm mb-1"
+                          dangerouslySetInnerHTML={{
+                            __html: result.highlightedTitle || result.title,
+                          }}
+                        />
+                        {result.highlightedExcerpt && (
+                          <div
+                            className="text-gray-600 text-xs line-clamp-2"
+                            dangerouslySetInnerHTML={{
+                              __html: result.highlightedExcerpt,
+                            }}
+                          />
+                        )}
+                        <div className="text-gray-500 text-xs mt-1">
+                          {result.permalink}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-gray-500">
+                    Keine Ergebnisse gefunden
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <Button
             // color="green"

@@ -9,7 +9,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import algoliasearch from "algoliasearch/lite";
-import { toggleFavorite } from "@/lib/utils/favoritesManager";
+import { toggleFavorite, getAllFavorites } from "@/lib/utils/favoritesManager";
 import CommonCardChip from "../ui/CommonCardChip";
 
 class ListSearch {
@@ -232,6 +232,7 @@ const LandingPage = () => {
   const [activeFooterMenu, setActiveFooterMenu] = useState(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [mobileFavorites, setMobileFavorites] = useState([]);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
@@ -257,6 +258,28 @@ const LandingPage = () => {
   useEffect(() => {
     // Check ticker status and reset daily if needed
     resetTickerDaily();
+
+    // Zoom detection
+    let initialZoom = window.devicePixelRatio;
+    let zoomTimeout;
+
+    const handleZoomDetection = () => {
+      const currentZoom = window.devicePixelRatio;
+
+      if (Math.abs(currentZoom - initialZoom) > 0.1) {
+        const toast = document.getElementById("zoomToast");
+        if (toast) {
+          toast.classList.add("show");
+
+          clearTimeout(zoomTimeout);
+          zoomTimeout = setTimeout(() => {
+            toast.classList.remove("show");
+          }, 4000);
+        }
+      }
+    };
+
+    window.addEventListener("resize", handleZoomDetection);
 
     // Register GSAP ScrollTrigger plugin
     if (typeof window !== "undefined") {
@@ -644,6 +667,11 @@ const LandingPage = () => {
           console.error("Error setting up card animations:", error);
         });
     }
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", handleZoomDetection);
+    };
   }, []);
 
   useEffect(() => {
@@ -746,6 +774,25 @@ const LandingPage = () => {
       }
     }
   };
+
+  // Load favorites for mobile dropdown
+  useEffect(() => {
+    const loadFavorites = () => {
+      const savedFavorites = getAllFavorites();
+      setMobileFavorites(savedFavorites);
+    };
+
+    loadFavorites();
+
+    // Add event listener to update favorites when storage changes
+    window.addEventListener("storage", loadFavorites);
+    window.addEventListener("favoritesUpdated", loadFavorites);
+
+    return () => {
+      window.removeEventListener("storage", loadFavorites);
+      window.removeEventListener("favoritesUpdated", loadFavorites);
+    };
+  }, []);
 
   const scrollbarContainerRef = useRef(null);
   const trackRef = useRef(null);
@@ -991,6 +1038,7 @@ const LandingPage = () => {
     const cards = Array.from(cardStack.querySelectorAll(".mobile-card"));
     if (cards.length === 0) return;
 
+    const totalCards = 15; // Updated to 15 cards
     let startX = 0;
     let startY = 0;
     let currentX = 0;
@@ -1079,7 +1127,7 @@ const LandingPage = () => {
           ease: "power2.out",
           onComplete: () => {
             // Move to next card
-            const nextIndex = (currentCardIndex + 1) % cards.length;
+            const nextIndex = (currentCardIndex + 1) % totalCards;
             setCurrentCardIndex(nextIndex);
 
             // Reset the swiped card
@@ -1166,8 +1214,7 @@ const LandingPage = () => {
             alt="Wishlist"
             className="wishlist-icon"
             onClick={() => {
-              // Navigate to profile page with favorites
-              route.push("/profile");
+              setShowFavorites(!showFavorites);
             }}
             style={{ cursor: "pointer", width: "25px", height: "25px" }}
           />
@@ -1212,6 +1259,36 @@ const LandingPage = () => {
             }}
           ></div>
         </div>
+
+        {/* Mobile Favorites Dropdown */}
+        <div
+          className={`mobile-favorites-dropdown ${
+            showFavorites ? "active" : ""
+          }`}
+        >
+          {mobileFavorites.length > 0 ? (
+            <ul>
+              {mobileFavorites.map((favorite, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    route.push(favorite.route);
+                    setShowFavorites(false);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  {favorite.title.length > 20
+                    ? favorite.title.substring(0, 20) + "..."
+                    : favorite.title}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p style={{ textAlign: "center", padding: "10px", color: "#666" }}>
+              Keine Favoriten
+            </p>
+          )}
+        </div>
       </header>
 
       {/* Overlay & Slide Menu */}
@@ -1236,18 +1313,125 @@ const LandingPage = () => {
       </nav>
 
       <style>{`
+        /* Zoom Toast Notification */
+        .zoom-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #c41e3a;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: none;
+            text-align: center;
+            outline: 5px solid #ffffff;
+            font-family: "Open Sans", sans-serif;
+        }
+
+        .zoom-toast.show {
+            display: block;
+            animation: toastFade 0.3s ease;
+        }
+
+        @keyframes toastFade {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
         /* Custom Scrollbar Container */
         .scrollbar-container {
             position: fixed;
-            right: 20px;
+            right: clamp(15px, 2vw, 25px);
             top: 50%;
             transform: translateY(-50%);
             width: 30px;
-            height: 70vh;
-            max-height: 600px;
+            height: clamp(300px, 60vh, 600px);
+            max-height: 70vh;
             display: flex;
             flex-direction: column;
-            z-index: 1000;
+            z-index: 998;
+        }
+
+        /* Responsive adjustments for scrollbar */
+        @media (max-width: 1600px) {
+          .scrollbar-container {
+            right: 15px;
+            height: 58vh;
+            max-height: 550px;
+          }
+        }
+
+        @media (max-width: 1400px) {
+          .scrollbar-container {
+            right: 12px;
+            height: 55vh;
+            max-height: 500px;
+          }
+        }
+
+        @media (max-width: 1200px) {
+          .scrollbar-container {
+            right: 10px;
+            height: 50vh;
+            max-height: 450px;
+            width: 25px;
+            top: 52%;
+          }
+          
+          .scrollbar-track {
+            width: 25px !important;
+          }
+          
+          .scrollbar-thumb {
+            width: 45px !important;
+            min-height: 45px !important;
+          }
+          
+          .arrow-button {
+            width: 25px !important;
+            height: 25px !important;
+          }
+        }
+
+        @media (max-width: 992px) {
+          .scrollbar-container {
+            right: 8px;
+            height: 45vh;
+            max-height: 380px;
+            width: 22px;
+            top: 52%;
+          }
+          
+          .scrollbar-track {
+            width: 22px !important;
+          }
+          
+          .arrow-button {
+            width: 22px !important;
+            height: 22px !important;
+          }
+          
+          .scrollbar-thumb {
+            width: 38px !important;
+            min-height: 38px !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .scrollbar-container {
+            display: none !important;
+          }
         }
 
         /* Arrow Buttons */
@@ -2183,6 +2367,18 @@ const LandingPage = () => {
         </button>
       </aside>
 
+      {/* Zoom Toast Message */}
+      <div
+        className="zoom-toast"
+        id="zoomToast"
+        role="alert"
+        aria-live="polite"
+      >
+        Bitte laden Sie die Seite neu (F5)
+        <br />
+        für die perfekte Ansicht
+      </div>
+
       {/* Discovery Deck - Mobile Card Stack */}
       <div className="discovery-deck">
         <div className="card-stack" id="cardStack" ref={cardStackRef}>
@@ -2194,80 +2390,305 @@ const LandingPage = () => {
             ✓
           </div>
 
-          {[
-            {
-              image: "/assets/tl-Zahlentrainer.avif",
-              title: "Zahlentrainer",
-              route: "/zahlentrainer",
-            },
-            {
-              image: "/assets/tl-Uhrzeittrainer.avif",
-              title: "Uhrzeittrainer",
-              route: "/wie-spaet-ist-es",
-            },
-            {
-              image: "/assets/tl-kulinarische-Selle.avif",
-              title: "Kulinarische Seele",
-              route: "/kulinarische-seele",
-            },
-            {
-              image: "/assets/tl-Raetsel.avif",
-              title: "Rätsel",
-              route: "/kreuzwortraetsel",
-            },
-            {
-              image: "/assets/tl-Ungarn-Insider.avif",
-              title: "Ungarn Insider",
-              route: "/wissenswert",
-            },
-            {
-              image: "/assets/tl-Zustand-in-einem-Wort.avif",
-              title: "Zustand in einem Wort",
-              route: "/einfach-lesen",
-            },
-            {
-              image: "/assets/tl-Plural.avif",
-              title: "Plural",
-              route: "/sprachkurs",
-            },
-            {
-              image: "/assets/tl-Makler-Tricks.avif",
-              title: "Makler Tricks",
-              route: "/wissenswert",
-            },
-            {
-              image: "/assets/tl-aus-dem-leben.avif",
-              title: "Aus dem Leben",
-              route: "/aus-dem-leben",
-            },
-            {
-              image: "/assets/tl-itt-ott.avif",
-              title: "Itt-Ott",
-              route: "/einfach-lesen",
-            },
-          ].map((card, index) => (
-            <div
-              key={index}
-              className={`mobile-card ${
-                index === currentCardIndex
-                  ? "active"
-                  : index === (currentCardIndex + 1) % 10
-                  ? "next"
-                  : "hidden"
-              }`}
-              data-index={index}
-              style={{
-                transform: `rotate(${Math.random() * 4 - 2}deg)`,
-              }}
-            >
-              <img
-                src={card.image}
-                alt={card.title}
-                className="card-image"
-                draggable="false"
-              />
-            </div>
-          ))}
+          {/* Card 1 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 0
+                ? "active"
+                : currentCardIndex === 1
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={0}
+            data-rotation="2"
+          >
+            <img
+              src="/assets/Label-01.png"
+              alt="Zahlentrainer"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 2 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 1
+                ? "active"
+                : currentCardIndex === 2
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={1}
+            data-rotation="-1"
+          >
+            <img
+              src="/assets/Label-02.png"
+              alt="Wir-erklären-ungarisch"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 3 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 2
+                ? "active"
+                : currentCardIndex === 3
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={2}
+            data-rotation="1.5"
+          >
+            <img
+              src="/assets/Label-03.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 4 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 3
+                ? "active"
+                : currentCardIndex === 4
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={3}
+            data-rotation="-2.5"
+          >
+            <img
+              src="/assets/Label-04.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 5 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 4
+                ? "active"
+                : currentCardIndex === 5
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={4}
+            data-rotation="0.5"
+          >
+            <img
+              src="/assets/Label-05.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 6 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 5
+                ? "active"
+                : currentCardIndex === 6
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={5}
+            data-rotation="-1.8"
+          >
+            <img
+              src="/assets/Label-06.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 7 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 6
+                ? "active"
+                : currentCardIndex === 7
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={6}
+            data-rotation="2.8"
+          >
+            <img
+              src="/assets/Label-07.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 8 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 7
+                ? "active"
+                : currentCardIndex === 8
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={7}
+            data-rotation="-0.8"
+          >
+            <img
+              src="/assets/Label-08.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 9 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 8
+                ? "active"
+                : currentCardIndex === 9
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={8}
+            data-rotation="1.2"
+          >
+            <img
+              src="/assets/Label-09.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 10 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 9
+                ? "active"
+                : currentCardIndex === 10
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={9}
+            data-rotation="-1"
+          >
+            <img
+              src="/assets/Label-10.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 11 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 10
+                ? "active"
+                : currentCardIndex === 11
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={10}
+            data-rotation="1.5"
+          >
+            <img
+              src="/assets/Label-11.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 12 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 11
+                ? "active"
+                : currentCardIndex === 12
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={11}
+            data-rotation="-0.8"
+          >
+            <img
+              src="/assets/Label-12.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 13 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 12
+                ? "active"
+                : currentCardIndex === 13
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={12}
+            data-rotation="2.8"
+          >
+            <img
+              src="/assets/Label-13.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 14 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 13
+                ? "active"
+                : currentCardIndex === 14
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={13}
+            data-rotation="-1.5"
+          >
+            <img
+              src="/assets/Label-14.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
+
+          {/* Card 15 */}
+          <div
+            className={`mobile-card ${
+              currentCardIndex === 14
+                ? "active"
+                : currentCardIndex === 0
+                ? "next"
+                : "hidden"
+            }`}
+            data-index={14}
+            data-rotation="-0.8"
+          >
+            <img
+              src="/assets/Label-15.png"
+              alt="Insider"
+              className="card-image"
+              draggable="false"
+            />
+          </div>
         </div>
       </div>
 
