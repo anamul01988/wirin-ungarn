@@ -225,7 +225,6 @@ const EinFachPage = () => {
         };
 
         const response = await searchIndex.current.search(search, searchParams);
-        console.log("Algolia search results:", response);
         setAlgoliaResults(response.hits);
 
         // Also use hits for the main search results when appropriate
