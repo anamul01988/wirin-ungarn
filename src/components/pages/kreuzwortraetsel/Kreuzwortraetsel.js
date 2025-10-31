@@ -15,7 +15,7 @@ const KreuzwortraetselPage = () => {
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
-  
+
   // Algolia search client
   const algoliaClient = useRef(null);
   const searchIndex = useRef(null);
@@ -82,7 +82,12 @@ const KreuzwortraetselPage = () => {
       let apiData;
       if (isSearching) {
         // Add post type filter to search parameters
-        apiData = await SearchAllPosts(search, 10, cursor, window.kreuzwortratselPostTypeFilter);
+        apiData = await SearchAllPosts(
+          search,
+          10,
+          cursor,
+          window.kreuzwortratselPostTypeFilter
+        );
       } else {
         apiData = await GetKreuzwortratsel(10, cursor);
       }
@@ -117,48 +122,55 @@ const KreuzwortraetselPage = () => {
 
     setFiltering(true);
     setIsSearching(true);
-    
+
     try {
       // If we already have Algolia results, use them
       if (algoliaResults.length > 0) {
         // Filter results to include only Crosswords items
-        const filteredResults = algoliaResults.filter(hit => 
-          hit.post_type_label === window.kreuzwortratselPostTypeFilter
+        const filteredResults = algoliaResults.filter(
+          (hit) => hit.post_type_label === window.kreuzwortratselPostTypeFilter
         );
-        
+
         // Create a structure compatible with your existing code
         const processedResults = {
-          edges: filteredResults.map(hit => ({
+          edges: filteredResults.map((hit) => ({
             node: {
               id: hit.objectID,
               title: hit.post_title,
-              slug: hit.permalink ? hit.permalink.split('/').filter(Boolean).pop() : '',
+              slug: hit.permalink
+                ? hit.permalink.split("/").filter(Boolean).pop()
+                : "",
               featuredImage: {
                 node: {
-                  sourceUrl: hit.featured_image_url || '',
-                  altText: hit.post_title || ''
-                }
+                  sourceUrl: hit.featured_image_url || "",
+                  altText: hit.post_title || "",
+                },
               },
               postContentCrosswords: {
-                excerpt: hit.post_excerpt || ''
-              }
-            }
+                excerpt: hit.post_excerpt || "",
+              },
+            },
           })),
           pageInfo: {
             hasNextPage: false,
-            endCursor: null
-          }
+            endCursor: null,
+          },
         };
-        
+
         setSearchResults(processedResults);
         setSearchPageInfo(processedResults.pageInfo);
       } else {
         // Fall back to the original search method with post type filter
-        const apiData = await SearchAllPosts(search, 10, null, window.kreuzwortratselPostTypeFilter);
+        const apiData = await SearchAllPosts(
+          search,
+          10,
+          null,
+          window.kreuzwortratselPostTypeFilter
+        );
         setSearchResults(apiData.data.posts);
         setSearchPageInfo(apiData.data.posts.pageInfo);
       }
-      
+
       setSearchCurrentPage(1);
       setSearchPageHistory([]);
     } catch (err) {
@@ -185,44 +197,53 @@ const KreuzwortraetselPage = () => {
     if (searchDebounce) {
       clearTimeout(searchDebounce);
     }
-    
+
     // Skip if search is empty or search index not initialized
     if (!search.trim() || !searchIndex.current) {
       setAlgoliaResults([]);
       return;
     }
-    
+
     // Set debounce timeout
     const debounceTimer = setTimeout(async () => {
       setAlgoliaSearching(true);
-      
+
       try {
         const searchParams = {
           hitsPerPage: 10,
-          attributesToRetrieve: ['objectID', 'post_title', 'permalink', 'post_excerpt', 'post_type', 'post_type_label'],
-          attributesToHighlight: ['post_title', 'post_excerpt'],
-          highlightPreTag: '<strong>',
-          highlightPostTag: '</strong>',
-          filters: window.kreuzwortratselPostTypeFilter ? `post_type_label:"${window.kreuzwortratselPostTypeFilter}"` : ''
+          attributesToRetrieve: [
+            "objectID",
+            "post_title",
+            "permalink",
+            "post_excerpt",
+            "post_type",
+            "post_type_label",
+          ],
+          attributesToHighlight: ["post_title", "post_excerpt"],
+          highlightPreTag: "<strong>",
+          highlightPostTag: "</strong>",
+          filters: window.kreuzwortratselPostTypeFilter
+            ? `post_type_label:"${window.kreuzwortratselPostTypeFilter}"`
+            : "",
         };
-        
+
         const response = await searchIndex.current.search(search, searchParams);
-        console.log('Algolia search results:', response);
+        console.log("Algolia search results:", response);
         setAlgoliaResults(response.hits);
-        
+
         // Also use hits for the main search results when appropriate
         if (response.hits.length > 0) {
           setIsSearching(true);
         }
       } catch (error) {
-        console.error('Algolia search error:', error);
+        console.error("Algolia search error:", error);
       } finally {
         setAlgoliaSearching(false);
       }
     }, 300); // 300ms debounce
-    
+
     setSearchDebounce(debounceTimer);
-    
+
     // Cleanup timeout on component unmount
     return () => {
       if (searchDebounce) {
@@ -235,13 +256,15 @@ const KreuzwortraetselPage = () => {
   useEffect(() => {
     // Initialize Algolia client
     algoliaClient.current = algoliasearch(
-      '4BNRIJHLXZ',
-      '0707974c58f2e7c53a70e1e58eeec381'
+      "4BNRIJHLXZ",
+      "0707974c58f2e7c53a70e1e58eeec381"
     );
-    searchIndex.current = algoliaClient.current.initIndex('wp_searchable_posts');
-    
+    searchIndex.current = algoliaClient.current.initIndex(
+      "wp_searchable_posts"
+    );
+
     // Store the post type filter for use in search
-    window.kreuzwortratselPostTypeFilter = 'Crosswords';
+    window.kreuzwortratselPostTypeFilter = "Crosswords";
   }, []);
 
   useEffect(() => {
@@ -286,10 +309,7 @@ const KreuzwortraetselPage = () => {
       /> */}
       {/* Header */}
       <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
-        <Typography
-          variant="h4"
-          className="font-bold text-center text-[#FFD6D9]"
-        >
+        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
           {title}
         </Typography>
       </div>
@@ -343,15 +363,15 @@ const KreuzwortraetselPage = () => {
               </div>
             )}
           </div>
-          
-          <Button 
-            color="red" 
-            onClick={handleSearch} 
+
+          <Button
+            color="red"
+            onClick={handleSearch}
             disabled={filtering || algoliaSearching}
           >
             {filtering || algoliaSearching ? "Suche..." : "SUCHE"}
           </Button>
-          
+
           {isSearching && (
             <Button color="gray" onClick={clearSearch} className="px-4 py-2">
               Clear
@@ -359,7 +379,7 @@ const KreuzwortraetselPage = () => {
           )}
         </div>
       </div>
-      
+
       {/* Algolia search results preview */}
       {search && algoliaResults.length > 0 && (
         <div className="border rounded-md mb-4 bg-gray-50">
@@ -369,19 +389,25 @@ const KreuzwortraetselPage = () => {
             </Typography>
           </div>
           <ul className="divide-y">
-            {algoliaResults.slice(0, 5).map(hit => (
+            {algoliaResults.slice(0, 5).map((hit) => (
               <li key={hit.objectID} className="p-3 hover:bg-gray-100">
                 <a href={hit.permalink} className="block">
-                  <Typography 
-                    variant="paragraph" 
+                  <Typography
+                    variant="paragraph"
                     className="font-medium text-red-600"
-                    dangerouslySetInnerHTML={{ __html: hit._highlightResult?.post_title?.value || hit.post_title }}
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        hit._highlightResult?.post_title?.value ||
+                        hit.post_title,
+                    }}
                   />
                   {hit._highlightResult?.post_excerpt?.value && (
-                    <Typography 
-                      variant="small" 
+                    <Typography
+                      variant="small"
                       className="text-gray-600 line-clamp-2"
-                      dangerouslySetInnerHTML={{ __html: hit._highlightResult.post_excerpt.value }}
+                      dangerouslySetInnerHTML={{
+                        __html: hit._highlightResult.post_excerpt.value,
+                      }}
                     />
                   )}
                   <Typography variant="small" className="text-gray-500 mt-1">
@@ -405,11 +431,15 @@ const KreuzwortraetselPage = () => {
       {search && algoliaResults.length === 0 && !algoliaSearching && (
         <div className="border rounded-md mb-4 bg-gray-50">
           <div className="p-4 text-center">
-            <Typography variant="paragraph" className="text-gray-600 font-medium">
+            <Typography
+              variant="paragraph"
+              className="text-gray-600 font-medium"
+            >
               Keine Suchergebnisse gefunden
             </Typography>
             <Typography variant="small" className="text-gray-500 mt-2">
-              Versuchen Sie andere Suchbegriffe oder überprüfen Sie die Schreibweise.
+              Versuchen Sie andere Suchbegriffe oder überprüfen Sie die
+              Schreibweise.
             </Typography>
           </div>
         </div>

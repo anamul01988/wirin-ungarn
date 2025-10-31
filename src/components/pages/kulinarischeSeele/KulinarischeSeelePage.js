@@ -306,10 +306,7 @@ const KulinarischeSeelePage = () => {
       /> */}
       {/* Header */}
       <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
-        <Typography
-          variant="h4"
-          className="font-bold text-center text-[#FFD6D9]"
-        >
+        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
           {title}
         </Typography>
       </div>

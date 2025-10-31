@@ -13,9 +13,9 @@ export default function Kategorien() {
   const handleOpen = () => setOpen(true);
   const route = useRouter();
 
-  const handleBackToMenu = () => {
-    route.back();
-  };
+  // const handleBackToMenu = () => {
+  //   route.back();
+  // };
   const handleClose = () => {
     setOpen(false);
     route.push("/");
@@ -55,7 +55,7 @@ export default function Kategorien() {
           <div className="mb-4 px-4 pt-4">
             <Breadcrumb className="text-sm" />
           </div>
-
+          {/* 
           {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}
@@ -77,7 +77,7 @@ export default function Kategorien() {
                 />
               </svg>
             </button>
-          )}
+          )} */}
           <div className="mt-8">
             <KategorienPage />
           </div>

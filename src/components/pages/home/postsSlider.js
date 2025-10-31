@@ -87,12 +87,12 @@ const PostsSlider = forwardRef(({ onTitleClick, postDetails }, ref) => {
             <img
               src={item.image}
               alt={item.title}
-              className="h-full w-full object-contain hover:scale-105 transition-transform duration-300"
+              className="h-full w-full object-contain transition-transform duration-300"
             />
             {/* Overlay with title */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+            {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
               <h3 className="text-white text-lg font-semibold">{item.title}</h3>
-            </div>
+            </div> */}
           </div>
         </div>
       ))}

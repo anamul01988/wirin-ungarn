@@ -1459,6 +1459,24 @@ body {
   font-size: 18px;
   color: #333;
 }
+.kategorian__singlePost h2 {
+  color: #436f4d;
+  font-size: 24px;
+  font-weight: 500;
+}
+.kategorian__singlePost h3 {
+  color: #436f4d;
+  font-size: 20px;
+  font-weight: 600;
+}
+.kategorian__singlePost p {
+  color: #56646f;
+  font-size: 16px;
+  font-weight: 500;
+}
+.kategorian__singlePost a {
+  color: #cc2233;
+}
 
 /* ===========================================
    DESKTOP VERSION (KEEP ORIGINAL VISIBLE)

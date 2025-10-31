@@ -90,10 +90,7 @@ const ProfileModal = () => {
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="bg-[#CC2233] mb-6 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center text-[#fff]">
-        <Typography
-          variant="h4"
-          className="font-bold text-center text-[#FFD6D9]"
-        >
+        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
           Profil
         </Typography>
       </div>

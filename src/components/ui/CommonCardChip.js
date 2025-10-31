@@ -76,7 +76,7 @@ export default function CommonCardChip({
   handleOpen,
   postDetails,
 }) {
-  console.log("postDetails", postDetails);
+  // console.log("postDetails", postDetails);
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(!open);
   const route = useRouter();
@@ -129,7 +129,7 @@ export default function CommonCardChip({
       {/* Custom backdrop with blur effect and height restrictions */}
       {open && (
         <div
-          className="fixed inset-0 z-40 shalar__dialog"
+          className="fixed inset-0 z-40"
           style={{
             background: `
               linear-gradient(to bottom, transparent 0px, transparent 200px),
