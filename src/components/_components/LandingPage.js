@@ -1044,6 +1044,19 @@ const LandingPage = () => {
     let currentX = 0;
     let currentY = 0;
     let isDragging = false;
+    let touchStartTime = 0;
+
+    // Card URL mappings
+    const cardUrls = {
+      2: "/anki-karten/", // Label-03
+      4: "/aus-dem-leben/", // Label-05
+      7: "/kreuzwortraetsel/", // Label-08
+      8: "/suffixhero/", // Label-09
+      9: "/kulinarische-seele/", // Label-10
+      10: "/vokabel-aufkleber/", // Label-11
+      13: "/memoria/", // Label-14
+      14: "/wie-spaet-ist-es/", // Label-15
+    };
 
     const handleTouchStart = (e) => {
       const touch = e.touches[0];
@@ -1052,6 +1065,7 @@ const LandingPage = () => {
       currentX = startX;
       currentY = startY;
       isDragging = false;
+      touchStartTime = Date.now();
     };
 
     const handleTouchMove = (e) => {
@@ -1098,9 +1112,10 @@ const LandingPage = () => {
     };
 
     const handleTouchEnd = (e) => {
-      if (!isDragging) return;
-
+      const touchEndTime = Date.now();
+      const touchDuration = touchEndTime - touchStartTime;
       const deltaX = currentX - startX;
+      const deltaY = currentY - startY;
       const activeCard = cards[currentCardIndex];
       const leftIndicator = document.getElementById("swipeLeft");
       const rightIndicator = document.getElementById("swipeRight");
@@ -1110,6 +1125,24 @@ const LandingPage = () => {
       // Hide indicators
       if (leftIndicator) leftIndicator.style.opacity = 0;
       if (rightIndicator) rightIndicator.style.opacity = 0;
+
+      // Check if it's a click (not a drag)
+      const isClick =
+        !isDragging &&
+        touchDuration < 300 &&
+        Math.abs(deltaX) < 10 &&
+        Math.abs(deltaY) < 10;
+
+      if (isClick) {
+        // Navigate to URL if this card has one
+        const url = cardUrls[currentCardIndex];
+        if (url) {
+          route.push(url);
+        }
+        return;
+      }
+
+      if (!isDragging) return;
 
       // Swipe threshold
       const threshold = 100;

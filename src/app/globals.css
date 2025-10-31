@@ -212,15 +212,15 @@ body {
 
 @media (max-width: 1200px) {
   .aiBtn {
-    right: 45px;
-    top: 8%;
+    right: 15px;
+    /* top: 8%; */
   }
 }
 
 @media (max-width: 992px) {
   .aiBtn {
-    right: 40px;
-    top: 8%;
+    right: 15px;
+    /* top: 8%; */
   }
 }
 
