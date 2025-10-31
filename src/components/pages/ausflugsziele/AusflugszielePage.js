@@ -132,6 +132,7 @@ const AusflugszielePage = () => {
     async function fetchData() {
       try {
         const apiData = await GetAusflugszielePages();
+        console.log("apiData 222222222", apiData);
         setCookieData(apiData);
         setCustomPosts(apiData.data.listings);
         setPageInfo(apiData.data.listings.pageInfo);
@@ -159,16 +160,13 @@ const AusflugszielePage = () => {
   return (
     <div className="mx-auto">
       <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
-        <Typography
-          variant="h4"
-          className="font-bold text-center text-[#FFD6D9]"
-        >
+        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
           {title}
         </Typography>
       </div>
 
       {/* Checkbox */}
-      <div className="flex items-center justify-end mb-4">
+      {/* <div className="flex items-center justify-end mb-4">
         <Checkbox
           color="red"
           checked={onlyHeadings}
@@ -176,17 +174,17 @@ const AusflugszielePage = () => {
           label="ausschließlich Überschriften anzeigen"
           crossOrigin={undefined} // needed for React strict mode
         />
-      </div>
+      </div> */}
 
       {/* Description */}
       <Typography
         variant="paragraph"
         className="text-green-800 font-bold leading-relaxed mb-6"
       >
-        Auf dieser Übersichtsseite findest du alle Artikel, die die
-        verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
-        durch die Beiträge stöbern oder die Filterfunktion nutzen, um gezielt
-        nach bestimmten Inhalten zu suchen.
+        Entdecke die Vielfalt Ungarns! Ob Zoos, Freizeitparks, Museen oder
+        Schwimmbäder – hier findest du 840 spannende Ausflugsziele, die nur
+        darauf warten, von dir erkundet zu werden. Stöbere, plane und lass dich
+        inspirieren für dein nächstes Abenteuer in Ungarn!
       </Typography>
 
       {/* Search Box */}
@@ -259,7 +257,8 @@ const AusflugszielePage = () => {
                     <div className="relative" key={edge.node.id}>
                       <CustomPost
                         title={edge.node?.title}
-                        description={edge.node.postContentLyrik?.introText}
+                        subcategory={edge.node.listingFieldGroup?.subcategory}
+                        description={edge.node.listingFieldGroup?.description}
                         onlyHeadings={onlyHeadings}
                         slug={edge.node.slug}
                         routePrefix="ausflugsziele"

@@ -500,8 +500,13 @@ export function GetAusflugszielePages(first = 10, after = null) {
             title
             slug
             date
-     
+            listingFieldGroup {
+              subtitle
+              description
+              subcategory
+            }
           }
+
         }
       }
     }

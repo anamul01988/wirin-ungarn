@@ -1865,10 +1865,10 @@ const LandingPage = () => {
                 //   menuName: "Land & Leute",
                 //   menuRoute: "/land-leute",
                 // },
-                {
-                  menuName: "Ungarn-insider",
-                  menuRoute: "insider_custom",
-                },
+                // {
+                //   menuName: "Ungarn-insider",
+                //   menuRoute: "insider_custom",
+                // },
                 {
                   menuName: "kulinarische Seele",
                   menuRoute: "/kulinarische-seele",
@@ -1998,11 +1998,11 @@ const LandingPage = () => {
             title: "Rätsel",
             route: "/kreuzwortraetsel",
           },
-          {
-            image: "/assets/tl-Ungarn-Insider.avif",
-            title: "Ungarn Insider",
-            route: "/wissenswert",
-          },
+          // {
+          //   image: "/assets/tl-Ungarn-Insider.avif",
+          //   title: "Ungarn Insider",
+          //   route: "/wissenswert",
+          // },
           {
             image: "/assets/tl-Zustand-in-einem-Wort.avif",
             title: "Zustand in einem Wort",

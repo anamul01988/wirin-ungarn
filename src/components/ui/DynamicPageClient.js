@@ -97,7 +97,7 @@ export default function DynamicPageClient({ slug }) {
 
     // Pass the custom type if available
     const contentType = contentData.customType || "post";
-    console.log("Rendering content of type:", contentType);
+    console.log("Rendering content of type:", contentType, contentData);
 
     // Special handling for topicsPostContent
     if (contentType === "kategorien" && postContent?.topicsPostContent) {

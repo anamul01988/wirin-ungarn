@@ -121,7 +121,7 @@ export default function ImpressumModal({ open, setOpen, handleOpen }) {
       {/* Custom backdrop with blur effect and height restrictions */}
       {open && (
         <div
-          className="fixed inset-0 z-40 shalar__dialog"
+          className="fixed inset-0 z-40"
           style={{
             background: `
               linear-gradient(to bottom, transparent 0px, transparent 200px),

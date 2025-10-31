@@ -68,6 +68,23 @@ const modalStyles = `
    .impressum-modal-container .bg-black {
     background-color: none !important;
   }
+  .grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60.backdrop-blur-sm {
+  backdrop-filter: blur(0px) !important;
+  --tw-bg-opacity: 0 !important;
+}
+
+.grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60 {
+  backdrop-filter: blur(0px) !important;
+  --tw-bg-opacity: 0 !important;
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(0px) !important;
+}
+
+.bg-opacity-60 {
+  --tw-bg-opacity: 0 !important;
+}
 `;
 
 export default function CommonCardChip({
@@ -76,7 +93,7 @@ export default function CommonCardChip({
   handleOpen,
   postDetails,
 }) {
-  console.log("postDetails", postDetails);
+  // console.log("postDetails", postDetails);
   // const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(!open);
   const route = useRouter();
@@ -129,7 +146,7 @@ export default function CommonCardChip({
       {/* Custom backdrop with blur effect and height restrictions */}
       {open && (
         <div
-          className="fixed inset-0 z-40 shalar__dialog"
+          className="fixed inset-0 z-40"
           style={{
             background: `
               linear-gradient(to bottom, transparent 0px, transparent 200px),
@@ -137,9 +154,9 @@ export default function CommonCardChip({
               rgba(0, 0, 0, 0.3)
             `,
             // backdropFilter: "blur(4px)",
-            top: "100px",
-            bottom: "100px",
-            height: "calc(100vh - 200px)",
+            top: "70px",
+            bottom: "70px",
+            height: "calc(100vh - 170px)",
           }}
           onClick={handleOpen}
         />
@@ -157,7 +174,9 @@ export default function CommonCardChip({
           style={{
             // maxHeight: "calc(80vh - 400px)",
             // height: "calc(80vh - 80px)",
-            height: "calc(60vh - 80px)",
+            // height: "calc(60vh - 80px)", //it was final
+            height: "calc(55px + 62vh)",
+
             background: "#fff !important",
             // height: "100%",
             // minHeight: "300px",
@@ -201,7 +220,6 @@ export default function CommonCardChip({
                   className="w-4.5rem h-3.4rem"
                 />
               </button>
-
               {/* Next */}
               <button
                 onClick={() => {
@@ -214,6 +232,21 @@ export default function CommonCardChip({
               >
                 <img
                   src="/assets/icons/arrow-right.png"
+                  alt="Next"
+                  className="w-3.5rem h-4.4rem"
+                />
+              </button>
+              <button
+                onClick={() => {
+                  if (carouselRef.current) {
+                    carouselRef.current.goToNext();
+                  }
+                }}
+                className="absolute right-[-17rem] bottom-[-77px] -translate-y-1/2 text-white rounded-full p-4 z-50"
+                aria-label="Next"
+              >
+                <img
+                  src="/assets/icons/click-for-detailview.png"
                   alt="Next"
                   className="w-3.5rem h-4.4rem"
                 />

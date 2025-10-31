@@ -48,6 +48,7 @@ const CustomPost = ({
   slug,
   onlyHeadings,
   routePrefix = "liedtexte",
+  subcategory = "",
 }) => {
   const route = useRouter();
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ const CustomPost = ({
     console.log("routePrefix", routePrefix, typeof routePrefix);
     // Dispatch routePrefix to Redux store before navigation
     // dispatch(setRoutePrefix(routePrefix));
-    console.log("Dispatched routePrefix to Redux:", routePrefix);
+    console.log("Dispatched routePrefix to Redux:", routePrefix, slug);
 
     // Small timeout to ensure dispatch completes before navigation
     // setTimeout(() => {
@@ -66,6 +67,9 @@ const CustomPost = ({
     // if (routePrefix === "wissenswert") {
     //   route.push(`/${routePrefix}/${slug}`);
     // }
+    if (routePrefix === "kategorien") {
+      route.push(`/${slug}`);
+    }
     if (routePrefix === "sprachkurs") {
       route.push(`/${routePrefix}/${slug}`);
     }
@@ -93,6 +97,27 @@ const CustomPost = ({
 
   // Render description based on routePrefix and data type
   const renderDescription = () => {
+    if (routePrefix === "ausflugsziele") {
+      return (
+        <div className="space-y-4">
+          <div className="text-[16px] text-[#566497] text-justify">
+            {subcategory}
+          </div>
+          <Typography
+            variant="small"
+            color="blue-gray"
+            className="text-[16px] text-[#566497] text-justify"
+            {...(isHTML(description)
+              ? {
+                  dangerouslySetInnerHTML: {
+                    __html: truncateText(description),
+                  },
+                }
+              : { children: truncateText(description) })}
+          />
+        </div>
+      );
+    }
     // For kategorien route, description is an array of objects
     if (routePrefix === "kategorien" && Array.isArray(description)) {
       const firstItem = description.length > 0 ? description[0] : null;
@@ -231,7 +256,7 @@ const CustomPost = ({
             <Typography
               variant="h6"
               color="blue-gray"
-              className="font-semibold mb-2 cursor-pointer"
+              className="font-normal mb-2 cursor-pointer text-[24px] text-[#000]"
               onClick={() => handleClick(slug)}
             >
               {title}
