@@ -12,6 +12,7 @@ import ProfileDropdown from "@/components/_components/ProfileDropdown";
 import CalendarMenu from "@/components/_components/CalendarMenu";
 import PageHistoryMenu from "@/components/_components/PageHistoryMenu";
 import FavoritenMenu from "@/components/_components/FavoritenMenu";
+import CurrencyConverter from "@/components/_components/CurrencyConverter";
 import "./calendarMenu.css";
 // import HomePage from "@/components/pages/home/Home";
 // import { Footer } from "@/components/ui";
@@ -24,6 +25,7 @@ export default function Home() {
     useState(false);
   const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
     useState(false);
+  const [isEurToHuf, setIsEurToHuf] = useState(true);
   const { isAuthenticated, loading } = useAuth();
 
   const handleLoginClick = () => {
@@ -86,9 +88,19 @@ export default function Home() {
     >
       <header className="header w-full desktop-header">
         <nav className="header-buttons">
-          <button className="header-btn">
-            <span className="ht_text">Währungsrechner</span> EUR ⇔ HUF
-          </button>
+          <div className="calendar-item currency-item">
+            <button
+              className="header-btn"
+              onClick={() => setIsEurToHuf(!isEurToHuf)}
+            >
+              <span className="ht_text">Währungsrechner</span>{" "}
+              {isEurToHuf ? "EUR ⇔ HUF" : "HUF ⇔ EUR"}
+            </button>
+            <CurrencyConverter
+              isEurToHuf={isEurToHuf}
+              onCurrencySwitch={() => setIsEurToHuf(!isEurToHuf)}
+            />
+          </div>
 
           <div className="calendar-item">
             <button className="header-btn" style={{ marginTop: "2px" }}>

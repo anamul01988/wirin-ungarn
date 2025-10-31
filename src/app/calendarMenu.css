@@ -124,3 +124,321 @@
   overflow-y: auto;
   scrollbar-width: thin;
 }
+
+/* Currency Converter Widget Styles */
+.currency-item .currency-converter-widget {
+  position: absolute;
+  top: 100%;
+  left: 190px;
+  border-radius: 12px;
+  outline: 5px solid #ffffff;
+  width: 320px;
+  max-width: 320px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000;
+  margin-top: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.currency-item:hover .currency-converter-widget {
+  opacity: 1;
+  visibility: visible;
+}
+
+.currency-converter-widget.red {
+  background: white;
+  border-radius: 12px;
+}
+
+.currency-converter-widget.green {
+  background: #15803d;
+  border-radius: 12px;
+}
+
+.currency-header {
+  padding: 12px 16px;
+  border-radius: 12px 12px 0 0;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.currency-header.red {
+  background-color: #b91c1c;
+}
+
+.currency-header.green {
+  background-color: #15803d;
+}
+
+.currency-header h2 {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.currency-refresh-icon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  opacity: 0.9;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.currency-refresh-icon:hover {
+  opacity: 1;
+}
+
+.currency-body {
+  padding: 16px;
+}
+
+.currency-converter-widget.red .currency-body {
+  background: white;
+}
+
+.currency-converter-widget.green .currency-body {
+  background: #15803d;
+}
+
+.currency-loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 32px 0;
+}
+
+.currency-form-group {
+  margin-bottom: 16px;
+}
+
+.currency-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.currency-converter-widget.red .currency-label {
+  color: #374151;
+}
+
+.currency-converter-widget.green .currency-label {
+  color: white;
+}
+
+.currency-label-small {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.currency-converter-widget.red .currency-label-small {
+  color: #6b7280;
+}
+
+.currency-converter-widget.green .currency-label-small {
+  color: white;
+}
+
+.currency-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.currency-input-badge {
+  position: absolute;
+  left: 3px;
+  padding: 10px 12px;
+  border-radius: 8px 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+
+.currency-input-badge.red {
+  background-color: #b91c1c;
+}
+
+.currency-input-badge.green {
+  background-color: #15803d;
+}
+
+.currency-input {
+  width: 100%;
+  padding: 10px 16px;
+  padding-left: 70px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.currency-input:focus {
+  border-color: #b91c1c;
+}
+
+.currency-converter-widget.green .currency-input:focus {
+  border-color: #15803d;
+}
+
+.currency-box-display {
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.currency-converter-widget.red .currency-box-display {
+  background-color: #f3f4f6;
+}
+
+.currency-converter-widget.green .currency-box-display {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.currency-text-display {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.currency-converter-widget.red .currency-text-display {
+  color: #1f2937;
+}
+
+.currency-converter-widget.green .currency-text-display {
+  color: white;
+}
+
+.currency-swap-container {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.currency-swap-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.currency-swap-button.red {
+  background-color: #dc2626;
+}
+
+.currency-swap-button.red:hover {
+  background-color: #b91c1c;
+}
+
+.currency-swap-button.green {
+  background-color: #16a34a;
+}
+
+.currency-swap-button.green:hover {
+  background-color: #15803d;
+}
+
+.currency-swap-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.currency-result-box {
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.currency-result-box.red {
+  background-color: #dc2626;
+}
+
+.currency-result-box.green {
+  background-color: #16a34a;
+}
+
+.currency-result-label {
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.currency-result-value {
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.currency-result-currency {
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.currency-footer-info {
+  text-align: right;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.currency-converter-widget.red .currency-footer-info {
+  color: #6b7280;
+}
+
+.currency-converter-widget.green .currency-footer-info {
+  color: white;
+}
+
+.currency-footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.currency-converter-widget.red .currency-footer-links {
+  color: #6b7280;
+}
+
+.currency-converter-widget.green .currency-footer-links {
+  color: white;
+}
+
+.currency-footer-links span:first-child {
+  font-weight: 600;
+}
