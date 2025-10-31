@@ -16,6 +16,8 @@ const WissenswertPage = () => {
   const [filtering, setFiltering] = useState(false);
   const [customPosts, setCustomPosts] = useState({});
   const [searchResults, setSearchResults] = useState({});
+  const [allPosts, setAllPosts] = useState({}); // Store all accumulated posts
+  const [allSearchPosts, setAllSearchPosts] = useState({}); // Store all accumulated search posts
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
@@ -87,15 +89,43 @@ const WissenswertPage = () => {
       }
       const newPosts = apiData.data.posts;
 
-      // Replace posts instead of appending
-      if (isSearching) {
-        setSearchResults(newPosts);
-        setSearchPageInfo(newPosts.pageInfo);
-        setSearchCurrentPage(newPage);
+      if (direction === "next") {
+        // Append new posts for infinite scroll
+        if (isSearching) {
+          const currentEdges =
+            allSearchPosts.edges || searchResults.edges || [];
+          const newEdges = newPosts.edges || [];
+          const mergedPosts = {
+            ...newPosts,
+            edges: [...currentEdges, ...newEdges],
+          };
+          setAllSearchPosts(mergedPosts);
+          setSearchResults(mergedPosts);
+          setSearchPageInfo(newPosts.pageInfo);
+          setSearchCurrentPage(newPage);
+        } else {
+          const currentEdges = allPosts.edges || customPosts.edges || [];
+          const newEdges = newPosts.edges || [];
+          const mergedPosts = {
+            ...newPosts,
+            edges: [...currentEdges, ...newEdges],
+          };
+          setAllPosts(mergedPosts);
+          setCustomPosts(mergedPosts);
+          setPageInfo(newPosts.pageInfo);
+          setCurrentPage(newPage);
+        }
       } else {
-        setCustomPosts(newPosts);
-        setPageInfo(newPosts.pageInfo);
-        setCurrentPage(newPage);
+        // Replace posts for previous navigation (if needed)
+        if (isSearching) {
+          setSearchResults(newPosts);
+          setSearchPageInfo(newPosts.pageInfo);
+          setSearchCurrentPage(newPage);
+        } else {
+          setCustomPosts(newPosts);
+          setPageInfo(newPosts.pageInfo);
+          setCurrentPage(newPage);
+        }
       }
     } catch (err) {
       setError("Fehler beim Laden der Seite.");
@@ -115,8 +145,10 @@ const WissenswertPage = () => {
     setIsSearching(true);
     try {
       const apiData = await SearchAllPosts(search);
-      setSearchResults(apiData.data.posts);
-      setSearchPageInfo(apiData.data.posts.pageInfo);
+      const posts = apiData.data.posts;
+      setSearchResults(posts);
+      setAllSearchPosts(posts); // Reset accumulated posts for new search
+      setSearchPageInfo(posts.pageInfo);
       setSearchCurrentPage(1);
       setSearchPageHistory([]);
     } catch (err) {
@@ -130,6 +162,7 @@ const WissenswertPage = () => {
     setSearch("");
     setIsSearching(false);
     setSearchResults({});
+    setAllSearchPosts({}); // Clear accumulated search posts
     setSearchPageInfo({ hasNextPage: false, endCursor: null });
     setSearchCurrentPage(1);
     setSearchPageHistory([]);
@@ -184,9 +217,11 @@ const WissenswertPage = () => {
     setFiltering(true);
     try {
       const apiData = await GetWessenwertPages(10, null, categoryId);
-      console.log("apiData 2221122222222111", apiData);
-      setCustomPosts(apiData.data.posts);
-      setPageInfo(apiData.data.posts.pageInfo);
+      // console.log("apiData 2221122222222111", apiData);
+      const posts = apiData.data.posts;
+      setCustomPosts(posts);
+      setAllPosts(posts); // Reset accumulated posts for new filter
+      setPageInfo(posts.pageInfo);
       setCurrentPage(1);
       setPageHistory([]);
     } catch (err) {
@@ -214,8 +249,10 @@ const WissenswertPage = () => {
         console.log("shorts data:", apiData.data.posts);
         console.log("shorts data: alll 222222", apiData);
         setCookieData(apiData);
-        setCustomPosts(apiData.data.posts);
-        setPageInfo(apiData.data.posts.pageInfo);
+        const posts = apiData.data.posts;
+        setCustomPosts(posts);
+        setAllPosts(posts); // Initialize accumulated posts
+        setPageInfo(posts.pageInfo);
         setCurrentPage(1);
         setPageHistory([]);
       } catch (err) {

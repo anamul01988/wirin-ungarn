@@ -120,11 +120,48 @@ const WissenwertPostGrid = ({
   loadingPage = false,
 }) => {
   const [filteredPosts, setFilteredPosts] = useState(posts);
+  const observerTarget = React.useRef(null);
 
   // Update filtered posts when posts change (filtering is handled at API level)
   useEffect(() => {
     setFilteredPosts(posts);
   }, [posts]);
+
+  // Infinite scroll detection using Intersection Observer
+  useEffect(() => {
+    // Only set up observer if there's a next page available
+    if (!hasNextPage || loadingPage || isLoading) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          hasNextPage &&
+          !loadingPage &&
+          !isLoading
+        ) {
+          // User has scrolled to the bottom, load next page
+          if (onPageChange) {
+            onPageChange("next");
+          }
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [hasNextPage, loadingPage, isLoading, onPageChange]);
 
   const filterTags = [
     { key: "all", label: "Alle" },
@@ -249,8 +286,27 @@ const WissenwertPostGrid = ({
             ))}
           </div>
 
-          {/* Pagination */}
-          <div className="flex justify-center gap-4 mt-8">
+          {/* Infinite Scroll Observer Target */}
+          {hasNextPage && (
+            <div
+              ref={observerTarget}
+              className="h-20 flex items-center justify-center"
+            >
+              {loadingPage && (
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+              )}
+            </div>
+          )}
+          {/* {!hasNextPage && filteredPosts.length > 0 && (
+            <div className="text-center mt-6 mb-4">
+              <Typography variant="small" color="gray" className="text-sm">
+                Alle Beiträge wurden geladen.
+              </Typography>
+            </div>
+          )} */}
+
+          {/* Pagination - Commented out for infinite scroll */}
+          {/* <div className="flex justify-center gap-4 mt-8">
             <Button
               color="red"
               onClick={() => onPageChange && onPageChange("previous")}
@@ -267,7 +323,7 @@ const WissenwertPostGrid = ({
             >
               {loadingPage ? "Lade..." : "Next"}
             </Button>
-          </div>
+          </div> */}
 
           {/* Results Info */}
           <div className="text-center mt-6">
