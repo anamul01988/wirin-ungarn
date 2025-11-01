@@ -1556,6 +1556,44 @@ body {
 .kategorian__singlePost a {
   color: #cc2233;
 }
+.custom-button {
+  background-color: #ffffff;
+  border: 2px solid #436f4d;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 80%;
+  margin: 15px auto;
+}
+.custom-button .cb_img {
+  padding: 5px 16px 1px 19px;
+}
+
+.custom-button .cb_img {
+  float: left;
+  background-color: #436f4d;
+  margin-right: 15px;
+}
+.custom-button .cb_img img {
+  max-width: 52px;
+  height: 40px;
+}
+.custom-button .cb_titles,
+.cb_img {
+  padding: 5px 16px 1px 19px;
+}
+.custom-button .main-text-btn {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #436f4d;
+}
+.custom-button .sub-text-btn {
+  font-size: 12px;
+  font-weight: bold;
+  color: #436f4d;
+}
 
 /* ===========================================
    DESKTOP VERSION (KEEP ORIGINAL VISIBLE)

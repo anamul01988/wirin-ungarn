@@ -1263,6 +1263,15 @@ export async function GetDynamicContentV2(slug, routePrefix) {
               topicsPostContent {
                 title
                 content
+                linkTitle
+                linkSubtitle
+                postLink {
+                  edges {
+                    node {
+                      id
+                    }
+                  }
+                }
               }
               postOrder
               shortTitle

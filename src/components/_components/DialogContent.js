@@ -17,6 +17,7 @@ import EinfachLesenAccordion from "./EinfachLesenAccordion";
 import TimetellingGame from "../pages/timetellingGame/TimetellingGame";
 import SuffixHeroGrammarExplanations from "./SuffixHeroStatic";
 import KategorianCollapsibleComment from "./kategorian_collapsibleForm";
+import Link from "next/link";
 export default function DialogContent({
   title,
   content,
@@ -888,6 +889,27 @@ export default function DialogContent({
                               __html: section.content,
                             }}
                           />
+                        )}
+                        {/* --------------------- */}
+                        {section.linkTitle && section.linkSubtitle && (
+                          <Link href="https://wir-in-ungarn.hu/50-languages/">
+                            <div class="custom-button">
+                              <div class="cb_img">
+                                <img
+                                  src="https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/blog-icon.png"
+                                  alt="blog icon right"
+                                />
+                              </div>
+                              <div class="cb_titles">
+                                <div class="main-text-btn">
+                                  {section.linkTitle}
+                                </div>
+                                <div class="sub-text-btn">
+                                  {section.linkSubtitle}
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
                         )}
                       </div>
                     ))}

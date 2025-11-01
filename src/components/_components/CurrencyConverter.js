@@ -59,7 +59,10 @@ const CurrencyConverter = ({ isEurToHuf, onCurrencySwitch }) => {
   return (
     <div className={`currency-converter-widget ${colorClass}`}>
       {/* Header */}
-      <div className={`currency-header ${colorClass}`} onClick={onCurrencySwitch}>
+      <div
+        className={`currency-header ${colorClass}`}
+        onClick={onCurrencySwitch}
+      >
         <h2>Währungsrechner</h2>
         <svg
           className="currency-refresh-icon"
@@ -107,7 +110,7 @@ const CurrencyConverter = ({ isEurToHuf, onCurrencySwitch }) => {
             </div>
 
             {/* Swap Button */}
-            <div className="currency-swap-container">
+            {/* <div className="currency-swap-container">
               <button
                 className={`currency-swap-button ${colorClass}`}
                 onClick={onCurrencySwitch}
@@ -118,7 +121,7 @@ const CurrencyConverter = ({ isEurToHuf, onCurrencySwitch }) => {
                   <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
                 </svg>
               </button>
-            </div>
+            </div> */}
 
             {/* To */}
             <div className="currency-form-group">
@@ -150,4 +153,3 @@ const CurrencyConverter = ({ isEurToHuf, onCurrencySwitch }) => {
 };
 
 export default CurrencyConverter;
-

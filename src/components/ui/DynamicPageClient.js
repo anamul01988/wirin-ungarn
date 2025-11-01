@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import { notFound, usePathname } from "next/navigation";
 import DialogContent from "@/components/_components/DialogContent";
 import { GetDynamicContent, GetDynamicContentV2 } from "@/lib/getAllPages";
-import { current } from "@reduxjs/toolkit";
-import SuffixHeroGrammarExplanations from "../_components/SuffixHeroStatic";
+// import { current } from "@reduxjs/toolkit";
+// import SuffixHeroGrammarExplanations from "../_components/SuffixHeroStatic";
 
 export default function DynamicPageClient({ slug }) {
   const [contentData, setContentData] = useState(null);
@@ -16,15 +16,13 @@ export default function DynamicPageClient({ slug }) {
   const pathName = usePathname();
   // Get routePrefix from Redux
   const routePrefix = useSelector((state) => state.route.routePrefix);
-
   useEffect(() => {
     async function fetchContent() {
       try {
-        console.log("Fetching content with routePrefix:", routePrefix);
+        const currentUrl = window.location.pathname;
 
         let data;
-        // Detect liedtexte or sprachkurs in the URL if routePrefix is not set
-        const currentUrl = window.location.pathname;
+
         const currentPrefix =
           !routePrefix && currentUrl.includes("/liedtexte/")
             ? "liedtexte"
@@ -36,25 +34,32 @@ export default function DynamicPageClient({ slug }) {
             ? "wissenswert"
             : !routePrefix && currentUrl.includes("/shorts/")
             ? "shorts"
+            : currentUrl === "/ungarisch-lernen-interessante-wege/" ||
+              currentUrl === "/hauptstadt-und-komitate/" ||
+              currentUrl === "/die-edv-als-nuetzlicher-helfer-im-alltag/" ||
+              currentUrl ===
+                "/das-ungarische-bildungssystem-von-kindergarten-bis-uni/" ||
+              currentUrl === "/traditionelle-ungarische-kueche/" ||
+              currentUrl === "/immobilie-kaufen-in-ungarn/"
+            ? "kategorien"
             : routePrefix;
 
-        console.log("66", currentPrefix);
-
-        // Update the detected prefix state
         setDetectedPrefix(currentPrefix);
 
-        // Conditionally call different API functions based on routePrefix
         if (
-          currentPrefix === "liedtexte" ||
-          currentPrefix === "sprachkurs" ||
-          currentPrefix === "kategorien" ||
-          currentPrefix === "wissenswert" ||
-          currentPrefix === "shorts"
+          [
+            "liedtexte",
+            "sprachkurs",
+            "kategorien",
+            "wissenswert",
+            "shorts",
+          ].includes(currentPrefix)
         ) {
           data = await GetDynamicContentV2(slug, currentPrefix);
         } else {
           data = await GetDynamicContent(slug);
         }
+
         setContentData(data);
         setLoading(false);
       } catch (err) {
