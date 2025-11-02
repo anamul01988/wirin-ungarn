@@ -49,7 +49,7 @@ export default function KultourUngarnModal() {
             onShare={() => console.log("Share clicked")}
           />
         )}
-        <div className="mb-4 px-4 pt-4">
+        <div className="mb-4 px-0 pt-4">
           <Breadcrumb className="text-sm" />
         </div>
 

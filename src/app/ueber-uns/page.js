@@ -52,7 +52,7 @@ export default function PhilosophieModal() {
 
         <DialogBody className="overflow-auto custom__modal_area flex-1">
           {/* Breadcrumb */}
-          <div className="mb-4 px-4 pt-4">
+          <div className="mb-4 px-0 pt-4">
             <Breadcrumb className="text-sm" />
           </div>
 

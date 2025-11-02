@@ -172,7 +172,10 @@ const UngarischLernenPage = () => {
     <div className="mx-auto">
       {/* Header */}
       <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center text-[#fff]">
-        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
+        <Typography
+          variant="h4"
+          className="archive__page_title font-bold text-center text-[#FFF]"
+        >
           {fakeData.title}
         </Typography>
       </div>
@@ -180,7 +183,7 @@ const UngarischLernenPage = () => {
       {/* Description */}
       <Typography
         variant="paragraph"
-        className="text-green-800 font-bold leading-relaxed mb-6"
+        className="archive__page_description leading-relaxed font-bold mb-6"
       >
         {fakeData.content} Nutze unsere vielfältigen Ressourcen, um deine
         Sprachfähigkeiten zu verbessern und deinen Start in Ungarn zu
@@ -192,7 +195,7 @@ const UngarischLernenPage = () => {
       <Typography variant="small" color="gray" className="mt-4">
         Angezeigt werden {fakeData.posts.edges.length} Beiträge.
       </Typography>
-      <div className="py-6 max-w-5xl mx-auto">
+      <div className="pt-6 pb-2 max-w-5xl mx-auto">
         {fakeData.posts.edges.map((edge, idx) => (
           <div key={edge.node.id}>
             <CustomPost

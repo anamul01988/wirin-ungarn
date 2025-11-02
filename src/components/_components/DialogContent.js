@@ -130,15 +130,13 @@ export default function DialogContent({
         {/* Dialog Body */}
         <DialogBody className="overflow-auto custom__modal_area flex-1">
           {/* Breadcrumb */}
-          <div className="mb-4 px-4 pt-4">
+          <div className="mb-4 px-0 pt-4">
             <Breadcrumb className="text-sm" />
           </div>
 
           <div>
             {routePrefix !== "einfach-lesen" && (
-              <h1 className="text-3xl font-semibold text-black mb-6">
-                {title}
-              </h1>
+              <h1 className="single__page_title font-semibold mb-6">{title}</h1>
             )}
             {/* <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1> */}
 
@@ -186,7 +184,7 @@ export default function DialogContent({
             {/* Excerpt */}
             {excerpt && (
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <p className="text-gray-700 italic">{excerpt}</p>
+                <p className="text-gray-700">{excerpt}</p>
               </div>
             )}
 
@@ -392,7 +390,7 @@ export default function DialogContent({
                     )}
 
                     <div className="w-full md:w-[calc(75%-16px)] md:float-left">
-                      <h1 className="text-2xl font-semibold text-gray-800 mb-2">
+                      <h1 className="single__page_postTitle font-semibold mb-2">
                         {title}
                       </h1>
                       {customFields?.germanTitle && (
@@ -475,14 +473,14 @@ export default function DialogContent({
                           </div>
 
                           <div className="flex-1 pl-3">
-                            <h3 className="font-semibold text-20px text-[#436f4d] mb-2">
+                            <h3 className="font-semibold single__page_postTitle text-[#436f4d] mb-2">
                               {item.title}
                             </h3>
                             {/* Content */}
                             <Typography
                               variant="paragraph"
                               color="blue-gray"
-                              className="text-sm leading-relaxed text-left mb-2"
+                              className="single__page_description leading-relaxed text-left mb-2"
                               dangerouslySetInnerHTML={{ __html: item.content }}
                             />
                           </div>
@@ -496,7 +494,7 @@ export default function DialogContent({
                     {content?.shortsPostContent && (
                       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                         <p
-                          className="text-gray-700 italic"
+                          className="single__page_description"
                           dangerouslySetInnerHTML={{
                             __html: content?.shortsPostContent,
                           }}

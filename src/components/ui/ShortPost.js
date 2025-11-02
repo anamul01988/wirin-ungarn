@@ -153,7 +153,10 @@ const ShortPostGrid = ({
     <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className=" mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
-        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
+        <Typography
+          variant="h4"
+          className="archive__page_title font-bold text-center text-[#FFF]"
+        >
           {title}
         </Typography>
       </div>
@@ -251,7 +254,7 @@ const ShortPostGrid = ({
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-center gap-4 mt-8">
+          <div className="flex justify-center gap-4 mt-2">
             <Button
               color="red"
               onClick={() => onPageChange && onPageChange("previous")}
