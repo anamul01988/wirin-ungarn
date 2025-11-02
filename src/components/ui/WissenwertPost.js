@@ -310,7 +310,10 @@ const WissenwertPostGrid = ({
     <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] bg-[#CC2233] flex items-center justify-center">
-        <Typography variant="h4" className="font-bold text-center text-white">
+        <Typography
+          variant="h4"
+          className="font-bold text-center text-white archive__page_title"
+        >
           {title}
         </Typography>
       </div>
@@ -319,7 +322,7 @@ const WissenwertPostGrid = ({
       <div className="mb-4">
         <Typography
           variant="paragraph"
-          className="text-[#386e44] font-normal font-[400] leading-relaxed text-lg"
+          className="text-[#386e44] font-normal leading-relaxed archive__page_description"
         >
           Entdecke unsere Artikel entweder visuell, indem du durch die
           Themenkacheln stöberst, oder finde gezielt, was du suchst: Nutze
@@ -471,7 +474,7 @@ const WissenwertPostGrid = ({
           )} */}
 
           {/* Pagination - Commented out for infinite scroll */}
-          {/* <div className="flex justify-center gap-4 mt-8">
+          {/* <div className="flex justify-center gap-4 mt-2">
             <Button
               color="red"
               onClick={() => onPageChange && onPageChange("previous")}

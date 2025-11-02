@@ -147,7 +147,10 @@ function VocabGame() {
   return (
     <div style={styles.container}>
       <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] text-[#fff] flex items-center justify-center">
-        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
+        <Typography
+          variant="h4"
+          className="archive__page_title font-bold text-center text-[#FFF]"
+        >
           Vokabel-Entdecker
         </Typography>
       </div>

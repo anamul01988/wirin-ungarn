@@ -1608,3 +1608,29 @@ body {
     display: none !important;
   }
 }
+/* -------------------------------------- font style ------------------------- */
+.archive__page_title {
+  font-size: 26px;
+}
+.archive__page_postTitle {
+  font-size: 24px;
+}
+.archive__page_description {
+  font-size: 16px;
+  color: #386e44;
+}
+.archive__page_content {
+  font-size: 14px;
+  color: #56646f;
+}
+.single__page_title {
+  font-size: 26px;
+  color: #436f4d;
+}
+.single__page_postTitle {
+  font-size: 24px;
+}
+.single__page_description {
+  font-size: 16px;
+  color: #56646f;
+}

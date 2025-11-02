@@ -30,7 +30,7 @@ export default function Kategorien() {
     route.push("/");
   };
 
-    useEffect(() => {
+  useEffect(() => {
     if (!open) return;
     const handleEsc = (e) => {
       if (e.key === "Escape") handleClose();
@@ -62,10 +62,10 @@ export default function Kategorien() {
 
         <DialogBody className="custom__modal_area flex-1">
           {/* Breadcrumb */}
-          <div className="mb-4 px-4 pt-4">
+          <div className="mb-4 px-0 pt-4">
             <Breadcrumb className="text-sm" />
           </div>
-          
+
           {/* {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}

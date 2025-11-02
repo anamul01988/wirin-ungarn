@@ -160,7 +160,7 @@ export default function Wissenswert({ initialData }) {
       {/* Description */}
       <Typography
         variant="paragraph"
-        className="text-green-800 font-bold leading-relaxed mb-6"
+        className="archive__page_description leading-relaxed font-bold mb-6"
       >
         Auf dieser Übersichtsseite findest du alle Artikel, die die
         verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
@@ -218,7 +218,7 @@ export default function Wissenswert({ initialData }) {
       <Typography variant="small" color="gray" className="mt-4">
         Angezeigt werden {filteredPosts.length} von {totalPosts} Beiträgen.
       </Typography>
-      <div className="py-6 max-w-5xl mx-auto">
+      <div className="pt-6 pb-2 max-w-5xl mx-auto">
         {!initialData ? (
           <>
             {" "}

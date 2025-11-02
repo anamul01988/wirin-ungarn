@@ -304,7 +304,10 @@ const SprachkursPage = () => {
       /> */}
       {/* Header */}
       <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
-        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
+        <Typography
+          variant="h4"
+          className="archive__page_title font-bold text-center text-[#FFF]"
+        >
           {title}
         </Typography>
       </div>
@@ -323,7 +326,7 @@ const SprachkursPage = () => {
       {/* Description */}
       <Typography
         variant="paragraph"
-        className="text-green-800 font-bold leading-relaxed mb-6"
+        className="archive__page_description leading-relaxed font-bold mb-6"
       >
         Auf dieser Übersichtsseite findest du alle Artikel, die die
         verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
@@ -454,7 +457,7 @@ const SprachkursPage = () => {
           </>
         )}
       </Typography>
-      <div className="py-6 max-w-5xl mx-auto">
+      <div className="pt-6 pb-2 max-w-5xl mx-auto">
         {filtering === true ? (
           <div>
             <DefaultSpinner />
@@ -504,7 +507,7 @@ const SprachkursPage = () => {
               isSearching &&
               (!searchResults?.edges || searchResults.edges.length === 0)
             ) && (
-              <div className="flex justify-center gap-4 mt-8">
+              <div className="flex justify-center gap-4 mt-2">
                 <Button
                   color="red"
                   onClick={() => loadPage("previous")}

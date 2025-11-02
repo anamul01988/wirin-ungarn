@@ -156,11 +156,14 @@ const AusflugszielePage = () => {
   if (error) return <div>{error}</div>;
 
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-  console.log("ausflugsziele data: cookieData 2222:", customPosts);
+  // console.log("ausflugsziele data: cookieData 2222:", customPosts);
   return (
     <div className="mx-auto">
       <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
-        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
+        <Typography
+          variant="h4"
+          className="archive__page_title font-bold text-center text-[#FFF]"
+        >
           {title}
         </Typography>
       </div>
@@ -179,7 +182,7 @@ const AusflugszielePage = () => {
       {/* Description */}
       <Typography
         variant="paragraph"
-        className="text-green-800 font-bold leading-relaxed mb-6"
+        className="archive__page_description leading-relaxed font-bold mb-6"
       >
         Entdecke die Vielfalt Ungarns! Ob Zoos, Freizeitparks, Museen oder
         Schwimmbäder – hier findest du 840 spannende Ausflugsziele, die nur
@@ -230,7 +233,7 @@ const AusflugszielePage = () => {
       </Typography>
       <div
         className="py-6 max-w-5xl overflow-auto mx-auto"
-        style={{ height: "calc(100vh - 500px)" }}
+        style={{ height: "calc(100vh - 450px)" }}
       >
         {filtering === true ? (
           <div>
@@ -280,7 +283,7 @@ const AusflugszielePage = () => {
         isSearching &&
         (!searchResults?.edges || searchResults.edges.length === 0)
       ) && (
-        <div className="flex justify-center gap-4 mt-8">
+        <div className="flex justify-center gap-4 mt-2">
           <Button
             color="red"
             onClick={() => loadPage("previous")}

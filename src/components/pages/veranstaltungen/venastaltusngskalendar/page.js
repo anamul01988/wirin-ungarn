@@ -199,7 +199,10 @@ const VenastaltusngskalendarPage = () => {
       /> */}
       {/* Header */}
       <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] flex items-center justify-center text-[#fff]">
-        <Typography variant="h4" className="font-bold text-center text-[#FFF]">
+        <Typography
+          variant="h4"
+          className="archive__page_title font-bold text-center text-[#FFF]"
+        >
           {title}
         </Typography>
       </div>
@@ -218,7 +221,7 @@ const VenastaltusngskalendarPage = () => {
       {/* Description */}
       <Typography
         variant="paragraph"
-        className="text-green-800 font-bold leading-relaxed mb-6"
+        className="archive__page_description leading-relaxed font-bold mb-6"
         dangerouslySetInnerHTML={{
           __html: truncateText(content),
         }}
@@ -267,7 +270,7 @@ const VenastaltusngskalendarPage = () => {
       </Typography>
       <div
         className="py-6 max-w-5xl overflow-auto mx-auto"
-        style={{ height: "calc(100vh - 500px)" }}
+        style={{ height: "calc(100vh - 450px)" }}
       >
         {filtering === true ? (
           <div>
@@ -316,7 +319,7 @@ const VenastaltusngskalendarPage = () => {
               isSearching &&
               (!searchResults?.edges || searchResults.edges.length === 0)
             ) && (
-              <div className="flex justify-center gap-4 mt-8">
+              <div className="flex justify-center gap-4 mt-2">
                 <Button
                   color="red"
                   onClick={() => loadPage("previous")}
