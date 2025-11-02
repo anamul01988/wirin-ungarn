@@ -51,7 +51,7 @@ export default function AnkiKartenModal() {
           />
         )}
 
-        <DialogBody className="overflow-auto flex-1">
+        <DialogBody className="overflow-auto pl-4 mr-1 my-1 flex-1">
           {/* Breadcrumb */}
           <div className="mb-4 px-0 pt-4">
             <Breadcrumb className="text-sm" />

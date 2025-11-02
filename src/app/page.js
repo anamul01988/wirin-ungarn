@@ -86,6 +86,20 @@ export default function Home() {
       //   width: "100%",
       // }}
     >
+      <style jsx global>{`
+        /* Hide default scrollbar only on landing page */
+        html,
+        body {
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, Opera */
+        }
+      `}</style>
+
       <header className="header w-full desktop-header">
         <nav className="header-buttons">
           <div className="calendar-item currency-item">

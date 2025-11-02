@@ -50,7 +50,7 @@ export default function KarriereModal() {
           />
         )}
 
-        <DialogBody className="overflow-auto custom__modal_area flex-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1 pl-4 mr-1 my-1">
           <KarriereDetails onBack={handleBackToMenu} />
         </DialogBody>
       </Dialog>

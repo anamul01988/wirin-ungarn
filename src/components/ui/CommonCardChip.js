@@ -254,7 +254,7 @@ export default function CommonCardChip({
             </>
           )}
 
-          <DialogBody className="overflow-auto flex-1">
+          <DialogBody className="overflow-auto flex-1 pl-4 mr-1 my-1">
             <PostsSlider
               ref={carouselRef}
               postDetails={postDetails}

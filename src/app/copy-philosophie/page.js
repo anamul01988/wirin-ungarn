@@ -48,7 +48,7 @@ export default function PhilosophieModal() {
           />
         )}
 
-        <DialogBody className="overflow-auto flex-1">
+        <DialogBody className="overflow-auto flex-1 pl-4 mr-1 my-1">
           <PhilosopiesDetails onBack={handleBackToMenu} />
         </DialogBody>
       </Dialog>

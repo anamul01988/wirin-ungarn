@@ -208,7 +208,7 @@ export default function ImpressumModal({ open, setOpen, handleOpen }) {
             </>
           )}
 
-          <DialogBody className="overflow-auto flex-1">
+          <DialogBody className="overflow-auto flex-1 pl-4 mr-1 my-1">
             <SubMenu onTitleClick={handleShowDetails} />
           </DialogBody>
         </Dialog>
