@@ -53,7 +53,7 @@ export default function KultourUngarnModal() {
           <Breadcrumb className="text-sm" />
         </div>
 
-        <DialogBody className="overflow-auto flex-1">
+        <DialogBody className="overflow-auto flex-1 pl-4 mr-1 my-1">
           {/* <VocabGame /> */}
           <HungarianQuiz />
         </DialogBody>
