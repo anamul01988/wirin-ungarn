@@ -1434,6 +1434,7 @@ body {
     height: 100%;
     max-height: 600px;
     touch-action: pan-y pinch-zoom;
+    margin-top: 30%;
   }
 
   /* Individual Card */
