@@ -8,8 +8,8 @@ import {
 import "./globals.css";
 import "./favorite-button.css";
 import "./page-history.css";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { ThemeProvider } from "@material-tailwind/react";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -50,7 +50,7 @@ export default function RootLayout({ children }) {
                 {/* Track user navigation history */}
                 <HistoryTracker />
               </AuthProvider>
-              <ToastContainer 
+              <ToastContainer
                 position="top-right"
                 autoClose={3000}
                 hideProgressBar={false}
@@ -61,6 +61,7 @@ export default function RootLayout({ children }) {
                 draggable
                 pauseOnHover
                 theme="light"
+                style={{ zIndex: 9999 }}
               />
             </ThemeProvider>
           </ReduxProvider>

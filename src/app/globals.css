@@ -1054,6 +1054,26 @@ body {
   margin-left: 10px;
 }
 
+/* Toast Notifications - Ensure they appear above modals */
+.Toastify__toast-container,
+.Toastify__toast-container--top-right,
+div[class*="Toastify"] {
+  z-index: 99999 !important;
+}
+
+.Toastify__toast {
+  z-index: 99999 !important;
+}
+
+/* Ensure toasts appear above Material Tailwind dialogs */
+[data-dialog] {
+  z-index: 9998 !important;
+}
+
+[data-dialog-backdrop] {
+  z-index: 9997 !important;
+}
+
 .hover-buttons {
   position: absolute;
   top: 10px;
