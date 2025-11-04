@@ -233,7 +233,7 @@ const AusflugszielePage = () => {
       </Typography>
       <div
         className="py-6 max-w-5xl overflow-auto mx-auto"
-        style={{ height: "calc(100vh - 450px)" }}
+        // style={{ height: "calc(100vh - 450px)" }}
       >
         {filtering === true ? (
           <div>

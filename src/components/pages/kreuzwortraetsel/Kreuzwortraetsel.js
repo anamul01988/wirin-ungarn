@@ -484,7 +484,7 @@ const KreuzwortraetselPage = () => {
                 </Typography>
               </div>
             ) : (
-              <div className="h-[530px] overflow-auto">
+              <div className="">
                 {(isSearching ? searchResults?.edges : customPosts?.edges)?.map(
                   (edge, idx) => {
                     const posts = isSearching ? searchResults : customPosts;
