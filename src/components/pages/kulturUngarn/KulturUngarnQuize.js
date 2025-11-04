@@ -1,3 +1,4 @@
+import { Typography } from "@material-tailwind/react";
 import React, { useState, useEffect } from "react";
 
 // Quiz data - Replace this array with your full 415 questions
@@ -445,8 +446,18 @@ const HungarianQuiz = () => {
   }, [selectedAnswer, currentQuestion]);
 
   return (
-    <div style={styles.wrapper}>
-      <h1 style={styles.mainTitle}>KulTour Ungarn</h1>
+    <div>
+      <div
+        className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center"
+        // style={styles.wrapper}
+      >
+        <Typography
+          variant="h4"
+          className="archive__page_title font-bold text-center text-[#FFF]"
+        >
+          Kultour Ungarn
+        </Typography>
+      </div>
 
       <div style={styles.container}>
         {/* Settings Panel */}
@@ -633,13 +644,13 @@ const HungarianQuiz = () => {
 };
 
 const styles = {
-  wrapper: {
-    fontFamily:
-      "'Roboto Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-    backgroundColor: "#f5f5f5",
-    minHeight: "100vh",
-    padding: "20px",
-  },
+  // wrapper: {
+  //   fontFamily:
+  //     "'Roboto Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  //   backgroundColor: "#f5f5f5",
+  //   minHeight: "100vh",
+  //   padding: "20px",
+  // },
   mainTitle: {
     // maxWidth: "800px",
     margin: "0 auto 20px",

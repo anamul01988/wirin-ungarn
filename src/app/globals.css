@@ -1097,6 +1097,7 @@ body {
 /* Apply to your modal scroll area */
 .custom__modal_area {
   scrollbar-width: thin;
+  /* overflow: auto; */
 }
 
 .none {

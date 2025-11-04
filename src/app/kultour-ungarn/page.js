@@ -28,6 +28,14 @@ export default function KultourUngarnModal() {
   const navigateToHome = () => {
     route.push("/");
   };
+  useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e) => {
+      if (e.key === "Escape") handleClose();
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [open]);
 
   return (
     <>
@@ -49,11 +57,11 @@ export default function KultourUngarnModal() {
             onShare={() => console.log("Share clicked")}
           />
         )}
-        <div className="mb-4 px-0 pt-4">
-          <Breadcrumb className="text-sm" />
-        </div>
 
         <DialogBody className="overflow-auto flex-1 pl-4 mr-1 my-1">
+          <div className="mb-4 px-0 pt-2">
+            <Breadcrumb className="text-sm" />
+          </div>
           {/* <VocabGame /> */}
           <HungarianQuiz />
         </DialogBody>

@@ -269,8 +269,8 @@ const VenastaltusngskalendarPage = () => {
         )}
       </Typography>
       <div
-        className="py-6 max-w-5xl overflow-auto mx-auto"
-        style={{ height: "calc(100vh - 450px)" }}
+        className="pt-6 pb-3 max-w-5xl overflow-auto mx-auto"
+        // style={{ height: "calc(100vh - 450px)" }}
       >
         {filtering === true ? (
           <div>
@@ -290,7 +290,7 @@ const VenastaltusngskalendarPage = () => {
                 </Typography>
               </div>
             ) : (
-              <div className="h-[330px] overflow-auto">
+              <div className="">
                 {(isSearching ? searchResults?.edges : customPosts?.edges)?.map(
                   (edge, idx) => {
                     const posts = isSearching ? searchResults : customPosts;
