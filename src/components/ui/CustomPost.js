@@ -100,13 +100,11 @@ const CustomPost = ({
     if (routePrefix === "ausflugsziele") {
       return (
         <div className="space-y-4">
-          <div className="text-[16px] text-[#566497] text-justify">
+          <div className="text-[14px] text-[#566497] text-justify">
             {subcategory}
           </div>
-          <Typography
-            variant="small"
-            color="blue-gray"
-            className="text-[16px] text-[#566497] text-justify"
+          <div
+            className="archive__page_content text-justify"
             {...(isHTML(description)
               ? {
                   dangerouslySetInnerHTML: {
@@ -129,7 +127,7 @@ const CustomPost = ({
               {firstItem.title}
             </h6> */}
           <div
-            className="text-sm leading-relaxed text-justify"
+            className="archive__page_content leading-relaxed text-justify"
             {...(isHTML(firstItem.content)
               ? {
                   dangerouslySetInnerHTML: {
@@ -169,7 +167,7 @@ const CustomPost = ({
               </h6> */}
             </div>
             <div
-              className="text-sm leading-relaxed text-justify"
+              className="archive__page_content leading-relaxed text-justify"
               {...(isHTML(firstItem.content)
                 ? {
                     dangerouslySetInnerHTML: {
@@ -195,7 +193,7 @@ const CustomPost = ({
               {firstItem.title}
             </h6> */}
             <div
-              className="text-sm leading-relaxed text-justify"
+              className="archive__page_content leading-relaxed text-justify"
               {...(isHTML(firstItem.content)
                 ? {
                     dangerouslySetInnerHTML: {
@@ -211,10 +209,8 @@ const CustomPost = ({
 
     // For other routes, description is a string
     return (
-      <Typography
-        variant="small"
-        color="blue-gray"
-        className="text-sm leading-relaxed text-justify"
+      <div
+        className="archive__page_content leading-relaxed text-justify"
         {...(isHTML(description)
           ? {
               dangerouslySetInnerHTML: {
