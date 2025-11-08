@@ -122,6 +122,7 @@ export default function HomePageLayout() {
               <Image
                 src="/assets/calendar.png"
                 alt="calendar"
+                loading="lazy"
                 width={15}
                 height={17}
               />
@@ -143,6 +144,7 @@ export default function HomePageLayout() {
               <Image
                 src="/assets/favorit.png"
                 alt="favorit"
+                loading="lazy"
                 width={15}
                 height={15}
               />
@@ -207,4 +209,3 @@ export default function HomePageLayout() {
     </div>
   );
 }
-

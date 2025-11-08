@@ -4,6 +4,9 @@ import { setRoutePrefix } from "@/lib/store/routeSlice";
 import { Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import Image from "next/image";
+import { useState } from "react";
+
 // Utility function to check if content contains HTML
 const isHTML = (str) => {
   if (typeof str !== "string") return false;
@@ -14,32 +17,50 @@ const isHTML = (str) => {
 export const truncateText = (text, maxWords = 80) => {
   if (typeof text !== "string") return text;
 
-  // For HTML content, remove all HTML tags and entities
   if (isHTML(text)) {
-    // Remove HTML tags, entities, and clean up whitespace
     const cleanText = text
-      .replace(/<[^>]*>/g, " ") // Remove all HTML tags
-      .replace(/&[^;]+;/g, " ") // Remove HTML entities like &#8211;
-      .replace(/\s+/g, " ") // Replace multiple spaces with single space
-      .trim(); // Remove leading/trailing whitespace
+      .replace(/<[^>]*>/g, " ")
+      .replace(/&[^;]+;/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
 
     const words = cleanText.split(" ");
-
-    if (words.length <= maxWords) {
-      return cleanText;
-    }
-
-    const truncated = words.slice(0, maxWords).join(" ");
-    return truncated + "...";
+    if (words.length <= maxWords) return cleanText;
+    return words.slice(0, maxWords).join(" ") + "...";
   } else {
-    // For plain text
     const words = text.split(/\s+/);
-    if (words.length <= maxWords) {
-      return text;
-    }
+    if (words.length <= maxWords) return text;
     return words.slice(0, maxWords).join(" ") + "...";
   }
 };
+
+// ✅ Reusable Image Component With Skeleton + Fade In
+function PostImage({ image, title }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className="w-full md:w-56 flex-shrink-0">
+      {/* Skeleton */}
+      {!loaded && (
+        <div className="w-full h-40 md:h-[200px] rounded-md bg-gray-300 animate-pulse" />
+      )}
+
+      <Image
+        src={image}
+        alt={title}
+        width={500}
+        height={200}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        className={`
+          w-full h-40 md:h-[200px] object-contain rounded-md
+          ${loaded ? "opacity-100" : "opacity-0"}
+          transition-opacity duration-500
+        `}
+      />
+    </div>
+  );
+}
 
 const CustomPost = ({
   image = "",
@@ -53,49 +74,20 @@ const CustomPost = ({
   const route = useRouter();
   const dispatch = useDispatch();
 
-  console.log("routePrefix", routePrefix);
-
   const handleClick = (slug) => {
-    console.log("routePrefix", routePrefix, typeof routePrefix);
-    // Dispatch routePrefix to Redux store before navigation
-    // dispatch(setRoutePrefix(routePrefix));
-    console.log("Dispatched routePrefix to Redux:", routePrefix, slug);
+    if (routePrefix === "kategorien") route.push(`/${slug}`);
+    if (routePrefix === "sprachkurs") route.push(`/${routePrefix}/${slug}`);
+    if (routePrefix === "einfach-lesen") route.push(`/${routePrefix}/${slug}`);
+    if (routePrefix === "liedtexte") route.push(`/${routePrefix}/${slug}`);
+    if (routePrefix === "kreuzwortraetsel")
+      route.push(`/${routePrefix}/${slug}`);
+    if (routePrefix === "kulinarische-seele")
+      route.push(`/${routePrefix}/${slug}`);
 
-    // Small timeout to ensure dispatch completes before navigation
-    // setTimeout(() => {
-    //   // route.push(`/${routePrefix}/${slug}`);
-    // if (routePrefix === "wissenswert") {
-    //   route.push(`/${routePrefix}/${slug}`);
-    // }
-    if (routePrefix === "kategorien") {
-      route.push(`/${slug}`);
-    }
-    if (routePrefix === "sprachkurs") {
-      route.push(`/${routePrefix}/${slug}`);
-    }
-    if (routePrefix === "einfach-lesen") {
-      route.push(`/${routePrefix}/${slug}`);
-    }
-    // if (routePrefix === "ausflugsziele") {
-    //   route.push(`/${routePrefix}/${slug}`);
-    // }
-    if (routePrefix === "liedtexte") {
-      route.push(`/${routePrefix}/${slug}`);
-    }
-    if (routePrefix === "kreuzwortraetsel") {
-      route.push(`/${routePrefix}/${slug}`);
-    }
-    if (routePrefix === "kulinarische-seele") {
-      route.push(`/${routePrefix}/${slug}`);
-    }
-    // if (routePrefix === "veranstaltungen") {
-    //   route.push(`/${routePrefix}/${slug}`);
-    // }
-    // }, 10);
     dispatch(setRoutePrefix(routePrefix));
   };
 
-  // Render description based on routePrefix and data type
+  // Description renderer (unchanged)
   const renderDescription = () => {
     if (routePrefix === "ausflugsziele") {
       return (
@@ -221,6 +213,7 @@ const CustomPost = ({
       />
     );
   };
+
   return (
     <div className="flex flex-col md:flex-row gap-4 pb-6">
       {onlyHeadings ? (
@@ -236,18 +229,10 @@ const CustomPost = ({
         </div>
       ) : (
         <>
-          {" "}
-          {/* Left Image */}
-          {image && (
-            <div className="w-full md:w-56 flex-shrink-0">
-              <img
-                src={image}
-                alt={title}
-                className="w-full h-40 md:max-h-[300px] object-cover rounded-md"
-              />
-            </div>
-          )}
-          {/* Right Content */}
+          {/* ✅ Left Image (now using next/image + skeleton) */}
+          {image && <PostImage image={image} title={title} />}
+
+          {/* ✅ Right Content */}
           <div className="flex-1">
             <Typography
               variant="h6"
@@ -257,6 +242,7 @@ const CustomPost = ({
             >
               {title}
             </Typography>
+
             {renderDescription()}
           </div>
         </>

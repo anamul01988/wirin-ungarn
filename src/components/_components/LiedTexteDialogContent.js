@@ -133,6 +133,7 @@ export default function LiedTexteDialogContent({
                           <Image
                             src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
                             alt={item.icon[0]}
+                            loading="lazy"
                             width={70}
                             height={70}
                             className="w-full h-auto"

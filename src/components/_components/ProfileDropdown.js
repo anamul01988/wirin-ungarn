@@ -53,6 +53,7 @@ const ProfileDropdown = () => {
           {user?.avatar ? (
             <Image
               src={user.avatar}
+              loading="lazy"
               alt={user.name || "User"}
               width={32}
               height={32}
@@ -96,6 +97,7 @@ const ProfileDropdown = () => {
                 {user?.avatar ? (
                   <Image
                     src={user.avatar}
+                    loading="lazy"
                     alt={user.name || "User"}
                     width={40}
                     height={40}

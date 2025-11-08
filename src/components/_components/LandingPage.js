@@ -1716,6 +1716,7 @@ const LandingPage = () => {
             <Image
               src="/assets/search-icon-white.png"
               alt="AI Icon"
+              loading="lazy"
               width={24}
               height={24}
             />
@@ -1750,6 +1751,7 @@ const LandingPage = () => {
                 <Image
                   src="/assets/search-icon-white.png"
                   alt="Search Icon"
+                  loading="lazy"
                   width={24}
                   height={24}
                 />

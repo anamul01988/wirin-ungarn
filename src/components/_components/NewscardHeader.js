@@ -8,6 +8,7 @@ const NewscardHeader = () => {
           src="/assets/ungran_insider_img.png"
           alt="ungran Insider logo"
           fill
+          loading="lazy"
           className="rounded-t-lg"
         />
       </div>
@@ -19,7 +20,7 @@ const NewscardHeader = () => {
 
         {/* Second row */}
         <div className="text-[25px] font-light text-[#436f4d] tracking-tight transform scale-x-90">
-          NACHRICHTEN | KULTUR | KOCHREZEPTE  | EVENTS
+          NACHRICHTEN | KULTUR | KOCHREZEPTE | EVENTS
         </div>
       </div>
     </>

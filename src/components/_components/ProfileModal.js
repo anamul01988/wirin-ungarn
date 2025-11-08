@@ -107,6 +107,7 @@ const ProfileModal = () => {
               {user?.image ? (
                 <Image
                   src={user.image}
+                  loading="lazy"
                   alt="Profile picture"
                   fill
                   className="object-cover"

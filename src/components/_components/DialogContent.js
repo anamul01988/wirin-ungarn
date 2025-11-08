@@ -449,6 +449,7 @@ export default function DialogContent({
                                     width={70}
                                     height={70}
                                     className="w-full h-auto"
+                                    loading="lazy"
                                   />
                                 ) : (
                                   <svg
@@ -528,6 +529,7 @@ export default function DialogContent({
                               <Image
                                 src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
                                 alt={item.icon[0]}
+                                loading="lazy"
                                 width={70}
                                 height={70}
                                 className="w-full h-auto"
@@ -594,6 +596,7 @@ export default function DialogContent({
                               <Image
                                 src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
                                 alt={item.icon[0]}
+                                loading="lazy"
                                 width={70}
                                 height={70}
                                 className="w-full h-auto"
@@ -659,6 +662,7 @@ export default function DialogContent({
                               <Image
                                 src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/recipe/${item.icon[0]}.png`}
                                 alt={item.icon[0]}
+                                loading="lazy"
                                 width={70}
                                 height={70}
                                 className="w-full h-auto"
