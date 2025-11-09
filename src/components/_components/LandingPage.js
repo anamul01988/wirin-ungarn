@@ -1931,11 +1931,17 @@ const LandingPage = () => {
             },
           ].map((item, i) => (
             <li key={i}>
-              <div className="nav-item">
+              <button 
+                type="button" 
+                className="nav-item"
+                aria-expanded="false"
+                aria-controls={item.slug !== "community" ? `${item.slug}-menu` : undefined}
+                aria-label={item.slug === "community" ? `${item.title} - ${item.text}` : undefined}
+              >
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
                 {item.slug !== "community" && (
-                  <ul className="hover-menu">
+                  <ul className="hover-menu" id={`${item.slug}-menu`}>
                     {chunkArray(item.menu, 6).map((column, columnIndex) => (
                       <div key={columnIndex} className="menu-column">
                         {column.map((menuItem, j) => (
@@ -1959,7 +1965,7 @@ const LandingPage = () => {
                     ))}
                   </ul>
                 )}
-              </div>
+              </button>
             </li>
           ))}
         </ul>

@@ -117,7 +117,7 @@ export default function HomePageLayout() {
           </div>
 
           <div className="calendar-item">
-            <button className="header-btn" style={{ marginTop: "2px" }}>
+            <button className="header-btn">
               <span className="ht_text">06.08. Zsuzsanna</span>{" "}
               <Image
                 src="/assets/calendar.png"
