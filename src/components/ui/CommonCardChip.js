@@ -146,7 +146,7 @@ export default function CommonCardChip({
       {/* Custom backdrop with blur effect and height restrictions */}
       {open && (
         <div
-          className="fixed inset-0 z-40"
+          className="fixed inset-0 z-90"
           style={{
             background: `
               linear-gradient(to bottom, transparent 0px, transparent 200px),
@@ -157,6 +157,7 @@ export default function CommonCardChip({
             top: "70px",
             bottom: "70px",
             height: "calc(100vh - 170px)",
+            zIndex: 1100,
           }}
           onClick={handleOpen}
         />
