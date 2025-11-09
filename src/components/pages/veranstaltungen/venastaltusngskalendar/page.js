@@ -8,25 +8,17 @@ const VenastaltusngskalendarPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
-  const [customPosts, setCustomPosts] = useState({});
+  const [allListings, setAllListings] = useState([]); // Store all listings
   const [searchResults, setSearchResults] = useState({});
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
-  const [pageInfo, setPageInfo] = useState({
-    hasNextPage: false,
-    endCursor: null,
-  });
-  const [searchPageInfo, setSearchPageInfo] = useState({
-    hasNextPage: false,
-    endCursor: null,
-  });
+
+  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
-  const [loadingPage, setLoadingPage] = useState(false);
-  const [pageHistory, setPageHistory] = useState([]); // Store page history for navigation
-  const [searchPageHistory, setSearchPageHistory] = useState([]); // Store search page history
+  const listingsPerPage = 10;
   const isHTML = (str) => {
     if (typeof str !== "string") return false;
     return /<[a-z][\s\S]*>/i.test(str);
@@ -61,73 +53,34 @@ const VenastaltusngskalendarPage = () => {
     }
   };
 
-  const loadPage = async (direction) => {
-    if (loadingPage) return;
+  // Get current listings to display based on pagination
+  const getCurrentListings = () => {
+    const startIndex = (currentPage - 1) * listingsPerPage;
+    const endIndex = startIndex + listingsPerPage;
+    return allListings.slice(startIndex, endIndex);
+  };
 
-    setLoadingPage(true);
-    try {
-      let cursor = null;
-      let newPage = isSearching ? searchCurrentPage : currentPage;
-      let currentPageInfo = isSearching ? searchPageInfo : pageInfo;
-      let currentHistory = isSearching ? searchPageHistory : pageHistory;
+  // Calculate total pages
+  const getTotalPages = () => {
+    return Math.ceil(allListings.length / listingsPerPage);
+  };
 
-      if (direction === "next") {
-        cursor = currentPageInfo.endCursor;
-        newPage = (isSearching ? searchCurrentPage : currentPage) + 1;
-        // Store current page in history
-        if (isSearching) {
-          setSearchPageHistory((prev) => [
-            ...prev,
-            { page: searchCurrentPage, cursor: searchPageInfo.endCursor },
-          ]);
-        } else {
-          setPageHistory((prev) => [
-            ...prev,
-            { page: currentPage, cursor: pageInfo.endCursor },
-          ]);
-        }
-      } else if (direction === "previous") {
-        if (currentHistory.length > 0) {
-          // Get the previous page from history
-          const prevPage = currentHistory[currentHistory.length - 1];
-          cursor = prevPage.cursor;
-          newPage = prevPage.page;
-          // Remove the last page from history
-          if (isSearching) {
-            setSearchPageHistory((prev) => prev.slice(0, -1));
-          } else {
-            setPageHistory((prev) => prev.slice(0, -1));
-          }
-        } else {
-          setLoadingPage(false);
-          return;
-        }
-      }
+  // Get current search results to display based on pagination
+  const getCurrentSearchResults = () => {
+    if (!searchResults?.edges) return [];
+    const startIndex = (searchCurrentPage - 1) * listingsPerPage;
+    const endIndex = startIndex + listingsPerPage;
+    return searchResults.edges.slice(startIndex, endIndex);
+  };
 
-      let apiData;
-      if (isSearching) {
-        apiData = await SearchAllPosts(search, 10, cursor);
-      } else {
-        apiData = await GetListingsVeranstaltungen(10, cursor);
-      }
-
-      const newPosts = isSearching ? apiData.data.posts : apiData.data.listings;
-
-      // Replace posts instead of appending
-      if (isSearching) {
-        setSearchResults(newPosts);
-        setSearchPageInfo(newPosts.pageInfo);
-        setSearchCurrentPage(newPage);
-      } else {
-        setCustomPosts(newPosts);
-        setPageInfo(newPosts.pageInfo);
-        setCurrentPage(newPage);
-      }
-    } catch (err) {
-      setError("Fehler beim Laden der Seite.");
-    } finally {
-      setLoadingPage(false);
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    if (isSearching) {
+      setSearchCurrentPage(pageNumber);
+    } else {
+      setCurrentPage(pageNumber);
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSearch = async () => {
@@ -140,11 +93,9 @@ const VenastaltusngskalendarPage = () => {
     setFiltering(true);
     setIsSearching(true);
     try {
-      const apiData = await SearchAllPosts(search);
+      const apiData = await SearchAllPosts(search, 1000);
       setSearchResults(apiData.data.posts);
-      setSearchPageInfo(apiData.data.posts.pageInfo);
       setSearchCurrentPage(1);
-      setSearchPageHistory([]);
     } catch (err) {
       setError("Fehler beim Suchen.");
     } finally {
@@ -156,9 +107,7 @@ const VenastaltusngskalendarPage = () => {
     setSearch("");
     setIsSearching(false);
     setSearchResults({});
-    setSearchPageInfo({ hasNextPage: false, endCursor: null });
     setSearchCurrentPage(1);
-    setSearchPageHistory([]);
   };
 
   useEffect(() => {
@@ -167,10 +116,9 @@ const VenastaltusngskalendarPage = () => {
         const apiData = await GetListingsVeranstaltungen();
         console.log("apiData 2221122222222111", apiData);
         setCookieData(apiData);
-        setCustomPosts(apiData.data.listings);
-        setPageInfo(apiData.data.listings.pageInfo);
+        // Store all listings in state
+        setAllListings(apiData.data.listings.edges || []);
         setCurrentPage(1);
-        setPageHistory([]);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");
       } finally {
@@ -189,7 +137,14 @@ const VenastaltusngskalendarPage = () => {
   if (error) return <div>{error}</div>;
 
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-  console.log("ausflugsziele data: cookieData 2222:", customPosts);
+  
+  // Get listings to display
+  const displayListings = isSearching ? getCurrentSearchResults() : getCurrentListings();
+  const totalPages = isSearching ? Math.ceil((searchResults?.edges?.length || 0) / listingsPerPage) : getTotalPages();
+  const activePage = isSearching ? searchCurrentPage : currentPage;
+  const totalListings = isSearching ? (searchResults?.edges?.length || 0) : allListings.length;
+  
+  console.log("ausflugsziele data: allListings:", allListings);
   return (
     <div className="mx-auto">
       {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
@@ -258,13 +213,13 @@ const VenastaltusngskalendarPage = () => {
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
           <>
-            Suchergebnisse - Seite {searchCurrentPage} - Angezeigt werden{" "}
-            {searchResults?.edges?.length || 0} Beiträge.
+            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt {totalListings} Beiträge - Angezeigt werden{" "}
+            {displayListings?.length || 0} Beiträge.
           </>
         ) : (
           <>
-            Seite {currentPage} - Angezeigt werden{" "}
-            {customPosts?.edges?.length || 0} Beiträge.
+            Seite {activePage} von {totalPages} - Insgesamt {totalListings} Beiträge - Angezeigt werden{" "}
+            {displayListings?.length || 0} Beiträge.
           </>
         )}
       </Typography>
@@ -291,9 +246,8 @@ const VenastaltusngskalendarPage = () => {
               </div>
             ) : (
               <div className="">
-                {(isSearching ? searchResults?.edges : customPosts?.edges)?.map(
+                {displayListings?.map(
                   (edge, idx) => {
-                    const posts = isSearching ? searchResults : customPosts;
                     return (
                       <div className="relative" key={edge.node.id}>
                         <CustomPost
@@ -304,7 +258,7 @@ const VenastaltusngskalendarPage = () => {
                           routePrefix="veranstaltungen"
                         />
                         {/* Divider except last */}
-                        {!onlyHeadings && idx < posts?.edges?.length - 1 && (
+                        {!onlyHeadings && idx < displayListings?.length - 1 && (
                           <hr className="my-6 border-gray-300" />
                         )}
                       </div>
@@ -314,36 +268,62 @@ const VenastaltusngskalendarPage = () => {
               </div>
             )}
 
-            {/* Pagination Buttons - Only show if not searching with empty results */}
+            {/* Numbered Pagination - Only show if not searching with empty results and more than 1 page */}
             {!(
               isSearching &&
               (!searchResults?.edges || searchResults.edges.length === 0)
-            ) && (
-              <div className="flex justify-center gap-4 mt-2">
-                <Button
-                  color="red"
-                  onClick={() => loadPage("previous")}
-                  disabled={
-                    (isSearching
-                      ? searchPageHistory.length === 0
-                      : pageHistory.length === 0) || loadingPage
-                  }
-                  className="px-6 py-2"
+            ) && totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
+                {/* Previous button */}
+                <button
+                  onClick={() => handlePageChange(activePage - 1)}
+                  disabled={activePage === 1}
+                  className="pagination-number"
                 >
-                  {loadingPage ? "Lade..." : "Previous"}
-                </Button>
-                <Button
-                  color="red"
-                  onClick={() => loadPage("next")}
-                  disabled={
-                    !(isSearching
-                      ? searchPageInfo.hasNextPage
-                      : pageInfo.hasNextPage) || loadingPage
+                  &laquo;
+                </button>
+
+                {/* Page numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage = 
+                    pageNum === 1 || 
+                    pageNum === totalPages || 
+                    (pageNum >= activePage - 2 && pageNum <= activePage + 2);
+                  
+                  const showEllipsis = 
+                    (pageNum === activePage - 3 && activePage > 4) ||
+                    (pageNum === activePage + 3 && activePage < totalPages - 3);
+
+                  if (showEllipsis) {
+                    return (
+                      <span key={pageNum} className="px-2 text-gray-500">
+                        ...
+                      </span>
+                    );
                   }
-                  className="px-6 py-2"
+
+                  if (!showPage) return null;
+
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`pagination-number ${pageNum === activePage ? 'active' : ''}`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                {/* Next button */}
+                <button
+                  onClick={() => handlePageChange(activePage + 1)}
+                  disabled={activePage === totalPages}
+                  className="pagination-number"
                 >
-                  {loadingPage ? "Lade..." : "Next"}
-                </Button>
+                  &raquo;
+                </button>
               </div>
             )}
           </>

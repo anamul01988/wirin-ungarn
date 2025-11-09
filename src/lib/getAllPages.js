@@ -515,9 +515,9 @@ export function GetAusflugszielePages(first = 1000, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-export function GetListingsVeranstaltungen(first = 10, after = null) {
+export function GetListingsVeranstaltungen(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetListingsVeranstaltungen($first: Int = 50, $after: String) {
+    query GetListingsVeranstaltungen($first: Int = 1000, $after: String) {
       pages(where: { title: "Veranstaltungskalender" }) {
         nodes {
           id
@@ -574,9 +574,9 @@ export function GetListingsVeranstaltungen(first = 10, after = null) {
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
-export function GetKreuzwortratsel(first = 10, after = null) {
+export function GetKreuzwortratsel(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetKreuzwortratsel($first: Int = 50, $after: String) {
+    query GetKreuzwortratsel($first: Int = 1000, $after: String) {
   pages(where: { title: "Kreuzworträtsel" }) {
     nodes {
       id
@@ -677,9 +677,9 @@ export function GetKreuzwortratsel(first = 10, after = null) {
 
 //   return fetchPage(SEARCH_QUERY, { search });
 // }
-export function GetAllSprachkursPages(first = 10, after = null) {
+export function GetAllSprachkursPages(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetAllSprachkursPages($first: Int = 10, $after: String) {
+    query GetAllSprachkursPages($first: Int = 1000, $after: String) {
       # Get the "kulinarische" Page
       pages(where: { name: "sprachkurs" }) {
         nodes {
