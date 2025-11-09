@@ -9,7 +9,7 @@ const EinFachPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
-  const [customPosts, setCustomPosts] = useState({});
+  const [allPosts, setAllPosts] = useState([]); // Store all einfache lesungen posts
   const [searchResults, setSearchResults] = useState({});
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
@@ -22,94 +22,40 @@ const EinFachPage = () => {
   const [algoliaResults, setAlgoliaResults] = useState([]);
   const [algoliaSearching, setAlgoliaSearching] = useState(false);
   const [searchDebounce, setSearchDebounce] = useState(null);
-  const [pageInfo, setPageInfo] = useState({
-    hasNextPage: false,
-    endCursor: null,
-  });
-  const [searchPageInfo, setSearchPageInfo] = useState({
-    hasNextPage: false,
-    endCursor: null,
-  });
+  
+  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
-  const [loadingPage, setLoadingPage] = useState(false);
-  const [pageHistory, setPageHistory] = useState([]); // Store page history for navigation
-  const [searchPageHistory, setSearchPageHistory] = useState([]); // Store search page history
+  const postsPerPage = 10;
 
-  const loadPage = async (direction) => {
-    if (loadingPage) return;
+  // Get current posts to display based on pagination
+  const getCurrentPosts = () => {
+    const startIndex = (currentPage - 1) * postsPerPage;
+    const endIndex = startIndex + postsPerPage;
+    return allPosts.slice(startIndex, endIndex);
+  };
 
-    setLoadingPage(true);
-    try {
-      let cursor = null;
-      let newPage = isSearching ? searchCurrentPage : currentPage;
-      let currentPageInfo = isSearching ? searchPageInfo : pageInfo;
-      let currentHistory = isSearching ? searchPageHistory : pageHistory;
+  // Calculate total pages
+  const getTotalPages = () => {
+    return Math.ceil(allPosts.length / postsPerPage);
+  };
 
-      if (direction === "next") {
-        cursor = currentPageInfo.endCursor;
-        newPage = (isSearching ? searchCurrentPage : currentPage) + 1;
-        // Store current page in history
-        if (isSearching) {
-          setSearchPageHistory((prev) => [
-            ...prev,
-            { page: searchCurrentPage, cursor: searchPageInfo.endCursor },
-          ]);
-        } else {
-          setPageHistory((prev) => [
-            ...prev,
-            { page: currentPage, cursor: pageInfo.endCursor },
-          ]);
-        }
-      } else if (direction === "previous") {
-        if (currentHistory.length > 0) {
-          // Get the previous page from history
-          const prevPage = currentHistory[currentHistory.length - 1];
-          cursor = prevPage.cursor;
-          newPage = prevPage.page;
-          // Remove the last page from history
-          if (isSearching) {
-            setSearchPageHistory((prev) => prev.slice(0, -1));
-          } else {
-            setPageHistory((prev) => prev.slice(0, -1));
-          }
-        } else {
-          setLoadingPage(false);
-          return;
-        }
-      }
+  // Get current search results to display based on pagination
+  const getCurrentSearchResults = () => {
+    if (!searchResults?.edges) return [];
+    const startIndex = (searchCurrentPage - 1) * postsPerPage;
+    const endIndex = startIndex + postsPerPage;
+    return searchResults.edges.slice(startIndex, endIndex);
+  };
 
-      let apiData;
-      if (isSearching) {
-        // Add post type filter to search parameters
-        apiData = await SearchAllPosts(
-          search,
-          10,
-          cursor,
-          window.einfachPostTypeFilter
-        );
-      } else {
-        apiData = await GetEinFachPages(10, cursor);
-      }
-
-      console.log("kategorien data:", apiData.data.einfacheLesungen);
-      const newPosts = apiData.data.einfacheLesungen;
-
-      // Replace posts instead of appending
-      if (isSearching) {
-        setSearchResults(newPosts);
-        setSearchPageInfo(newPosts.pageInfo);
-        setSearchCurrentPage(newPage);
-      } else {
-        setCustomPosts(newPosts);
-        setPageInfo(newPosts.pageInfo);
-        setCurrentPage(newPage);
-      }
-    } catch (err) {
-      setError("Fehler beim Laden der Seite.");
-    } finally {
-      setLoadingPage(false);
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    if (isSearching) {
+      setSearchCurrentPage(pageNumber);
+    } else {
+      setCurrentPage(pageNumber);
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSearch = async () => {
@@ -148,28 +94,21 @@ const EinFachPage = () => {
               content: hit.post_excerpt || "",
             },
           })),
-          pageInfo: {
-            hasNextPage: false,
-            endCursor: null,
-          },
         };
 
         setSearchResults(processedResults);
-        setSearchPageInfo(processedResults.pageInfo);
       } else {
         // Fall back to the original search method with post type filter
         const apiData = await SearchAllPosts(
           search,
-          10,
+          1000,
           null,
           window.einfachPostTypeFilter
         );
         setSearchResults(apiData.data.posts);
-        setSearchPageInfo(apiData.data.posts.pageInfo);
       }
 
       setSearchCurrentPage(1);
-      setSearchPageHistory([]);
     } catch (err) {
       console.error("Search error:", err);
       setError("Fehler beim Suchen.");
@@ -182,9 +121,7 @@ const EinFachPage = () => {
     setSearch("");
     setIsSearching(false);
     setSearchResults({});
-    setSearchPageInfo({ hasNextPage: false, endCursor: null });
     setSearchCurrentPage(1);
-    setSearchPageHistory([]);
     setAlgoliaResults([]);
   };
 
@@ -270,10 +207,9 @@ const EinFachPage = () => {
         // console.log("shorts data:", apiData.data.posts);
         console.log("einfachLessen data: alll 222222", apiData);
         setCookieData(apiData);
-        setCustomPosts(apiData.data.einfacheLesungen);
-        setPageInfo(apiData.data.einfacheLesungen.pageInfo);
+        // Store all posts in state
+        setAllPosts(apiData.data.einfacheLesungen.edges || []);
         setCurrentPage(1);
-        setPageHistory([]);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");
       } finally {
@@ -292,8 +228,15 @@ const EinFachPage = () => {
   if (error) return <div>{error}</div>;
   // if (!cookieData || !cookieData.data || !cookieData.data.page)
   //   return <div>Keine Cookie-Daten gefunden.</div>;
-  console.log("kategorien data: cookieData 2222:", customPosts);
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
+  
+  // Get posts to display
+  const displayPosts = isSearching ? getCurrentSearchResults() : getCurrentPosts();
+  const totalPages = isSearching ? Math.ceil((searchResults?.edges?.length || 0) / postsPerPage) : getTotalPages();
+  const activePage = isSearching ? searchCurrentPage : currentPage;
+  const totalPosts = isSearching ? (searchResults?.edges?.length || 0) : allPosts.length;
+  
+  console.log("einfach data: allPosts:", allPosts);
 
   return (
     <div className="mx-auto">
@@ -450,13 +393,13 @@ const EinFachPage = () => {
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
           <>
-            Suchergebnisse - Seite {searchCurrentPage} - Angezeigt werden{" "}
-            {searchResults?.edges?.length || 0} Beiträge.
+            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge - Angezeigt werden{" "}
+            {displayPosts?.length || 0} Beiträge.
           </>
         ) : (
           <>
-            Seite {currentPage} - Angezeigt werden{" "}
-            {customPosts?.edges?.length || 0} Beiträge.
+            Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge - Angezeigt werden{" "}
+            {displayPosts?.length || 0} Beiträge.
           </>
         )}
       </Typography>
@@ -467,9 +410,8 @@ const EinFachPage = () => {
           </div>
         ) : (
           <>
-            {(isSearching ? searchResults?.edges : customPosts?.edges)?.map(
+            {displayPosts?.map(
               (edge, idx) => {
-                const posts = isSearching ? searchResults : customPosts;
                 return (
                   <div key={edge.node.id}>
                     <CustomPost
@@ -483,7 +425,7 @@ const EinFachPage = () => {
                       routePrefix="einfach-lesen"
                     />
                     {/* Divider except last */}
-                    {!onlyHeadings && idx < posts?.edges?.length - 1 && (
+                    {!onlyHeadings && idx < displayPosts?.length - 1 && (
                       <hr className="my-6 border-gray-300" />
                     )}
                   </div>
@@ -491,33 +433,61 @@ const EinFachPage = () => {
               }
             )}
 
-            {/* Pagination Buttons */}
-            <div className="flex justify-center gap-4 mt-2">
-              <Button
-                color="red"
-                onClick={() => loadPage("previous")}
-                disabled={
-                  (isSearching
-                    ? searchPageHistory.length === 0
-                    : pageHistory.length === 0) || loadingPage
-                }
-                className="px-6 py-2"
-              >
-                {loadingPage ? "Lade..." : "Previous"}
-              </Button>
-              <Button
-                color="red"
-                onClick={() => loadPage("next")}
-                disabled={
-                  !(isSearching
-                    ? searchPageInfo.hasNextPage
-                    : pageInfo.hasNextPage) || loadingPage
-                }
-                className="px-6 py-2"
-              >
-                {loadingPage ? "Lade..." : "Next"}
-              </Button>
-            </div>
+            {/* Numbered Pagination - Only show if more than 1 page */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
+                {/* Previous button */}
+                <button
+                  onClick={() => handlePageChange(activePage - 1)}
+                  disabled={activePage === 1}
+                  className="pagination-number"
+                >
+                  &laquo;
+                </button>
+
+                {/* Page numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage = 
+                    pageNum === 1 || 
+                    pageNum === totalPages || 
+                    (pageNum >= activePage - 2 && pageNum <= activePage + 2);
+                  
+                  const showEllipsis = 
+                    (pageNum === activePage - 3 && activePage > 4) ||
+                    (pageNum === activePage + 3 && activePage < totalPages - 3);
+
+                  if (showEllipsis) {
+                    return (
+                      <span key={pageNum} className="px-2 text-gray-500">
+                        ...
+                      </span>
+                    );
+                  }
+
+                  if (!showPage) return null;
+
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`pagination-number ${pageNum === activePage ? 'active' : ''}`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                {/* Next button */}
+                <button
+                  onClick={() => handlePageChange(activePage + 1)}
+                  disabled={activePage === totalPages}
+                  className="pagination-number"
+                >
+                  &raquo;
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

@@ -71,9 +71,9 @@ export function GetDynamicCookiesPages(slug) {
   return fetchPage(DYNAMIC_PAGE_QUERY);
 }
 
-export function GetLiedTextePages(first = 10, after = null) {
+export function GetLiedTextePages(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetLiedTexte($first: Int = 10, $after: String) {
+    query GetLiedTexte($first: Int = 1000, $after: String) {
       pages(where: { name: "liedtexte" }) {
         nodes {
           id
@@ -250,9 +250,9 @@ export function GetShortPages(first = 10, after = null) {
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
-export function GetKategorienPages(first = 10, after = null) {
+export function GetKategorienPages(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetShortsPosts($first: Int = 10, $after: String) {
+    query GetShortsPosts($first: Int = 1000, $after: String) {
       pages(where: { name: "kategorien" }) {
         nodes {
           id
@@ -424,9 +424,9 @@ export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
   return fetchPage(SEARCH_QUERY, variables);
 }
 
-export function GetEinFachPages(first = 10, after = null) {
+export function GetEinFachPages(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetEinFachPage($first: Int = 10, $after: String) {
+    query GetEinFachPage($first: Int = 1000, $after: String) {
       pages(where: { name: "Einfach Lesen" }) {
         nodes {
           id
