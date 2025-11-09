@@ -16,7 +16,7 @@ export default function AnkiKartenPage() {
   const route = useRouter();
 
   // const handleBackToMenu = () => {
-  //   route.back();
+  //   route.back()
   // };
   const handleClose = () => {
     setOpen(false);
