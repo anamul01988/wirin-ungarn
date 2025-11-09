@@ -454,15 +454,13 @@ const KulinarischeSeelePage = () => {
             ) && totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
                 {/* Previous button */}
-                <Button
-                  color="red"
-                  variant="outlined"
+                <button
                   onClick={() => handlePageChange(activePage - 1)}
                   disabled={activePage === 1}
-                  className="px-4 py-2"
+                  className="pagination-number"
                 >
                   &laquo;
-                </Button>
+                </button>
 
                 {/* Page numbers */}
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
@@ -487,28 +485,24 @@ const KulinarischeSeelePage = () => {
                   if (!showPage) return null;
 
                   return (
-                    <Button
+                    <button
                       key={pageNum}
-                      color="red"
-                      variant={pageNum === activePage ? "filled" : "outlined"}
                       onClick={() => handlePageChange(pageNum)}
-                      className="px-4 py-2 min-w-[40px]"
+                      className={`pagination-number ${pageNum === activePage ? 'active' : ''}`}
                     >
                       {pageNum}
-                    </Button>
+                    </button>
                   );
                 })}
 
                 {/* Next button */}
-                <Button
-                  color="red"
-                  variant="outlined"
+                <button
                   onClick={() => handlePageChange(activePage + 1)}
                   disabled={activePage === totalPages}
-                  className="px-4 py-2"
+                  className="pagination-number"
                 >
                   &raquo;
-                </Button>
+                </button>
               </div>
             )}
           </>
