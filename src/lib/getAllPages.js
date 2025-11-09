@@ -741,9 +741,10 @@ export function GetAllSprachkursPages(first = 10, after = null) {
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
-export function GetKulinarischeSeelePages(first = 10, after = null) {
+
+export async function GetKulinarischeSeelePages(batchSize = 100) {
   const SEARCH_QUERY = `
-    query GetKulinarischeSeelePages($first: Int = 10, $after: String) {
+    query GetKulinarischeSeelePages($first: Int = 100, $after: String) {
       # Get the "kulinarische" Page
       pages(where: { title: "Ungarns kulinarische Seele" }) {
         nodes {
@@ -789,7 +790,71 @@ export function GetKulinarischeSeelePages(first = 10, after = null) {
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, { first, after });
+  let hasNextPage = true;
+  let after = null;
+  let aggregatedEdges = [];
+  let firstResponse = null;
+
+  while (hasNextPage) {
+    const response = await fetchPage(SEARCH_QUERY, {
+      first: batchSize,
+      after,
+    });
+
+    if (!firstResponse) {
+      firstResponse = response;
+    }
+
+    const recipes = response?.data?.recipes;
+    const edges = recipes?.edges ?? [];
+
+    if (edges.length > 0) {
+      aggregatedEdges = aggregatedEdges.concat(edges);
+    }
+
+    hasNextPage = recipes?.pageInfo?.hasNextPage ?? false;
+    after = recipes?.pageInfo?.endCursor ?? null;
+  }
+
+  if (!firstResponse) {
+    return {
+      data: {
+        pages: { nodes: [] },
+        recipes: {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+            endCursor: null,
+          },
+          totalCount: 0,
+        },
+      },
+    };
+  }
+
+  const firstRecipe = aggregatedEdges[0] ?? null;
+  const lastRecipe = aggregatedEdges[aggregatedEdges.length - 1] ?? null;
+  const existingPageInfo = firstResponse.data?.recipes?.pageInfo ?? {};
+
+  firstResponse.data = {
+    ...firstResponse.data,
+    recipes: {
+      ...(firstResponse.data?.recipes ?? {}),
+      edges: aggregatedEdges,
+      pageInfo: {
+        ...existingPageInfo,
+        hasNextPage: false,
+        hasPreviousPage: false,
+        startCursor: firstRecipe?.cursor ?? null,
+        endCursor: lastRecipe?.cursor ?? null,
+      },
+      totalCount: aggregatedEdges.length,
+    },
+  };
+
+  return firstResponse;
 }
 
 export function SearchAllPosts(

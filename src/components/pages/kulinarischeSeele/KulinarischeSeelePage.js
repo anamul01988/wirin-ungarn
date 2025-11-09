@@ -5,12 +5,15 @@ import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import algoliasearch from "algoliasearch/lite";
 import CustomPost from "@/components/ui/CustomPost";
+
+const ITEMS_PER_PAGE = 10;
+const SEARCH_BATCH_SIZE = 100;
 const KulinarischeSeelePage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
-  const [customPosts, setCustomPosts] = useState({});
-  const [searchResults, setSearchResults] = useState({});
+  const [allRecipes, setAllRecipes] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
@@ -22,93 +25,26 @@ const KulinarischeSeelePage = () => {
   const [algoliaResults, setAlgoliaResults] = useState([]);
   const [algoliaSearching, setAlgoliaSearching] = useState(false);
   const [searchDebounce, setSearchDebounce] = useState(null);
-  const [pageInfo, setPageInfo] = useState({
-    hasNextPage: false,
-    endCursor: null,
-  });
-  const [searchPageInfo, setSearchPageInfo] = useState({
-    hasNextPage: false,
-    endCursor: null,
-  });
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
-  const [loadingPage, setLoadingPage] = useState(false);
-  const [pageHistory, setPageHistory] = useState([]); // Store page history for navigation
-  const [searchPageHistory, setSearchPageHistory] = useState([]); // Store search page history
 
-  const loadPage = async (direction) => {
-    if (loadingPage) return;
+  const handlePageChange = (pageNumber) => {
+    const activeTotalPages = isSearching
+      ? Math.ceil(searchResults.length / ITEMS_PER_PAGE)
+      : Math.ceil(allRecipes.length / ITEMS_PER_PAGE);
 
-    setLoadingPage(true);
-    try {
-      let cursor = null;
-      let newPage = isSearching ? searchCurrentPage : currentPage;
-      let currentPageInfo = isSearching ? searchPageInfo : pageInfo;
-      let currentHistory = isSearching ? searchPageHistory : pageHistory;
+    if (pageNumber < 1 || (activeTotalPages && pageNumber > activeTotalPages)) {
+      return;
+    }
 
-      if (direction === "next") {
-        cursor = currentPageInfo.endCursor;
-        newPage = (isSearching ? searchCurrentPage : currentPage) + 1;
-        // Store current page in history
-        if (isSearching) {
-          setSearchPageHistory((prev) => [
-            ...prev,
-            { page: searchCurrentPage, cursor: searchPageInfo.endCursor },
-          ]);
-        } else {
-          setPageHistory((prev) => [
-            ...prev,
-            { page: currentPage, cursor: pageInfo.endCursor },
-          ]);
-        }
-      } else if (direction === "previous") {
-        if (currentHistory.length > 0) {
-          // Get the previous page from history
-          const prevPage = currentHistory[currentHistory.length - 1];
-          cursor = prevPage.cursor;
-          newPage = prevPage.page;
-          // Remove the last page from history
-          if (isSearching) {
-            setSearchPageHistory((prev) => prev.slice(0, -1));
-          } else {
-            setPageHistory((prev) => prev.slice(0, -1));
-          }
-        } else {
-          setLoadingPage(false);
-          return;
-        }
-      }
+    if (isSearching) {
+      setSearchCurrentPage(pageNumber);
+    } else {
+      setCurrentPage(pageNumber);
+    }
 
-      let apiData;
-      if (isSearching) {
-        // Add post type filter to search parameters
-        apiData = await SearchAllPosts(
-          search,
-          10,
-          cursor,
-          window.kulinarischeSeelePostTypeFilter
-        );
-      } else {
-        apiData = await GetKulinarischeSeelePages(10, cursor);
-      }
-
-      console.log("kategorien data:", apiData);
-      const newPosts = isSearching ? apiData.data.posts : apiData.data.recipes;
-
-      // Replace posts instead of appending
-      if (isSearching) {
-        setSearchResults(newPosts);
-        setSearchPageInfo(newPosts.pageInfo);
-        setSearchCurrentPage(newPage);
-      } else {
-        setCustomPosts(newPosts);
-        setPageInfo(newPosts.pageInfo);
-        setCurrentPage(newPage);
-      }
-    } catch (err) {
-      setError("Fehler beim Laden der Seite.");
-    } finally {
-      setLoadingPage(false);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -131,46 +67,36 @@ const KulinarischeSeelePage = () => {
             hit.post_type_label === window.kulinarischeSeelePostTypeFilter
         );
 
-        // Create a structure compatible with your existing code
-        const processedResults = {
-          edges: filteredResults.map((hit) => ({
-            node: {
-              id: hit.objectID,
-              title: hit.post_title,
-              slug: hit.permalink
-                ? hit.permalink.split("/").filter(Boolean).pop()
-                : "",
-              featuredImage: {
-                node: {
-                  sourceUrl: hit.featured_image_url || "",
-                  altText: hit.post_title || "",
-                },
+        const processedEdges = filteredResults.map((hit) => ({
+          node: {
+            id: hit.objectID,
+            title: hit.post_title,
+            slug: hit.permalink
+              ? hit.permalink.split("/").filter(Boolean).pop()
+              : "",
+            featuredImage: {
+              node: {
+                sourceUrl: hit.featured_image_url || "",
+                altText: hit.post_title || "",
               },
-              content: hit.post_excerpt || "",
             },
-          })),
-          pageInfo: {
-            hasNextPage: false,
-            endCursor: null,
+            content: hit.post_excerpt || "",
           },
-        };
+        }));
 
-        setSearchResults(processedResults);
-        setSearchPageInfo(processedResults.pageInfo);
+        setSearchResults(processedEdges);
       } else {
         // Fall back to the original search method with post type filter
         const apiData = await SearchAllPosts(
           search,
-          10,
+          SEARCH_BATCH_SIZE,
           null,
           window.kulinarischeSeelePostTypeFilter
         );
-        setSearchResults(apiData.data.posts);
-        setSearchPageInfo(apiData.data.posts.pageInfo);
+        setSearchResults(apiData.data.posts?.edges ?? []);
       }
 
       setSearchCurrentPage(1);
-      setSearchPageHistory([]);
     } catch (err) {
       console.error("Search error:", err);
       setError("Fehler beim Suchen.");
@@ -182,10 +108,8 @@ const KulinarischeSeelePage = () => {
   const clearSearch = () => {
     setSearch("");
     setIsSearching(false);
-    setSearchResults({});
-    setSearchPageInfo({ hasNextPage: false, endCursor: null });
+    setSearchResults([]);
     setSearchCurrentPage(1);
-    setSearchPageHistory([]);
     setAlgoliaResults([]);
   };
 
@@ -269,13 +193,10 @@ const KulinarischeSeelePage = () => {
     async function fetchData() {
       try {
         const apiData = await GetKulinarischeSeelePages();
-        console.log("shorts data:", apiData.data.posts);
-        console.log("shorts data: alll 222222", apiData);
+        console.log("kulinarische Seele data:", apiData);
         setCookieData(apiData);
-        setCustomPosts(apiData.data.recipes);
-        setPageInfo(apiData.data.recipes.pageInfo);
+        setAllRecipes(apiData.data?.recipes?.edges ?? []);
         setCurrentPage(1);
-        setPageHistory([]);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");
       } finally {
@@ -284,6 +205,17 @@ const KulinarischeSeelePage = () => {
     }
     fetchData();
   }, []);
+
+  const activeEdges = isSearching ? searchResults : allRecipes;
+  const defaultTotalPages = Math.ceil(allRecipes.length / ITEMS_PER_PAGE) || 0;
+  const searchTotalPages = Math.ceil(searchResults.length / ITEMS_PER_PAGE) || 0;
+  const totalPages = isSearching ? searchTotalPages : defaultTotalPages;
+  const activePage = isSearching ? searchCurrentPage : currentPage;
+  const paginatedEdges = activeEdges.slice(
+    (activePage - 1) * ITEMS_PER_PAGE,
+    activePage * ITEMS_PER_PAGE
+  );
+  const paginationNumbers = Array.from({ length: totalPages }, (_, idx) => idx + 1);
 
   if (loading)
     return (
@@ -294,8 +226,8 @@ const KulinarischeSeelePage = () => {
   if (error) return <div>{error}</div>;
   // if (!cookieData || !cookieData.data || !cookieData.data.page)
   //   return <div>Keine Cookie-Daten gefunden.</div>;
-  console.log("shorts data: cookieData 2222:", customPosts);
-  const { title, content } = cookieData.data.pages?.nodes[0] || {};
+  console.log("shorts data: cookieData 2222:", allRecipes);
+  const { title } = cookieData.data.pages?.nodes[0] || {};
 
   return (
     <div className="mx-auto">
@@ -448,98 +380,87 @@ const KulinarischeSeelePage = () => {
         </div>
       )}
 
-      {/* Footer info */}
-      <Typography variant="small" color="gray" className="mt-4">
-        {isSearching ? (
-          <>
-            Suchergebnisse - Seite {searchCurrentPage} - Angezeigt werden{" "}
-            {searchResults?.edges?.length || 0} Beiträge.
-          </>
-        ) : (
-          <>
-            Seite {currentPage} - Angezeigt werden{" "}
-            {customPosts?.edges?.length || 0} Beiträge.
-          </>
-        )}
-      </Typography>
-      <div className="pt-6 pb-2 max-w-5xl mx-auto">
-        {filtering === true ? (
-          <div>
-            <DefaultSpinner />
-          </div>
-        ) : (
-          <>
-            {isSearching &&
-            (!searchResults?.edges || searchResults.edges.length === 0) ? (
-              <div className="text-center py-8">
-                <Typography variant="h6" color="gray" className="mb-4">
-                  Keine Suchergebnisse gefunden
-                </Typography>
-                <Typography variant="paragraph" color="gray">
-                  Versuchen Sie es mit anderen Suchbegriffen oder schauen Sie
-                  sich alle verfügbaren Artikel an.
-                </Typography>
-              </div>
-            ) : (
-              (isSearching ? searchResults?.edges : customPosts?.edges)?.map(
-                (edge, idx) => {
-                  const posts = isSearching ? searchResults : customPosts;
-                  return (
-                    <div key={edge.node.id}>
-                      <CustomPost
-                        title={edge.node?.title}
-                        image={edge.node?.featuredImage?.node?.sourceUrl}
-                        imageAlt={edge.node?.featuredImage?.node?.altText}
-                        description={edge.node.postContentRecipe?.introText}
-                        onlyHeadings={onlyHeadings}
-                        slug={edge.node.slug}
-                        routePrefix="kulinarische-seele"
-                      />
-                      {/* Divider except last */}
-                      {!onlyHeadings && idx < posts?.edges?.length - 1 && (
-                        <hr className="my-6 border-gray-300" />
-                      )}
-                    </div>
-                  );
-                }
-              )
-            )}
+        {/* Footer info */}
+        <Typography variant="small" color="gray" className="mt-4">
+          {isSearching ? (
+            <>
+              Suchergebnisse – Seite {searchCurrentPage} von{" "}
+              {searchTotalPages || 1} – Angezeigt werden {paginatedEdges.length}{" "}
+              Beiträge aus insgesamt {searchResults.length}.
+            </>
+          ) : (
+            <>
+              Seite {currentPage} von {defaultTotalPages || 1} – Angezeigt werden{" "}
+              {paginatedEdges.length} Beiträge aus insgesamt {allRecipes.length}.
+            </>
+          )}
+        </Typography>
+        <div className="pt-6 pb-2 max-w-5xl mx-auto">
+          {filtering === true ? (
+            <div>
+              <DefaultSpinner />
+            </div>
+          ) : (
+            <>
+              {isSearching && searchResults.length === 0 ? (
+                <div className="text-center py-8">
+                  <Typography variant="h6" color="gray" className="mb-4">
+                    Keine Suchergebnisse gefunden
+                  </Typography>
+                  <Typography variant="paragraph" color="gray">
+                    Versuchen Sie es mit anderen Suchbegriffen oder schauen Sie
+                    sich alle verfügbaren Artikel an.
+                  </Typography>
+                </div>
+              ) : (
+                paginatedEdges.map((edge, idx) => (
+                  <div key={edge.node?.id ?? idx}>
+                    <CustomPost
+                      title={edge.node?.title}
+                      image={edge.node?.featuredImage?.node?.sourceUrl}
+                      imageAlt={edge.node?.featuredImage?.node?.altText}
+                      description={
+                        edge.node?.postContentRecipe?.introText ||
+                        edge.node?.content ||
+                        ""
+                      }
+                      onlyHeadings={onlyHeadings}
+                      slug={edge.node?.slug}
+                      routePrefix="kulinarische-seele"
+                    />
+                    {/* Divider except last */}
+                    {!onlyHeadings && idx < paginatedEdges.length - 1 && (
+                      <hr className="my-6 border-gray-300" />
+                    )}
+                  </div>
+                ))
+              )}
 
-            {/* Pagination Buttons - Only show if not searching with empty results */}
-            {!(
-              isSearching &&
-              (!searchResults?.edges || searchResults.edges.length === 0)
-            ) && (
-              <div className="flex justify-center gap-4 mt-2">
-                <Button
-                  color="red"
-                  onClick={() => loadPage("previous")}
-                  disabled={
-                    (isSearching
-                      ? searchPageHistory.length === 0
-                      : pageHistory.length === 0) || loadingPage
-                  }
-                  className="px-6 py-2"
-                >
-                  {loadingPage ? "Lade..." : "Previous"}
-                </Button>
-                <Button
-                  color="red"
-                  onClick={() => loadPage("next")}
-                  disabled={
-                    !(isSearching
-                      ? searchPageInfo.hasNextPage
-                      : pageInfo.hasNextPage) || loadingPage
-                  }
-                  className="px-6 py-2"
-                >
-                  {loadingPage ? "Lade..." : "Next"}
-                </Button>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+              {/* Pagination Buttons - Only show when there are items */}
+              {paginatedEdges.length > 0 && totalPages > 1 && (
+                <div className="flex flex-wrap justify-center gap-2 mt-6">
+                  {paginationNumbers.map((pageNumber) => {
+                    const isActivePage = pageNumber === activePage;
+                    return (
+                      <Button
+                        key={pageNumber}
+                        color={isActivePage ? "red" : "gray"}
+                        variant={isActivePage ? "filled" : "outlined"}
+                        disabled={isActivePage}
+                        onClick={() => handlePageChange(pageNumber)}
+                        className={`px-4 py-2 min-w-[44px] ${
+                          isActivePage ? "pointer-events-none" : ""
+                        }`}
+                      >
+                        {pageNumber}
+                      </Button>
+                    );
+                  })}
+                </div>
+              )}
+            </>
+          )}
+        </div>
     </div>
   );
 };
