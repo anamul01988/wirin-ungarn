@@ -741,9 +741,9 @@ export function GetAllSprachkursPages(first = 10, after = null) {
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
-export function GetKulinarischeSeelePages(first = 10, after = null) {
+export function GetKulinarischeSeelePages(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetKulinarischeSeelePages($first: Int = 10, $after: String) {
+    query GetKulinarischeSeelePages($first: Int = 1000, $after: String) {
       # Get the "kulinarische" Page
       pages(where: { title: "Ungarns kulinarische Seele" }) {
         nodes {
