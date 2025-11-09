@@ -470,9 +470,9 @@ export function GetEinFachPages(first = 10, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-export function GetAusflugszielePages(first = 10, after = null) {
+export function GetAusflugszielePages(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetAusflugsziele($first: Int = 10, $after: String) {
+    query GetAusflugsziele($first: Int = 1000, $after: String) {
       # Get the ausflugsziele Page
       pages(where: { title: "ausflugsziele" }) {
         nodes {
