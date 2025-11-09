@@ -22,7 +22,7 @@ const KulinarischeSeelePage = () => {
   const [algoliaResults, setAlgoliaResults] = useState([]);
   const [algoliaSearching, setAlgoliaSearching] = useState(false);
   const [searchDebounce, setSearchDebounce] = useState(null);
-
+  
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
@@ -55,7 +55,7 @@ const KulinarischeSeelePage = () => {
     } else {
       setCurrentPage(pageNumber);
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSearch = async () => {
@@ -230,21 +230,15 @@ const KulinarischeSeelePage = () => {
       </div>
     );
   if (error) return <div>{error}</div>;
-
+  
   console.log("shorts data: allRecipes:", allRecipes);
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-
+  
   // Get recipes to display
-  const displayRecipes = isSearching
-    ? getCurrentSearchResults()
-    : getCurrentRecipes();
-  const totalPages = isSearching
-    ? Math.ceil((searchResults?.edges?.length || 0) / recipesPerPage)
-    : getTotalPages();
+  const displayRecipes = isSearching ? getCurrentSearchResults() : getCurrentRecipes();
+  const totalPages = isSearching ? Math.ceil((searchResults?.edges?.length || 0) / recipesPerPage) : getTotalPages();
   const activePage = isSearching ? searchCurrentPage : currentPage;
-  const totalRecipes = isSearching
-    ? searchResults?.edges?.length || 0
-    : allRecipes.length;
+  const totalRecipes = isSearching ? (searchResults?.edges?.length || 0) : allRecipes.length;
 
   return (
     <div className="mx-auto">
@@ -401,14 +395,13 @@ const KulinarischeSeelePage = () => {
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
           <>
-            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt{" "}
-            {totalRecipes} Beiträge - Angezeigt werden{" "}
+            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt {totalRecipes} Beiträge - Angezeigt werden{" "}
             {displayRecipes?.length || 0} Beiträge.
           </>
         ) : (
           <>
-            Seite {activePage} von {totalPages} - Insgesamt {totalRecipes}{" "}
-            Beiträge - Angezeigt werden {displayRecipes?.length || 0} Beiträge.
+            Seite {activePage} von {totalPages} - Insgesamt {totalRecipes} Beiträge - Angezeigt werden{" "}
+            {displayRecipes?.length || 0} Beiträge.
           </>
         )}
       </Typography>
@@ -431,98 +424,93 @@ const KulinarischeSeelePage = () => {
                 </Typography>
               </div>
             ) : (
-              displayRecipes?.map((edge, idx) => {
-                return (
-                  <div key={edge.node.id}>
-                    <CustomPost
-                      title={edge.node?.title}
-                      image={edge.node?.featuredImage?.node?.sourceUrl}
-                      imageAlt={edge.node?.featuredImage?.node?.altText}
-                      description={edge.node.postContentRecipe?.introText}
-                      onlyHeadings={onlyHeadings}
-                      slug={edge.node.slug}
-                      routePrefix="kulinarische-seele"
-                    />
-                    {/* Divider except last */}
-                    {!onlyHeadings && idx < displayRecipes?.length - 1 && (
-                      <hr className="my-6 border-gray-300" />
-                    )}
-                  </div>
-                );
-              })
+              displayRecipes?.map(
+                (edge, idx) => {
+                  return (
+                    <div key={edge.node.id}>
+                      <CustomPost
+                        title={edge.node?.title}
+                        image={edge.node?.featuredImage?.node?.sourceUrl}
+                        imageAlt={edge.node?.featuredImage?.node?.altText}
+                        description={edge.node.postContentRecipe?.introText}
+                        onlyHeadings={onlyHeadings}
+                        slug={edge.node.slug}
+                        routePrefix="kulinarische-seele"
+                      />
+                      {/* Divider except last */}
+                      {!onlyHeadings && idx < displayRecipes?.length - 1 && (
+                        <hr className="my-6 border-gray-300" />
+                      )}
+                    </div>
+                  );
+                }
+              )
             )}
 
             {/* Numbered Pagination - Only show if not searching with empty results and more than 1 page */}
             {!(
               isSearching &&
               (!searchResults?.edges || searchResults.edges.length === 0)
-            ) &&
-              totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
-                  {/* Previous button */}
-                  <Button
-                    color="red"
-                    variant="outlined"
-                    onClick={() => handlePageChange(activePage - 1)}
-                    disabled={activePage === 1}
-                    className="px-4 py-2"
-                  >
-                    &laquo;
-                  </Button>
+            ) && totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
+                {/* Previous button */}
+                <Button
+                  color="red"
+                  variant="outlined"
+                  onClick={() => handlePageChange(activePage - 1)}
+                  disabled={activePage === 1}
+                  className="px-4 py-2"
+                >
+                  &laquo;
+                </Button>
 
-                  {/* Page numbers */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (pageNum) => {
-                      // Show first page, last page, current page, and pages around current
-                      const showPage =
-                        pageNum === 1 ||
-                        pageNum === totalPages ||
-                        (pageNum >= activePage - 2 &&
-                          pageNum <= activePage + 2);
+                {/* Page numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage = 
+                    pageNum === 1 || 
+                    pageNum === totalPages || 
+                    (pageNum >= activePage - 2 && pageNum <= activePage + 2);
+                  
+                  const showEllipsis = 
+                    (pageNum === activePage - 3 && activePage > 4) ||
+                    (pageNum === activePage + 3 && activePage < totalPages - 3);
 
-                      const showEllipsis =
-                        (pageNum === activePage - 3 && activePage > 4) ||
-                        (pageNum === activePage + 3 &&
-                          activePage < totalPages - 3);
+                  if (showEllipsis) {
+                    return (
+                      <span key={pageNum} className="px-2 text-gray-500">
+                        ...
+                      </span>
+                    );
+                  }
 
-                      if (showEllipsis) {
-                        return (
-                          <span key={pageNum} className="px-2 text-gray-500">
-                            ...
-                          </span>
-                        );
-                      }
+                  if (!showPage) return null;
 
-                      if (!showPage) return null;
+                  return (
+                    <Button
+                      key={pageNum}
+                      color="red"
+                      variant={pageNum === activePage ? "filled" : "outlined"}
+                      onClick={() => handlePageChange(pageNum)}
+                      className="px-4 py-2 min-w-[40px]"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
 
-                      return (
-                        <Button
-                          key={pageNum}
-                          color="red"
-                          variant={
-                            pageNum === activePage ? "filled" : "outlined"
-                          }
-                          onClick={() => handlePageChange(pageNum)}
-                          className="px-4 py-2 min-w-[40px]"
-                        >
-                          {pageNum}
-                        </Button>
-                      );
-                    }
-                  )}
-
-                  {/* Next button */}
-                  <Button
-                    color="red"
-                    variant="outlined"
-                    onClick={() => handlePageChange(activePage + 1)}
-                    disabled={activePage === totalPages}
-                    className="px-4 py-2"
-                  >
-                    &raquo;
-                  </Button>
-                </div>
-              )}
+                {/* Next button */}
+                <Button
+                  color="red"
+                  variant="outlined"
+                  onClick={() => handlePageChange(activePage + 1)}
+                  disabled={activePage === totalPages}
+                  className="px-4 py-2"
+                >
+                  &raquo;
+                </Button>
+              </div>
+            )}
           </>
         )}
       </div>
