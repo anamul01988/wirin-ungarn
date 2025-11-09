@@ -443,12 +443,10 @@ body {
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  justify-items: end;
-  align-items: center;
-  width: 100%;
-  gap: 40px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 40px;
 }
 
 .footer-link {
@@ -464,6 +462,72 @@ body {
 
 .footer-link:hover {
   background: rgba(74, 124, 89, 0.2);
+}
+
+/* Desktop Footer Navigation - matching index_semantic */
+@media (min-width: 769px) {
+  .desktop-footer-nav {
+    flex: 1;
+    max-width: 650px;
+    margin-left: auto;
+  }
+  
+  .footer-links-container {
+    background: #4a7c59;
+    padding: 10px;
+    border-radius: 5px;
+    outline: 5px solid #ffffff;
+  }
+  
+  .footer-links-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  
+  .footer-link-item {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: clamp(11px, 0.73vw, 16px);
+    padding: 0px 5px;
+    border-radius: 4px;
+    transition: background 0.3s;
+    line-height: 14px;
+    font-family: 'Roboto Condensed', sans-serif;
+  }
+  
+  .footer-link-item:hover {
+    background: rgba(74, 124, 89, 0.2);
+  }
+  
+  .footer-link-item:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+  
+  .footer-more-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  @media screen and (max-width: 1366px) {
+    .footer-links-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+  }
+}
+
+/* Hide desktop footer on mobile */
+@media (max-width: 768px) {
+  .desktop-footer-nav {
+    display: none;
+  }
 }
 
 /* Hungarian flag colors in logo */
@@ -485,35 +549,35 @@ body {
 .ticker-container {
   position: relative;
   background-color: #ffffff;
-  border: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  /* margin: 20px auto; */
-  max-width: 100%;
+  max-width: 900px;
   display: flex;
   align-items: center;
-  height: 50px;
+  height: 42px;
   border: 2px solid #436f4d;
-  padding: 0px 8px;
+  padding: 0 5px;
+  border-radius: 8px;
 }
 
 @media screen and (max-width: 1366px) {
   .ticker-container {
-    /* max-width: 500px; */
-    margin-left: 0px;
+    max-width: 500px;
   }
 }
+
 @media screen and (max-width: 1040px) {
   .ht_text {
     display: none;
   }
 }
+
 .ticker-label {
   background-color: #c41e3a;
   color: white;
   padding: 0 15px;
   font-weight: bold;
-  font-size: 13px;
+  font-size: clamp(11px, 0.68vw, 14px);
   white-space: nowrap;
   height: 75%;
   display: flex;
@@ -536,8 +600,8 @@ body {
   animation: scroll 30s linear infinite;
   padding-left: 100%;
   border: 1px solid #1c6547;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 .ticker-content:hover .ticker-wrapper {
@@ -548,7 +612,7 @@ body {
   white-space: nowrap;
   padding: 0 5px;
   color: #333;
-  font-size: 14px;
+  font-size: clamp(11px, 0.73vw, 16px);
   display: flex;
   align-items: center;
 }
@@ -563,7 +627,7 @@ body {
   background-color: #c41e3a;
   border: none;
   color: white;
-  font-size: 18px;
+  font-size: clamp(14px, 0.94vw, 20px);
   cursor: pointer;
   padding: 0 15px;
   height: 75%;
@@ -581,6 +645,11 @@ body {
   background-color: #a01729;
 }
 
+.close-button:focus {
+  outline: 2px solid white;
+  outline-offset: -2px;
+}
+
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -590,31 +659,47 @@ body {
   }
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for ticker */
 @media (max-width: 768px) {
   .ticker-container {
     height: 40px;
   }
 
   .ticker-label {
-    font-size: 11px;
+    font-size: clamp(10px, 0.57vw, 12px);
     padding: 0 10px;
   }
 
   .ticker-item {
-    font-size: 12px;
+    font-size: clamp(11px, 0.63vw, 14px);
     padding: 0 30px;
   }
 
   .close-button {
     padding: 0 12px;
-    font-size: 16px;
+    font-size: clamp(14px, 0.83vw, 18px);
   }
 }
 
 /* Hidden state */
 .ticker-container.hidden {
   display: none;
+}
+
+/* News link styles */
+.news-link {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.news-link:hover {
+  color: #c41e3a;
+}
+
+.news-link:focus {
+  outline: 2px solid #c41e3a;
+  outline-offset: 2px;
 }
 
 /* Additional styling for multiple news items */
