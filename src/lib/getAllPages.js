@@ -741,9 +741,9 @@ export function GetAllSprachkursPages(first = 10, after = null) {
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
-export function GetKulinarischeSeelePages(first = 10, after = null) {
+export function GetKulinarischeSeelePages(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetKulinarischeSeelePages($first: Int = 10, $after: String) {
+    query GetKulinarischeSeelePages($first: Int = 1000, $after: String) {
       # Get the "kulinarische" Page
       pages(where: { title: "Ungarns kulinarische Seele" }) {
         nodes {
@@ -790,6 +790,100 @@ export function GetKulinarischeSeelePages(first = 10, after = null) {
   `;
 
   return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+// Function to fetch all recipes by paginating through all pages
+export async function GetAllKulinarischeSeeleRecipes() {
+  const SEARCH_QUERY = `
+    query GetKulinarischeSeelePages($first: Int = 100, $after: String) {
+      # Get the "kulinarische" Page
+      pages(where: { title: "Ungarns kulinarische Seele" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+        }
+      }
+
+      # Get Listings CPT
+      recipes(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            slug
+            date
+            featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+           }
+            postContentRecipe{
+              introText
+            }
+
+          }
+        }
+      }
+    }
+  `;
+
+  let allRecipes = [];
+  let hasNextPage = true;
+  let after = null;
+  let pageData = null;
+
+  try {
+    // First fetch to get page info
+    const firstFetch = await fetchPage(SEARCH_QUERY, {
+      first: 100,
+      after: null,
+    });
+    pageData = firstFetch.data.pages;
+    allRecipes = [...(firstFetch.data.recipes?.edges || [])];
+    hasNextPage = firstFetch.data.recipes?.pageInfo?.hasNextPage || false;
+    after = firstFetch.data.recipes?.pageInfo?.endCursor || null;
+
+    // Continue fetching until all pages are loaded
+    while (hasNextPage && after) {
+      const nextFetch = await fetchPage(SEARCH_QUERY, { first: 100, after });
+      const nextRecipes = nextFetch.data.recipes?.edges || [];
+      allRecipes = [...allRecipes, ...nextRecipes];
+      hasNextPage = nextFetch.data.recipes?.pageInfo?.hasNextPage || false;
+      after = nextFetch.data.recipes?.pageInfo?.endCursor || null;
+    }
+
+    return {
+      data: {
+        pages: pageData,
+        recipes: {
+          edges: allRecipes,
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            endCursor: null,
+            startCursor: null,
+          },
+        },
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching all recipes:", error);
+    throw error;
+  }
 }
 
 export function SearchAllPosts(
