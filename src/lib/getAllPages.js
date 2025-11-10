@@ -82,6 +82,12 @@ export function GetLiedTextePages(first = 1000, after = null) {
           slug
           content
           status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
         }
       }
 
@@ -112,6 +118,12 @@ export function GetLiedTextePages(first = 1000, after = null) {
                 title
                 uri
               }
+            }
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
             }
           }
         }
@@ -194,6 +206,12 @@ export function GetShortPages(first = 10, after = null) {
       slug
       content
       status
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
     }
   }
 
@@ -241,6 +259,12 @@ export function GetShortPages(first = 10, after = null) {
           shortTitle
           shortsPostContent
         }
+        seo {
+          title
+          metaDesc
+          opengraphTitle
+          opengraphDescription
+        }
       }
     }
   }
@@ -261,6 +285,12 @@ export function GetKategorienPages(first = 1000, after = null) {
           slug
           content
           status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
         }
       }
       posts(
@@ -309,6 +339,12 @@ export function GetKategorienPages(first = 1000, after = null) {
                 title
                 uri
               }
+            }
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
             }
           }
         }
@@ -370,6 +406,12 @@ export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
           slug
           content
           status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
         }
       }
       posts(
@@ -409,6 +451,12 @@ export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
                 uri
               }
             }
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
+            }
           }
         }
       }
@@ -435,6 +483,12 @@ export function GetEinFachPages(first = 1000, after = null) {
           slug
           content
           status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
         }
       }
 
@@ -461,6 +515,12 @@ export function GetEinFachPages(first = 1000, after = null) {
                 uri
               }
             }
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
+            }
           }
         }
       }
@@ -482,6 +542,12 @@ export function GetAusflugszielePages(first = 1000, after = null) {
           slug
           content
           status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
         }
       }
 
@@ -505,6 +571,12 @@ export function GetAusflugszielePages(first = 1000, after = null) {
               description
               subcategory
             }
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
+            }
           }
 
         }
@@ -526,6 +598,12 @@ export function GetListingsVeranstaltungen(first = 1000, after = null) {
           slug
           content
           status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
         }
       }
       listings(
@@ -566,6 +644,12 @@ export function GetListingsVeranstaltungen(first = 1000, after = null) {
                 uri
               }
             }
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
+            }
           }
         }
       }
@@ -585,6 +669,12 @@ export function GetKreuzwortratsel(first = 1000, after = null) {
       slug
       content
       status
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
     }
   }
   crosswords(
@@ -616,6 +706,12 @@ export function GetKreuzwortratsel(first = 1000, after = null) {
               uri
             }
           }
+        seo {
+          title
+          metaDesc
+          opengraphTitle
+          opengraphDescription
+        }
       }
     }
   }
@@ -698,7 +794,13 @@ export function GetAllSprachkursPages(first = 1000, after = null) {
                 title
                 uri
               }
-            } 
+            }
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
+            }
         }
       }
 
@@ -733,6 +835,12 @@ export function GetAllSprachkursPages(first = 1000, after = null) {
                 uri
               }
             }
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
+            }
           }
         }
       }
@@ -753,6 +861,12 @@ export function GetKulinarischeSeelePages(first = 1000, after = null) {
           slug
           content
           status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
         }
       }
 
@@ -782,7 +896,12 @@ export function GetKulinarischeSeelePages(first = 1000, after = null) {
             postContentRecipe{
               introText
             }
-
+            seo {
+              title
+              metaDesc
+              opengraphTitle
+              opengraphDescription
+            }
           }
         }
       }

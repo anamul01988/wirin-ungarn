@@ -5,6 +5,12 @@ export const GET_PAGE_COOKIE = `
       title
       slug
       content
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
     }
   }
 `;
@@ -16,6 +22,12 @@ export const GET_PAGE_DATENSCHUTZ = `
       title
       slug
       content
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
     }
   }
 `;
@@ -27,6 +39,12 @@ export const GET_PAGE_IMPRESSUM = `
       title
       slug
       content
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
     }
   }
 `;
@@ -38,6 +56,12 @@ export const GET_PAGE_KONTAKT = `
       title
       slug
       content
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
     }
   }
 `;

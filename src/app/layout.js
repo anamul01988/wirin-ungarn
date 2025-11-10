@@ -17,6 +17,10 @@ import ReduxProvider from "@/lib/store/ReduxProvider";
 import SessionProvider from "@/components/providers/SessionProvider";
 import HistoryTracker from "@/components/_components/HistoryTracker";
 
+// Note: Metadata cannot be exported from client components.
+// Individual pages have their own metadata via generateMetadata() functions.
+// For site-wide SEO defaults, see individual page metadata and sitemap.js
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

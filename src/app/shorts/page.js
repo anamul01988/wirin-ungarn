@@ -1,85 +1,63 @@
-"use client";
+import ShortsComponent from "./ShortsComponent";
+import { GetShortPages } from "@/lib/getAllPages";
 
-import { useEffect, useState } from "react";
-import { Dialog, DialogBody, Button } from "@material-tailwind/react";
-import { useRouter } from "next/navigation";
-// import CookieDetails from "@/components/pages/cookie/CookieDetails";
-import ShortsPage from "@/components/pages/shorts/ShortsPage";
-import ModalIcons from "@/components/_components/ModalIcons";
-import Breadcrumb from "@/components/_components/Breadcrumb";
+// Generate metadata for SEO
+export async function generateMetadata() {
+  try {
+    const data = await GetShortPages(1);
+    const pageData = data?.data?.pages?.nodes?.[0];
+    const seo = pageData?.seo;
+    const featuredImage =
+      pageData?.featuredImage?.node?.sourceUrl || "/assets/WIU-logo.png";
 
-export default function Shorts() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const route = useRouter();
-
-  const handleBackToMenu = () => {
-    route.back();
-  };
-  const handleClose = () => {
-    setOpen(false);
-    route.push("/");
-  };
-
-  useEffect(() => {
-    if (!open) return;
-    const handleEsc = (e) => {
-      if (e.key === "Escape") handleClose();
+    return {
+      title: seo?.title || pageData?.title || "Shorts",
+      description: seo?.metaDesc || "Shorts - Wir in Ungarn",
+      openGraph: {
+        title: seo?.opengraphTitle || seo?.title || pageData?.title || "Shorts",
+        description:
+          seo?.opengraphDescription ||
+          seo?.metaDesc ||
+          "Shorts - Wir in Ungarn",
+        url: "https://wir-in-ungarn.hu/shorts",
+        siteName: "Wir in Ungarn",
+        type: "website",
+        locale: "de_DE",
+        images: [
+          {
+            url: featuredImage,
+            width: 1200,
+            height: 630,
+            alt: seo?.title || pageData?.title || "Shorts",
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: seo?.opengraphTitle || seo?.title || pageData?.title || "Shorts",
+        description:
+          seo?.opengraphDescription ||
+          seo?.metaDesc ||
+          "Shorts - Wir in Ungarn",
+        images: [featuredImage],
+      },
+      alternates: {
+        canonical: "https://wir-in-ungarn.hu/shorts",
+      },
     };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [open]);
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Shorts",
+      description: "Shorts - Wir in Ungarn",
+    };
+  }
+}
 
-  useEffect(() => {
-    setOpen(true);
-  }, []);
-
-  const navigateToHome = () => {
-    route.push("/");
-  };
-
+export default function Page() {
   return (
     <>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        size={"lg"}
-        dismiss={{
-          enabled: false,
-        }}
-        className="bg-white outline-none relative border-2 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
-      >
-        {/* Floating Cross + Love Icons */}
-        {open && (
-          <ModalIcons
-            onClose={handleClose}
-            onFavorite={() => console.log("Favorite clicked")}
-            onLayers={() => console.log("Layers clicked")}
-            onShare={() => console.log("Share clicked")}
-          />
-        )}
-
-        <DialogBody className="overflow-auto custom__modal_area flex-1 border-0 pl-4 mr-1 my-1">
-          {/* Breadcrumb */}
-          <div className="mb-4 px-0 pt-2">
-            <Breadcrumb className="text-sm" />
-          </div>
-
-          <div className="">
-            <ShortsPage />
-          </div>
-        </DialogBody>
-      </Dialog>
-      <div className="min-h-screen flex items-center justify-center">
-        <Button
-          onClick={navigateToHome}
-          color="blue"
-          size="lg"
-          className="px-6 py-3 capitalize"
-        >
-          Navigate to Home
-        </Button>
-      </div>
+      <ShortsComponent />
     </>
   );
 }

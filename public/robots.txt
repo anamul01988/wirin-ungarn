@@ -1,0 +1,18 @@
+# Robots.txt for wir-in-ungarn.hu
+# Allow all crawlers
+
+User-agent: *
+Allow: /
+
+# Disallow admin and auth pages
+Disallow: /api/
+Disallow: /auth/
+Disallow: /profile/
+Disallow: /reset-password/
+
+# Sitemap location
+Sitemap: https://wir-in-ungarn.hu/sitemap.xml
+
+# Crawl-delay (optional, in seconds)
+Crawl-delay: 1
+
