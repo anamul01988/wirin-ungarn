@@ -1931,11 +1931,23 @@ const LandingPage = () => {
             },
           ].map((item, i) => (
             <li key={i}>
-              <div className="nav-item">
+              <div
+                type="button"
+                className="nav-item"
+                aria-expanded="false"
+                aria-controls={
+                  item.slug !== "community" ? `${item.slug}-menu` : undefined
+                }
+                aria-label={
+                  item.slug === "community"
+                    ? `${item.title} - ${item.text}`
+                    : undefined
+                }
+              >
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
                 {item.slug !== "community" && (
-                  <ul className="hover-menu">
+                  <ul className="hover-menu" id={`${item.slug}-menu`}>
                     {chunkArray(item.menu, 6).map((column, columnIndex) => (
                       <div key={columnIndex} className="menu-column">
                         {column.map((menuItem, j) => (
@@ -2256,35 +2268,27 @@ const LandingPage = () => {
 
           {/* Footer Links */}
 
-          <nav aria-label="Footer Navigation" className="relative">
+          <nav
+            aria-label="Footer Navigation"
+            className="relative desktop-footer-nav"
+          >
             {/* Main Footer Links */}
-            <div className="bg-[#4a7c59] p-3 rounded-lg border-[5px] border-white shadow-lg">
-              <div className="flex flex-wrap items-center">
+            <div className="footer-links-container">
+              <div className="footer-links-grid">
                 {primaryLinks.map((link, index) => (
                   <React.Fragment key={link.key}>
-                    <Link
-                      href={link.endpoint}
-                      className="text-white hover:text-gray-200 transition-colors text-sm font-medium px-1 whitespace-nowrap"
-                    >
+                    <Link href={link.endpoint} className="footer-link-item">
                       {link.title}
                     </Link>
-                    {index < primaryLinks.length - 1 && (
-                      <span className="text-white" aria-hidden="true">
-                        |
-                      </span>
-                    )}
                   </React.Fragment>
                 ))}
-                <span className="text-white" aria-hidden="true">
-                  |
-                </span>
 
                 {/* More Button */}
-                <div className="relative">
+                <div className="relative footer-more-wrapper">
                   <button
                     type="button"
                     onClick={() => setIsOpen(!isOpen)}
-                    className="text-white hover:text-gray-200 transition-colors text-sm font-medium flex items-center gap-1 px-1"
+                    className="footer-link-item footer-more-btn"
                     aria-expanded={isOpen}
                     aria-label="Weitere Links anzeigen"
                   >
@@ -2302,6 +2306,7 @@ const LandingPage = () => {
                         isOpen ? "rotate-180" : ""
                       }`}
                       aria-hidden="true"
+                      style={{ marginLeft: "4px" }}
                     >
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
