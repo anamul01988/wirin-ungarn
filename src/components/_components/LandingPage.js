@@ -1931,12 +1931,18 @@ const LandingPage = () => {
             },
           ].map((item, i) => (
             <li key={i}>
-              <button 
-                type="button" 
+              <div
+                type="button"
                 className="nav-item"
                 aria-expanded="false"
-                aria-controls={item.slug !== "community" ? `${item.slug}-menu` : undefined}
-                aria-label={item.slug === "community" ? `${item.title} - ${item.text}` : undefined}
+                aria-controls={
+                  item.slug !== "community" ? `${item.slug}-menu` : undefined
+                }
+                aria-label={
+                  item.slug === "community"
+                    ? `${item.title} - ${item.text}`
+                    : undefined
+                }
               >
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
@@ -1965,7 +1971,7 @@ const LandingPage = () => {
                     ))}
                   </ul>
                 )}
-              </button>
+              </div>
             </li>
           ))}
         </ul>
@@ -2262,16 +2268,16 @@ const LandingPage = () => {
 
           {/* Footer Links */}
 
-          <nav aria-label="Footer Navigation" className="relative desktop-footer-nav">
+          <nav
+            aria-label="Footer Navigation"
+            className="relative desktop-footer-nav"
+          >
             {/* Main Footer Links */}
             <div className="footer-links-container">
               <div className="footer-links-grid">
                 {primaryLinks.map((link, index) => (
                   <React.Fragment key={link.key}>
-                    <Link
-                      href={link.endpoint}
-                      className="footer-link-item"
-                    >
+                    <Link href={link.endpoint} className="footer-link-item">
                       {link.title}
                     </Link>
                   </React.Fragment>
