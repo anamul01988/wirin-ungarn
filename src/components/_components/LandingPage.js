@@ -128,9 +128,9 @@ class ListSearch {
   showLoading() {
     if (this.resultsContainer) {
       this.resultsContainer.innerHTML = `
-        <div class="loading">
-          <div class="loading-spinner"></div>
-          <p>Searching...</p>
+        <div class="loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
+          <img src="/assets/loader.gif" alt="Loading..." width="80" height="80" />
+          <p style="margin-top: 16px; color: #666;">Searching...</p>
         </div>
       `;
     }

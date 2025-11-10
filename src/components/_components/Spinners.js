@@ -1,9 +1,3 @@
-import { Spinner } from "@material-tailwind/react";
- 
-export function DefaultSpinner() {
-  return (
-    <div className="flex justify-center items-center min-h-40 w-full">
-      <Spinner />
-    </div>
-  );
-}
+// This file is deprecated. Please use Loader.js instead
+// Kept for backward compatibility
+export { DefaultSpinner } from "./Loader";

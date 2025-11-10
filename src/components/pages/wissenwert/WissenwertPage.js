@@ -183,7 +183,8 @@ const WissenswertPage = () => {
       imageAlt: edge.node.featuredImage?.node?.altText || edge.node.title,
       slug: edge.node.slug,
       category: "all", // Default category, can be enhanced later
-      badge: "ARTIKEL", // Default badge, can be enhanced later
+      // badge: "ARTIKEL", // Default badge, can be enhanced later
+      badge: edge.node.postContent?.postContent ? "ARTIKEL" : "SHORTS", // Default badge, can be enhanced later
     }));
   };
 

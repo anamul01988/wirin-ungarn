@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { InlineLoader } from "./Loader";
 
 const CurrencyConverter = ({ isEurToHuf, onCurrencySwitch }) => {
   const [amount, setAmount] = useState("1");
@@ -81,7 +82,9 @@ const CurrencyConverter = ({ isEurToHuf, onCurrencySwitch }) => {
       {/* Body */}
       <div className="currency-body">
         {loading ? (
-          <div className="currency-loading">Loading...</div>
+          <div className="currency-loading">
+            <InlineLoader size="small" text="Loading..." />
+          </div>
         ) : (
           <>
             {/* Amount Input */}

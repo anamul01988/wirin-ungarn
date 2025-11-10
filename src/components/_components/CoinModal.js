@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { useAuth } from "@/contexts/AuthContext";
 import { fetchPage } from "@/lib/getAllPages";
+import { InlineLoader } from "./Loader";
 
 export function GetUserCreditHistory(userId) {
   // Determine the appropriate ID type based on the user ID format
@@ -144,8 +145,8 @@ const CoinModal = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={4} className="py-6 text-center text-gray-500">
-                  Loading...
+                <td colSpan={4} className="py-6 text-center">
+                  <InlineLoader size="medium" text="Loading..." />
                 </td>
               </tr>
             ) : creditHistory.length === 0 ? (

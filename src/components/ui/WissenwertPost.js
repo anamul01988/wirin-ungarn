@@ -133,6 +133,8 @@ const WissenwertPost = ({
     }, 10);
   };
 
+
+
   return (
     <div
       className="wissenwert-post-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
@@ -151,7 +153,7 @@ const WissenwertPost = ({
         <span
           className={`absolute top-3 right-3 px-3 py-1 text-xs font-bold rounded-full ${
             badge === "SHORTS"
-              ? "bg-blue-500 text-white"
+              ? "bg-[#436F4D] text-white"
               : "bg-green-500 text-white"
           }`}
         >

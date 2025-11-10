@@ -2,6 +2,7 @@
 
 import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Loader from "@/components/_components/Loader";
 
 function WordPressResetRedirectContent() {
   const router = useRouter();
@@ -25,10 +26,7 @@ function WordPressResetRedirectContent() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">Redirecting to password reset...</p>
-      </div>
+      <Loader size="large" text="Redirecting to password reset..." />
     </div>
   );
 }
@@ -36,10 +34,7 @@ function WordPressResetRedirectContent() {
 function LoadingFallback() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading...</p>
-      </div>
+      <Loader size="large" text="Loading..." />
     </div>
   );
 }
