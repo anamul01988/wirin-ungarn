@@ -171,14 +171,14 @@ export default function CommonCardChip({
             enabled: false,
           }}
           size={"md"}
-          className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl flex flex-col"
+          className="bg-transparent outline-none relative rounded-2xl flex flex-col shadow-none"
           style={{
             // maxHeight: "calc(80vh - 400px)",
             // height: "calc(80vh - 80px)",
             // height: "calc(60vh - 80px)", //it was final
             height: "calc(55px + 62vh)",
 
-            background: "#fff !important",
+            // background: "#fff !important",
             // height: "100%",
             // minHeight: "300px",
           }}
@@ -202,10 +202,9 @@ export default function CommonCardChip({
             />
           )}
 
-          {/* Outside Arrow Buttons */}
+          {/* Outside Arrow Buttons - Hidden per requirement */}
           {open && (
             <>
-              {/* Prev */}
               <button
                 onClick={() => {
                   if (carouselRef.current) {
@@ -221,7 +220,6 @@ export default function CommonCardChip({
                   className="w-4.5rem h-3.4rem"
                 />
               </button>
-              {/* Next */}
               <button
                 onClick={() => {
                   if (carouselRef.current) {
@@ -255,7 +253,7 @@ export default function CommonCardChip({
             </>
           )}
 
-          <DialogBody className="overflow-auto flex-1 pl-4 mr-1 my-1">
+          <DialogBody className="overflow-auto flex-1 rounded-2xl">
             <PostsSlider
               ref={carouselRef}
               postDetails={postDetails}

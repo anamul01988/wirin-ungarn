@@ -50,19 +50,7 @@ const PostsSlider = forwardRef(({ onTitleClick, postDetails }, ref) => {
       className="submenu-carousel rounded-lg"
       loop
       autoplay={false}
-      navigation={({ setActiveIndex, activeIndex, length }) => (
-        <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
-          {new Array(length).fill("").map((_, i) => (
-            <span
-              key={i}
-              className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
-              }`}
-              onClick={() => setActiveIndex(i)}
-            />
-          ))}
-        </div>
-      )}
+      navigation={() => null}
       prevArrow={({ handlePrev }) => (
         <button
           onClick={handlePrev}
@@ -81,14 +69,15 @@ const PostsSlider = forwardRef(({ onTitleClick, postDetails }, ref) => {
       {orderedData.map((item, idx) => (
         <div key={idx} className="relative h-full w-full">
           <div
-            className="relative h-full w-full cursor-pointer overflow-hidden rounded-lg"
+            className="relative h-full w-full cursor-pointer rounded-2xl transition-transform duration-300"
             onClick={() => handleImageClick(item.route)}
+            style={{
+              backgroundImage: `url(${item.image})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
           >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="h-full w-full object-contain transition-transform duration-300"
-            />
             {/* Overlay with title */}
             {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
               <h3 className="text-white text-lg font-semibold">{item.title}</h3>
