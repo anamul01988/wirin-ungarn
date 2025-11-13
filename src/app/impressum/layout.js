@@ -6,6 +6,8 @@ export async function generateMetadata() {
     const data = await GetImpressumPages();
     const pageData = data?.data?.page;
     const seo = pageData?.seo;
+    const featuredImage =
+      pageData?.featuredImage?.node?.sourceUrl || "/assets/WIU-logo.png";
 
     return {
       title: seo?.title || pageData?.title || "Impressum",
@@ -20,6 +22,14 @@ export async function generateMetadata() {
         siteName: "Wir in Ungarn",
         type: "website",
         locale: "de_DE",
+        images: [
+          {
+            url: featuredImage,
+            width: 1200,
+            height: 630,
+            alt: seo?.title || pageData?.title || "Impressum",
+          },
+        ],
       },
       twitter: {
         card: "summary_large_image",
@@ -28,6 +38,7 @@ export async function generateMetadata() {
           seo?.opengraphDescription ||
           seo?.metaDesc ||
           "Impressum - Wir in Ungarn",
+        images: [featuredImage],
       },
       alternates: {
         canonical: "https://wir-in-ungarn.hu/impressum",
