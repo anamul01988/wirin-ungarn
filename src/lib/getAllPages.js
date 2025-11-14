@@ -911,6 +911,57 @@ export function GetKulinarischeSeelePages(first = 1000, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
+export function GetAllUngarnInsider(first = 100, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllUngarnInsider($first: Int = 100, $after: String) {
+      # Get the "Ungarn-Insider" Page
+      pages(where: { title: "Ungarn-Insider" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
+        }
+      }
+
+      # Get UngarnInsider CPT
+      ungarnInsiders(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+           startCursor
+        }
+        nodes {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+          ungarnInsiderFields {
+            outgoingLink
+            insiderComment
+            lockedContent
+            language
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+
 // Function to fetch all recipes by paginating through all pages
 export async function GetAllKulinarischeSeeleRecipes() {
   const SEARCH_QUERY = `

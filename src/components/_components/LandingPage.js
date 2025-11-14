@@ -1806,9 +1806,14 @@ const LandingPage = () => {
                 //   menuName: "SHORTS",
                 //   menuRoute: "/shorts",
                 // },
+
                 {
                   menuName: "KATEGORIEN",
                   menuRoute: "/kategorien",
+                },
+                {
+                  menuName: "Kurz und knapp",
+                  menuRoute: "/kurz-und-knapp",
                 },
               ],
             },
@@ -1904,6 +1909,10 @@ const LandingPage = () => {
                 //   menuName: "Ungarn-insider",
                 //   menuRoute: "insider_custom",
                 // },
+                {
+                  menuName: "Ungarn-insider",
+                  menuRoute: "/ungarn-insider",
+                },
                 {
                   menuName: "kulinarische Seele",
                   menuRoute: "/kulinarische-seele",
