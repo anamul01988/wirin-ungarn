@@ -1,0 +1,306 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+  GetShortPages,
+  GetWessenwertPages,
+  SearchAllPosts,
+} from "@/lib/getAllPages";
+import { DefaultSpinner } from "@/components/_components/Spinners";
+// import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
+// import CustomPost from "@/components/ui/CustomPost";
+import WissenwertPostGrid from "@/components/ui/WissenwertPost";
+
+const WissenswertPage = () => {
+  const [cookieData, setCookieData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [filtering, setFiltering] = useState(false);
+  const [customPosts, setCustomPosts] = useState({});
+  const [searchResults, setSearchResults] = useState({});
+  const [allPosts, setAllPosts] = useState({}); // Store all accumulated posts
+  const [allSearchPosts, setAllSearchPosts] = useState({}); // Store all accumulated search posts
+  const [isSearching, setIsSearching] = useState(false);
+  const [error, setError] = useState(null);
+  const [onlyHeadings, setOnlyHeadings] = useState(false);
+  const [search, setSearch] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [pageInfo, setPageInfo] = useState({
+    hasNextPage: false,
+    endCursor: null,
+  });
+  const [searchPageInfo, setSearchPageInfo] = useState({
+    hasNextPage: false,
+    endCursor: null,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchCurrentPage, setSearchCurrentPage] = useState(1);
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [pageHistory, setPageHistory] = useState([]); // Store page history for navigation
+  const [searchPageHistory, setSearchPageHistory] = useState([]); // Store search page history
+
+  const loadPage = async (direction) => {
+    if (loadingPage) return;
+
+    setLoadingPage(true);
+    try {
+      let cursor = null;
+      let newPage = isSearching ? searchCurrentPage : currentPage;
+      let currentPageInfo = isSearching ? searchPageInfo : pageInfo;
+      let currentHistory = isSearching ? searchPageHistory : pageHistory;
+
+      if (direction === "next") {
+        cursor = currentPageInfo.endCursor;
+        newPage = (isSearching ? searchCurrentPage : currentPage) + 1;
+        // Store current page in history
+        if (isSearching) {
+          setSearchPageHistory((prev) => [
+            ...prev,
+            { page: searchCurrentPage, cursor: searchPageInfo.endCursor },
+          ]);
+        } else {
+          setPageHistory((prev) => [
+            ...prev,
+            { page: currentPage, cursor: pageInfo.endCursor },
+          ]);
+        }
+      } else if (direction === "previous") {
+        if (currentHistory.length > 0) {
+          // Get the previous page from history
+          const prevPage = currentHistory[currentHistory.length - 1];
+          cursor = prevPage.cursor;
+          newPage = prevPage.page;
+          // Remove the last page from history
+          if (isSearching) {
+            setSearchPageHistory((prev) => prev.slice(0, -1));
+          } else {
+            setPageHistory((prev) => prev.slice(0, -1));
+          }
+        } else {
+          setLoadingPage(false);
+          return;
+        }
+      }
+
+      let apiData;
+      if (isSearching) {
+        apiData = await SearchAllPosts(search, 10, cursor);
+      } else {
+        apiData = await GetWessenwertPages(10, cursor, selectedCategoryId);
+      }
+      const newPosts = apiData.data.posts;
+
+      if (direction === "next") {
+        // Append new posts for infinite scroll
+        if (isSearching) {
+          const currentEdges =
+            allSearchPosts.edges || searchResults.edges || [];
+          const newEdges = newPosts.edges || [];
+          const mergedPosts = {
+            ...newPosts,
+            edges: [...currentEdges, ...newEdges],
+          };
+          setAllSearchPosts(mergedPosts);
+          setSearchResults(mergedPosts);
+          setSearchPageInfo(newPosts.pageInfo);
+          setSearchCurrentPage(newPage);
+        } else {
+          const currentEdges = allPosts.edges || customPosts.edges || [];
+          const newEdges = newPosts.edges || [];
+          const mergedPosts = {
+            ...newPosts,
+            edges: [...currentEdges, ...newEdges],
+          };
+          setAllPosts(mergedPosts);
+          setCustomPosts(mergedPosts);
+          setPageInfo(newPosts.pageInfo);
+          setCurrentPage(newPage);
+        }
+      } else {
+        // Replace posts for previous navigation (if needed)
+        if (isSearching) {
+          setSearchResults(newPosts);
+          setSearchPageInfo(newPosts.pageInfo);
+          setSearchCurrentPage(newPage);
+        } else {
+          setCustomPosts(newPosts);
+          setPageInfo(newPosts.pageInfo);
+          setCurrentPage(newPage);
+        }
+      }
+    } catch (err) {
+      setError("Fehler beim Laden der Seite.");
+    } finally {
+      setLoadingPage(false);
+    }
+  };
+
+  const handleSearch = async () => {
+    if (!search.trim()) {
+      // If search is empty, clear search and show original data
+      clearSearch();
+      return;
+    }
+
+    setFiltering(true);
+    setIsSearching(true);
+    try {
+      const apiData = await SearchAllPosts(search);
+      const posts = apiData.data.posts;
+      setSearchResults(posts);
+      setAllSearchPosts(posts); // Reset accumulated posts for new search
+      setSearchPageInfo(posts.pageInfo);
+      setSearchCurrentPage(1);
+      setSearchPageHistory([]);
+    } catch (err) {
+      setError("Fehler beim Suchen.");
+    } finally {
+      setFiltering(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearch("");
+    setIsSearching(false);
+    setSearchResults({});
+    setAllSearchPosts({}); // Clear accumulated search posts
+    setSearchPageInfo({ hasNextPage: false, endCursor: null });
+    setSearchCurrentPage(1);
+    setSearchPageHistory([]);
+  };
+
+  // Helper function to transform posts data for the new component
+  const transformPostsData = (posts) => {
+    if (!posts?.edges) return [];
+    console.log("posts 2221122222222111", posts);
+    return posts.edges.map((edge) => ({
+      id: edge.node.id,
+      title: edge.node.title,
+      description:
+        edge.node.postContent?.postContent?.[0]?.content ||
+        edge.node.postContent?.shortTitle ||
+        "",
+      image: edge.node.featuredImage?.node?.sourceUrl || null,
+      imageAlt: edge.node.featuredImage?.node?.altText || edge.node.title,
+      slug: edge.node.slug,
+      category: "all", // Default category, can be enhanced later
+      // badge: "ARTIKEL", // Default badge, can be enhanced later
+      badge: edge.node.postContent?.postContent ? "ARTIKEL" : "SHORTS", // Default badge, can be enhanced later
+    }));
+  };
+
+  // Handle filter change
+  const handleFilterChange = (filter) => {
+    setActiveFilter(filter);
+
+    // Map filter keys to category IDs
+    const categoryMap = {
+      burokratie: 605,
+      verkehr: 606,
+      immobilien: 608,
+      kultur: 609,
+      arbeit: 610,
+      all: null,
+    };
+
+    const categoryId = categoryMap[filter] || null;
+    setSelectedCategoryId(categoryId);
+
+    // Reset pagination when filter changes
+    setCurrentPage(1);
+    setPageHistory([]);
+
+    // Load new data with the selected category
+    loadFilteredData(categoryId);
+  };
+
+  // Load filtered data
+  const loadFilteredData = async (categoryId) => {
+    setFiltering(true);
+    try {
+      const apiData = await GetWessenwertPages(10, null, categoryId);
+      // console.log("apiData 2221122222222111", apiData);
+      const posts = apiData.data.posts;
+      setCustomPosts(posts);
+      setAllPosts(posts); // Reset accumulated posts for new filter
+      setPageInfo(posts.pageInfo);
+      setCurrentPage(1);
+      setPageHistory([]);
+    } catch (err) {
+      setError("Fehler beim Laden der gefilterten Daten.");
+    } finally {
+      setFiltering(false);
+    }
+  };
+
+  // Handle search from the new component
+  const handleNewSearch = (searchTerm) => {
+    setSearch(searchTerm);
+    handleSearch();
+  };
+
+  // Handle page change from the new component
+  const handleNewPageChange = (direction) => {
+    loadPage(direction);
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const apiData = await GetWessenwertPages(10, null, null);
+        console.log("shorts data:", apiData.data.posts);
+        console.log("shorts data: alll 222222", apiData);
+        setCookieData(apiData);
+        const posts = apiData.data.posts;
+        setCustomPosts(posts);
+        setAllPosts(posts); // Initialize accumulated posts
+        setPageInfo(posts.pageInfo);
+        setCurrentPage(1);
+        setPageHistory([]);
+      } catch (err) {
+        setError("Fehler beim Laden der Cookie-Daten.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading)
+    return (
+      <div>
+        <DefaultSpinner />
+      </div>
+    );
+  if (error) return <div>{error}</div>;
+
+  const { title } = cookieData.data.pages?.nodes[0] || {};
+  const currentPosts = isSearching ? searchResults : customPosts;
+  const currentPageNum = isSearching ? searchCurrentPage : currentPage;
+  const currentPageInfo = isSearching ? searchPageInfo : pageInfo;
+  const currentPageHistory = isSearching ? searchPageHistory : pageHistory;
+
+  console.log("currentPosts 2221122222222111", currentPosts);
+
+  return (
+    <WissenwertPostGrid
+      posts={transformPostsData(currentPosts)}
+      title={title}
+      onSearch={handleNewSearch}
+      onFilter={handleFilterChange}
+      onPageChange={handleNewPageChange}
+      currentPage={currentPageNum}
+      totalPages={Math.ceil((currentPosts?.edges?.length || 0) / 10)}
+      isLoading={filtering}
+      isSearchLoading={isSearching}
+      loadingPage={loadingPage}
+      searchValue={search}
+      onSearchChange={setSearch}
+      activeFilter={activeFilter}
+      onlyHeadings={onlyHeadings}
+      hasNextPage={currentPageInfo.hasNextPage}
+      hasPreviousPage={currentPageHistory.length > 0}
+    />
+  );
+};
+
+export default WissenswertPage;

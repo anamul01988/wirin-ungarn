@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Währungsrechner</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .widget {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 320px;
+        overflow: hidden;
+      }
+
+      .header {
+        padding: 12px 16px;
+        border-radius: 12px 12px 0 0;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header.red {
+        background-color: #b91c1c;
+      }
+
+      .header.green {
+        background-color: #15803d;
+      }
+
+      .header h2 {
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .refresh-icon {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        opacity: 0.9;
+      }
+
+      .refresh-icon:hover {
+        opacity: 1;
+      }
+
+      .body {
+        padding: 16px;
+        background: white;
+      }
+
+      .loading {
+        text-align: center;
+        color: #6b7280;
+        padding: 32px 0;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+      }
+
+      .label-small {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #6b7280;
+        margin-bottom: 8px;
+      }
+
+      .input {
+        width: 100%;
+        padding: 10px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .input:focus {
+        border-color: #b91c1c;
+      }
+
+      .currency-box {
+        padding: 12px 16px;
+        background-color: #f3f4f6;
+        border-radius: 8px;
+      }
+
+      .currency-text {
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+      }
+
+      .swap-container {
+        display: flex;
+        justify-content: center;
+        margin: 16px 0;
+      }
+
+      .swap-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .swap-button.red {
+        background-color: #dc2626;
+      }
+
+      .swap-button.red:hover {
+        background-color: #b91c1c;
+      }
+
+      .swap-button.green {
+        background-color: #16a34a;
+      }
+
+      .swap-button.green:hover {
+        background-color: #15803d;
+      }
+
+      .result-box {
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 16px;
+        transition: background-color 0.3s ease;
+      }
+
+      .result-box.red {
+        background-color: #dc2626;
+      }
+
+      .result-box.green {
+        background-color: #16a34a;
+      }
+
+      .result-label {
+        font-size: 14px;
+        color: white;
+        font-weight: 600;
+        margin-bottom: 8px;
+        opacity: 0.9;
+      }
+
+      .result-value {
+        color: white;
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .result-currency {
+        font-size: 14px;
+        color: white;
+        font-weight: 600;
+        opacity: 0.9;
+      }
+
+      .footer-info {
+        text-align: center;
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 8px;
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 12px;
+      }
+
+      .footer-links span:first-child {
+        font-weight: 600;
+      }
+
+      .instruction {
+        text-align: center;
+        font-size: 12px;
+        color: #9ca3af;
+        font-style: italic;
+      }
+
+      .icon {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="widget">
+      <!-- Header -->
+      <div class="header red" id="header" onclick="switchCurrency()">
+        <h2>Währungsrechner</h2>
+        <svg
+          class="icon refresh-icon"
+          onclick="event.stopPropagation(); fetchRate();"
+          viewBox="0 0 24 24"
+        >
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path
+            d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+          ></path>
+        </svg>
+      </div>
+
+      <!-- Body -->
+      <div class="body">
+        <div id="loading" class="loading">Loading...</div>
+
+        <div id="content" style="display: none">
+          <!-- Amount Input -->
+          <div class="form-group">
+            <label class="label">Menge</label>
+            <input
+              type="text"
+              class="input"
+              id="amount"
+              value="1"
+              placeholder="1"
+              oninput="handleAmountChange(event)"
+            />
+          </div>
+
+          <!-- From -->
+          <div class="form-group">
+            <label class="label-small">Von</label>
+            <div class="currency-box">
+              <span class="currency-text" id="fromCurrency">Euro - EUR</span>
+            </div>
+          </div>
+
+          <!-- Swap Button -->
+          <div class="swap-container">
+            <button
+              class="swap-button red"
+              id="swapButton"
+              onclick="switchCurrency()"
+            >
+              <svg class="icon" viewBox="0 0 24 24">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path
+                  d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- To -->
+          <div class="form-group">
+            <label class="label-small">Zu</label>
+            <div class="currency-box">
+              <span class="currency-text" id="toCurrency"
+                >Ungarischer Forint - HUF</span
+              >
+            </div>
+          </div>
+
+          <!-- Result -->
+          <div class="result-box red" id="resultBox">
+            <div class="result-label">Ergebnisse</div>
+            <div class="result-value" id="resultValue">0.00</div>
+            <div class="result-currency" id="resultCurrency">HUF</div>
+          </div>
+
+          <!-- Footer Info -->
+          <div class="footer-info" id="lastUpdated"></div>
+          <div class="footer-links">
+            <span id="currencyPair">EUR/HUF</span>
+            <span>•</span>
+            <span>Currency Wiki</span>
+          </div>
+          <div class="instruction">Click to switch currencies</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let rate = null;
+      let isEurToHuf = true;
+
+      // Fetch exchange rate
+      async function fetchRate() {
+        try {
+          const response = await fetch(
+            "https://api.frankfurter.app/latest?from=EUR&to=HUF"
+          );
+          const data = await response.json();
+          rate = data.rates.HUF;
+
+          // Update UI
+          document.getElementById("lastUpdated").textContent = data.date;
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("content").style.display = "block";
+
+          // Calculate conversion
+          updateConversion();
+        } catch (error) {
+          console.error("Error fetching exchange rate:", error);
+          document.getElementById("loading").textContent =
+            "Error loading rates";
+        }
+      }
+
+      // Handle amount input
+      function handleAmountChange(event) {
+        const value = event.target.value;
+        // Allow empty, numbers, and decimal point
+        if (value === "" || /^\d*\.?\d*$/.test(value)) {
+          updateConversion();
+        } else {
+          // Reset to previous valid value
+          event.target.value = event.target.value.slice(0, -1);
+        }
+      }
+
+      // Switch currency direction
+      function switchCurrency() {
+        isEurToHuf = !isEurToHuf;
+        updateUI();
+        updateConversion();
+      }
+
+      // Update UI colors and text
+      function updateUI() {
+        const colorClass = isEurToHuf ? "red" : "green";
+        const oppositeClass = isEurToHuf ? "green" : "red";
+
+        // Update header
+        document.getElementById("header").classList.remove(oppositeClass);
+        document.getElementById("header").classList.add(colorClass);
+
+        // Update swap button
+        document.getElementById("swapButton").classList.remove(oppositeClass);
+        document.getElementById("swapButton").classList.add(colorClass);
+
+        // Update result box
+        document.getElementById("resultBox").classList.remove(oppositeClass);
+        document.getElementById("resultBox").classList.add(colorClass);
+
+        // Update currency labels
+        if (isEurToHuf) {
+          document.getElementById("fromCurrency").textContent = "Euro - EUR";
+          document.getElementById("toCurrency").textContent =
+            "Ungarischer Forint - HUF";
+          document.getElementById("resultCurrency").textContent = "HUF";
+          document.getElementById("currencyPair").textContent = "EUR/HUF";
+        } else {
+          document.getElementById("fromCurrency").textContent =
+            "Ungarischer Forint - HUF";
+          document.getElementById("toCurrency").textContent = "Euro - EUR";
+          document.getElementById("resultCurrency").textContent = "EUR";
+          document.getElementById("currencyPair").textContent = "HUF/EUR";
+        }
+      }
+
+      // Calculate and display conversion
+      function updateConversion() {
+        if (!rate) return;
+
+        const amountInput = document.getElementById("amount");
+        const amount = parseFloat(amountInput.value) || 0;
+
+        let result;
+        if (isEurToHuf) {
+          result = (amount * rate).toFixed(2);
+        } else {
+          result = (amount / rate).toFixed(2);
+        }
+
+        document.getElementById("resultValue").textContent = result;
+      }
+
+      // Initialize on page load
+      fetchRate();
+
+      // Auto-refresh every 5 minutes
+      setInterval(fetchRate, 300000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,471 @@
+/* Calendar hover menu styles - matching sidebar nav styles */
+.header-buttons .calendar-item {
+  position: relative;
+}
+.calendar-item .hover-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border-radius: 8px;
+  outline: 5px solid #ffffff;
+  min-width: 250px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000;
+  margin-top: 10px;
+  background-color: #e3e3e3;
+}
+
+.calendar-item:hover .hover-menu {
+  opacity: 1;
+  visibility: visible;
+} /* Caret Arrow */
+
+.calendar-hover-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 7px;
+  min-width: auto;
+  background-color: #e3e3e3;
+}
+
+.calendar-hover-menu .hover-menu::after,
+.calendar-hover-menu.hover-menu::after,
+.calendar-item .hover-menu::after {
+  display: none !important;
+}
+
+.calendar-hover-menu .hover-menu,
+.calendar-hover-menu.hover-menu,
+.calendar-item .hover-menu {
+  gap: 0px !important;
+}
+
+.history-hover-menu.calendar-hover-menu,
+.favoriten-hover-menu.calendar-hover-menu {
+  display: inline !important;
+  flex-direction: initial !important;
+}
+
+.calendar-hover-menu .menu-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+}
+.calendar-hover-menu .menu-item {
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: block;
+  color: #56646f;
+  font-weight: bold;
+  padding: 7px 4px 7px;
+  border-top: 1px solid rgb(231 231 231);
+  border-bottom: 1px solid rgb(231 231 231);
+  display: grid;
+  grid-template-columns: 38px 1fr 2.5fr;
+}
+.calendar-hover-menu .menu-item:hover {
+  background: #d2d0d0;
+}
+.calendar-hover-menu .nameday-date {
+  font-weight: 600;
+  margin-right: 6px;
+  color: #4a7c59;
+}
+.calendar-hover-menu .menu-footer {
+  text-align: right;
+  font-size: 13px;
+  padding: 2px 14px;
+  color: #666;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Calendar Tabs */
+.calendar-tabs {
+  display: flex;
+  border-bottom: 2px solid #d2d0d0;
+  margin-bottom: 8px;
+}
+
+.calendar-tab {
+  padding: 8px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.calendar-tab.active {
+  color: #4a7c59;
+  border-bottom: 3px solid #4a7c59;
+  margin-bottom: -2px;
+}
+
+/* History Item Styling */
+.history-hover-menu .history-item {
+  border-top: 1px solid rgb(231 231 231);
+  border-bottom: 1px solid rgb(231 231 231);
+  border-radius: 4px !important;
+  width: 100%;
+  display: flex !important;
+}
+
+.calendar-hover-menu .history-date {
+  font-weight: 600;
+  color: #c41e3a;
+}
+
+/* Favoriten Menu Styling */
+.favoriten-hover-menu {
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* Currency Converter Widget Styles */
+.currency-item .currency-converter-widget {
+  position: absolute;
+  top: 100%;
+  left: 190px;
+  border-radius: 12px;
+  outline: 5px solid #ffffff;
+  width: 320px;
+  max-width: 320px;
+  /* opacity: 1;
+  visibility: visible; */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000;
+  margin-top: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.currency-item:hover .currency-converter-widget {
+  opacity: 1;
+  visibility: visible;
+}
+
+.currency-converter-widget {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.currency-converter-widget.red {
+  background: white;
+}
+
+.currency-converter-widget.green {
+  background: #15803d;
+}
+
+.currency-header {
+  padding: 12px 16px 12px 16px;
+  border-radius: 12px 12px 0 0;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-bottom: none;
+}
+
+.currency-header.red {
+  background-color: #b91c1c;
+}
+
+.currency-header.green {
+  background-color: #15803d;
+}
+
+.currency-header h2 {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  width: 100%;
+  text-align: center;
+}
+
+.currency-header > svg {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+}
+
+.currency-refresh-icon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  opacity: 0.9;
+  stroke: white;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.currency-refresh-icon:hover {
+  opacity: 1;
+}
+
+.currency-body {
+  padding: 16px;
+  background: transparent;
+}
+
+.currency-loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 32px 0;
+}
+
+.currency-form-group {
+  margin-bottom: 12px;
+}
+
+.currency-form-group:last-of-type {
+  margin-bottom: 12px;
+}
+
+.currency-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.currency-converter-widget.red .currency-label {
+  color: #374151;
+}
+
+.currency-converter-widget.green .currency-label {
+  color: white;
+}
+
+.currency-label-small {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.currency-converter-widget.red .currency-label-small {
+  color: #6b7280;
+}
+
+.currency-converter-widget.green .currency-label-small {
+  color: white;
+}
+
+.currency-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.currency-input-badge {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  padding: 0 12px;
+  border-radius: 6px 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.currency-input-badge.red {
+  background-color: #b91c1c;
+}
+
+.currency-input-badge.green {
+  background-color: #15803d;
+}
+
+.currency-input {
+  width: 100%;
+  padding: 10px 16px;
+  padding-left: 65px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s;
+  background: white;
+}
+
+.currency-converter-widget.green .currency-input {
+  background: white;
+}
+
+.currency-input:focus {
+  border-color: #b91c1c;
+}
+
+.currency-converter-widget.green .currency-input:focus {
+  border-color: #15803d;
+}
+
+.currency-box-display {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: none;
+}
+
+.currency-converter-widget.red .currency-box-display {
+  background-color: #f3f4f6;
+}
+
+.currency-converter-widget.green .currency-box-display {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.currency-text-display {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.currency-converter-widget.red .currency-text-display {
+  color: #1f2937;
+}
+
+.currency-converter-widget.green .currency-text-display {
+  color: white;
+}
+
+.currency-swap-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.currency-swap-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.currency-swap-button.red {
+  background-color: #dc2626;
+}
+
+.currency-swap-button.red:hover {
+  background-color: #b91c1c;
+}
+
+.currency-swap-button.green {
+  background-color: #16a34a;
+}
+
+.currency-swap-button.green:hover {
+  background-color: #15803d;
+}
+
+.currency-swap-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.currency-result-box {
+  border-radius: 8px;
+  padding: 16px 20px;
+  text-align: center;
+  margin-bottom: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.currency-result-box.red {
+  background-color: #dc2626;
+}
+
+.currency-result-box.green {
+  background-color: #16a34a;
+}
+
+.currency-result-label {
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.currency-result-value {
+  color: white;
+  font-size: 42px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.currency-result-currency {
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.currency-footer-info {
+  text-align: right;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.currency-converter-widget.red .currency-footer-info {
+  color: #6b7280;
+}
+
+.currency-converter-widget.green .currency-footer-info {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.currency-footer-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid transparent;
+}
+
+.currency-converter-widget.red .currency-footer-links {
+  border-bottom-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.currency-converter-widget.green .currency-footer-links {
+  color: white;
+  border-bottom-color: transparent;
+}
+
+.currency-footer-links span:first-child {
+  font-weight: 600;
+}
