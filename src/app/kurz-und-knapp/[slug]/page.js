@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { GetkulinarischeSinglePostBySlug } from "@/lib/getAllPages";
+import { GetkurzUndKnappPostBySlug } from "@/lib/getAllPages";
 import DialogContent from "@/components/_components/DialogContent";
 export default async function kulinarischeSinglePage({ params }) {
   const { slug } = await params;
