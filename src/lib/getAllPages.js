@@ -961,6 +961,49 @@ export function GetAllUngarnInsider(first = 100, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
+export function GetAllKnowledges(first = 500, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllKnowledges($first: Int = 500, $after: String) {
+      # Get the main "Knowledge" Page
+      pages(where: { title: "kurz & knapp" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
+        }
+      }
+
+      # Get Knowledges CPT
+      knowledges(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        nodes {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
 
 // Function to fetch all recipes by paginating through all pages
 export async function GetAllKulinarischeSeeleRecipes() {
@@ -2418,7 +2461,49 @@ export async function GetkulinarischeSinglePostBySlug(slug) {
     return null;
   }
 }
+export async function GetkurzUndKnappPostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        knowledge (id: "${slug}", idType: SLUG) {
+          id
+          title
+          slug
+          link
+          date
+          content
 
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+              uri
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.recipe) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching kurzknapp post by slug:", error);
+    return null;
+  }
+}
 export async function GetShortsPostBySlug(slug) {
   try {
     const postQuery = `
