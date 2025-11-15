@@ -1005,6 +1005,61 @@ export function GetAllKnowledges(first = 500, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
+export function GetAllAusDemLebens(first = 50, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllAusDemLebens($first: Int = 50, $after: String) {
+      # Get the "Aus dem Lebens" Page
+      pages(where: { title: "Aus dem Lebens" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
+        }
+      }
+
+      # Get ausDemLebens CPT
+      ausDemLebens(first: $first, after: $after, where: { stati: [PUBLISH, DRAFT] }) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        nodes {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+          status
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              mediaDetails {
+                width
+                height
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
 // Function to fetch all recipes by paginating through all pages
 export async function GetAllKulinarischeSeeleRecipes() {
   const SEARCH_QUERY = `

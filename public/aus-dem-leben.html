@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aus dem Leben - Gallery</title>
+    <style>
+        /* =============================================
+           OUT OF LIFE (OOL) GALLERY STYLES
+           ============================================= */
+
+        /* CSS Variables for easy customization */
+        :root {
+            --ool-primary-color: #436f4d;
+            --ool-accent-color: #cc2233;
+            --ool-text-dark: #333;
+            --ool-text-medium: #555;
+            --ool-text-light: #666;
+            --ool-border-color: #436f4d;
+            --ool-bg-white: #ffffff;
+            --ool-bg-light: #f1f1f1;
+            --ool-shadow-light: rgba(0, 0, 0, 0.1);
+            --ool-shadow-dark: rgba(0, 0, 0, 0.9);
+            --ool-overlay-bg: rgba(0, 0, 0, 0.6);
+            --ool-image-size: 167px;
+            --ool-gap-small: 5px;
+            --ool-gap-medium: 10px;
+            --ool-gap-large: 20px;
+            --ool-border-radius: 4px;
+            --ool-transition-fast: 0.2s ease;
+            --ool-transition-medium: 0.3s ease;
+            --ool-transition-slow: 0.5s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Page Layout */
+        .ool-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .ool-page-header {
+            margin-bottom: 20px;
+        }
+
+        .ool-page-title {
+            font-size: 28px;
+            color: var(--ool-text-dark);
+            margin: 0 0 20px 0;
+        }
+
+        /* Description Section (Collapsible) */
+        .ool-description-section {
+            margin-bottom: 25px;
+        }
+
+        .ool-description-header {
+            background: var(--ool-primary-color);
+            padding: 0 12px;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .ool-description-header::before {
+            content: "▼";
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            font-size: 16px;
+            color: var(--ool-bg-white);
+            transition: transform 0.3s ease;
+        }
+
+        .ool-description-header.collapsed::before {
+            transform: translateY(-50%) rotate(-90deg);
+        }
+
+        .ool-description-header h3 {
+            font-size: 16px;
+            color: var(--ool-bg-white);
+            padding: 5px 0;
+            margin: 0;
+        }
+
+        .ool-description-content {
+            border: 2px solid var(--ool-border-color);
+            border-top: none;
+            padding: var(--ool-gap-medium);
+            display: block;
+        }
+
+        .ool-description-content.hidden {
+            display: none;
+        }
+
+        .ool-description-text {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+            color: var(--ool-text-medium);
+        }
+
+        /* Main Container */
+        .ool-container {
+            position: relative;
+        }
+
+        /* Control Buttons */
+        .ool-controls {
+            display: flex;
+            justify-content: center;
+            gap: var(--ool-gap-large);
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            z-index: 10;
+        }
+
+        .ool-control-btn {
+            background-color: var(--ool-bg-white);
+            color: #000;
+            width: 40px;
+            height: 40px;
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: background-color var(--ool-transition-medium);
+            border: 2px solid var(--ool-bg-white);
+            outline: 2px solid black;
+            font-weight: bold;
+        }
+
+        .ool-control-btn:hover {
+            opacity: 0.9;
+            background-color: #f0f0f0;
+        }
+
+        /* Gallery Container (Horizontal Scroll) */
+        .ool-gallery-container {
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #888 var(--ool-bg-light);
+            padding-bottom: 1rem;
+            position: relative;
+            padding-left: 3px;
+        }
+
+        .ool-gallery-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .ool-gallery-container::-webkit-scrollbar-track {
+            background: var(--ool-bg-light);
+            border-radius: var(--ool-border-radius);
+        }
+
+        .ool-gallery-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: var(--ool-border-radius);
+        }
+
+        .ool-gallery-container::-webkit-scrollbar-thumb:hover {
+            background: var(--ool-text-medium);
+        }
+
+        /* Gallery Grid */
+        .ool-gallery {
+            display: flex;
+            width: max-content;
+            gap: var(--ool-gap-small);
+            padding: 10px 0;
+        }
+
+        .ool-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--ool-gap-small);
+            width: var(--ool-image-size);
+        }
+
+        /* Image Containers */
+        .ool-image-container {
+            height: var(--ool-image-size);
+            overflow: hidden;
+            border-radius: var(--ool-border-radius);
+            position: relative;
+            cursor: pointer;
+            transition: transform var(--ool-transition-fast);
+            border: 2px solid var(--ool-bg-white);
+        }
+
+        .ool-image-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--ool-shadow-light);
+        }
+
+        .ool-image-container.ool-active {
+            outline: 3px solid var(--ool-accent-color);
+        }
+
+        .ool-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--ool-transition-medium);
+        }
+
+        .ool-image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Image Overlay Text */
+        .ool-overlay-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--ool-overlay-bg);
+            color: var(--ool-bg-white);
+            text-align: center;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform var(--ool-transition-medium), 
+                        opacity var(--ool-transition-medium);
+            width: var(--ool-image-size);
+            height: var(--ool-image-size);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ool-image-container:hover .ool-overlay-text {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .ool-overlay-text h3 {
+            color: var(--ool-bg-white);
+            line-height: 26px;
+            margin: 0 0 10px 0;
+            padding: 0 10px;
+            font-family: 'Roboto Condensed', Arial, sans-serif;
+            font-size: 20px;
+        }
+
+        .ool-overlay-text p {
+            line-height: 17px;
+            margin: 0;
+            padding: 0 10px;
+            font-family: 'Roboto Condensed', Arial, sans-serif;
+        }
+
+        /* Info Container */
+        .ool-info-container {
+            color: var(--ool-accent-color);
+            font-size: 18px;
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        /* Details Container (Popup/Modal) */
+        .ool-details-container {
+            margin-top: 2rem;
+            padding: 2rem;
+            background-color: var(--ool-bg-white);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--ool-shadow-light);
+            display: none;
+            animation: fadeIn var(--ool-transition-slow);
+            position: relative;
+        }
+
+        .ool-details-container.ool-show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Close Button */
+        .ool-close-details {
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: #383838;
+            background: none;
+            border: none;
+            transition: color var(--ool-transition-fast);
+            padding: 5px 10px;
+        }
+
+        .ool-close-details:hover {
+            color: var(--ool-text-dark);
+        }
+
+        /* Details Header */
+        .ool-details-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .ool-details-thumbnail {
+            width: 120px;
+            height: 120px;
+            border-radius: var(--ool-border-radius);
+            overflow: hidden;
+            margin-right: 1.5rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .ool-details-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ool-details-title-area {
+            flex: 1;
+        }
+
+        .ool-details-title {
+            font-size: 20px;
+            margin: 0 0 5px 0;
+            color: var(--ool-text-dark);
+        }
+
+        .ool-details-subtitle {
+            font-size: 18px;
+            color: var(--ool-text-light);
+            margin: 0;
+        }
+
+        /* Details Content */
+        .ool-details-content {
+            line-height: 1.7;
+            color: #444;
+        }
+
+        .ool-details-content p {
+            margin-bottom: 1rem;
+        }
+
+        .ool-details-content h2,
+        .ool-details-content h3,
+        .ool-details-content h4,
+        .ool-details-content h5,
+        .ool-details-content h6 {
+            color: var(--ool-primary-color);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .ool-details-content blockquote {
+            font-size: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 1rem 0;
+            padding-left: 20px;
+            border-left: 3px solid var(--ool-primary-color);
+            background-color: #f9f9f9;
+            padding: 10px 10px 10px 20px;
+        }
+
+        .ool-details-content blockquote p {
+            font-family: inherit;
+            line-height: 1.5em;
+            margin-bottom: 9px;
+        }
+
+        /* Error Reporting Section */
+        .ool-error-section {
+            margin-top: 40px;
+        }
+
+        .ool-error-header {
+            background: var(--ool-primary-color);
+            padding: 0 12px;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .ool-error-header::before {
+            content: "▼";
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            font-size: 16px;
+            color: var(--ool-bg-white);
+            transition: transform 0.3s ease;
+        }
+
+        .ool-error-header.collapsed::before {
+            transform: translateY(-50%) rotate(-90deg);
+        }
+
+        .ool-error-header h3 {
+            font-size: 16px;
+            color: var(--ool-bg-white);
+            padding: 5px 0;
+            margin: 0;
+        }
+
+        .ool-error-content {
+            border: 2px solid var(--ool-border-color);
+            border-top: none;
+            padding: var(--ool-gap-medium);
+            display: none;
+        }
+
+        .ool-error-content.ool-show {
+            display: block;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .ool-page {
+                padding: 15px;
+            }
+
+            .ool-controls {
+                position: static;
+                margin-bottom: 15px;
+            }
+
+            .ool-details-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .ool-details-thumbnail {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Mobile styles */
+        @media (max-width: 767px) {
+            .ool-page {
+                padding: 10px;
+            }
+
+            .ool-page-title {
+                font-size: 24px;
+            }
+
+            /* Convert gallery to 2-column grid on mobile */
+            .ool-gallery {
+                display: block;
+                width: auto;
+            }
+
+            .ool-column {
+                display: block;
+                width: 50%;
+                float: left;
+            }
+
+            .ool-image-container {
+                margin: 3px;
+                height: auto;
+                aspect-ratio: 1;
+            }
+
+            .ool-overlay-text {
+                width: 100%;
+                height: 100%;
+            }
+
+            .ool-overlay-text p {
+                padding-left: 3px;
+                padding-right: 3px;
+                font-size: 14px;
+            }
+
+            .ool-overlay-text h3 {
+                font-size: 16px;
+                line-height: 20px;
+            }
+
+            /* Hide controls on mobile */
+            .ool-controls {
+                display: none;
+            }
+
+            /* Hide info container on mobile */
+            .ool-info-container {
+                display: none;
+            }
+
+            /* Mobile popup for details */
+            .ool-details-container.mobile-popup {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 85%;
+                height: 82%;
+                max-height: 82vh;
+                background-color: var(--ool-bg-white);
+                padding: 16px;
+                box-shadow: 0 4px 42px var(--ool-shadow-dark);
+                z-index: 9999;
+                overflow-y: auto;
+                margin-top: 0;
+            }
+
+            .ool-details-header {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .ool-details-thumbnail {
+                width: 80px;
+                height: 80px;
+                margin-right: 1rem;
+                margin-bottom: 0;
+            }
+
+            .ool-details-title {
+                font-size: 18px;
+            }
+
+            .ool-details-subtitle {
+                font-size: 16px;
+            }
+
+            .ool-close-details {
+                font-size: 2rem;
+                top: 5px;
+                right: 10px;
+            }
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content Container -->
+    <div class="ool-page">
+        
+        <!-- Page Header -->
+        <div class="ool-page-header">
+            <h1 class="ool-page-title">aus dem Leben</h1>
+        </div>
+
+        <!-- Description Section (Collapsible) -->
+        <div class="ool-description-section">
+            <div class="ool-description-header" id="descriptionHeader">
+                <h3>Ungarisch aus dem Leben lernen</h3>
+            </div>
+            <div class="ool-description-content" id="descriptionContent">
+                <p class="ool-description-text">
+                    Die ungarische Sprache begegnet dir überall – auf Schildern, Verpackungen, Speisekarten und Plakaten. 
+                    Warum nicht diese echten Beispiele aus der Praxis nutzen, um Ungarisch zu lernen? 
+                    Sie sind voller nützlicher Vokabeln und zeigen die Grammatik in Aktion!
+                </p>
+                <p class="ool-description-text">
+                    Stöbere durch die Galerie und klicke einfach auf ein Bild, das dich interessiert oder neugierig macht. 
+                    Du erhältst dann eine detaillierte Erklärung, was die einzelnen Wörter bedeuten und welche grammatikalischen 
+                    Besonderheiten dahinterstecken.
+                </p>
+                <p class="ool-description-text" style="font-weight: bold; color: var(--ool-primary-color);">
+                    Viel Spaß beim Entdecken und Lernen!
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="ool-container">
+            
+            <!-- Control Buttons -->
+            <div class="ool-controls">
+                <button class="ool-control-btn" id="prevBtn" aria-label="Previous">←</button>
+                <button class="ool-control-btn" id="nextBtn" aria-label="Next">→</button>
+            </div>
+
+            <!-- Gallery Container (Horizontally Scrollable) -->
+            <div class="ool-gallery-container" id="galleryContainer">
+                <div class="ool-gallery" id="gallery">
+                    <!-- Gallery items will be inserted here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Info Container -->
+            <div class="ool-info-container">
+                Click on an image to view details
+            </div>
+        </div>
+
+        <!-- Details Container (Hidden by default, shown when image clicked) -->
+        <div class="ool-details-container" id="detailsContainer">
+            <button class="ool-close-details" id="closeDetails" aria-label="Close">×</button>
+            
+            <div class="ool-details-header">
+                <div class="ool-details-thumbnail" id="detailsThumbnailWrapper">
+                    <img src="" alt="" id="detailsThumbnail">
+                </div>
+                <div class="ool-details-title-area">
+                    <h2 class="ool-details-title" id="detailsTitle"></h2>
+                    <p class="ool-details-subtitle" id="detailsSubtitle"></p>
+                </div>
+            </div>
+
+            <div class="ool-details-content" id="detailsContent"></div>
+        </div>
+
+        <!-- Error Reporting Section -->
+        <div class="ool-error-section">
+            <div class="ool-error-header" id="errorHeader">
+                <h3>Fehler in dieser Lektion gefunden?</h3>
+            </div>
+            <div class="ool-error-content" id="errorContent">
+                <p>Wenn Sie einen Fehler in dieser Lektion gefunden haben, können Sie uns dies mitteilen...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* =============================================
+           OUT OF LIFE GALLERY - JAVASCRIPT
+           ============================================= */
+
+        // Gallery data - Real images from wir-in-ungarn.hu
+        const galleryData = [
+            {
+                id: 1,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/Zseton.jpg',
+                title: 'Ausfahrt mit Chip',
+                subtitle: 'Jeton für Verlassen des Parkplat...',
+                content: '<p>Wie man den Parkplatz mit einem Chip verlässt - eine praktische Einführung in ungarische Parkplatzsysteme.</p>'
+            },
+            {
+                id: 2,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/atlagos-tapertek.jpg',
+                title: 'Joghurt-Nährwerte',
+                subtitle: 'Die Nährwerttabelle genau verste...',
+                content: '<p>Lerne die ungarischen Begriffe für Nährwerte und verstehe Produktverpackungen besser.</p>'
+            },
+            {
+                id: 3,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/koeszoenjuek-hogy-vasarolt.jpg',
+                title: 'Danke & Tschüss!',
+                subtitle: 'Ein freundlicher Abschied aus dem...',
+                content: '<p>Die freundliche Art, sich bei Kunden zu bedanken - wichtige Höflichkeitsformeln auf Ungarisch.</p>'
+            },
+            {
+                id: 4,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Foeldhivatal.jpg',
+                title: 'Katasteramt',
+                subtitle: 'Wer ist zuständig für Grundstü...',
+                content: '<p>Verstehe die Begriffe rund um Grundstücke und Behörden in Ungarn.</p>'
+            },
+            {
+                id: 5,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Szueleszet.jpg',
+                title: 'Klinik-Abteilung',
+                subtitle: 'Wegweiser im Krankenhaus: Diese A...',
+                content: '<p>Wichtige medizinische Begriffe und Abteilungsnamen im ungarischen Krankenhaus.</p>'
+            },
+            {
+                id: 6,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/vakalathullas.jpg',
+                title: 'Achtung, Putz!',
+                subtitle: 'Diesen Bereich unbedingt meiden',
+                content: '<p>Warnschilder verstehen - wichtig für deine Sicherheit auf Baustellen.</p>'
+            },
+            {
+                id: 7,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/sporolj-veluenk.jpg',
+                title: 'günstiger einkaufen',
+                subtitle: 'Spare mit uns - Woche für Woche ...',
+                content: '<p>Wie du bei Werbeangeboten Geld sparen kannst - Vokabeln fürs Shopping.</p>'
+            },
+            {
+                id: 8,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Kinai-Buefe.jpg',
+                title: 'Asiatisch essen',
+                subtitle: 'Öffnungszeiten verstehen, um nic...',
+                content: '<p>Öffnungszeiten und Restaurantbegriffe - damit du nicht vor verschlossener Tür stehst.</p>'
+            },
+            {
+                id: 9,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Parkhaus.jpg',
+                title: 'Parkhaus-Tarife',
+                subtitle: 'Öffnungszeiten und Gebühren des...',
+                content: '<p>Verstehe Parkhaus-Tarife und Öffnungszeiten auf Ungarisch.</p>'
+            },
+            {
+                id: 10,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/arcsoekkentett-Termek.jpg',
+                title: 'Schnäppchen-Alarm',
+                subtitle: 'Dieses Produkt ist jetzt günstig...',
+                content: '<p>Reduzierte Preise erkennen - so findest du die besten Angebote im Supermarkt.</p>'
+            },
+            {
+                id: 11,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Parkolo-1.jpg',
+                title: 'Parken nur für…',
+                subtitle: 'Wer darf hier parken und wann mus...',
+                content: '<p>Parkregeln verstehen - wer darf wo parken und wann drohen Strafen?</p>'
+            },
+            {
+                id: 12,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/kormanyablak.jpg',
+                title: 'Bürger-Service',
+                subtitle: 'Behördengänge leichter machen i...',
+                content: '<p>Der ungarische Bürgerservice - wichtige Begriffe für Behördengänge.</p>'
+            },
+            {
+                id: 13,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/kuertoeskolacs.jpg',
+                title: 'Süße Spezialität',
+                subtitle: 'Traditionell über Holzkohle geba...',
+                content: '<p>Kürtőskalács - die süße Spezialität Ungarns und ihre sprachlichen Besonderheiten.</p>'
+            },
+            {
+                id: 14,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/meheszeti-termekek.jpg',
+                title: 'Süßes & Gesundes',
+                subtitle: 'Produkte vom Imker',
+                content: '<p>Honig und Imkereiprodukte - süße und gesunde Vokabeln.</p>'
+            },
+            {
+                id: 15,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/mindi-elerheto.jpg',
+                title: 'Dein Liebling',
+                subtitle: 'Dein Lieblingsprodukt ist immer v...',
+                content: '<p>Verfügbarkeit und Produktsuche - nützliche Begriffe fürs Einkaufen.</p>'
+            },
+            {
+                id: 16,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/kapubejarot.jpg',
+                title: 'Hofeinfahrt freilassen',
+                subtitle: 'Bitte die Toreinfahrt unbedingt f...',
+                content: '<p>Wichtige Verkehrsregeln - verstehe Hinweisschilder zu Einfahrten und Zugang.</p>'
+            },
+            {
+                id: 17,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/ide-kicsit-benezek.jpg',
+                title: 'Ein kurzer Blick genügt?',
+                subtitle: 'Wie man mit einem kleinen Abstech...',
+                content: '<p>Einladende Formulierungen für Geschäfte - komm doch mal rein!</p>'
+            },
+            {
+                id: 18,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/na-allj-a-kapubeallo-ele.jpg',
+                title: 'Parken verboten!',
+                subtitle: 'Hier besser nicht hinstellen ...',
+                content: '<p>Deutliche Parkverbote verstehen - damit es keine bösen Überraschungen gibt.</p>'
+            },
+            {
+                id: 19,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/Caritas-bolt.jpg',
+                title: 'Kaufen oder Spenden',
+                subtitle: 'Wie ein ungarisches Caritas-Schil...',
+                content: '<p>Soziale Einrichtungen und Hilfsorganisationen - wichtige Begriffe für Spenden und Second-Hand.</p>'
+            },
+            {
+                id: 20,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Fleischer.jpg',
+                title: 'Gutes vom Metzger',
+                subtitle: 'Frisches Fleisch und Wurstwaren f...',
+                content: '<p>Beim Metzger einkaufen - Fleisch- und Wurstvokabeln für den Alltag.</p>'
+            },
+            {
+                id: 21,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/fonalak.jpg',
+                title: 'Für Kreative',
+                subtitle: 'Garne, Perlen & Handgemachtes',
+                content: '<p>Alles für Handarbeit und kreative Projekte.</p>'
+            },
+            {
+                id: 22,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Langosok.jpg',
+                title: 'Lángos-Paradies',
+                subtitle: 'Welche Sorte Lángos möchtest du...',
+                content: '<p>Die verschiedenen Lángos-Varianten und wie man sie bestellt.</p>'
+            },
+            {
+                id: 23,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/baromfibolt.jpg',
+                title: 'Geflügel & Co.',
+                subtitle: 'Wer frisches Geflügel sucht, wir...',
+                content: '<p>Frisches Geflügel und Eier - wichtige Vokabeln fürs Einkaufen.</p>'
+            },
+            {
+                id: 24,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/nem-uezemel.jpg',
+                title: 'Keine Speisen hier',
+                subtitle: 'Da hat sich entweder der Betrieb ...',
+                content: '<p>Geschlossen oder außer Betrieb - verstehe Hinweisschilder richtig.</p>'
+            },
+            {
+                id: 25,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/vonalkod-leolvaso.jpg',
+                title: 'Preis-Erfahren',
+                subtitle: 'Den Strichcode selbst lesen für ...',
+                content: '<p>Preislesegeräte im Supermarkt - wie du selbst Preise checkst.</p>'
+            },
+            {
+                id: 26,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/szoenyeg-tisztitas.jpg',
+                title: 'Teppich-Profi',
+                subtitle: 'Hier werden deine Teppiche wieder...',
+                content: '<p>Teppichreinigung und Pflegedienste verstehen.</p>'
+            },
+            {
+                id: 27,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/Olloelezes.jpg',
+                title: 'Kleine Reparaturen',
+                subtitle: 'Schärfen, Nähen, Stempel & mehr',
+                content: '<p>Reparatur- und Servicedienste - von Scherenschleifen bis Nähen.</p>'
+            },
+            {
+                id: 28,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/vigyazz-auto.jpg',
+                title: 'Achtung Auto!',
+                subtitle: 'Diese kurze Warnung vor Autos sol...',
+                content: '<p>Verkehrswarnungen und Sicherheitshinweise verstehen.</p>'
+            },
+            {
+                id: 29,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Parkscheinautomat.jpg',
+                title: 'Parkticket gegen Münze',
+                subtitle: 'Anleitung für die Barzahlung am ...',
+                content: '<p>Parkautomaten bedienen - Schritt für Schritt erklärt.</p>'
+            },
+            {
+                id: 30,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Brot.jpg',
+                title: 'Vollkorn?',
+                subtitle: 'Was die Brot-Verpackung über den...',
+                content: '<p>Brotsorten erkennen und die richtige Wahl treffen.</p>'
+            },
+            {
+                id: 31,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Altoelsammlung.jpg',
+                title: 'Pflanzenöl-Entsorgung',
+                subtitle: 'Wohin mit gebrauchtem Speiseöl? ...',
+                content: '<p>Umweltgerechte Entsorgung von Speiseöl - wichtig für Haushalt und Umwelt.</p>'
+            },
+            {
+                id: 32,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/sonnig-halbschattig.jpg',
+                title: 'Pflanzen-Standort',
+                subtitle: 'Welches Plätzchen bevorzugt dies...',
+                content: '<p>Pflanzenpflege-Hinweise richtig lesen - sonnig oder schattig?</p>'
+            },
+            {
+                id: 33,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/Somloi-galuska.jpg',
+                title: 'Ungarns süße Seite',
+                subtitle: 'Somlói Galuska probieren!',
+                content: '<p>Das berühmte ungarische Dessert - ein Muss für jeden Besucher!</p>'
+            },
+            {
+                id: 34,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2023/07/Fogaszat.jpg',
+                title: 'Beim Zahnarzt',
+                subtitle: 'Zahnheilkunde & Kieferorthopädie',
+                content: '<p>Medizinische Fachbegriffe rund um Zahngesundheit.</p>'
+            },
+            {
+                id: 35,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Viragfoeld.jpg',
+                title: 'Blumenerde',
+                subtitle: 'Die richtige Erde für deine medi...',
+                content: '<p>Gartenprodukte und Blumenerde - was brauchen deine Pflanzen?</p>'
+            },
+            {
+                id: 36,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/gazdasagpolitika.jpg',
+                title: 'Ungarn schafft es!',
+                subtitle: 'Was politische Plakate über die ...',
+                content: '<p>Politische Slogans und ihre sprachlichen Besonderheiten.</p>'
+            },
+            {
+                id: 37,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/GLS-Automata.jpg',
+                title: 'Paket-Automat',
+                subtitle: 'Pakete einfach abholen oder verse...',
+                content: '<p>Paketautomaten nutzen - so funktioniert der moderne Versand.</p>'
+            },
+            {
+                id: 38,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/05/Vidd-a-szemetedet.jpg',
+                title: 'Nimm deinen Müll mit!',
+                subtitle: 'Ein Appell für saubere ungarisch...',
+                content: '<p>Umweltschutz-Hinweise und höfliche Aufforderungen verstehen.</p>'
+            },
+            {
+                id: 39,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/Waescherei.jpg',
+                title: 'Deine Wäsche',
+                subtitle: 'Was du hier alles waschen kannst:...',
+                content: '<p>Wäscherei-Service nutzen - Textilpflege leicht gemacht.</p>'
+            },
+            {
+                id: 40,
+                image: 'https://wir-in-ungarn.hu/wiucontent/uploads/2025/04/ut-a-joevobe.jpg',
+                title: 'Europa baut mit',
+                subtitle: 'Was EU-Förderschilder über Proj...',
+                content: '<p>EU-Förderprojekte erkennen - diese Schilder zeigen europäische Zusammenarbeit.</p>'
+            }
+        ];
+
+        // State management
+        let currentImageId = null;
+
+        // DOM Ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGallery();
+        });
+
+        /* =============================================
+           INITIALIZATION
+           ============================================= */
+
+        function initializeGallery() {
+            renderGallery();
+            setupImageClickHandlers();
+            setupNavigationButtons();
+            setupCloseButton();
+            setupCollapsibleSections();
+            checkUrlForDirectLink();
+            setupKeyboardNavigation();
+        }
+
+        /* =============================================
+           RENDER GALLERY
+           ============================================= */
+
+        function renderGallery() {
+            const gallery = document.getElementById('gallery');
+            
+            // Group items into columns (2 items per column)
+            const columns = [];
+            for (let i = 0; i < galleryData.length; i += 2) {
+                columns.push(galleryData.slice(i, i + 2));
+            }
+
+            // Create HTML for columns
+            let html = '';
+            columns.forEach(column => {
+                html += '<div class="ool-column">';
+                column.forEach(item => {
+                    html += `
+                        <div class="ool-image-container" data-id="${item.id}">
+                            <img src="${item.image}" alt="${item.title}">
+                            <div class="ool-overlay-text">
+                                <h3>${item.title}</h3>
+                                <p>${item.subtitle}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            });
+
+            gallery.innerHTML = html;
+        }
+
+        /* =============================================
+           IMAGE CLICK HANDLERS
+           ============================================= */
+
+        function setupImageClickHandlers() {
+            document.addEventListener('click', function(e) {
+                const container = e.target.closest('.ool-image-container');
+                if (container) {
+                    const imageId = container.getAttribute('data-id');
+                    openDetails(imageId);
+                    
+                    // Remove active class from all images
+                    document.querySelectorAll('.ool-image-container').forEach(img => {
+                        img.classList.remove('ool-active');
+                    });
+                    
+                    // Add active class to clicked image
+                    container.classList.add('ool-active');
+                }
+            });
+        }
+
+        /* =============================================
+           DETAILS PANEL MANAGEMENT
+           ============================================= */
+
+        function openDetails(imageId) {
+            currentImageId = parseInt(imageId);
+            const detailsContainer = document.getElementById('detailsContainer');
+            const imageData = getImageData(imageId);
+            
+            if (!imageData) return;
+            
+            // Update details content
+            updateDetailsContent(imageData);
+            
+            // Show details container
+            detailsContainer.classList.add('ool-show');
+            
+            // Check if mobile and add mobile-popup class
+            if (window.innerWidth <= 767) {
+                detailsContainer.classList.add('mobile-popup');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Scroll to details (desktop only)
+            if (window.innerWidth > 767) {
+                setTimeout(() => {
+                    detailsContainer.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }, 100);
+            }
+            
+            // Update URL with query parameter
+            updateUrlParameter('id', imageId);
+        }
+
+        function closeDetails() {
+            const detailsContainer = document.getElementById('detailsContainer');
+            
+            // Hide details container
+            detailsContainer.classList.remove('ool-show', 'mobile-popup');
+            
+            // Re-enable body scroll on mobile
+            document.body.style.overflow = '';
+            
+            // Remove active class from all images
+            document.querySelectorAll('.ool-image-container').forEach(img => {
+                img.classList.remove('ool-active');
+            });
+            
+            // Remove query parameter from URL
+            removeUrlParameter('id');
+            
+            currentImageId = null;
+        }
+
+        function updateDetailsContent(imageData) {
+            const thumbnail = document.getElementById('detailsThumbnail');
+            const title = document.getElementById('detailsTitle');
+            const subtitle = document.getElementById('detailsSubtitle');
+            const content = document.getElementById('detailsContent');
+            
+            if (thumbnail) thumbnail.src = imageData.image;
+            if (title) title.textContent = imageData.title;
+            if (subtitle) subtitle.textContent = imageData.subtitle;
+            if (content) content.innerHTML = imageData.content;
+        }
+
+        /* =============================================
+           NAVIGATION BUTTONS
+           ============================================= */
+
+        function setupNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const galleryContainer = document.getElementById('galleryContainer');
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Scroll by approximately 2 columns (2 * 167px + gaps)
+                    const scrollAmount = (167 * 2) + (5 * 2); // 2 images + 2 gaps
+                    galleryContainer.scrollBy({
+                        left: -scrollAmount,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Scroll by approximately 2 columns (2 * 167px + gaps)
+                    const scrollAmount = (167 * 2) + (5 * 2); // 2 images + 2 gaps
+                    galleryContainer.scrollBy({
+                        left: scrollAmount,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        }
+
+        /* =============================================
+           CLOSE BUTTON
+           ============================================= */
+
+        function setupCloseButton() {
+            const closeBtn = document.getElementById('closeDetails');
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeDetails);
+            }
+        }
+
+        /* =============================================
+           COLLAPSIBLE SECTIONS
+           ============================================= */
+
+        function setupCollapsibleSections() {
+            const descriptionHeader = document.getElementById('descriptionHeader');
+            const errorHeader = document.getElementById('errorHeader');
+            
+            if (descriptionHeader) {
+                descriptionHeader.addEventListener('click', function() {
+                    this.classList.toggle('collapsed');
+                    const content = document.getElementById('descriptionContent');
+                    content.classList.toggle('hidden');
+                });
+            }
+            
+            if (errorHeader) {
+                errorHeader.addEventListener('click', function() {
+                    this.classList.toggle('collapsed');
+                    const content = document.getElementById('errorContent');
+                    content.classList.toggle('ool-show');
+                });
+            }
+        }
+
+        /* =============================================
+           KEYBOARD NAVIGATION
+           ============================================= */
+
+        function setupKeyboardNavigation() {
+            document.addEventListener('keydown', function(e) {
+                const detailsContainer = document.getElementById('detailsContainer');
+                const isDetailsOpen = detailsContainer.classList.contains('ool-show');
+                
+                if (!isDetailsOpen) return;
+                
+                // Close on Escape key
+                if (e.key === 'Escape') {
+                    closeDetails();
+                }
+                
+                // Navigate with arrow keys
+                if (currentImageId) {
+                    if (e.key === 'ArrowLeft' && currentImageId > 1) {
+                        navigateToPrevious();
+                    } else if (e.key === 'ArrowRight' && currentImageId < galleryData.length) {
+                        navigateToNext();
+                    }
+                }
+            });
+        }
+
+        function navigateToPrevious() {
+            if (currentImageId > 1) {
+                openDetails(currentImageId - 1);
+                updateActiveImage(currentImageId);
+            }
+        }
+
+        function navigateToNext() {
+            if (currentImageId < galleryData.length) {
+                openDetails(currentImageId + 1);
+                updateActiveImage(currentImageId);
+            }
+        }
+
+        function updateActiveImage(imageId) {
+            const imageContainers = document.querySelectorAll('.ool-image-container');
+            imageContainers.forEach(img => img.classList.remove('ool-active'));
+            
+            const activeImage = document.querySelector(`[data-id="${imageId}"]`);
+            if (activeImage) {
+                activeImage.classList.add('ool-active');
+            }
+        }
+
+        /* =============================================
+           URL PARAMETER MANAGEMENT
+           ============================================= */
+
+        function checkUrlForDirectLink() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has('id')) {
+                const imageId = urlParams.get('id');
+                openDetails(imageId);
+                
+                // Mark the image as active
+                const imageContainer = document.querySelector(`[data-id="${imageId}"]`);
+                if (imageContainer) {
+                    imageContainer.classList.add('ool-active');
+                }
+            }
+        }
+
+        function updateUrlParameter(param, value) {
+            const url = new URL(window.location);
+            url.searchParams.set(param, value);
+            window.history.pushState({}, '', url);
+        }
+
+        function removeUrlParameter(param) {
+            const url = new URL(window.location);
+            url.searchParams.delete(param);
+            window.history.pushState({}, '', url);
+        }
+
+        /* =============================================
+           DATA MANAGEMENT
+           ============================================= */
+
+        function getImageData(imageId) {
+            return galleryData.find(item => item.id == imageId) || galleryData[0];
+        }
+
+        /* =============================================
+           RESPONSIVE BEHAVIOR
+           ============================================= */
+
+        window.addEventListener('resize', function() {
+            const detailsContainer = document.getElementById('detailsContainer');
+            const isDetailsOpen = detailsContainer.classList.contains('ool-show');
+            
+            if (isDetailsOpen) {
+                if (window.innerWidth <= 767) {
+                    detailsContainer.classList.add('mobile-popup');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    detailsContainer.classList.remove('mobile-popup');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+    </script>
+
+    <!-- 
+    ============================================
+    HOW TO GET YOUR IMAGE DATA FROM WORDPRESS
+    ============================================
+    
+    Option 1: Manual Method
+    ----------------------
+    1. Go to your WordPress page: https://wir-in-ungarn.hu/aus-dem-leben/
+    2. Right-click on each image and select "Inspect" or "Inspect Element"
+    3. Look for the <img> tag and copy the "src" attribute URL
+    4. Copy the title and subtitle from the overlay
+    5. Replace the placeholder URLs above with your actual URLs
+    
+    Option 2: Automatic Method (Browser Console)
+    -------------------------------------------
+    1. Go to: https://wir-in-ungarn.hu/aus-dem-leben/
+    2. Open browser console (F12 or Ctrl+Shift+J)
+    3. Paste this code and press Enter:
+    
+    // Copy this code and run it in your browser console on your WordPress page
+    const extractedData = [];
+    document.querySelectorAll('.ool_image-container').forEach((container, index) => {
+        const img = container.querySelector('img');
+        const title = container.querySelector('.overlay-text h3')?.textContent || '';
+        const subtitle = container.querySelector('.overlay-text p')?.textContent || '';
+        
+        extractedData.push({
+            id: index + 1,
+            image: img ? img.src : '',
+            title: title.trim(),
+            subtitle: subtitle.trim(),
+            content: '<p>Add your content here...</p>'
+        });
+    });
+    console.log('Copy this array and paste it into the galleryData variable:');
+    console.log(JSON.stringify(extractedData, null, 4));
+    
+    4. Copy the output and replace the galleryData array above
+    
+    Option 3: From WordPress Admin
+    -----------------------------
+    1. Go to WordPress Admin > Media Library
+    2. Find each image used in the gallery
+    3. Click on the image to see details
+    4. Copy the "File URL" field
+    5. Use that URL in the 'image' field above
+    
+    ============================================
+    -->
+</body>
+</html>

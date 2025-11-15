@@ -1830,10 +1830,10 @@ const LandingPage = () => {
                   menuName: "Kreuzworträtsel",
                   menuRoute: "/kreuzwortraetsel",
                 },
-                // {
-                //   menuName: "Ungarisch-Impulse",
-                //   menuRoute: "/ungarisch-impulse",
-                // },
+                {
+                  menuName: "Ungarisch-Impulse",
+                  menuRoute: "/ungarisch-impulse",
+                },
                 {
                   menuName: "SuffixHero",
                   menuRoute: "/suffixhero",
@@ -1874,10 +1874,10 @@ const LandingPage = () => {
                   menuName: "Wie spät ist es?",
                   menuRoute: "/wie-spaet-ist-es",
                 },
-                // {
-                //   menuName: "Verbarium",
-                //   menuRoute: "/verbarium",
-                // },
+                {
+                  menuName: "Verbarium",
+                  menuRoute: "/verbarium",
+                },
                 {
                   menuName: "Ungarisch lernen",
                   menuRoute: "/ungarisch-lernen",
