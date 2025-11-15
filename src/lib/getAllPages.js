@@ -4,7 +4,7 @@ import {
   GET_PAGE_IMPRESSUM,
   GET_PAGE_KONTAKT,
 } from "./queries";
-import {BASE_URL} from "./routes";
+import { BASE_URL } from "./routes";
 
 export async function fetchPage(query, variables = {}) {
   try {
@@ -14,12 +14,12 @@ export async function fetchPage(query, variables = {}) {
 
     const res = await fetch(BASE_URL, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         query,
         variables,
       }),
-      next: {revalidate: 60},
+      next: { revalidate: 60 },
       signal: controller.signal,
     });
 
@@ -130,7 +130,7 @@ export function GetLiedTextePages(first = 1000, after = null) {
       }
     }
   `;
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 
 // export function GetLiedTextePages(search = "") {
@@ -272,7 +272,7 @@ export function GetShortPages(first = 10, after = null) {
 
   `;
 
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 export function GetKategorienPages(first = 1000, after = null) {
   const SEARCH_QUERY = `
@@ -352,7 +352,7 @@ export function GetKategorienPages(first = 1000, after = null) {
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 
 export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
@@ -464,7 +464,7 @@ export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
   `;
 
   // Only pass categoryId if it's not null
-  const variables = {first, after};
+  const variables = { first, after };
   if (categoryId !== null) {
     variables.categoryId = categoryId;
   }
@@ -527,7 +527,7 @@ export function GetEinFachPages(first = 1000, after = null) {
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 
 export function GetAusflugszielePages(first = 1000, after = null) {
@@ -584,7 +584,7 @@ export function GetAusflugszielePages(first = 1000, after = null) {
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 
 export function GetListingsVeranstaltungen(first = 1000, after = null) {
@@ -656,7 +656,7 @@ export function GetListingsVeranstaltungen(first = 1000, after = null) {
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 export function GetKreuzwortratsel(first = 1000, after = null) {
   const SEARCH_QUERY = `
@@ -718,7 +718,7 @@ export function GetKreuzwortratsel(first = 1000, after = null) {
 }
   `;
 
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 
 // export function GetSprachkursPages(search = "") {
@@ -847,44 +847,7 @@ export function GetAllSprachkursPages(first = 1000, after = null) {
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, {first, after});
-}
-
-// Aus Dem Leben
-export function GetAllAusDemLebens(first = 50, after = null) {
-  const SEARCH_QUERY = `
-    query GetAllAusDemLebens($first: Int = 50, $after: String) {
-      ausDemLebens(first: $first, after: $after) {
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          endCursor
-          startCursor
-        }
-        nodes {
-          id
-          databaseId
-          title
-          date
-          slug
-          content
-          status
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              mediaDetails {
-                width
-                height
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 
 export function GetKulinarischeSeelePages(first = 1000, after = null) {
@@ -946,7 +909,7 @@ export function GetKulinarischeSeelePages(first = 1000, after = null) {
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, {first, after});
+  return fetchPage(SEARCH_QUERY, { first, after });
 }
 
 export function GetAllUngarnInsider(first = 100, after = null) {
@@ -1339,7 +1302,7 @@ export async function GetAllKulinarischeSeeleRecipes() {
 
     // Continue fetching until all pages are loaded
     while (hasNextPage && after) {
-      const nextFetch = await fetchPage(SEARCH_QUERY, {first: 100, after});
+      const nextFetch = await fetchPage(SEARCH_QUERY, { first: 100, after });
       const nextRecipes = nextFetch.data.recipes?.edges || [];
       allRecipes = [...allRecipes, ...nextRecipes];
       hasNextPage = nextFetch.data.recipes?.pageInfo?.hasNextPage || false;
@@ -1411,7 +1374,7 @@ export function SearchAllPosts(
     }
   `;
 
-  return fetchPage(SEARCH_QUERY, {search, first, after});
+  return fetchPage(SEARCH_QUERY, { search, first, after });
 }
 
 export function GetSprachkursPages(search = "") {
@@ -1471,7 +1434,7 @@ export function GetSprachkursPages(search = "") {
       }
     `;
 
-  return fetchPage(SEARCH_QUERY, {search});
+  return fetchPage(SEARCH_QUERY, { search });
 }
 
 // Configuration for custom post types and their specific fields
@@ -2890,7 +2853,7 @@ export async function GetAllPosts({
         }
       }
     `;
-  return fetchPage(ALL_POSTS_QUERY, {first, after, search});
+  return fetchPage(ALL_POSTS_QUERY, { first, after, search });
 }
 
 export function GetKontactPages() {
@@ -2899,7 +2862,7 @@ export function GetKontactPages() {
 
 // Specific functions for confirmed working custom post types
 export async function getAllLiedtextePosts(options = {}) {
-  const {first = 50, after = null} = options;
+  const { first = 50, after = null } = options;
 
   const query = `
       query GetAllLiedtexte($first: Int, $after: String) {
@@ -2919,7 +2882,7 @@ export async function getAllLiedtextePosts(options = {}) {
     `;
 
   try {
-    const data = await fetchPage(query, {first, after});
+    const data = await fetchPage(query, { first, after });
     return {
       success: true,
       data: data?.data?.liedtexte || null,
@@ -2937,7 +2900,7 @@ export async function getAllLiedtextePosts(options = {}) {
 }
 
 export async function getAllSprachkursPosts(options = {}) {
-  const {first = 50, after = null} = options;
+  const { first = 50, after = null } = options;
 
   const query = `
       query GetAllSprachkurs($first: Int, $after: String) {
@@ -2957,7 +2920,7 @@ export async function getAllSprachkursPosts(options = {}) {
     `;
 
   try {
-    const data = await fetchPage(query, {first, after});
+    const data = await fetchPage(query, { first, after });
     return {
       success: true,
       data: data?.data?.sprachkurs || null,
@@ -2976,7 +2939,7 @@ export async function getAllSprachkursPosts(options = {}) {
 
 // Generic function to get all posts from any custom post type
 export async function getAllCustomPostTypePosts(postType, options = {}) {
-  const {first = 50, after = null} = options;
+  const { first = 50, after = null } = options;
 
   try {
     // Use the exact static query structure that you confirmed is working
@@ -3103,7 +3066,7 @@ export function initializeCustomPostTypes() {
 export async function getContentByType(type, slug) {
   try {
     let query = "";
-    let variables = {slug};
+    let variables = { slug };
 
     switch (type) {
       case "post":
