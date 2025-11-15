@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
-// import AusDemLebenPage from "@/components/pages/ausDemLeben/AusDemLebenPage";
 import ModalIcons from "@/components/_components/ModalIcons";
 import Breadcrumb from "@/components/_components/Breadcrumb";
-import AusDemLebenPage from "@/components/pages/ausDemLeben/AusdemLebenPage";
+import AusDemLebenPage from "@/components/pages/ausdemLeben/AusdemLebenPage";
 
 export default function AusDemLebenComponent() {
   const [open, setOpen] = useState(false);
