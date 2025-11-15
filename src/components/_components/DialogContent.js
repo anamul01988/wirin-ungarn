@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {
   Dialog,
   DialogBody,
   // Button,
   Typography,
 } from "@material-tailwind/react";
-import { usePathname, useRouter } from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import CollapsibleComment from "./CollapsibleComment";
 import ContactForm from "./ContactForm";
 import ModalIcons from "./ModalIcons";
@@ -40,6 +40,7 @@ export default function DialogContent({
   nextPostTitle, // Add nextPostTitle prop
   prevPostTitle, // Add prevPostTitle prop
   // backupShortsPostContent,
+  isSinglePage = false,
 }) {
   const [open, setOpen] = useState(true);
 
@@ -114,13 +115,14 @@ export default function DialogContent({
         open={open}
         handler={handleOpen}
         size="lg"
-        dismiss={{ enabled: false }}
+        dismiss={{enabled: false}}
         className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
           <ModalIcons
             onClose={handleClose}
+            isSinglePage={isSinglePage}
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}
@@ -131,12 +133,14 @@ export default function DialogContent({
         <DialogBody className="overflow-auto custom__modal_area flex-1 pl-4 mr-1 my-1">
           {/* Breadcrumb */}
           <div className="mb-4 px-0 pt-2">
-            <Breadcrumb className="text-sm" />
+            <Breadcrumb className="text-sm" isSinglePage={isSinglePage} />
           </div>
 
           <div>
             {routePrefix !== "einfach-lesen" && (
-              <h1 className="single__page_title font-semibold mb-6">{title}</h1>
+              <h1 className="single__page_title mb-6 text-2xl font-bold text-gray-800 pr-12 leading-snug">
+                {title}
+              </h1>
             )}
             {/* <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1> */}
 
@@ -425,7 +429,7 @@ export default function DialogContent({
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
                   className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{ __html: content?.introText }}
+                  dangerouslySetInnerHTML={{__html: content?.introText}}
                 />
                 {content?.postContent?.length > 0 ? (
                   <>
@@ -482,7 +486,7 @@ export default function DialogContent({
                               variant="paragraph"
                               color="blue-gray"
                               className="single__page_description leading-relaxed text-left mb-2"
-                              dangerouslySetInnerHTML={{ __html: item.content }}
+                              dangerouslySetInnerHTML={{__html: item.content}}
                             />
                           </div>
                         </div>
@@ -511,7 +515,7 @@ export default function DialogContent({
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
                   className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{ __html: content }}
+                  dangerouslySetInnerHTML={{__html: content}}
                 />
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
@@ -565,7 +569,7 @@ export default function DialogContent({
                           variant="paragraph"
                           color="blue-gray"
                           className="text-sm leading-relaxed text-left mb-2"
-                          dangerouslySetInnerHTML={{ __html: item.content }}
+                          dangerouslySetInnerHTML={{__html: item.content}}
                         />
                       </div>
                     </div>
@@ -578,7 +582,7 @@ export default function DialogContent({
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
                   className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{ __html: content?.introText }}
+                  dangerouslySetInnerHTML={{__html: content?.introText}}
                 />
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
@@ -632,7 +636,7 @@ export default function DialogContent({
                           variant="paragraph"
                           color="blue-gray"
                           className="text-sm leading-relaxed text-left mb-2"
-                          dangerouslySetInnerHTML={{ __html: item.content }}
+                          dangerouslySetInnerHTML={{__html: item.content}}
                         />
                       </div>
                     </div>
@@ -644,7 +648,7 @@ export default function DialogContent({
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
                   className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{ __html: content?.introText }}
+                  dangerouslySetInnerHTML={{__html: content?.introText}}
                 />
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
@@ -698,7 +702,7 @@ export default function DialogContent({
                           variant="paragraph"
                           color="blue-gray"
                           className="text-sm leading-relaxed text-left mb-2"
-                          dangerouslySetInnerHTML={{ __html: item.content }}
+                          dangerouslySetInnerHTML={{__html: item.content}}
                         />
                       </div>
                     </div>
@@ -733,14 +737,14 @@ export default function DialogContent({
                         </div>
                         <h2 className="text-2xl font-semibold text-green-700">
                           <div
-                            dangerouslySetInnerHTML={{ __html: content.title }}
+                            dangerouslySetInnerHTML={{__html: content.title}}
                           />
                         </h2>
                       </div>
 
                       <p className="text-gray-600 leading-relaxed">
                         <div
-                          dangerouslySetInnerHTML={{ __html: content.content }}
+                          dangerouslySetInnerHTML={{__html: content.content}}
                         />
                       </p>
 
@@ -793,7 +797,7 @@ export default function DialogContent({
                   contentType === "page" &&
                   !hasContactForm && (
                     <div className="prose prose-lg max-w-none">
-                      <div dangerouslySetInnerHTML={{ __html: content }} />
+                      <div dangerouslySetInnerHTML={{__html: content}} />
                     </div>
                   )}
               </>
