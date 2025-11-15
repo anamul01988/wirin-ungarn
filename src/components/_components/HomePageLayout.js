@@ -180,7 +180,6 @@ export default function HomePageLayout() {
       </header>
       <LandingPage />
       {/* <HomePage /> */}
-      {/* <Footer /> */}
 
       {/* Modals */}
       <LoginModal
