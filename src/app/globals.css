@@ -1203,8 +1203,8 @@ div[class*="Toastify"] {
 /* Fixed modal width for Sprachkurs page - above 1160px screen size */
 @media screen and (min-width: 1200px) {
   [role="dialog"]:not([data-dialog="impressum-modal"]) {
-    max-width: 1030px !important;
-    min-width: 1030px !important;
+    max-width: 900px !important;
+    min-width: 900px !important;
     width: 100% !important;
   }
 }
