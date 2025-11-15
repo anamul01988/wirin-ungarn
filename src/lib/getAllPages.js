@@ -1146,6 +1146,94 @@ export function GetAllVerbarium(first = 500, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
+export function GetAllImpulses(first = 50, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllImpulse($first: Int = 50, $after: String) {
+      # Get the "Impulse" Page
+      pages(where: { title: "Impulse" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
+        }
+      }
+
+      # Get Ungarisch Impulse CPT
+      ungarischImpulses(first: $first, after: $after, where: { stati: [PUBLISH, DRAFT] }) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        nodes {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+export function GetAllImpulse(first = 50, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllImpulse($first: Int = 50, $after: String) {
+      # Get the "Impulse" Page
+      pages(where: { title: "Impulse" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
+        }
+      }
+
+      # Get Ungarisch Impulse CPT
+      ungarischImpulses(first: $first, after: $after, where: { stati: [PUBLISH, DRAFT] }) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        nodes {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
 // Function to fetch all recipes by paginating through all pages
 export async function GetAllKulinarischeSeeleRecipes() {
   const SEARCH_QUERY = `

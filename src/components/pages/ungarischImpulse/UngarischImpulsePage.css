@@ -1,0 +1,525 @@
+/* ============================================
+   UNGARISCH-IMPULSE STYLES
+   All-in-one CSS for Hungarian Language Learning Page
+   ============================================ */
+
+/* ============================================
+   1. FONTS & BASE TYPOGRAPHY
+   ============================================ */
+
+/* Hungarian Word Styling */
+.hu-word,
+.himpulse-expressions .hu_word,
+.himpulse-description .hu_word,
+.himpulse-expressions-vertiefung .hu_word,
+.himpulse-expressions-ubungen .hu_word,
+.himpulse-expressions-antworten .hu_word {
+  font-family: 'Noto Sans Mono', monospace;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-style: normal;
+  color: #2e5136;
+}
+
+strong .hu-word,
+.hu-word strong,
+strong .hu_word,
+.hu_word strong {
+  font-family: 'Noto Sans Mono', monospace;
+  font-weight: 600;
+}
+
+/* ============================================
+   2. BASE LAYOUT & CONTAINER
+   ============================================ */
+
+.impulse-page * {
+  box-sizing: border-box;
+}
+
+.impulse-page {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans', sans-serif;
+  color: #2e5136;
+  background-color: #f5f5f5;
+}
+
+.impulse-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.impulse-content {
+  position: relative;
+}
+
+.impulse-content.loading {
+  opacity: 0.5;
+}
+
+/* ============================================
+   3. TYPOGRAPHY HIERARCHY
+   ============================================ */
+
+.impulse-page h1 {
+  color: #333;
+  margin-bottom: 18px;
+  text-transform: none;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.impulse-page h2 {
+  font-size: 24px;
+  color: #2e5136;
+  margin-bottom: 10px;
+}
+
+.impulse-page h3 {
+  margin-top: 10px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #2e5136;
+}
+
+.impulse-page h3.impulse-subheadline,
+.impulse-page h3.impulse_subhdline {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.impulse-page h4 {
+  font-size: 19px;
+  font-weight: 400;
+  color: #2e5136;
+  margin-bottom: 8px;
+}
+
+/* Title Color Variants */
+.impulse-page .red-title,
+.impulse-page .red_title {
+  color: #dc3545;
+}
+
+.impulse-page .green-title,
+.impulse-page .green_title {
+  color: #436f4d;
+}
+
+/* ============================================
+   4. PAGE HEADER
+   ============================================ */
+
+.impulse-header {
+  margin-bottom: 30px;
+}
+
+.impulse-intro {
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.impulse-note {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* ============================================
+   5. TOP CONTROL BAR
+   ============================================ */
+
+.impulse-control-bar {
+  width: 100%;
+  max-width: 550px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  float: right;
+}
+
+.impulse-selector-wrapper {
+  float: left;
+  width: 355px;
+  margin-right: 10px;
+}
+
+.impulse-selector {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 41px;
+  font-size: 14px;
+}
+
+.impulse-lesson-number {
+  background-color: #006400;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  float: left;
+  width: 98px;
+  text-align: center;
+  height: 40px;
+  line-height: 24px;
+}
+
+.impulse-next-button {
+  background-color: #006400;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  float: right;
+  width: 49px;
+  height: 40px;
+  border: none;
+  position: relative;
+}
+
+.impulse-next-button::after {
+  content: "➜";
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 14px;
+  padding-top: 8px;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.impulse-next-button:hover {
+  background-color: #004d00;
+}
+
+/* ============================================
+   6. CONTENT SECTIONS
+   ============================================ */
+
+.impulse-section,
+.impulse-content > div {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.impulse-section p,
+.impulse-content p {
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+/* Section with audio controls needs extra spacing */
+.impulse-expressions,
+.impulse-expressions-vertiefung,
+.impulse-expressions-ubungen,
+.impulse-expressions-antworten,
+.himpulse-expressions,
+.himpulse-expressions-vertiefung,
+.himpulse-expressions-ubungen,
+.himpulse-expressions-antworten {
+  position: relative;
+  padding-right: 200px; /* Space for audio controls */
+}
+
+.impulse-expressions p,
+.impulse-expressions-vertiefung p,
+.impulse-expressions-ubungen p,
+.impulse-expressions-antworten p,
+.himpulse-expressions p,
+.himpulse-expressions-vertiefung p,
+.himpulse-expressions-ubungen p,
+.himpulse-expressions-antworten p {
+  width: 85%;
+}
+
+/* ============================================
+   7. LISTS
+   ============================================ */
+
+.expression-list,
+.exercise-list,
+.answer-list,
+.impulse-content ul,
+.impulse-content ol {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.expression-list li,
+.exercise-list li,
+.answer-list li,
+.impulse-content ul li,
+.impulse-content ol li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.impulse-content ol.exercise-list,
+.impulse-content ol.answer-list,
+.impulse-content ol {
+  list-style-type: decimal;
+}
+
+.impulse-content ul.expression-list,
+.impulse-content ul {
+  list-style-type: disc;
+}
+
+/* ============================================
+   8. AUDIO CONTROLS
+   ============================================ */
+
+.audio-control-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px 14px;
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.audio-play-button {
+  background: url('https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/PLAY.png');
+  background-size: cover !important;
+  width: 80px;
+  height: 26px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.audio-play-button:hover {
+  opacity: 0.8;
+}
+
+.audio-play-button.playing {
+  background: url('https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/pause.png');
+  background-size: cover !important;
+}
+
+.audio-backward-button {
+  background: url('https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/5SEC.png');
+  background-size: cover !important;
+  width: 80px;
+  height: 26px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.audio-backward-button:hover {
+  opacity: 0.8;
+}
+
+/* ============================================
+   9. INTERACTIVE ELEMENTS
+   ============================================ */
+
+/* Blurred Answers Section */
+.antworten-blurred.blurred,
+.antworten_blurred.blurred {
+  filter: blur(4px);
+  cursor: pointer;
+  user-select: none;
+}
+
+.italic-para,
+.italic_para {
+  font-style: italic;
+  cursor: pointer;
+  color: #666;
+  font-size: 14px;
+}
+
+/* ============================================
+   10. FOOTER CTA
+   ============================================ */
+
+.impulse-footer {
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
+.impulse-cta-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #006400;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.impulse-cta-button:hover {
+  background-color: #004d00;
+}
+
+.impulse-cta-button .arrow {
+  margin-left: 10px;
+}
+
+/* ============================================
+   11. UTILITY CLASSES
+   ============================================ */
+
+.clear {
+  clear: both;
+}
+
+.hn-bold {
+  font-weight: bold;
+}
+
+.no-lesson {
+  padding: 40px;
+  text-align: center;
+  color: #666;
+}
+
+/* ============================================
+   12. RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablets and smaller */
+@media screen and (max-width: 768px) {
+  .impulse-expressions,
+  .impulse-expressions-vertiefung,
+  .impulse-expressions-ubungen,
+  .impulse-expressions-antworten,
+  .himpulse-expressions,
+  .himpulse-expressions-vertiefung,
+  .himpulse-expressions-ubungen,
+  .himpulse-expressions-antworten {
+    padding-right: 0;
+  }
+
+  .impulse-expressions p,
+  .impulse-expressions-vertiefung p,
+  .impulse-expressions-ubungen p,
+  .impulse-expressions-antworten p,
+  .himpulse-expressions p,
+  .himpulse-expressions-vertiefung p,
+  .himpulse-expressions-ubungen p,
+  .himpulse-expressions-antworten p {
+    width: 100%;
+  }
+
+  .audio-control-container {
+    position: static;
+    padding: 10px 0;
+    margin-bottom: 15px;
+  }
+}
+
+/* Mobile devices */
+@media screen and (max-width: 600px) {
+  .impulse-page {
+    padding: 15px;
+  }
+
+  .impulse-control-bar {
+    width: auto;
+    float: none;
+    padding-left: 0;
+    max-width: 100%;
+  }
+
+  .impulse-selector-wrapper {
+    width: 100%;
+    margin-bottom: 14px;
+    float: none;
+  }
+
+  .impulse-selector {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .impulse-lesson-number {
+    float: none;
+    width: auto;
+    margin-bottom: 10px;
+  }
+
+  .impulse-next-button {
+    float: none;
+    width: 100%;
+    padding-top: 8px;
+  }
+
+  .impulse-next-button::after {
+    font-size: 20px;
+  }
+
+  .impulse-page h1 {
+    font-size: 26px;
+  }
+
+  .impulse-page h2 {
+    font-size: 20px;
+  }
+
+  .impulse-page h3 {
+    font-size: 18px;
+  }
+}
+
+/* Extra small devices */
+@media screen and (max-width: 480px) {
+  .impulse-page h3 {
+    margin-top: 10px;
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+
+  .audio-control-container {
+    padding: 5px 0;
+  }
+
+  .audio-controls {
+    flex-wrap: wrap;
+  }
+}
+
+/* Desktop - Title width adjustment */
+@media screen and (min-width: 600px) {
+  .impulse-page .red-title,
+  .impulse-page .red_title {
+    width: 70%;
+  }
+}
+
+/* ============================================
+   13. PRINT STYLES
+   ============================================ */
+
+@media print {
+  .impulse-control-bar,
+  .audio-control-container,
+  .impulse-footer {
+    display: none;
+  }
+
+  .antworten-blurred.blurred,
+  .antworten_blurred.blurred {
+    filter: none;
+  }
+}
+
