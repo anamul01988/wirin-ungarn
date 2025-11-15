@@ -3,6 +3,7 @@ import { Carousel } from "@material-tailwind/react";
 import { landingCards, slideData } from "@/lib/utils/utils";
 import { useRouter } from "next/navigation";
 import { useImperativeHandle, forwardRef, useRef } from "react";
+import Image from "next/image";
 
 const PostsSlider = forwardRef(({ onTitleClick, postDetails }, ref) => {
   const router = useRouter();
@@ -69,15 +70,17 @@ const PostsSlider = forwardRef(({ onTitleClick, postDetails }, ref) => {
       {orderedData.map((item, idx) => (
         <div key={idx} className="relative h-full w-full">
           <div
-            className="relative h-full w-full cursor-pointer rounded-2xl transition-transform duration-300"
+            className="relative h-full w-full cursor-pointer rounded-2xl overflow-hidden transition-transform duration-300"
             onClick={() => handleImageClick(item.route)}
-            style={{
-              backgroundImage: `url(${item.image})`,
-              backgroundSize: "contain",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
           >
+            <Image
+              src={item.image}
+              alt={item.title || "Post image"}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              quality={90}
+            />
             {/* Overlay with title */}
             {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
               <h3 className="text-white text-lg font-semibold">{item.title}</h3>
