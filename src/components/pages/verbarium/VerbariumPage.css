@@ -1,0 +1,417 @@
+/* ===============================================
+   VERBARIUM PAGE STYLES
+   Complete CSS for Hungarian Verb Dictionary
+   =============================================== */
+
+/* -----------------------------------------------
+   1. BASE LAYOUT & RESET
+   ----------------------------------------------- */
+.verbarium-page * {
+  box-sizing: border-box;
+}
+
+.verbarium-page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+#content-holder {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+#content-box {
+  width: 100%;
+}
+
+.content-wrapper {
+  width: 100%;
+}
+
+.content-inner {
+  width: 100%;
+}
+
+.clear {
+  clear: both;
+}
+
+/* -----------------------------------------------
+   2. PAGE HEADER
+   ----------------------------------------------- */
+#term {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #436f4d;
+}
+
+.term-title h1 {
+  font-size: 2.5rem;
+  color: #436f4d;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* -----------------------------------------------
+   3. DESCRIPTION SECTION
+   ----------------------------------------------- */
+.wissenswert_description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #436f4d;
+  border-radius: 4px;
+}
+
+/* -----------------------------------------------
+   4. SEARCH SECTION
+   ----------------------------------------------- */
+.wissenswert_sf {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.search-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  display: block;
+}
+
+#search_form_inner_verbarium {
+  margin-bottom: 15px;
+}
+
+#verbarium_input {
+  width: 70%;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 2px solid #436f4d;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#verbarium_input:focus {
+  border-color: #2d4a33;
+  box-shadow: 0 0 8px rgba(67, 111, 77, 0.3);
+}
+
+#verbarium_input::placeholder {
+  color: #999;
+}
+
+/* -----------------------------------------------
+   5. SEARCH SUGGESTIONS
+   ----------------------------------------------- */
+.all_word_container {
+  position: absolute;
+  background: white;
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 999;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.all_word_container .verbarium_link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.all_word_container .verbarium_link:hover {
+  background-color: #f5f5f5;
+}
+
+.all_word_container .verbarium_item {
+  display: inline-block;
+  border: none;
+  margin: 0;
+  padding: 4px 8px;
+  color: #436f4d;
+  width: auto;
+  text-align: left;
+  font-size: 0.95rem;
+  background: none;
+}
+
+.all_word_container .verbarium_item.hungarian {
+  font-weight: 600;
+}
+
+.all_word_container .verbarium_item.german {
+  color: #cc2233;
+  margin-left: 5px;
+  font-weight: normal;
+}
+
+.no-results {
+  padding: 15px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+.ar-suggestion-box {
+  background-color: #f0f8ff;
+  border: 1px solid #d0e4f5;
+  border-radius: 4px;
+  padding: 15px;
+  margin-top: 10px;
+  display: none;
+}
+
+.asb-title {
+  font-weight: 600;
+  color: #436f4d;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.asb-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* -----------------------------------------------
+   6. POSTS FOUND NOTICE
+   ----------------------------------------------- */
+.found_posts {
+  margin-bottom: 20px;
+}
+
+.found_posts_notif {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 500;
+  display: block;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  border-left: 3px solid #436f4d;
+}
+
+/* -----------------------------------------------
+   7. VERBARIUM GRID
+   ----------------------------------------------- */
+.wissenwert_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.verbarium_link {
+  position: relative;
+  text-decoration: none;
+  flex: 0 0 calc(20% - 10px); /* 5 items per row */
+  display: flex;
+}
+
+.verbarium_item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #436f4d;
+  padding: 12px 18px;
+  color: #333;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-height: 50px;
+}
+
+.verbarium_link:hover .verbarium_item {
+  background-color: #436f4d;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Hidden verb links */
+.hidden_vlink {
+  display: none;
+}
+
+/* -----------------------------------------------
+   8. TOOLTIP FUNCTIONALITY
+   ----------------------------------------------- */
+.verbarium_link .tooltiptext {
+  visibility: hidden;
+  opacity: 0;
+  background-color: rgba(51, 51, 51, 0.95);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 12px;
+  position: absolute;
+  z-index: 1000;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  font-weight: normal;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+}
+
+/* Tooltip arrow */
+.verbarium_link .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(51, 51, 51, 0.95) transparent transparent transparent;
+}
+
+.verbarium_link:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* -----------------------------------------------
+   9. SEO TEXT SECTION
+   ----------------------------------------------- */
+.verbarium_seo {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* -----------------------------------------------
+   10. RESPONSIVE DESIGN
+   ----------------------------------------------- */
+
+/* Tablets (768px - 1024px) */
+@media screen and (max-width: 1024px) {
+  .verbarium_link {
+    flex: 0 0 calc(25% - 10px); /* 4 items per row */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .verbarium_link {
+    flex: 0 0 calc(33.333% - 10px); /* 3 items per row */
+  }
+  
+  #verbarium_input {
+    width: 85%;
+  }
+  
+  .all_word_container {
+    width: 85%;
+  }
+}
+
+/* Mobile Landscape (640px) */
+@media screen and (max-width: 640px) {
+  .term-title h1 {
+    font-size: 2rem;
+  }
+  
+  .verbarium_link {
+    flex: 0 0 calc(50% - 10px); /* 2 items per row */
+  }
+  
+  .verbarium_item {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile Portrait (480px) */
+@media screen and (max-width: 480px) {
+  #content-holder {
+    padding: 15px;
+  }
+  
+  .term-title h1 {
+    font-size: 1.75rem;
+  }
+  
+  #verbarium_input {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+  
+  .all_word_container {
+    width: 100%;
+  }
+  
+  .verbarium_link {
+    flex: 0 0 calc(50% - 10px);
+  }
+  
+  .verbarium_item {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .wissenswert_description {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+}
+
+/* Extra Small Mobile (360px) */
+@media screen and (max-width: 360px) {
+  .verbarium_link {
+    flex: 0 0 100%; /* 1 item per row */
+  }
+  
+  .verbarium_item {
+    min-height: 45px;
+  }
+}
+
+/* -----------------------------------------------
+   11. SCROLLBAR STYLING
+   ----------------------------------------------- */
+.all_word_container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.all_word_container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.all_word_container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.all_word_container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+

@@ -1060,6 +1060,92 @@ export function GetAllAusDemLebens(first = 50, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
+export function GetAllVerbariums(first = 500, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllVerbarium($first: Int = 500, $after: String) {
+      # Get the "Verbarium" Page
+      pages(where: { title: "Verbarium" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
+        }
+      }
+
+      # Get verbarium CPT
+      verbariums(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        nodes {
+          id
+          databaseId
+          title
+          date
+          slug
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+export function GetAllVerbarium(first = 500, after = null) {
+  const SEARCH_QUERY = `
+    query GetAllVerbarium($first: Int = 500, $after: String) {
+      # Get the "Verbarium" Page
+      pages(where: { title: "Verbarium" }) {
+        nodes {
+          id
+          title
+          isContentNode
+          slug
+          content
+          status
+          seo {
+            title
+            metaDesc
+            opengraphTitle
+            opengraphDescription
+          }
+        }
+      }
+
+      # Get verbarium CPT
+      verbariums(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+        nodes {
+          id
+          databaseId
+          title
+          date
+          slug
+        }
+      }
+    }
+  `;
+
+  return fetchPage(SEARCH_QUERY, { first, after });
+}
+
 // Function to fetch all recipes by paginating through all pages
 export async function GetAllKulinarischeSeeleRecipes() {
   const SEARCH_QUERY = `
