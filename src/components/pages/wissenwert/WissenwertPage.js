@@ -171,7 +171,7 @@ const WissenswertPage = () => {
   // Helper function to transform posts data for the new component
   const transformPostsData = (posts) => {
     if (!posts?.edges) return [];
-    console.log("posts 2221122222222111", posts);
+    // console.log("posts 2221122222222111", posts);
     return posts.edges.map((edge) => ({
       id: edge.node.id,
       title: edge.node.title,
@@ -279,7 +279,7 @@ const WissenswertPage = () => {
   const currentPageInfo = isSearching ? searchPageInfo : pageInfo;
   const currentPageHistory = isSearching ? searchPageHistory : pageHistory;
 
-  console.log("currentPosts 2221122222222111", currentPosts);
+  // console.log("currentPosts 2221122222222111", currentPosts);
 
   return (
     <WissenwertPostGrid

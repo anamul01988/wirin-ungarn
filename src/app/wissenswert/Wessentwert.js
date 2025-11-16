@@ -55,14 +55,15 @@ export default function Wissenswert() {
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}
+            isSinglePage={true}
           />
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1 border-0 pl-4 mr-1 my-1">
           {/* Breadcrumb */}
-          <div className="mb-4 px-0 pt-2">
+          {/* <div className="mb-4 px-0 pt-2">
             <Breadcrumb className="text-sm" />
-          </div>
+          </div> */}
 
           <div className="">
             <WissenswertPage />

@@ -15,7 +15,7 @@ export default async function WissenswertDynamicPage({ params }) {
 
   try {
     const contentData = await GetWissenswertPostBySlug(slug);
-    console.log("content data333eeeee333", contentData.data?.data.post);
+    // console.log("content data333eeeee333", contentData.data?.data.post);
     // if (!contentData) {
     //   notFound();
     // }

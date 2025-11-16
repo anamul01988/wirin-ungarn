@@ -43,6 +43,7 @@ export default function KategorienComponent() {
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}
+            isSinglePage={true}
           />
         )}
 
