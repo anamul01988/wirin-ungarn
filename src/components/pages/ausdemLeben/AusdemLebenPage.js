@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { GetAllAusDemLebens } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { useRouter } from "next/navigation";
-import "./AusdemPage.css";
+import "./AusDemLebenPage.css";
 
 const AusDemLebenPage = () => {
   const [pageData, setPageData] = useState(null);
