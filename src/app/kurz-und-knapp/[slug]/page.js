@@ -15,17 +15,17 @@ export default async function kulinarischeSinglePage({ params }) {
     // Handle post content
     if (contentData?.type === "post") {
       console.log("Processing as post type");
-      const { title, featuredImage, postContentRecipe } =
-        contentData?.data.data.recipe;
+      const { title, featuredImage, content } =
+        contentData?.data.data.knowledge;
       const imageUrl = featuredImage?.node?.sourceUrl || null;
 
       return (
         <div className="min-h-screen flex items-center justify-center">
           <DialogContent
             title={title}
-            content={postContentRecipe}
+            content={content}
             imageFeature={imageUrl}
-            contentType="kulinarische-seele"
+            contentType="kurz-und-knapp"
           />
         </div>
       );

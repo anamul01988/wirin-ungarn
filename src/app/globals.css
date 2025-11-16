@@ -1725,6 +1725,9 @@ div[class*="Toastify"] {
   font-size: 26px;
   color: #436f4d;
 } */
+.single__page-content {
+  padding: 0 15px;
+}
 .single__page_postTitle {
   font-size: 24px;
 }

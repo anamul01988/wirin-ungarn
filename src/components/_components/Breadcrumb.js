@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import {usePathname} from "next/navigation";
-import {Typography} from "@material-tailwind/react";
+import { usePathname } from "next/navigation";
+import { Typography } from "@material-tailwind/react";
 
 const Breadcrumb = ({
   customItems = null,
@@ -85,7 +85,7 @@ const Breadcrumb = ({
 
   return (
     <nav
-      className={`flex items-center space-x-2 text-sm ${className} ${
+      className={`flex items-center space-x-2 text-sm rounded-sm ${className} ${
         isSinglePage && "bg-[#4a7c59] text-white px-5"
       }`}
       aria-label="Breadcrumb"

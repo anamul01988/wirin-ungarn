@@ -2698,27 +2698,16 @@ export async function GetkurzUndKnappPostBySlug(slug) {
         knowledge (id: "${slug}", idType: SLUG) {
           id
           title
-          slug
-          link
           date
           content
-
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-              title
-              uri
-            }
-          }
         }
       }
     `;
 
     const postData = await fetchPage(postQuery);
 
-    // If post exists, return it with a type indicator
-    if (postData?.data?.recipe) {
+    // If knowledge exists, return it with a type indicator
+    if (postData?.data?.knowledge) {
       const result = {
         type: "post",
         data: postData,
@@ -2727,7 +2716,7 @@ export async function GetkurzUndKnappPostBySlug(slug) {
       return result;
     }
 
-    // Post doesn't exist
+    // Knowledge doesn't exist
     return null;
   } catch (error) {
     console.error("Error fetching kurzknapp post by slug:", error);

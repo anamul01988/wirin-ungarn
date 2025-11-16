@@ -1,12 +1,12 @@
 "use client";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogBody,
   // Button,
   Typography,
 } from "@material-tailwind/react";
-import {usePathname, useRouter} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import CollapsibleComment from "./CollapsibleComment";
 import ContactForm from "./ContactForm";
 import ModalIcons from "./ModalIcons";
@@ -115,7 +115,7 @@ export default function DialogContent({
         open={open}
         handler={handleOpen}
         size="lg"
-        dismiss={{enabled: false}}
+        dismiss={{ enabled: false }}
         className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
@@ -131,12 +131,11 @@ export default function DialogContent({
 
         {/* Dialog Body */}
         <DialogBody className="overflow-auto custom__modal_area flex-1 pl-4 mr-1 my-1">
-          {/* Breadcrumb */}
-          <div className="mb-4 px-0 pt-2">
-            <Breadcrumb className="text-sm" isSinglePage={isSinglePage} />
-          </div>
-
-          <div>
+          <div className="single__page-content">
+            {/* Breadcrumb */}
+            <div className="mb-4 px-0 pt-2">
+              <Breadcrumb className="text-sm" isSinglePage={isSinglePage} />
+            </div>
             {routePrefix !== "einfach-lesen" && (
               <h1 className="single__page_title mb-6 text-2xl font-bold text-gray-800 pr-12 leading-snug">
                 {title}
@@ -309,7 +308,7 @@ export default function DialogContent({
               routePrefix !== "sprachkurs" &&
               routePrefix !== "einfach-lesen" && (
                 <div
-                  className="mb-3 h-56 md:h-68 rounded-[28px] overflow-hidden relative max-w-2xl mx-auto"
+                  className="mb-3 h-56 md:h-68 rounded-[28px] overflow-hidden relative max-w-xl mx-auto"
                   style={{
                     backgroundImage: `url('${imageFeature}')`,
                     backgroundSize: "cover",
@@ -426,10 +425,10 @@ export default function DialogContent({
             )}
 
             {contentType === "wissenswert" && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="mb-6 py-4 bg-gray-50 rounded-lg">
                 <p
-                  className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{__html: content?.introText}}
+                  className="single__page_description"
+                  dangerouslySetInnerHTML={{ __html: content?.introText }}
                 />
                 {content?.postContent?.length > 0 ? (
                   <>
@@ -486,7 +485,7 @@ export default function DialogContent({
                               variant="paragraph"
                               color="blue-gray"
                               className="single__page_description leading-relaxed text-left mb-2"
-                              dangerouslySetInnerHTML={{__html: item.content}}
+                              dangerouslySetInnerHTML={{ __html: item.content }}
                             />
                           </div>
                         </div>
@@ -497,7 +496,7 @@ export default function DialogContent({
                   <>
                     {" "}
                     {content?.shortsPostContent && (
-                      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                      <div className="mb-6 py-4 bg-gray-50 rounded-lg">
                         <p
                           className="single__page_description"
                           dangerouslySetInnerHTML={{
@@ -515,7 +514,7 @@ export default function DialogContent({
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
                   className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{__html: content}}
+                  dangerouslySetInnerHTML={{ __html: content }}
                 />
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
@@ -569,7 +568,7 @@ export default function DialogContent({
                           variant="paragraph"
                           color="blue-gray"
                           className="text-sm leading-relaxed text-left mb-2"
-                          dangerouslySetInnerHTML={{__html: item.content}}
+                          dangerouslySetInnerHTML={{ __html: item.content }}
                         />
                       </div>
                     </div>
@@ -582,7 +581,7 @@ export default function DialogContent({
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
                   className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{__html: content?.introText}}
+                  dangerouslySetInnerHTML={{ __html: content?.introText }}
                 />
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
@@ -636,7 +635,7 @@ export default function DialogContent({
                           variant="paragraph"
                           color="blue-gray"
                           className="text-sm leading-relaxed text-left mb-2"
-                          dangerouslySetInnerHTML={{__html: item.content}}
+                          dangerouslySetInnerHTML={{ __html: item.content }}
                         />
                       </div>
                     </div>
@@ -647,8 +646,8 @@ export default function DialogContent({
             {contentType === "kulinarische-seele" && (
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <p
-                  className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{__html: content?.introText}}
+                  className="text-sm leading-relaxed text-left mb-2"
+                  dangerouslySetInnerHTML={{ __html: content?.introText }}
                 />
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
@@ -702,13 +701,19 @@ export default function DialogContent({
                           variant="paragraph"
                           color="blue-gray"
                           className="text-sm leading-relaxed text-left mb-2"
-                          dangerouslySetInnerHTML={{__html: item.content}}
+                          dangerouslySetInnerHTML={{ __html: item.content }}
                         />
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
+            )}
+            {contentType === "kurz-und-knapp" && (
+              <p
+                className="text-sm leading-relaxed text-left mb-2"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
             )}
             {/* ---------------------------------------- */}
             {(contentType !== "kulinarische-seele" ||
@@ -737,14 +742,14 @@ export default function DialogContent({
                         </div>
                         <h2 className="text-2xl font-semibold text-green-700">
                           <div
-                            dangerouslySetInnerHTML={{__html: content.title}}
+                            dangerouslySetInnerHTML={{ __html: content.title }}
                           />
                         </h2>
                       </div>
 
                       <p className="text-gray-600 leading-relaxed">
                         <div
-                          dangerouslySetInnerHTML={{__html: content.content}}
+                          dangerouslySetInnerHTML={{ __html: content.content }}
                         />
                       </p>
 
@@ -797,7 +802,7 @@ export default function DialogContent({
                   contentType === "page" &&
                   !hasContactForm && (
                     <div className="prose prose-lg max-w-none">
-                      <div dangerouslySetInnerHTML={{__html: content}} />
+                      <div dangerouslySetInnerHTML={{ __html: content }} />
                     </div>
                   )}
               </>

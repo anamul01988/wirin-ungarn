@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setRoutePrefix } from "@/lib/store/routeSlice";
 import algoliasearch from "algoliasearch/lite";
+import Image from "next/image";
 import "./WissenwertPost.css";
 
 // Algolia Search Class for Wissenswert
@@ -132,8 +133,6 @@ const WissenwertPost = ({
       router.push(`/${routePrefix}/${slug}`);
     }, 10);
   };
-
-
 
   return (
     <div
@@ -311,14 +310,23 @@ const WissenwertPostGrid = ({
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header */}
-      <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] bg-[#CC2233] flex items-center justify-center">
-        <Typography
-          variant="h4"
-          className="font-bold text-center text-white archive__page_title"
-        >
-          {title}
-        </Typography>
+      {/* <div className="mb-4 rounded-[18px] h-[50px] bg-[#CC2233] flex items-center justify-center"> */}
+      <div className="w-full relative flex items-center justify-center my-3">
+        {/* <Image
+          src="/wessenwert.jpeg"
+          alt={title || "Wissenwert"}
+          fill
+          className="w-full h-auto object-contain"
+        /> */}
+        <Image
+          src="/wessenwert.jpeg"
+          alt={title || "Wissenwert"}
+          width={500}
+          height={100}
+          className="object-contain"
+        />
       </div>
+      {/* </div> */}
 
       {/* Intro Text */}
       <div className="mb-4">

@@ -4,13 +4,14 @@ import { GetKategorienPages } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
+import Image from "next/image";
 const KategorienPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [allPosts, setAllPosts] = useState([]); // Store all kategorien posts
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
@@ -30,7 +31,7 @@ const KategorienPage = () => {
   // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -62,13 +63,13 @@ const KategorienPage = () => {
   // if (!cookieData || !cookieData.data || !cookieData.data.page)
   //   return <div>Keine Cookie-Daten gefunden.</div>;
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-  
+
   // Get posts to display
   const displayPosts = getCurrentPosts();
   const totalPages = getTotalPages();
   const activePage = currentPage;
   const totalPosts = allPosts.length;
-  
+
   console.log("kategorien data: allPosts:", allPosts);
 
   return (
@@ -79,13 +80,14 @@ const KategorienPage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="bg-red-600 mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
-        <Typography
-          variant="h4"
-          className="archive__page_title font-bold text-center text-[#FFF]"
-        >
-          {title}
-        </Typography>
+      <div className="w-full relative flex items-center justify-center mt-3 mb-5">
+        <Image
+          src="/kategorian.jpeg"
+          alt={title || "Kategorien"}
+          width={500}
+          height={100}
+          className="object-contain"
+        />
       </div>
 
       {/* Checkbox */}
@@ -112,8 +114,8 @@ const KategorienPage = () => {
 
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
-        Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge - Angezeigt werden{" "}
-        {displayPosts?.length || 0} Beiträge.
+        Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge -
+        Angezeigt werden {displayPosts?.length || 0} Beiträge.
       </Typography>
       <div className="pt-6 pb-2 max-w-5xl mx-auto">
         <>
@@ -151,37 +153,41 @@ const KategorienPage = () => {
               </button>
 
               {/* Page numbers */}
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
-                // Show first page, last page, current page, and pages around current
-                const showPage = 
-                  pageNum === 1 || 
-                  pageNum === totalPages || 
-                  (pageNum >= activePage - 2 && pageNum <= activePage + 2);
-                
-                const showEllipsis = 
-                  (pageNum === activePage - 3 && activePage > 4) ||
-                  (pageNum === activePage + 3 && activePage < totalPages - 3);
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (pageNum) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage =
+                    pageNum === 1 ||
+                    pageNum === totalPages ||
+                    (pageNum >= activePage - 2 && pageNum <= activePage + 2);
 
-                if (showEllipsis) {
+                  const showEllipsis =
+                    (pageNum === activePage - 3 && activePage > 4) ||
+                    (pageNum === activePage + 3 && activePage < totalPages - 3);
+
+                  if (showEllipsis) {
+                    return (
+                      <span key={pageNum} className="px-2 text-gray-500">
+                        ...
+                      </span>
+                    );
+                  }
+
+                  if (!showPage) return null;
+
                   return (
-                    <span key={pageNum} className="px-2 text-gray-500">
-                      ...
-                    </span>
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`pagination-number ${
+                        pageNum === activePage ? "active" : ""
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
                   );
                 }
-
-                if (!showPage) return null;
-
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageChange(pageNum)}
-                    className={`pagination-number ${pageNum === activePage ? 'active' : ''}`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
+              )}
 
               {/* Next button */}
               <button
