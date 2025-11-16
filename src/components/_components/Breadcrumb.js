@@ -2,14 +2,15 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Typography } from "@material-tailwind/react";
+import {usePathname} from "next/navigation";
+import {Typography} from "@material-tailwind/react";
 
 const Breadcrumb = ({
   customItems = null,
   showHome = true,
   separator = "/",
   className = "",
+  isSinglePage = false,
 }) => {
   const pathname = usePathname();
 
@@ -84,21 +85,26 @@ const Breadcrumb = ({
 
   return (
     <nav
-      className={`flex items-center space-x-2 text-sm ${className}`}
+      className={`flex items-center space-x-2 text-sm ${className} ${
+        isSinglePage && "bg-[#4a7c59] text-white px-5"
+      }`}
       aria-label="Breadcrumb"
     >
       <ol className="flex items-center space-x-2">
         {breadcrumbItems.map((item, index) => (
           <li key={index} className="flex items-center">
             {index > 0 && (
-              <span className="mx-2 text-gray-400" aria-hidden="true">
+              <span
+                className={`mx-2 ${!isSinglePage && "text-gray-400"}`}
+                aria-hidden="true"
+              >
                 {separator}
               </span>
             )}
             {item.isActive ? (
               <Typography
                 variant="small"
-                className="text-gray-600 font-medium"
+                className={`font-medium ${!isSinglePage && "text-gray-600"}`}
                 aria-current="page"
               >
                 {item.label}
@@ -106,7 +112,9 @@ const Breadcrumb = ({
             ) : (
               <Link
                 href={item.href}
-                className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                className={`hover:underline transition-colors ${
+                  !isSinglePage && "text-blue-600 hover:text-blue-800"
+                }`}
               >
                 <Typography variant="small" className="font-medium">
                   {item.label}

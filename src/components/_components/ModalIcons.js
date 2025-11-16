@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { isFavorited, toggleFavorite } from "@/lib/utils/favoritesManager";
-import { usePathname } from "next/navigation";
+import React, {useState, useEffect} from "react";
+import {isFavorited, toggleFavorite} from "@/lib/utils/favoritesManager";
+import {usePathname} from "next/navigation";
 
 /**
  * Reusable Modal Icons Component
@@ -32,6 +32,7 @@ export default function ModalIcons({
   type,
   pageTitle,
   customRoute,
+  isSinglePage = false,
 }) {
   const pathname = usePathname();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -78,7 +79,7 @@ export default function ModalIcons({
 
   const defaultTopIconsStyle = {
     top: "0rem",
-    right: "-6.5rem",
+    right: isSinglePage ? "-4.5rem" : "-6.5rem",
   };
 
   const defaultShareIconStyle = {
@@ -90,15 +91,39 @@ export default function ModalIcons({
     <>
       {/* Top icons (Cross, Love, Layers) */}
       <div
-        className="absolute flex flex-col z-50"
+        className={`absolute flex flex-col z-50 ${isSinglePage && "gap-3"}`}
         style={{
           ...defaultTopIconsStyle,
           ...topIconsStyle,
         }}
       >
         {/* Cross Icon */}
-        <div onClick={onClose} className="px-4 cursor-pointer rounded-full">
-          <img src="/assets/icons/close.png" alt="Close Icon" />
+        <div
+          onClick={onClose}
+          className={
+            isSinglePage
+              ? "flex items-center justify-center bg-white h-12 w-12 cursor-pointer rounded-lg shadow-md hover:bg-gray-100"
+              : "px-4 cursor-pointer rounded-full"
+          }
+        >
+          {isSinglePage ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              className="w-6 h-6 text-gray-700"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          ) : (
+            <img src="/assets/icons/close.png" alt="Close Icon" />
+          )}
         </div>
 
         {type !== "impressum" && !shouldHideIcons && (
@@ -107,9 +132,30 @@ export default function ModalIcons({
             {showFavorite && (
               <div
                 onClick={handleFavoriteClick}
-                className="px-4 cursor-pointer py-1 rounded-full favorite-icon"
+                className={
+                  isSinglePage
+                    ? "flex items-center justify-center bg-white h-12 w-12 cursor-pointer rounded-lg shadow-md hover:bg-gray-100"
+                    : "px-4 cursor-pointer py-1 rounded-full favorite-icon"
+                }
               >
-                <img src="/assets/icons/favorit_e.png" alt="Favorite Icon" />
+                {isSinglePage ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    className="w-6 h-6 text-gray-700"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
+                  </svg>
+                ) : (
+                  <img src="/assets/icons/favorit_e.png" alt="Favorite Icon" />
+                )}
               </div>
             )}
 
@@ -117,21 +163,65 @@ export default function ModalIcons({
             {showLayers && type !== "sprachkurs" && (
               <div
                 onClick={onLayers}
-                className="px-4 cursor-pointer py-1 rounded-full"
+                className={
+                  isSinglePage
+                    ? "flex items-center justify-center bg-white h-12 w-12 cursor-pointer rounded-lg shadow-md hover:bg-gray-100"
+                    : "px-4 cursor-pointer py-1 rounded-full"
+                }
               >
-                <img
-                  style={{ width: "92%" }}
-                  src="/assets/icons/plus.png"
-                  alt="Layers Icon"
-                />
+                {isSinglePage ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    className="w-6 h-6 text-gray-700"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                ) : (
+                  <img
+                    style={{width: "92%"}}
+                    src="/assets/icons/plus.png"
+                    alt="Layers Icon"
+                  />
+                )}
               </div>
             )}
           </>
         )}
+        {isSinglePage && showShare && (
+          <div>
+            <div
+              onClick={onShare}
+              className="flex items-center justify-center bg-white h-12 w-12 cursor-pointer rounded-lg shadow-md hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-6 h-6 text-gray-700"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                />
+              </svg>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Share button anchored at bottom */}
-      {type !== "impressum" && (
+      {!isSinglePage && type !== "impressum" && (
         <>
           {showShare && (
             <div
