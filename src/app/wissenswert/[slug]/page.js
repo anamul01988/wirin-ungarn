@@ -38,6 +38,7 @@ export default async function WissenswertDynamicPage({ params }) {
             //     : []
             // }
             contentType="wissenswert"
+            isSinglePage={true}
           />
         </div>
       );

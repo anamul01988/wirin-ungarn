@@ -1721,10 +1721,10 @@ div[class*="Toastify"] {
   font-size: 14px;
   color: #56646f;
 }
-.single__page_title {
+/* .single__page_title {
   font-size: 26px;
   color: #436f4d;
-}
+} */
 .single__page_postTitle {
   font-size: 24px;
 }
