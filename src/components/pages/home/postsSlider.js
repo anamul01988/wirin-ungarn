@@ -1,94 +1,107 @@
 "use client";
-import { Carousel } from "@material-tailwind/react";
-import { landingCards, slideData } from "@/lib/utils/utils";
+import { landingCards } from "@/lib/utils/utils";
 import { useRouter } from "next/navigation";
-import { useImperativeHandle, forwardRef, useRef } from "react";
-import Image from "next/image";
+import {
+  useImperativeHandle,
+  forwardRef,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 
 const PostsSlider = forwardRef(({ onTitleClick, postDetails }, ref) => {
   const router = useRouter();
-  const carouselRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [orderedData, setOrderedData] = useState([]);
+  const orderedDataRef = useRef([]);
 
-  useImperativeHandle(ref, () => ({
-    goToPrev: () => {
-      const prevBtn = document.querySelector(".submenu-carousel .prev-btn");
-      if (prevBtn) prevBtn.click();
-    },
-    goToNext: () => {
-      const nextBtn = document.querySelector(".submenu-carousel .next-btn");
-      if (nextBtn) nextBtn.click();
-    },
-  }));
+  // Reorder the array to put the matching item first with circular order
+  useEffect(() => {
+    const getOrderedData = () => {
+      if (postDetails && postDetails.title) {
+        const matchingIndex = landingCards.findIndex(
+          (item) => item.title === postDetails.title
+        );
+
+        if (matchingIndex >= 0) {
+          // Create a new array with the matching item first, followed by items after it, then items before it
+          const itemsBefore = landingCards.slice(0, matchingIndex);
+          const itemsFromMatching = landingCards.slice(matchingIndex);
+          const reorderedData = [...itemsFromMatching, ...itemsBefore];
+          return reorderedData;
+        }
+      }
+      return landingCards;
+    };
+
+    const data = getOrderedData();
+    setOrderedData(data);
+    orderedDataRef.current = data;
+    setCurrentIndex(0); // Start at first item (which is the matching one)
+  }, [postDetails]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      goToPrev: () => {
+        setCurrentIndex((prev) => {
+          const data = orderedDataRef.current;
+          if (prev <= 0) {
+            return data.length - 1;
+          }
+          return prev - 1;
+        });
+      },
+      goToNext: () => {
+        setCurrentIndex((prev) => {
+          const data = orderedDataRef.current;
+          if (prev >= data.length - 1) {
+            return 0;
+          }
+          return prev + 1;
+        });
+      },
+    }),
+    []
+  );
 
   const handleImageClick = (route) => {
     router.push(route);
   };
-  console.log("postDetails 2222222222", postDetails, landingCards);
 
-  // Reorder the array to put the matching item first with circular order
-  const getOrderedData = () => {
-    if (postDetails && postDetails.title) {
-      const matchingIndex = landingCards.findIndex(
-        (item) => item.title === postDetails.title
-      );
+  if (orderedData.length === 0) {
+    return null;
+  }
 
-      if (matchingIndex >= 0) {
-        // Create a new array with the matching item first, followed by items after it, then items before it
-        const itemsBefore = landingCards.slice(0, matchingIndex);
-        const itemsFromMatching = landingCards.slice(matchingIndex);
-        const reorderedData = [...itemsFromMatching, ...itemsBefore];
-        return reorderedData;
-      }
-    }
-    return landingCards;
-  };
-
-  const orderedData = getOrderedData();
-  console.log("orderedData 4444444444", orderedData);
+  const currentItem = orderedData[currentIndex];
 
   return (
-    <Carousel
-      className="submenu-carousel rounded-lg"
-      loop
-      autoplay={false}
-      navigation={() => null}
-      prevArrow={({ handlePrev }) => (
-        <button
-          onClick={handlePrev}
-          className="prev-btn"
-          style={{ visibility: "hidden", position: "absolute" }}
-        />
-      )}
-      nextArrow={({ handleNext }) => (
-        <button
-          onClick={handleNext}
-          className="next-btn"
-          style={{ visibility: "hidden", position: "absolute" }}
-        />
-      )}
+    <div
+      className="cursor-pointer inline-flex items-center justify-center"
+      onClick={() => handleImageClick(currentItem.route)}
+      style={{
+        width: "auto",
+        height: "auto",
+        maxWidth: "100%",
+        maxHeight: "100%",
+      }}
     >
-      {orderedData.map((item, idx) => (
-        <div key={idx} className="relative h-full w-full">
-          <div
-            className="relative h-full w-full cursor-pointer rounded-2xl overflow-hidden transition-transform duration-300"
-            onClick={() => handleImageClick(item.route)}
-          >
-            <Image
-              src={item.image}
-              alt={item.title || "Post image"}
-              fill
-              className="object-cover"
-              sizes="100vw"
-              quality={90}
-            />
-            {/* Overlay with title */}
-            {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-              <h3 className="text-white text-lg font-semibold">{item.title}</h3>
-            </div> */}
-          </div>
-        </div>
-      ))}
-    </Carousel>
+      <img
+        src={currentItem.image}
+        alt={currentItem.title || "Post image"}
+        className="slider-image"
+        style={{
+          maxWidth: "100%",
+          maxHeight: "100%",
+          width: "auto",
+          height: "auto",
+          objectFit: "contain",
+          display: "block",
+          borderRadius: "12px",
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.5)",
+        }}
+      />
+    </div>
   );
 });
 

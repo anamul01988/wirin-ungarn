@@ -1,90 +1,215 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { Dialog, DialogBody, Button } from "@material-tailwind/react";
+import React, { useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import SubMenu from "../pages/home/SubMenu";
-import ModalIcons from "../_components/ModalIcons";
 import PostsSlider from "../pages/home/postsSlider";
 
-// CSS styles specific to this modal component
-const modalStyles = `
-  /* Override Material Tailwind Dialog backdrop styles using data attributes */
-  [data-dialog="impressum-modal"] {
-    backdrop-filter: none !important;
+// CSS styles matching z.html design
+const sliderModalStyles = `
+  .slider-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
-  /* Target the backdrop element specifically */
-  [data-dialog="impressum-modal"] + div[class*="fixed"] {
-    background: transparent !important;
-    backdrop-filter: none !important;
+  .slider-modal.active {
+    display: block;
+    opacity: 1;
   }
 
-  /* Override any backdrop with grid place-items-center */
-  .impressum-modal-container [class*="grid"][class*="place-items-center"][class*="fixed"][class*="w-screen"][class*="h-screen"] {
-    background: transparent !important;
-    backdrop-filter: none !important;
+  .slider-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* More specific targeting for dialog backdrop */
-  .impressum-modal-container [class*="grid"][class*="place-items-center"] {
-    background: transparent !important;
-    backdrop-filter: none !important;
+  .slider-container::before {
+    content: '';
+    height: 5%;
+    flex-shrink: 0;
+    background: transparent;
   }
 
-  /* Target the specific backdrop that appears after dialog */
-  .impressum-modal-container > div > div[class*="fixed"] {
-    background: transparent !important;
-    backdrop-filter: none !important;
+  .slider-container::after {
+    content: '';
+    height: 5%;
+    flex-shrink: 0;
+    background: transparent;
   }
 
-  /* Target backdrop using data-dialog-backdrop attribute */
-  .impressum-modal-container [data-dialog-backdrop] {
-    background: transparent !important;
-    backdrop-filter: none !important;
+  .slider-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5%;
+    overflow: hidden;
+    background: rgba(50, 50, 50, 0.5);
   }
 
-  /* More specific targeting for backdrop with all the classes */
-  .impressum-modal-container [data-dialog-backdrop].grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60.backdrop-blur-sm {
-    background: transparent !important;
-    backdrop-filter: none !important;
+  .slider-image-wrapper {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
   }
 
-  /* Scoped styles for backdrop blur and background - only for ImpressumModal */
-  .impressum-modal-container .backdrop-blur-sm {
-    backdrop-filter: blur(0px) !important;
+  // .slider-image {
+  //   display: block;
+  //   max-width: 100%;
+  //   max-height: 100%;
+  //   width: auto;
+  //   height: auto;
+  //   object-fit: contain;
+  //   border-radius: 12px;
+  //   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  // }
+
+  .slider-logo {
+    position: absolute;
+    bottom: 3px;
+    right: -266px;
+    max-width: 60%;
+    min-width: 120px;
+    /* width: 354px; */
+    height: auto;
+    z-index: 10002;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
   }
 
-  .impressum-modal-container .bg-black {
-    --tw-bg-opacity: 0 !important;
-    background-color: none !important;
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #333;
+    transition: all 0.3s ease;
+    z-index: 10001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
-  .impressum-modal-container .bg-opacity-60 {
-    --tw-bg-opacity: 0 !important;
-    background-color: none !important;
+  .slider-arrow:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
   }
 
-   .impressum-modal-container .bg-black {
-    background-color: none !important;
+  .slider-arrow:active {
+    transform: translateY(-50%) scale(0.95);
   }
-  .grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60.backdrop-blur-sm {
-  backdrop-filter: blur(0px) !important;
-  --tw-bg-opacity: 0 !important;
-}
 
-.grid.place-items-center.fixed.w-screen.h-screen.bg-black.bg-opacity-60 {
-  backdrop-filter: blur(0px) !important;
-  --tw-bg-opacity: 0 !important;
-}
+  .slider-arrow.prev {
+    left: 12%;
+  }
 
-.backdrop-blur-sm {
-  backdrop-filter: blur(0px) !important;
-}
+  .slider-arrow.next {
+    right: 12%;
+  }
 
-.bg-opacity-60 {
-  --tw-bg-opacity: 0 !important;
-}
+  .slider-arrow::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  .slider-arrow.prev::before {
+    border-width: 12px 18px 12px 0;
+    border-color: transparent #333 transparent transparent;
+    margin-right: 3px;
+  }
+
+  .slider-arrow.next::before {
+    border-width: 12px 0 12px 18px;
+    border-color: transparent transparent transparent #333;
+    margin-left: 3px;
+  }
+
+  .slider-close {
+    position: absolute;
+    top: 65px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 28px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    line-height: 1;
+  }
+
+  .slider-close:hover {
+    background: white;
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    .slider-arrow {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+    }
+
+    .slider-arrow.prev {
+      left: 10px;
+    }
+
+    .slider-arrow.next {
+      right: 10px;
+    }
+
+    .slider-close {
+      width: 40px;
+      height: 40px;
+      font-size: 24px;
+      top: 10px;
+      right: 10px;
+    }
+
+    .slider-logo {
+      // width: 150px;
+      // min-width: 100px;
+      // max-width: 45%;
+      bottom: 15px;
+      right: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slider-logo {
+      // width: 120px;
+      // min-width: 80px;
+      // max-width: 50%;
+      bottom: 10px;
+      right: 10px;
+    }
+  }
+
 `;
 
 export default function CommonCardChip({
@@ -93,21 +218,19 @@ export default function CommonCardChip({
   handleOpen,
   postDetails,
 }) {
-  // console.log("postDetails", postDetails);
-  // const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(!open);
   const route = useRouter();
   const carouselRef = useRef(null);
+  const modalRef = useRef(null);
 
   // Inject CSS styles when component mounts
-  React.useEffect(() => {
-    const styleId = "impressum-modal-styles";
+  useEffect(() => {
+    const styleId = "slider-modal-styles";
     let styleElement = document.getElementById(styleId);
 
     if (!styleElement) {
       styleElement = document.createElement("style");
       styleElement.id = styleId;
-      styleElement.textContent = modalStyles;
+      styleElement.textContent = sliderModalStyles;
       document.head.appendChild(styleElement);
     }
 
@@ -120,158 +243,109 @@ export default function CommonCardChip({
     };
   }, []);
 
-  // Escape key closes modal
-  React.useEffect(() => {
+  // Handle modal open/close and body scroll
+  useEffect(() => {
+    if (open && modalRef.current) {
+      modalRef.current.classList.add("active");
+      document.body.style.overflow = "hidden";
+    } else if (modalRef.current) {
+      modalRef.current.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+  }, [open]);
+
+  // Keyboard navigation
+  useEffect(() => {
     if (!open) return;
-    const handleEsc = (e) => {
-      if (e.key === "Escape") handleOpen();
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        handleOpen();
+      } else if (e.key === "ArrowLeft") {
+        if (carouselRef.current) {
+          carouselRef.current.goToPrev();
+        }
+      } else if (e.key === "ArrowRight") {
+        if (carouselRef.current) {
+          carouselRef.current.goToNext();
+        }
+      }
     };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open, handleOpen]);
 
+  // Prevent wheel scroll on modal
+  useEffect(() => {
+    if (!open || !modalRef.current) return;
+
+    const handleWheel = (e) => {
+      e.preventDefault();
+    };
+
+    modalRef.current.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      if (modalRef.current) {
+        modalRef.current.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, [open]);
+
   const handleShowDetails = (title) => {
-    // setSelectedTitle(title);
-    // setShowDetails(true);
     route.push("/wissenswert");
   };
 
-  // const navigateToHome = () => {
-  //   handleOpen();
-  //   // route.push("/");
-  // };
+  const handleBackdropClick = (e) => {
+    if (e.target === modalRef.current) {
+      handleOpen();
+    }
+  };
 
   return (
-    <div className="relative">
-      {/* Custom backdrop with blur effect and height restrictions */}
-      {open && (
-        <div
-          className="fixed inset-0 z-90"
-          style={{
-            background: `
-              linear-gradient(to bottom, transparent 0px, transparent 200px),
-              linear-gradient(to top, transparent 0px, transparent 200px),
-              rgba(0, 0, 0, 0.3)
-            `,
-            // backdropFilter: "blur(4px)",
-            top: "70px",
-            bottom: "70px",
-            height: "calc(100vh - 170px)",
-            zIndex: 1100,
-          }}
+    <div ref={modalRef} className="slider-modal" onClick={handleBackdropClick}>
+      <div className="slider-container">
+        <button
+          className="slider-close"
           onClick={handleOpen}
-        />
-      )}
-
-      <div className="impressum-modal-container" style={{ height: "100%" }}>
-        <Dialog
-          open={open}
-          handler={handleOpen}
-          dismiss={{
-            enabled: false,
-          }}
-          size={"md"}
-          className="bg-transparent outline-none relative rounded-2xl flex flex-col shadow-none"
-          style={{
-            // maxHeight: "calc(80vh - 400px)",
-            // height: "calc(80vh - 80px)",
-            // height: "calc(60vh - 80px)", //it was final
-            height: "calc(55px + 62vh)",
-
-            // background: "#fff !important",
-            // height: "100%",
-            // minHeight: "300px",
-          }}
-          backdrop={{
-            enabled: false,
-          }}
-          data-dialog="impressum-modal"
+          aria-label="Close slider"
         >
-          {/* Floating Cross + Love Icons */}
-          {open && (
-            <ModalIcons
-              onClose={handleOpen}
-              onFavorite={() => console.log("Favorite clicked")}
-              onLayers={() => console.log("Layers clicked")}
-              onShare={() => console.log("Share clicked")}
-              type="impressum"
-              topIconsStyle={{
-                top: "-0.5rem",
-                right: "-20rem",
-              }}
-            />
-          )}
-
-          {/* Outside Arrow Buttons - Hidden per requirement */}
-          {open && (
-            <>
-              <button
-                onClick={() => {
-                  if (carouselRef.current) {
-                    carouselRef.current.goToPrev();
-                  }
-                }}
-                className="absolute left-[-11rem] top-1/2 -translate-y-1/2 text-white rounded-full p-4 z-50"
-                aria-label="Previous"
-              >
-                <img
-                  src="/assets/icons/arrow-left.png"
-                  alt="Previous"
-                  className="w-4.5rem h-3.4rem"
-                />
-              </button>
-              <button
-                onClick={() => {
-                  if (carouselRef.current) {
-                    carouselRef.current.goToNext();
-                  }
-                }}
-                className="absolute right-[-11rem] top-1/2 -translate-y-1/2 text-white rounded-full p-4 z-50"
-                aria-label="Next"
-              >
-                <img
-                  src="/assets/icons/arrow-right.png"
-                  alt="Next"
-                  className="w-3.5rem h-4.4rem"
-                />
-              </button>
-              <button
-                onClick={() => {
-                  if (carouselRef.current) {
-                    carouselRef.current.goToNext();
-                  }
-                }}
-                className="absolute right-[-17rem] bottom-[-77px] -translate-y-1/2 text-white rounded-full p-4 z-50"
-                aria-label="Next"
-              >
-                <img
-                  src="/assets/icons/click-for-detailview.png"
-                  alt="Next"
-                  className="w-3.5rem h-4.4rem"
-                />
-              </button>
-            </>
-          )}
-
-          <DialogBody className="overflow-auto flex-1 rounded-2xl">
+          &times;
+        </button>
+        <button
+          className="slider-arrow prev"
+          onClick={() => {
+            if (carouselRef.current) {
+              carouselRef.current.goToPrev();
+            }
+          }}
+          aria-label="Previous"
+        />
+        <div className="slider-content">
+          <div className="slider-image-wrapper">
             <PostsSlider
               ref={carouselRef}
               postDetails={postDetails}
               onTitleClick={handleShowDetails}
             />
-          </DialogBody>
-        </Dialog>
+            <img
+              // src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 100'%3E%3Crect fill='%2352b788' width='300' height='100' rx='10'/%3E%3Ctext x='150' y='35' font-family='Arial, sans-serif' font-size='20' font-weight='bold' fill='white' text-anchor='middle'%3EKLICK AUF DAS BILD%3C/text%3E%3Ctext x='150' y='65' font-family='Arial, sans-serif' font-size='20' font-weight='bold' fill='white' text-anchor='middle'%3EZUR DETAILANSICHT%3C/text%3E%3C/svg%3E"
+              src="/assets/click-for-detailview.png"
+              alt="Click for detail"
+              className="slider-logo"
+            />
+          </div>
+        </div>
+        <button
+          className="slider-arrow next"
+          onClick={() => {
+            if (carouselRef.current) {
+              carouselRef.current.goToNext();
+            }
+          }}
+          aria-label="Next"
+        />
       </div>
-      {/* <div className="min-h-screen flex items-center justify-center">
-        <Button
-          onClick={navigateToHome}
-          color="blue"
-          size="lg"
-          className="px-6 py-3 capitalize"
-        >
-          Impressum
-        </Button>
-      </div> */}
     </div>
   );
 }
