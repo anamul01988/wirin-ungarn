@@ -12,6 +12,7 @@ export default withMT({
     extend: {
       colors: {
         primaryRed: "#e11d48", // 🔥 your custom red
+        offblack: "#56646f", // custom offblack color
       },
     },
   },

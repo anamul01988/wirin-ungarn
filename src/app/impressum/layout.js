@@ -1,3 +1,4 @@
+import HomePageLayout from "@/components/_components/HomePageLayout";
 import { GetImpressumPages } from "@/lib/getAllPages";
 
 // Generate metadata for SEO
@@ -54,5 +55,10 @@ export async function generateMetadata() {
 }
 
 export default function CommonLayout({ children }) {
-  return children;
+   return (
+      <>
+        {children}
+        <HomePageLayout />
+      </>
+    );
 }
