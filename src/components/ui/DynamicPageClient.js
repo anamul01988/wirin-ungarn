@@ -1,15 +1,15 @@
 "use client";
 
-import {useSelector} from "react-redux";
-import {useState, useEffect} from "react";
-import {notFound, usePathname} from "next/navigation";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { notFound, usePathname } from "next/navigation";
 import DialogContent from "@/components/_components/DialogContent";
-import {GetDynamicContent, GetDynamicContentV2} from "@/lib/getAllPages";
+import { GetDynamicContent, GetDynamicContentV2 } from "@/lib/getAllPages";
 import Loader from "@/components/_components/Loader";
 // import { current } from "@reduxjs/toolkit";
 // import SuffixHeroGrammarExplanations from "../_components/SuffixHeroStatic";
 
-export default function DynamicPageClient({slug}) {
+export default function DynamicPageClient({ slug }) {
   const [contentData, setContentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -87,7 +87,7 @@ export default function DynamicPageClient({slug}) {
 
   // Handle post content
   if (contentData.type === "post") {
-    const {title, content, featuredImage, postContent} =
+    const { title, content, featuredImage, postContent } =
       contentData.data.data.post;
     const imageUrl = featuredImage?.node?.sourceUrl || null;
 
@@ -196,7 +196,7 @@ export default function DynamicPageClient({slug}) {
 
   // Handle page content
   if (contentData.type === "page") {
-    const {title, content} = contentData.data.data.page;
+    const { title, content } = contentData.data.data.page;
 
     return (
       <div className="min-h-screen flex items-center justify-center">

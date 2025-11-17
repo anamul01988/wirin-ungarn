@@ -107,18 +107,26 @@ export const philosopiesDetails = {
       },
     },
     content: {
-      introduction: {
-        text: "Liebe Besucherin, lieber Besucher, bevor du dich in das bunte Treiben unserer Seite stürzt, möchten wir dir gerne erzählen, was hinter diesem Projekt steckt. Denn das Portal ist nicht nur ein Sammelsurium von Informationen und Ratschlägen. Es ist der Ausdruck einer tiefen Überzeugung und einer Philosophie, die uns alle verbindet.",
-        style:
-          "text-base leading-relaxed mb-6 text-gray-700 dark:text-gray-200",
-      },
       sections: [
         {
           header: {
-            h2: {
+            p: {
+              text: "Liebe Besucherin, lieber Besucher,",
+              style: " mb-3 mt-3 font-semibold  text-var(--offblack)",
+            },
+          },
+          paragraph: {
+            text: "bevor du dich in das bunte Treiben unserer Seite stürzt, möchten wir dir gerne erzählen, was hinter diesem Projekt steckt. Denn das Portal ist nicht nur ein Sammelsurium von Informationen und Ratschlägen. Es ist der Ausdruck einer tiefen Überzeugung und einer Philosophie, die uns alle verbindet.",
+            style:
+              "text-base leading-relaxed mb-6 text-gray-700 dark:text-gray-200",
+          },
+        },
+
+        {
+          header: {
+            p: {
               text: "Verbindung und Gemeinschaft",
-              style:
-                "text-xl font-medium mb-3 text-gray-800 dark:text-gray-100",
+              style: "mb-3 mt-3 font-semibold  text-var(--offblack)",
             },
           },
           paragraph: {
@@ -127,12 +135,12 @@ export const philosopiesDetails = {
               "text-base leading-relaxed mb-6 text-gray-700 dark:text-gray-200",
           },
         },
+
         {
           header: {
-            h2: {
+            p: {
               text: "Hilfe und Unterstützung",
-              style:
-                "text-xl font-medium mb-3 text-gray-800 dark:text-gray-100",
+              style: "mb-3 mt-3 font-semibold  text-var(--offblack)",
             },
           },
           paragraph: {
@@ -143,10 +151,9 @@ export const philosopiesDetails = {
         },
         {
           header: {
-            h2: {
+            p: {
               text: "Authentizität und Integrität",
-              style:
-                "text-xl font-medium mb-3 text-gray-800 dark:text-gray-100",
+              style: "mb-3 mt-3 font-semibold  text-var(--offblack)",
             },
           },
           paragraph: {
@@ -157,14 +164,64 @@ export const philosopiesDetails = {
         },
         {
           header: {
-            h2: {
+            p: {
               text: "Wachstum und Entwicklung",
-              style:
-                "text-xl font-medium mb-3 text-gray-800 dark:text-gray-100",
+              style: "mb-3 mt-3 font-semibold  text-var(--offblack)",
             },
           },
           paragraph: {
             text: "Wir glauben daran, dass wir ständig lernen und wachsen können. Und so wie Ungarn sich weiterentwickelt, wollen auch wir uns weiterentwickeln. Das bedeutet, dass du immer auf der Suche nach neuen Möglichkeiten, Ideen und Wegen sind, um diese Plattform zu verbessern und dir das bestmögliche Erlebnis zu bieten.",
+            style:
+              "text-base leading-relaxed mb-6 text-gray-700 dark:text-gray-200",
+          },
+        },
+      ],
+      closing: {
+        text: "Bevor du weiterklickst und all die Ressourcen, Geschichten und Gemeinschaften erkundest, die wir hier aufgebaut haben, möchten wir dir einfach danken. Danke, dass du hier bist und ein Teil dieser Reise bist. Denn letztlich bist du es, der unserer Philosophie Leben einhaucht.\n\nDein Team von https://wir-in-ungarn.hu ❤",
+        style:
+          "text-base leading-relaxed mt-6 text-gray-700 dark:text-gray-200",
+      },
+    },
+
+    content2: {
+      sections2: [
+        {
+          header: {
+            p: {
+              text: "Worüber schreiben wir?,",
+              style: " mb-3 mt-3 font-semibold  text-var(--offblack)",
+            },
+          },
+          paragraph: {
+            text: "Unsere Webseite „wir-in-ungarn“ widmet sich allen Aspekten des Lebens, die zugewanderte Menschen, insbesondere aus deutschsprachigen Ländern, in Ungarn wissen müssen. Unsere Artikel decken ein breites Spektrum an Themen ab, von alltäglichen Herausforderungen und praktischen Tipps bis hin zu kulturellen und sozialen Aspekten des Lebens in Ungarn. Wir verstehen, dass der Umzug in ein neues Land viele Fragen aufwirft, und daher bemühen wir uns, diese Fragen zu beantworten und wertvolle Informationen bereitzustellen.",
+            style:
+              "text-base leading-relaxed mb-6 text-gray-700 dark:text-gray-200",
+          },
+        },
+
+        {
+          header: {
+            p: {
+              text: "Für wen schreiben wir?",
+              style: "mb-3 mt-3 font-semibold  text-var(--offblack)",
+            },
+          },
+          paragraph: {
+            text: "Unser Publikum sind vor allem Menschen, die nach Ungarn gezogen sind oder dies planen, insbesondere solche aus deutschsprachigen Ländern. Wir richten uns an Einzelpersonen und Familien, die sich in einem neuen Umfeld zurechtfinden müssen und nach verlässlichen und umfassenden Informationen suchen. Unser Ziel ist es, eine Gemeinschaft zu schaffen, die sich gegenseitig unterstützt und austauscht.",
+            style:
+              "text-base leading-relaxed mb-6 text-gray-700 dark:text-gray-200",
+          },
+        },
+
+        {
+          header: {
+            p: {
+              text: "Warum schreiben wir?",
+              style: "mb-3 mt-3 font-semibold  text-var(--offblack)",
+            },
+          },
+          paragraph: {
+            text: "Die Idee hinter „wir-in-ungarn“ entstand aus persönlicher Erfahrung. Als wir selbst nach Ungarn zogen, mussten wir mühsam Informationen an vielen verschiedenen Stellen zusammensuchen. Diese Herausforderung inspirierte uns, eine zentrale Plattform zu schaffen, auf der alle notwendigen Informationen leicht zugänglich sind. Unsere Webseite wächst stetig und bietet nun neben umfassenden Artikeln zum Alltagsleben auch einen kostenlosen Ungarisch-Kurs an, um den Einstieg in das neue Leben zu erleichtern.",
             style:
               "text-base leading-relaxed mb-6 text-gray-700 dark:text-gray-200",
           },

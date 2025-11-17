@@ -33,7 +33,7 @@ const ImpressumDetails = () => {
 
   return (
     <div className="mx-auto">
-      <h1 className="text-3xl font-bold mb-6">{title}</h1>
+      <h1 className="single__page_title mb-3 text-2xl font-bold text-gray-800 pr-12 leading-snug">{title}</h1>
       <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
     </div>
   );

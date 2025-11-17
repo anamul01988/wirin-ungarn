@@ -1,3 +1,5 @@
+import HomePageLayout from "@/components/_components/HomePageLayout";
+
 // Generate metadata for SEO
 export async function generateMetadata() {
   const featuredImage = "/assets/WIU-logo.png";
@@ -34,5 +36,10 @@ export async function generateMetadata() {
 }
 
 export default function PhilosophieLayout({ children }) {
-  return children;
+  return (
+    <>
+      {children}
+      <HomePageLayout />
+    </>
+  );
 }
