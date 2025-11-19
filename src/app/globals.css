@@ -710,9 +710,17 @@ body {
   color: #c41e3a;
 }
 
-.prose strong {
-  font-weight: 600;
+.prose p {
+  font-size: 14px;
   color: #56646f;
+  line-height: 25px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.ueber-uns-prose strong {
+  font-size: 18px !important;
+  font-weight: 600 !important;
 }
 /* Font size mappings */
 .has-small-font-size {
@@ -1722,12 +1730,14 @@ div[class*="Toastify"] {
   font-size: 14px;
   color: #56646f;
 }
-/* .single__page_title {
-  font-size: 26px;
-  color: #436f4d;
-} */
+.single__page_title {
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 8px !important;
+  padding-bottom: 0px;
+}
 .single__page-content {
-  padding: 0 30px;
+  padding: 0 10px;
 }
 .single__page_postTitle {
   font-size: 24px;
