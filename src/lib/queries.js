@@ -65,6 +65,40 @@ export const GET_PAGE_KONTAKT = `
     }
   }
 `;
+
+export const GET_PAGE_PHILOSOPHIE = `
+  query {
+    page(id: "philosophie", idType: URI) {
+      id
+      title
+      slug
+      content
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
+    }
+  }
+`;
+
+export const GET_PAGE_KARRIERE = `
+  query {
+    page(id: "karriere", idType: URI) {
+      id
+      title
+      slug
+      content
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+      }
+    }
+  }
+`;
 export const GET_PAGE_LIEDTEXTE = `query GetLiedtextePageAndPosts {
   pages(where: { name: "liedtexte" }) {
     nodes {

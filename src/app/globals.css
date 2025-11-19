@@ -782,34 +782,44 @@ body {
   font-weight: 600 !important;
 }
 /* Font size mappings */
-.has-small-font-size {
-  font-size: 0.875rem;
+.wp-block-heading.has-small-font-size {
+  font-size: 13px !important;
+  text-transform: none;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #494158;
+  line-height: 1.3em;
+  padding: 0.5em 0;
+  margin: 0 0 0 -0.05em;
+  font-style: normal;
+}
+.has-medium-font-size{
+  font-size: 20px !important;
 }
 
-.has-medium-font-size {
-  font-size: 1.125rem;
+.wp-block-heading.has-medium-font-size {
+  font-size: 20px !important;
+  text-transform: none;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #494158;
+  line-height: 1.3em;
+  padding: 0.5em 0;
+  margin: 0 0 0 -0.05em;
+  font-style: normal;
 }
 
-.has-large-font-size {
-  font-size: 1.25rem;
+.wp-block-list li{
+  font-size: 13px !important;
+  color: #56646f;
+  line-height: 1.785em;
+  font-weight: 400;
+  font-family: "Open Sans", sans-serif;
 }
 
-/* Headings */
-.wp-block-heading {
-  font-weight: bold;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
+.wp-block-list li strong{
+  font-size: 13px !important;
 }
-
-/* Lists */
-.wp-block-list {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-}
-/* .bg-black {
-  background-color: transparent;
-} */
-
 .backdrop-blur-sm {
   backdrop-filter: blur(1px);
   /* background-color: #a1a1a1 !important;

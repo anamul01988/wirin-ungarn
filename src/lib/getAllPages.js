@@ -3,6 +3,8 @@ import {
   GET_PAGE_DATENSCHUTZ,
   GET_PAGE_IMPRESSUM,
   GET_PAGE_KONTAKT,
+  GET_PAGE_PHILOSOPHIE,
+  GET_PAGE_KARRIERE,
 } from "./queries";
 import { BASE_URL } from "./routes";
 
@@ -55,6 +57,14 @@ export async function fetchPage(query, variables = {}) {
 
 export function GetCookiesPages() {
   return fetchPage(GET_PAGE_COOKIE);
+}
+
+export function GetPhilosophiePages() {
+  return fetchPage(GET_PAGE_PHILOSOPHIE);
+}
+
+export function GetKarrierePages() {
+  return fetchPage(GET_PAGE_KARRIERE);
 }
 // Dynamic page fetch
 export function GetDynamicCookiesPages(slug) {
