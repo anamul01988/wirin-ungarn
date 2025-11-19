@@ -1,8 +1,9 @@
 "use client";
 
-import React, {useState, useEffect} from "react";
-import {isFavorited, toggleFavorite} from "@/lib/utils/favoritesManager";
-import {usePathname} from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { isFavorited, toggleFavorite } from "@/lib/utils/favoritesManager";
+import { usePathname } from "next/navigation";
+import { FaBox } from "react-icons/fa";
 
 /**
  * Reusable Modal Icons Component
@@ -11,9 +12,11 @@ import {usePathname} from "next/navigation";
  * @param {Function} props.onFavorite - Function to handle favorite button click (optional)
  * @param {Function} props.onLayers - Function to handle layers button click (optional)
  * @param {Function} props.onShare - Function to handle share button click (optional)
+ * @param {Function} props.onLearningBox - Function to handle learning box button click (optional)
  * @param {boolean} props.showFavorite - Whether to show favorite icon (default: true)
  * @param {boolean} props.showLayers - Whether to show layers icon (default: true)
  * @param {boolean} props.showShare - Whether to show share icon (default: true)
+ * @param {boolean} props.showLearningBox - Whether to show learning box icon (default: false)
  * @param {Object} props.topIconsStyle - Custom style for top icons container (optional)
  * @param {Object} props.shareIconStyle - Custom style for share icon container (optional)
  * @param {string} props.pageTitle - The title of the current page (for favorites)
@@ -24,9 +27,11 @@ export default function ModalIcons({
   onFavorite,
   onLayers,
   onShare,
+  onLearningBox,
   showFavorite = true,
   showLayers = true,
   showShare = true,
+  showLearningBox = false,
   topIconsStyle,
   shareIconStyle,
   type,
@@ -186,11 +191,33 @@ export default function ModalIcons({
                   </svg>
                 ) : (
                   <img
-                    style={{width: "92%"}}
+                    style={{ width: "92%" }}
                     src="/assets/icons/plus.png"
                     alt="Layers Icon"
                   />
                 )}
+              </div>
+            )}
+
+            {/* Learning Box Icon - Only for einfach-lesen */}
+            {showLearningBox && onLearningBox && (
+              <div
+                onClick={onLearningBox}
+                className={
+                  isSinglePage
+                    ? "flex items-center justify-center bg-white cursor-pointer rounded-lg shadow-md hover:bg-gray-100"
+                    : "px-4 cursor-pointer py-1 rounded-full staticBoxicon"
+                }
+                style={isSinglePage ? { width: "45px", height: "45px" } : {}}
+              >
+                <FaBox
+                  className="text-[#406c4d]"
+                  style={
+                    isSinglePage
+                      ? { width: "24px", height: "24px" }
+                      : { width: "24px", height: "24px" }
+                  }
+                />
               </div>
             )}
           </>

@@ -2440,6 +2440,15 @@ export async function GetWissenswertPostBySlug(slug) {
               uri
             }
           }
+        imageLong {
+          featuredImageMobile {
+              node {
+                id
+                sourceUrl
+                altText
+              }
+            }
+          }
         }
       }
     `;

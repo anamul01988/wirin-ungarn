@@ -18,6 +18,7 @@ import TimetellingGame from "../pages/timetellingGame/TimetellingGame";
 import SuffixHeroGrammarExplanations from "./SuffixHeroStatic";
 import KategorianCollapsibleComment from "./kategorian_collapsibleForm";
 import Link from "next/link";
+import LearningBoxModal from "./LearningBoxModal";
 export default function DialogContent({
   title,
   content,
@@ -43,12 +44,21 @@ export default function DialogContent({
   isSinglePage = false,
 }) {
   const [open, setOpen] = useState(true);
+  const [learningBoxOpen, setLearningBoxOpen] = useState(false);
 
   const route = useRouter();
   const pathname = usePathname();
   const handleOpen = () => setOpen(!open);
   const navigateToHome = () => {
     route.push("/");
+  };
+
+  // Get current URL for learning box source field
+  const getCurrentUrl = () => {
+    if (typeof window !== "undefined") {
+      return window.location.href;
+    }
+    return "";
   };
 
   // Truncate title helper function
@@ -126,8 +136,18 @@ export default function DialogContent({
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}
+            onLearningBox={() => setLearningBoxOpen(true)}
+            showLearningBox={routePrefix === "einfach-lesen"}
           />
         )}
+
+        {/* Learning Box Modal */}
+        <LearningBoxModal
+          open={learningBoxOpen}
+          onClose={() => setLearningBoxOpen(false)}
+          sourceUrl={getCurrentUrl()}
+          title={title}
+        />
 
         {/* Dialog Body */}
         <DialogBody className="overflow-auto custom__modal_area flex-1 pl-4 mr-1 my-1">

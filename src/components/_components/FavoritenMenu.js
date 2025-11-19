@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getAllFavorites } from "@/lib/utils/favoritesManager";
+import LearningBoxListModal from "./LearningBoxListModal";
 
 const FavoritenMenu = () => {
   const route = useRouter();
   const [favorites, setFavorites] = useState([]);
+  const [learningBoxOpen, setLearningBoxOpen] = useState(false);
 
   // Load favorites from localStorage when component mounts
   useEffect(() => {
@@ -29,39 +31,57 @@ const FavoritenMenu = () => {
   }, []);
 
   return (
-    <div className="hover-menu calendar-hover-menu history-hover-menu favoriten-hover-menu">
-      {favorites.length > 0 ? (
-        favorites.map((favorite, i) => {
-          // Remove trailing slash if it exists and clean up the title
-          let titleOnly = favorite.title;
-
-          // Remove trailing slash
-          if (titleOnly.endsWith("/")) {
-            titleOnly = titleOnly.slice(0, -1);
-          }
-
-          // Extract just the last part after the last slash (if any slashes remain)
-          if (titleOnly.includes("/")) {
-            titleOnly = titleOnly.split("/").pop();
-          }
-
-          return (
-            <div
-              key={i}
-              className="menu-item history-item favoriten-item cursor-pointer"
-              onClick={() => route.push(favorite.route)}
-              title={favorite.title}
-            >
-              <span className="history-title">{titleOnly}</span>
-            </div>
-          );
-        })
-      ) : (
-        <div className="menu-item history-item favoriten-item">
-          <span className="history-title">Keine Favoriten</span>
+    <>
+      <div className="hover-menu calendar-hover-menu history-hover-menu favoriten-hover-menu">
+        {/* Static "Meine Lernkiste" item */}
+        <div
+          className="menu-item history-item favoriten-item cursor-pointer"
+          onClick={() => setLearningBoxOpen(true)}
+          title="Meine Lernkiste"
+        >
+          <span className="history-title">Meine Lernkiste</span>
         </div>
-      )}
-    </div>
+
+        {/* Favorites list */}
+        {favorites.length > 0 ? (
+          favorites.map((favorite, i) => {
+            // Remove trailing slash if it exists and clean up the title
+            let titleOnly = favorite.title;
+
+            // Remove trailing slash
+            if (titleOnly.endsWith("/")) {
+              titleOnly = titleOnly.slice(0, -1);
+            }
+
+            // Extract just the last part after the last slash (if any slashes remain)
+            if (titleOnly.includes("/")) {
+              titleOnly = titleOnly.split("/").pop();
+            }
+
+            return (
+              <div
+                key={i}
+                className="menu-item history-item favoriten-item cursor-pointer"
+                onClick={() => route.push(favorite.route)}
+                title={favorite.title}
+              >
+                <span className="history-title">{titleOnly}</span>
+              </div>
+            );
+          })
+        ) : (
+          <div className="menu-item history-item favoriten-item">
+            <span className="history-title">Keine Favoriten</span>
+          </div>
+        )}
+      </div>
+
+      {/* Learning Box List Modal */}
+      <LearningBoxListModal
+        open={learningBoxOpen}
+        onClose={() => setLearningBoxOpen(false)}
+      />
+    </>
   );
 };
 
