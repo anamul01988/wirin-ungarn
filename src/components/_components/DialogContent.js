@@ -157,52 +157,39 @@ export default function DialogContent({
               <Breadcrumb className="text-sm" isSinglePage={isSinglePage} />
             </div>
             {routePrefix !== "einfach-lesen" && (
-              <h1 className="single__page_title mb-6 text-2xl font-bold text-gray-800 pr-12 leading-snug">
-                {title}
-              </h1>
+              <h1 className="single__page_title text-[#494158]">{title}</h1>
             )}
-            {/* <h1 className="text-3xl font-semibold text-black mb-6">{title}</h1> */}
 
-            {/* {contentType === "wissenswert" && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <p
-                  className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{ __html: content }}
-                />
-              </div>
-            )} */}
-
-            {/* Content Metadata */}
-            <div className="mb-6 text-sm text-gray-600 space-y-2">
-              {date && (
-                <p>
-                  <strong>Published:</strong>{" "}
-                  {new Date(date).toLocaleDateString()}
-                </p>
-              )}
-              {author && (
-                <p>
-                  <strong>Author:</strong> {author}
-                </p>
-              )}
-              {/* {contentType && (
-                <p>
-                  <strong>Type:</strong> {contentType}
-                </p>
-              )} */}
-              {categories && categories.length > 0 && (
-                <p>
-                  <strong>Categories:</strong>{" "}
-                  {categories.map((cat) => cat.name).join(", ")}
-                </p>
-              )}
-              {tags && tags.length > 0 && (
-                <p>
-                  <strong>Tags:</strong>{" "}
-                  {tags.map((tag) => tag.name).join(", ")}
-                </p>
-              )}
-            </div>
+            {!contentType === "page" && (
+              <>
+                {/* Content Metadata */}
+                <div className="mb-6 text-sm text-gray-600 space-y-2">
+                  {date && (
+                    <p>
+                      <strong>Published:</strong>{" "}
+                      {new Date(date).toLocaleDateString()}
+                    </p>
+                  )}
+                  {author && (
+                    <p>
+                      <strong>Author:</strong> {author}
+                    </p>
+                  )}
+                  {categories && categories.length > 0 && (
+                    <p>
+                      <strong>Categories:</strong>{" "}
+                      {categories.map((cat) => cat.name).join(", ")}
+                    </p>
+                  )}
+                  {tags && tags.length > 0 && (
+                    <p>
+                      <strong>Tags:</strong>{" "}
+                      {tags.map((tag) => tag.name).join(", ")}
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
 
             {/* Excerpt */}
             {excerpt && (
@@ -263,67 +250,6 @@ export default function DialogContent({
               </div>
             )}
 
-            {/* Custom Fields for Kategorien with topicsPostContent */}
-
-            {/* Custom Fields for Sprachkurs */}
-            {/* {contentType === "sprachkurs" && (
-              <div className="mb-6">
-                {postContent?.sprachkursContent ? (
-                  <div className="space-y-6">
-                    {postContent.sprachkursContent.map((section, index) => (
-                      <div
-                        key={index}
-                        className="border-l-4 border-purple-300 pl-4"
-                      >
-                        {section.title && (
-                          <h4 className="font-medium text-purple-800 text-lg mb-2">
-                            {section.title}
-                          </h4>
-                        )}
-                        {section.icon && section.icon.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-2">
-                            {section.icon.map((iconName, iconIndex) => (
-                              <span
-                                key={iconIndex}
-                                className="inline-block px-2 py-1 text-xs font-medium text-purple-700 bg-purple-100 rounded-full"
-                              >
-                                {iconName}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        {section.content && (
-                          <div
-                            className="prose prose-sm max-w-none"
-                            dangerouslySetInnerHTML={{
-                              __html: section.content,
-                            }}
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div
-                    className="prose prose-lg max-w-none"
-                    dangerouslySetInnerHTML={{ __html: content }}
-                  />
-                )}
-              </div>
-            )} */}
-
-            {/* {imageFeature && (
-              <>
-                <div
-                  className="w-full h-56 md:h-72 bg-cover bg-center rounded-lg mb-6"
-                  style={{
-                    backgroundImage: `url('${imageFeature}')`,
-                  }}
-                  role="img"
-                  aria-label={imageAlt || title}
-                ></div>
-              </>
-            )} */}
             {imageFeature &&
               routePrefix !== "sprachkurs" &&
               routePrefix !== "einfach-lesen" && (
@@ -336,21 +262,9 @@ export default function DialogContent({
                     backgroundRepeat: "no-repeat",
                   }}
                   role="img"
-                  // aria-label={imageAlt || title}
                 ></div>
               )}
 
-            {/* {contentType === "einfach-lesen" && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <p
-                  className="text-gray-700 italic"
-                  dangerouslySetInnerHTML={{ __html: content }}
-                />
-                <p className="text-center text-[32px] font-bold mt-4">
-                  Hello vai ! render here as you wish )::
-                </p>
-              </div>
-            )} */}
             {contentType === "einfach-lesen" && (
               <div className="mb-6">
                 {/* Learning Tip Section */}
@@ -821,7 +735,13 @@ export default function DialogContent({
                 {routePrefix == null &&
                   contentType === "page" &&
                   !hasContactForm && (
-                    <div className="prose prose-lg max-w-none">
+                    <div
+                      className={`prose prose-p-strong prose-p max-w-none ${
+                        pathname === "/uber-uns" || pathname === "/uber-uns/" || pathname === "/wiu-muenzen" || pathname === "/wiu-muenzen/" || pathname === "/philosophie" || pathname === "/philosophie/"  || pathname === "/karriere" || pathname === "/karriere/"
+                          ? "ueber-uns-prose"
+                          : ""
+                      }`}
+                    >
                       <div dangerouslySetInnerHTML={{ __html: content }} />
                     </div>
                   )}

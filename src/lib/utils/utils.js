@@ -236,12 +236,12 @@ export const philosopiesDetails = {
   },
 };
 export const footerLinks = [
-  {
-    title: "Neueste Beiträge",
-    key: "posts",
-    endpoint: "/posts",
-    primary: true,
-  },
+  // {
+  //   title: "Neueste Beiträge",
+  //   key: "posts",
+  //   endpoint: "/posts",
+  //   primary: true,
+  // },
   {
     title: "Neuigkeiten",
     key: "news",

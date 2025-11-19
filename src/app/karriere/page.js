@@ -1,75 +1,28 @@
-"use client";
+import { notFound } from "next/navigation";
+import { GetKarrierePages } from "@/lib/getAllPages";
+import DialogContent from "@/components/_components/DialogContent";
 
-import { useEffect, useState } from "react";
-import { Dialog, DialogBody, Button } from "@material-tailwind/react";
-import { useRouter } from "next/navigation";
-import KarriereDetails from "@/components/pages/karriere/KarriereDetails";
-import ModalIcons from "@/components/_components/ModalIcons";
-import Breadcrumb from "@/components/_components/Breadcrumb";
-// import KarriereDetails from "@/components/pages/karriere/page";
-// import PhilosopiesDetails from "@/components/pages/philosopies/philosopiesDetails";
+export default async function KarriereModal() {
+  try {
+    const data = await GetKarrierePages();
+    
+    if (!data || !data.data || !data.data.page) {
+      return notFound();
+    }
 
-export default function KarriereModal() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const route = useRouter();
+    const { title, content } = data.data.page;
 
-  const handleBackToMenu = () => {
-    route.back();
-  };
-  const handleClose = () => {
-    setOpen(false);
-    route.push("/");
-  };
-
-  useEffect(() => {
-    setOpen(true);
-  }, []);
-
-  const navigateToHome = () => {
-    route.push("/");
-  };
-
-  return (
-    <>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        size={"lg"}
-        dismiss={{
-          enabled: false,
-        }}
-        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
-      >
-        {/* Floating Cross + Love Icons */}
-        {open && (
-          <ModalIcons
-            onClose={handleClose}
-            onFavorite={() => console.log("Favorite clicked")}
-            onLayers={() => console.log("Layers clicked")}
-            onShare={() => console.log("Share clicked")}
-          />
-        )}
-
-        <DialogBody className="overflow-auto custom__modal_area flex-1 pl-4 mr-1 my-1">
-          {/* Breadcrumb */}
-          <div className="mb-4 px-0 pt-2">
-            <Breadcrumb className="text-sm" />
-          </div>
-
-          <KarriereDetails onBack={handleBackToMenu} />
-        </DialogBody>
-      </Dialog>
+    return (
       <div className="min-h-screen flex items-center justify-center">
-        <Button
-          onClick={navigateToHome}
-          color="blue"
-          size="lg"
-          className="px-6 py-3 capitalize"
-        >
-          Navigate to Home
-        </Button>
+        <DialogContent 
+          title={title} 
+          content={content} 
+          contentType="page"
+        />
       </div>
-    </>
-  );
+    );
+  } catch (error) {
+    console.error("Error fetching karriere content:", error);
+    return notFound();
+  }
 }
