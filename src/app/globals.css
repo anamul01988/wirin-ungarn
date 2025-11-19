@@ -713,9 +713,30 @@ body {
 .prose p {
   font-size: 14px;
   color: #56646f;
-  line-height: 25px;
+  line-height: 1.785em;
   font-weight: 400;
+  font-family: "Open Sans", sans-serif;
   margin-bottom: 15px;
+}
+
+.prose ul{
+  list-style-type: disc;
+  line-height: 1.785em;
+  margin: 0 0 0 1.5em;
+}
+
+.prose h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #494158;
+}
+
+.prose ol li strong{
+  font-size: 16px;
+  font-weight: 600;
+  color: #494158;
+  line-height: 1.785em;
+  margin: 0 0 0 1.5em;
 }
 
 .ueber-uns-prose strong {
