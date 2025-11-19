@@ -1216,6 +1216,12 @@ div[class*="Toastify"] {
     max-width: 650px !important;
     width: 100% !important;
   }
+  
+  /* Learning Box List Modal - 900px max width */
+  [role="dialog"][data-dialog="learning-box-list-modal"] {
+    max-width: 900px !important;
+    width: 100% !important;
+  }
 }
 
 @media screen and (max-width: 1199px) and (min-width: 920px) {
@@ -1228,6 +1234,12 @@ div[class*="Toastify"] {
   /* Learning Box Modal - 650px max width */
   [role="dialog"][data-dialog="learning-box-modal"] {
     max-width: 650px !important;
+    width: 100% !important;
+  }
+  
+  /* Learning Box List Modal - 900px max width */
+  [role="dialog"][data-dialog="learning-box-list-modal"] {
+    max-width: 900px !important;
     width: 100% !important;
   }
 }
@@ -1244,6 +1256,12 @@ div[class*="Toastify"] {
   /* Learning Box Modal - 650px max width */
   [role="dialog"][data-dialog="learning-box-modal"] {
     max-width: 650px !important;
+    width: 100% !important;
+  }
+  
+  /* Learning Box List Modal - 900px max width */
+  [role="dialog"][data-dialog="learning-box-list-modal"] {
+    max-width: 900px !important;
     width: 100% !important;
   }
 }
