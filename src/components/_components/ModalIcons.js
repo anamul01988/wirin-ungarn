@@ -205,11 +205,19 @@ export default function ModalIcons({
                 onClick={onLearningBox}
                 className={
                   isSinglePage
-                    ? "flex items-center justify-center bg-white h-12 w-12 cursor-pointer rounded-lg shadow-md hover:bg-gray-100"
-                    : "px-4 cursor-pointer py-1 rounded-full"
+                    ? "flex items-center justify-center bg-white cursor-pointer rounded-lg shadow-md hover:bg-gray-100"
+                    : "px-4 cursor-pointer py-1 rounded-full staticBoxicon"
                 }
+                style={isSinglePage ? { width: "45px", height: "45px" } : {}}
               >
-                <FaBox className="w-6 h-6 text-[#406c4d]" />
+                <FaBox
+                  className="text-[#406c4d]"
+                  style={
+                    isSinglePage
+                      ? { width: "24px", height: "24px" }
+                      : { width: "24px", height: "24px" }
+                  }
+                />
               </div>
             )}
           </>

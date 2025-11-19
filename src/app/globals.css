@@ -1203,23 +1203,47 @@ div[class*="Toastify"] {
 
 /* Fixed modal width for Sprachkurs page - above 1160px screen size */
 @media screen and (min-width: 1200px) {
-  [role="dialog"]:not([data-dialog="impressum-modal"]) {
+  [role="dialog"]:not([data-dialog="impressum-modal"]):not(
+      [data-dialog="learning-box-modal"]
+    ) {
     max-width: 900px !important;
     min-width: 900px !important;
+    width: 100% !important;
+  }
+
+  /* Learning Box Modal - 650px max width */
+  [role="dialog"][data-dialog="learning-box-modal"] {
+    max-width: 650px !important;
     width: 100% !important;
   }
 }
 
 @media screen and (max-width: 1199px) and (min-width: 920px) {
-  [role="dialog"]:not([data-dialog="impressum-modal"]) {
+  [role="dialog"]:not([data-dialog="impressum-modal"]):not(
+      [data-dialog="learning-box-modal"]
+    ) {
     min-width: 80% !important;
+  }
+
+  /* Learning Box Modal - 650px max width */
+  [role="dialog"][data-dialog="learning-box-modal"] {
+    max-width: 650px !important;
+    width: 100% !important;
   }
 }
 
 @media screen and (max-width: 919px) and (min-width: 768px) {
-  [role="dialog"]:not([data-dialog="impressum-modal"]) {
+  [role="dialog"]:not([data-dialog="impressum-modal"]):not(
+      [data-dialog="learning-box-modal"]
+    ) {
     max-width: 612px !important;
     min-width: 612px !important;
+    width: 100% !important;
+  }
+
+  /* Learning Box Modal - 650px max width */
+  [role="dialog"][data-dialog="learning-box-modal"] {
+    max-width: 650px !important;
     width: 100% !important;
   }
 }
@@ -1768,4 +1792,15 @@ div[class*="Toastify"] {
 .pagination-number:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.staticBoxicon {
+  background: white;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 22px;
+  margin-top: 8px;
 }
