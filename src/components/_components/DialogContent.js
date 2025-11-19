@@ -735,7 +735,13 @@ export default function DialogContent({
                 {routePrefix == null &&
                   contentType === "page" &&
                   !hasContactForm && (
-                    <div className={`prose prose-p-strong prose-p max-w-none ${pathname === '/uber-uns' || pathname === '/uber-uns/' ? 'ueber-uns-prose' : ''}`}>
+                    <div
+                      className={`prose prose-p-strong prose-p max-w-none ${
+                        pathname === "/uber-uns" || pathname === "/uber-uns/"
+                          ? "ueber-uns-prose"
+                          : ""
+                      }`}
+                    >
                       <div dangerouslySetInnerHTML={{ __html: content }} />
                     </div>
                   )}
