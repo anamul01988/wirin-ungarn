@@ -737,7 +737,14 @@ export default function DialogContent({
                   !hasContactForm && (
                     <div
                       className={`prose prose-p-strong prose-p max-w-none ${
-                        pathname === "/uber-uns" || pathname === "/uber-uns/" || pathname === "/wiu-muenzen" || pathname === "/wiu-muenzen/" || pathname === "/philosophie" || pathname === "/philosophie/"  || pathname === "/karriere" || pathname === "/karriere/"
+                        pathname === "/uber-uns" ||
+                        pathname === "/uber-uns/" ||
+                        pathname === "/wiu-muenzen" ||
+                        pathname === "/wiu-muenzen/" ||
+                        pathname === "/philosophie" ||
+                        pathname === "/philosophie/" ||
+                        pathname === "/karriere" ||
+                        pathname === "/karriere/"
                           ? "ueber-uns-prose"
                           : ""
                       }`}

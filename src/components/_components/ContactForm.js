@@ -137,7 +137,16 @@ export default function ContactForm({ formHtml }) {
       <div className="flex w-full justify-between">
         {/* Left side text */}
         <div className="w-[48%]">
-          <p className="mb-6">
+          <p
+            className="mb-6"
+            style={{
+              margin: "0 0 1em 0",
+              padding: "0",
+              fontSize: "13px",
+              fontWeight: "400",
+              color: "#56646f !important",
+            }}
+          >
             Hey, schön, dass du uns schreiben möchtest! <br />
             <br /> Bevor du uns kontaktierst, könnte es hilfreich sein, kurz auf
             unserer Seite zu stöbern. Viele Antworten auf gängige Fragen findest
@@ -145,7 +154,16 @@ export default function ContactForm({ formHtml }) {
             Bereichen.
           </p>
 
-          <p className="mb-8">
+          <p
+            className="mb-8"
+            style={{
+              margin: "0 0 1em 0",
+              padding: "0",
+              fontSize: "13px",
+              fontWeight: "400",
+              color: "#56646f !important",
+            }}
+          >
             Aber natürlich wissen wir, dass manchmal direkte Kommunikation
             unschlagbar ist! Wenn du also eine spezielle Frage hast, Anregungen
             geben möchtest oder einfach nur Hallo sagen willst, zögere nicht und
