@@ -747,6 +747,17 @@ body {
   line-height: 1.785em;
 }
 
+.prose h2 strong {
+  font-size: 24px;
+  font-weight: 600;
+  color: #494158;
+}
+.prose h3 strong {
+  font-size: 24px;
+  font-weight: 600;
+  color: #494158;
+}
+
 .prose h5 {
   font-size: 16px;
   font-weight: 600;
