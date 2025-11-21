@@ -1,21 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogBody,
-  Typography,
-  Button,
-} from "@material-tailwind/react";
+import { Dialog, DialogBody } from "@material-tailwind/react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getLearningBoxCards } from "./LearningBoxModal";
+import Image from "next/image";
+import ModalIcons from "@/components/_components/ModalIcons";
 
 export default function LearningBoxListModal({ open, onClose }) {
   const { user } = useAuth();
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (open && user?.id) {
+      setSearchQuery("");
       loadCards();
     }
   }, [open, user?.id]);
@@ -42,86 +41,194 @@ export default function LearningBoxListModal({ open, onClose }) {
     }
   };
 
-  const handleDelete = (cardId) => {
-    if (!user?.id || !confirm("Möchtest du diese Karte wirklich löschen?")) {
-      return;
-    }
+  const handleSearch = () => {
+    if (!user?.id) return;
 
     try {
       const userCards = getLearningBoxCards(user.id);
-      const filteredCards = userCards.filter((card) => card.id !== cardId);
-      const storageKey = `learningBoxCards_${user.id}`;
-      localStorage.setItem(storageKey, JSON.stringify(filteredCards));
-      loadCards(); // Reload the list
+      if (searchQuery.trim()) {
+        const filtered = userCards.filter(
+          (card) =>
+            card.cardTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            card.source.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (card.notes &&
+              card.notes.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+        const sortedCards = filtered.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setCards(sortedCards);
+      } else {
+        // If search is empty, reload all cards
+        const sortedCards = userCards.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setCards(sortedCards);
+      }
     } catch (error) {
-      console.error("Error deleting card:", error);
+      console.error("Error searching cards:", error);
     }
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return "-";
+    if (!dateString) return null;
     try {
+      // If it's already in DD.MM.YYYY format, return as is
+      if (
+        typeof dateString === "string" &&
+        dateString.includes(".") &&
+        dateString.match(/^\d{2}\.\d{2}\.\d{4}$/)
+      ) {
+        return dateString;
+      }
       const date = new Date(dateString);
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return null;
+      }
       return date.toLocaleDateString("de-DE", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
       });
     } catch {
-      return dateString;
+      return null;
     }
   };
 
+  // Helper to get description text for a card
+  const getCardDescription = (card) => {
+    // Use notes if available, otherwise use source
+    let description = "";
+    if (card.notes) {
+      const textContent = card.notes.replace(/<[^>]*>/g, "").trim();
+      description = textContent || "";
+    }
+    if (!description && card.source) {
+      description = card.source;
+    }
+    if (!description) {
+      return "Keine Beschreibung verfügbar";
+    }
+    // Truncate if too long
+    return description.length > 80
+      ? description.substring(0, 80) + "..."
+      : description;
+  };
+
+  // Helper to get status/notes text for a card
+  const getCardStatus = (card) => {
+    // Show notes if available (truncated), otherwise show a default message
+    if (card.notes) {
+      const textContent = card.notes.replace(/<[^>]*>/g, "").trim();
+      if (textContent) {
+        // Truncate to reasonable length for display
+        return textContent.length > 50
+          ? textContent.substring(0, 50) + "..."
+          : textContent;
+      }
+    }
+    return "keine Notizen";
+  };
+
+  // Helper to get date for a card
+  const getCardDate = (card) => {
+    // Prefer repeatDate, then createdAt
+    const date = formatDate(card.repeatDate) || formatDate(card.createdAt);
+    return date || "-";
+  };
+
+  console.log("Rendering LearningBoxListModal with cards:", cards);
   return (
     <Dialog
       open={open}
       handler={onClose}
       size="lg"
-      dismiss={{ enabled: false }}
-      data-dialog="learning-box-list-modal"
-      className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl max-h-[90vh] overflow-hidden z-[10000]"
-      style={{ maxWidth: "900px", width: "100%" }}
+      // dismiss={{ enabled: false }}
+      // data-dialog="learning-box-list-modal"
+      className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] custom__modal_area flex flex-col"
     >
-      <DialogBody className="overflow-auto p-6 max-h-[80vh]">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="w-8 h-8 text-[#406c4d]"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-              />
-            </svg>
-            <Typography variant="h4" className="text-[#406c4d] font-bold">
-              Meine Lernkiste
-            </Typography>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-red-500 hover:text-red-700 transition-colors"
+      {/* Floating Cross Icon - outside DialogBody */}
+      {open && (
+        <ModalIcons
+          onClose={onClose}
+          showFavorite={false}
+          showLayers={false}
+          showShare={false}
+          showLearningBox={false}
+        />
+      )}
+
+      <DialogBody className="overflow-auto p-[30px]">
+        {/* Header with Logo */}
+        <div className="flex items-center gap-3">
+          {/* <Image
+            src="/Meine_Lernkiste_logo.jpeg"
+            alt="Meine Lernkiste"
+            width={80}
+            height={80}
+            className="object-contain"
+          /> */}
+          {/* <h1
+            className="text-4xl font-bold"
+            style={{
+              background:
+                "linear-gradient(to right, #dc2626, #16a34a, #ffffff)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              fontFamily: "Arial, sans-serif",
+            }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            meine Lernkiste
+          </h1> */}
+        </div>
+        <div className="w-full relative flex items-center justify-center mt-0 mb-5">
+          <Image
+            src="/Meine_Lernkiste_logo.jpeg"
+            alt="Meine Lernkiste"
+            width={500}
+            height={100}
+            className="object-contain"
+          />
+          {/* 
+          <span
+            className={`absolute top-3 right-3 px-3 py-1 text-xs font-bold rounded-full ${
+              badge === "SHORTS"
+                ? "bg-[#436F4D] text-white"
+                : "bg-green-500 text-white"
+            }`}
+          >
+            {badge}
+          </span> */}
+        </div>
+        {/* Description Text */}
+        <p className="text-gray-700 mb-6 text-sm leading-relaxed">
+          Hier siehst du, in der Reihenfolge in der du es dann im Stapel auf der
+          Startseite angezeigt bekommst, alle Themen, die du in deiner Lernliste
+          hast. Du kannst die Liste durchsuchen, dir einzelne Themen anzeigen
+          lassen und auch, mit anklicken des Zahnrades, die Karten modifizieren.
+        </p>
+
+        {/* Search Bar */}
+        <div className="flex gap-2 mb-6">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
+            placeholder="Suche..."
+            className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#406c4d] focus:border-transparent"
+          />
+          <button
+            onClick={handleSearch}
+            className="bg-[#436F4D] text-white px-6 py-2 rounded-lg font-semibold transition-colors whitespace-nowrap"
+          >
+            SUCHE
           </button>
         </div>
 
@@ -143,179 +250,59 @@ export default function LearningBoxListModal({ open, onClose }) {
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {/* Desktop Table View */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-50 border-b-2 border-gray-200">
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                      Titel
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                      Quelle
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                      Level
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                      Wiederholung
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                      Erstellt
-                    </th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">
-                      Aktion
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cards.map((card) => (
-                    <tr
-                      key={card.id}
-                      className="border-b border-gray-200 hover:bg-gray-50"
-                    >
-                      <td className="px-4 py-3 text-sm text-gray-800 font-medium">
-                        {card.cardTitle}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">
-                        <a
-                          href={card.source}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline truncate block max-w-xs"
-                          title={card.source}
-                        >
-                          {card.source.length > 40
-                            ? `${card.source.substring(0, 40)}...`
-                            : card.source}
-                        </a>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">
-                        {card.level}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">
-                        {card.repeatDate || "-"}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">
-                        {formatDate(card.createdAt)}
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        <button
-                          onClick={() => handleDelete(card.id)}
-                          className="text-red-600 hover:text-red-800 transition-colors"
-                          title="Löschen"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-5 h-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Mobile List View */}
-            <div className="md:hidden space-y-4">
-              {cards.map((card) => (
-                <div
-                  key={card.id}
-                  className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-gray-800 text-sm flex-1">
-                      {card.cardTitle}
-                    </h3>
-                    <button
-                      onClick={() => handleDelete(card.id)}
-                      className="text-red-600 hover:text-red-800 transition-colors ml-2"
-                      title="Löschen"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="space-y-1 text-xs text-gray-600">
-                    <div>
-                      <span className="font-medium">Quelle:</span>{" "}
-                      <a
-                        href={card.source}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        {card.source.length > 50
-                          ? `${card.source.substring(0, 50)}...`
-                          : card.source}
-                      </a>
+          <div className="space-y-3">
+            {cards.map((card) => (
+              <div
+                key={card.id}
+                className="bg-white border border-[#c8e6c8] rounded-lg p-4 flex items-start justify-between hover:shadow-md transition-shadow"
+              >
+                <div className="flex-1 pr-4">
+                  <h3 className="font-semibold text-[#436F4D] text-lg mb-1">
+                    {card.cardTitle}
+                  </h3>
+                  <p className="text-sm text-gray-700 mb-1 leading-relaxed">
+                    {getCardDescription(card)}
+                  </p>
+                  <div className="flex gap-10 flex-wrap text-sm text-gray-600">
+                    <div className="font-medium text-red-200">
+                      {getCardDate(card)}
                     </div>
-                    <div className="flex gap-4">
-                      <div>
-                        <span className="font-medium">Level:</span> {card.level}
-                      </div>
-                      {card.repeatDate && (
-                        <div>
-                          <span className="font-medium">Wiederholung:</span>{" "}
-                          {card.repeatDate}
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <span className="font-medium">Erstellt:</span>{" "}
-                      {formatDate(card.createdAt)}
-                    </div>
-                    {card.notes && (
-                      <div className="mt-2 pt-2 border-t border-gray-100">
-                        <span className="font-medium">Notizen:</span>
-                        <div
-                          className="text-gray-700 mt-1"
-                          dangerouslySetInnerHTML={{ __html: card.notes }}
-                        />
-                      </div>
-                    )}
+                    <div className="text-red-200">{card.source}</div>
                   </div>
                 </div>
-              ))}
-            </div>
+                <button
+                  onClick={() => {
+                    // TODO: Open edit modal
+                    console.log("Edit card:", card.id);
+                  }}
+                  className="text-gray-500 hover:text-gray-700 transition-colors ml-4 flex-shrink-0"
+                  title="Karte bearbeiten"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            ))}
           </div>
         )}
-
-        {/* Footer */}
-        <div className="flex justify-end mt-6 pt-4 border-t border-gray-200">
-          <Button
-            onClick={onClose}
-            className="bg-[#406c4d] hover:bg-[#355a47] text-white px-6 py-2 rounded-lg font-semibold"
-          >
-            Schließen
-          </Button>
-        </div>
       </DialogBody>
     </Dialog>
   );
 }
-
