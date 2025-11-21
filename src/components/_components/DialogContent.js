@@ -118,7 +118,7 @@ export default function DialogContent({
             onClose={handleClose}
             isSinglePage={isSinglePage}
             showFavorite={contentType === "page" || !contentType ? false : true}
-            showLayers={contentType !== "page" && !contentType ? false : true}
+            showLayers={contentType !== "page" || !contentType ? false : true}
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}

@@ -73,13 +73,13 @@ export default function DynamicPageClient({ slug }) {
     fetchContent();
   }, [slug, routePrefix]);
 
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center">
-  //       <Loader size="large" text="Loading content..." />
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader size="large" />
+      </div>
+    );
+  }
 
   if (error || !contentData) {
     return notFound();
