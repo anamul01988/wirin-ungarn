@@ -1485,10 +1485,11 @@ const LandingPage = () => {
           }
         }
 
+        
         @media (max-width: 992px) {
           .scrollbar-container {
-            right: 8px;
-            height: 45vh;
+            right: 28px;
+            height: 55vh;
             max-height: 380px;
             width: 22px;
             top: 52%;
@@ -2825,7 +2826,7 @@ const LandingPage = () => {
           ✕
         </button>
         <div className="popup-content">
-          <h2>Mein Profil</h2>
+          <p className="text-[#4a7c59] text-2xl uppercase font-bold mb-6">Mein Profil</p>
 
           {/* Login Form */}
           <div className="login-form" id="loginForm">
@@ -2864,7 +2865,9 @@ const LandingPage = () => {
           ✕
         </button>
         <div className="popup-content">
-          <h2>Werkzeuge</h2>
+          {/* <h2>Werkzeuge</h2> */}
+
+          <p className="text-[#4a7c59] text-2xl font-bold uppercase mb-6">Werkzeuge</p>
 
           <div className="widget-grid">
             {/* Currency Converter */}
@@ -2921,7 +2924,7 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2>Währungsrechner</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Währungsrechner</h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -2963,7 +2966,7 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2>Kalender</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Kalender</h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -3014,7 +3017,8 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2>Favoriten</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Favoriten</h2>
+          
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -3057,7 +3061,7 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2>Verlauf</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Verlauf</h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>

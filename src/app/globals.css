@@ -452,6 +452,26 @@ body {
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
+  /* Hide mobile-only elements on tablet */
+  .mobile-header,
+  .mobile-menu,
+  .mobile-footer,
+  .mobile-btm-button,
+  .overlay {
+    display: none !important;
+  }
+
+  .footer-dropdown{
+    display: none;
+  }
+
+  /* Show desktop header and footer */
+  .header,
+  .sidebar,
+  .footer {
+    display: flex !important;
+  }
+
   /*.discovery-deck {
                 display: block !important;
                 margin-left: 31%;
@@ -461,6 +481,40 @@ body {
     display: block !important;
     /* margin: 0 15% 15% 31%; */
     width: 388px;
+    position: relative;
+    padding: 0;
+    height: auto;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+  }
+
+  .card-stack {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    touch-action: auto;
+  }
+
+  .mobile-card {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    display: block !important;
+  }
+
+  .mobile-card.active,
+  .mobile-card.next,
+  .mobile-card.hidden {
+    position: relative !important;
+    transform: none !important;
+    z-index: auto !important;
   }
 
   #main-content {
@@ -566,7 +620,6 @@ body {
 @media (min-width: 769px) {
   .desktop-footer-nav {
     flex: 1;
-    max-width: 650px;
     margin-left: auto;
   }
 
@@ -1548,7 +1601,7 @@ div[class*="Toastify"] {
 /* =============================================
    MOBILE HEADER & FOOTER ADDITIONS
    ============================================= */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* ========== MOBILE HEADER ========== */
   .mobile-header {
     position: fixed;
@@ -2425,7 +2478,7 @@ div[class*="Toastify"] {
 
 .history-item {
   padding: 18px;
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
   border-radius: 12px;
   margin-bottom: 12px;
   cursor: pointer;
@@ -2481,6 +2534,22 @@ div[class*="Toastify"] {
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
+    /* Hide mobile-only elements on tablet */
+    .mobile-header,
+    .mobile-menu,
+    .mobile-footer,
+    .mobile-btm-button,
+    .overlay {
+        display: none !important;
+    }
+
+    /* Show desktop header and footer */
+    .header,
+    .sidebar,
+    .footer {
+        display: flex !important;
+    }
+
     /*.discovery-deck {
         display: block !important;
         margin-left: 31%;
@@ -2488,7 +2557,16 @@ div[class*="Toastify"] {
 
     .discovery-deck {
         display: block !important;
+        /* margin: 0 15% 15% 31%; */
         width: 388px;
+        margin-top: 30px;
+        position: relative;
+        padding: 0;
+        height: auto;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
     }
 
     #main-content {
@@ -2520,9 +2598,36 @@ div[class*="Toastify"] {
     }
 
 
+    .card-stack {
+        position: relative;
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        touch-action: auto;
+    }
+
+    .mobile-card {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        opacity: 1 !important;
+        transform: none !important;
+        display: block !important;
+    }
+
+    .mobile-card.active,
+    .mobile-card.next,
+    .mobile-card.hidden {
+        position: relative !important;
+        transform: none !important;
+        z-index: auto !important;
+    }
+
     .card-image { 
         width: 100%;
-        height : auto;
+        height: auto;
         object-fit: cover;
     }
 
@@ -2664,7 +2769,7 @@ div[class*="Toastify"] {
 /* ===========================================
    DESKTOP VERSION (KEEP ORIGINAL VISIBLE)
    =========================================== */
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
   .mobile-header,
   .mobile-menu,
   .mobile-footer,
