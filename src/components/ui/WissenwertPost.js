@@ -311,7 +311,7 @@ const WissenwertPostGrid = ({
     <div className="max-w-7xl mx-auto">
       {/* Header */}
       {/* <div className="mb-4 rounded-[18px] h-[50px] bg-[#CC2233] flex items-center justify-center"> */}
-      <div className="w-full relative flex items-center justify-center my-3">
+      <div className="w-full relative flex items-center justify-center mb-3">
         {/* <Image
           src="/wessenwert.jpeg"
           alt={title || "Wissenwert"}
