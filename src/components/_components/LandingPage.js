@@ -235,6 +235,8 @@ const LandingPage = () => {
   const [mobileFavorites, setMobileFavorites] = useState([]);
   const [activePopup, setActivePopup] = useState(null);
   const [activeDetailPopup, setActiveDetailPopup] = useState(null);
+  const [filterBarActive, setFilterBarActive] = useState(false);
+  const [filterTags, setFilterTags] = useState(['Sprache', 'Uhrzeit', 'Zahlen']);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
@@ -799,6 +801,22 @@ const LandingPage = () => {
 
   const closeDetailPopup = () => {
     setActiveDetailPopup(null);
+  };
+
+  // Filter Bar Functions
+  const openFilterBar = (tag = null) => {
+    setFilterBarActive(true);
+    if (tag && !filterTags.includes(tag)) {
+      setFilterTags([...filterTags, tag]);
+    }
+  };
+
+  const closeFilterBar = () => {
+    setFilterBarActive(false);
+  };
+
+  const removeTag = (tagToRemove) => {
+    setFilterTags(filterTags.filter(tag => tag !== tagToRemove));
   };
 
   // Handle Escape key to close popups
@@ -3172,6 +3190,92 @@ const LandingPage = () => {
       >
         <div className="menu-column">
           <Link href="#">Gemeinsam</Link>
+        </div>
+      </div>
+
+      {/* Floating Plus Button (Mobile Only) */}
+      <button
+        type="button"
+        className="hover-plus mobile-only"
+        onClick={() => openFilterBar()}
+        aria-label="Mehr von diesem Thema"
+      >
+        <img src="/assets/plus-icon.png" alt="" />
+      </button>
+
+      {/* Bottom Filter Bar */}
+      <div
+        id="bottom-filter-bar"
+        className={filterBarActive ? "active" : ""}
+        aria-hidden={!filterBarActive}
+      >
+        <div className="bar-inner">
+          <div className="left-column">
+            <button className="funnel-btn" aria-label="Filter">
+              <img
+                src="/assets/filter-icon.jpeg"
+                alt="Filter"
+                className="btn-icon funnel-icon"
+              />
+            </button>
+
+            <div className="text-and-controls">
+              <div className="mobile-title">Filter Setup</div>
+
+              <div className="filter-text">
+                Du hast den Filter angeschaltet und bekommst ausschließlich die
+                gewünschten Themen angezeigt.
+              </div>
+
+              <div className="controls-row" role="group" aria-label="filter controls">
+                <button className="info-btn" aria-label="Info" title="Info">
+                  <img
+                    src="/assets/filter-i-icon.jpeg"
+                    alt="Info"
+                    className="btn-icon info-icon"
+                  />
+                </button>
+
+                <div className="search-wrap">
+                  <input
+                    id="filter-search"
+                    className="filter-search"
+                    type="text"
+                    placeholder="search for more tags"
+                    aria-label="search for tags"
+                  />
+                </div>
+
+                <div id="filter-tags" className="filter-tags" aria-label="active tags">
+                  {filterTags.map((tag, index) => (
+                    <div className="tag-pill" key={index}>
+                      {tag}{' '}
+                      <button
+                        className="tag-close"
+                        aria-label={`remove ${tag}`}
+                        onClick={() => removeTag(tag)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="right-column">
+            <button
+              id="filter-close"
+              aria-label="Schließen"
+              title="Schließen"
+              type="button"
+              onClick={closeFilterBar}
+            >
+              <span className="close-x">×</span>
+              <span className="close-text">close modification</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

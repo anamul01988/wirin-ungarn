@@ -2866,3 +2866,404 @@ div[class*="Toastify"] {
   margin-left: 22px;
   margin-top: 8px;
 }
+
+/* =============================================
+   FLOATING PLUS & FILTER BAR STYLES
+   ============================================= */
+
+/* Floating plus initial rules (hidden by default on desktop) */
+.hover-plus.mobile-only {
+  display: none;
+}
+
+/* ---------- Bottom Filter Bar (desktop & shared) ---------- */
+#bottom-filter-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(110%);
+  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
+  background: #6e7b6f;
+  padding: 12px 18px;
+  z-index: 12000;
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.16);
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+#bottom-filter-bar.active {
+  transform: translateY(0);
+}
+
+.bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 76px;
+}
+
+.left-column {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 380px;
+}
+
+/* Funnel button */
+.funnel-btn {
+  padding: 8px;
+  background: transparent;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.funnel-btn img {
+  width: 50px;
+  height: auto;
+}
+
+/* Text stack */
+.text-and-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 260px;
+}
+
+.mobile-title {
+  display: none;
+}
+
+.filter-text {
+  color: #fff;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Controls row (desktop) */
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.info-btn {
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+}
+
+.info-btn img {
+  width: 35px;
+  height: 35px;
+}
+
+/* Search field */
+.search-wrap {
+  min-width: 200px;
+  max-width: 320px;
+  width: 260px;
+}
+
+.filter-search {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  color: #2e4630;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Tags row */
+.filter-tags {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+/* Tag pills */
+.tag-pill {
+  background: #ffffff;
+  color: #2e4630;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.tag-close {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #f0f0f0;
+  color: #2e4630;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* Right column */
+.right-column {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Default desktop close button (big white circle with ×) */
+#filter-close {
+  width: 70px;
+  height: 70px;
+  background: none;
+  color: #fff;
+  font-size: 70px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Hide the mobile close-text by default (desktop) */
+#filter-close .close-text {
+  display: none;
+}
+
+.btn-icon {
+  background-color: transparent;
+}
+
+/* ---------- Mobile-specific layout ---------- */
+@media (max-width: 900px) {
+  /* Show floating plus on mobile */
+  .hover-plus.mobile-only {
+    display: flex !important;
+    position: fixed;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    z-index: 999999;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+  }
+
+  .hover-plus.mobile-only img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+  }
+
+  /* Stacked (mobile) layout */
+  .bar-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding-bottom: 18px;
+    min-height: auto;
+    position: relative;
+  }
+
+  #bottom-filter-bar {
+    padding: 20px 14px 30px;
+    box-shadow: 0 -6px 22px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Mobile: hide long description and remove info icon */
+  .filter-text {
+    display: none !important;
+  }
+
+  .info-btn {
+    display: none !important;
+  }
+
+  /* Mobile title visible */
+  .mobile-title {
+    display: block;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+
+  /* Controls stacked: search then tags */
+  .controls-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    margin-top: 6px;
+  }
+
+  /* Search expands full width on mobile */
+  .search-wrap {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .filter-search {
+    width: 100%;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  /* Tags: horizontally scrollable row */
+  .filter-tags {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-tags::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .filter-tags::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+  }
+
+  .tag-pill {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
+  /* On mobile: replace the round white button with underlined text at bottom-right */
+  #filter-close {
+    width: auto;
+    height: auto;
+    background: transparent !important;
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 6px 8px;
+    border-radius: 0;
+    box-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 10px;
+    bottom: -20px;
+  }
+
+  /* Show the textual label, hide the heavy X on mobile */
+  #filter-close .close-x {
+    display: none;
+  }
+
+  #filter-close .close-text {
+    display: inline;
+    text-decoration: underline;
+    text-underline-position: under;
+    color: #ffffff;
+    letter-spacing: 0.2px;
+    line-height: 1;
+  }
+
+  /* Slightly smaller icons on mobile */
+  .funnel-btn img {
+    width: 40px;
+  }
+
+  .info-btn img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .left-column {
+    min-width: 0;
+  }
+}
+
+/* Preserve desktop: hide mobile-only elements */
+@media (min-width: 901px) {
+  .mobile-title {
+    display: none;
+  }
+
+  .hover-plus.mobile-only {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Accessibility focus */
+#bottom-filter-bar button:focus,
+#bottom-filter-bar .filter-search:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(110, 123, 111, 0.12);
+}
+
+/* Very small screens */
+@media (max-width: 400px) {
+  /* Ensure the bar-inner has some padding so content doesn't touch the edges */
+  #bottom-filter-bar .bar-inner {
+    padding-right: 20px;
+  }
+
+  /* Make search and tags take full width but leave room for close button */
+  .search-wrap {
+    width: 100%;
+    max-width: calc(100% - 60px);
+  }
+
+  .filter-tags {
+    overflow-x: auto;
+    gap: 6px;
+    padding-bottom: 2px;
+    max-width: calc(100% - 60px);
+  }
+
+  /* Optional: reduce tag font size to prevent overflow */
+  .tag-pill {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
