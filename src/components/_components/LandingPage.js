@@ -233,6 +233,8 @@ const LandingPage = () => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [showFavorites, setShowFavorites] = useState(false);
   const [mobileFavorites, setMobileFavorites] = useState([]);
+  const [activePopup, setActivePopup] = useState(null);
+  const [activeDetailPopup, setActiveDetailPopup] = useState(null);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
@@ -774,6 +776,46 @@ const LandingPage = () => {
       }
     }
   };
+
+  // Popup Functions
+  const openPopup = (popupId) => {
+    setActivePopup(popupId);
+    if (typeof document !== "undefined") {
+      document.body.style.overflow = "hidden";
+    }
+  };
+
+  const closeAllPopups = () => {
+    setActivePopup(null);
+    setActiveDetailPopup(null);
+    if (typeof document !== "undefined") {
+      document.body.style.overflow = "";
+    }
+  };
+
+  const openDetailPopup = (detailPopupId) => {
+    setActiveDetailPopup(detailPopupId);
+  };
+
+  const closeDetailPopup = () => {
+    setActiveDetailPopup(null);
+  };
+
+  // Handle Escape key to close popups
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape" && (activePopup || activeDetailPopup)) {
+        closeAllPopups();
+      }
+    };
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("keydown", handleEscape);
+      return () => {
+        document.removeEventListener("keydown", handleEscape);
+      };
+    }
+  }, [activePopup, activeDetailPopup]);
 
   // Load favorites for mobile dropdown
   useEffect(() => {
@@ -1382,11 +1424,17 @@ const LandingPage = () => {
             }
         }
 
+        @media screen and (max-width: 1170px) {
+    .panel {
+        max-width: 760px;
+    }
+}
+
         /* Custom Scrollbar Container */
         .scrollbar-container {
             position: fixed;
             right: clamp(15px, 2vw, 25px);
-            top: 50%;
+            top: 58%;
             transform: translateY(-50%);
             width: 30px;
             height: clamp(300px, 60vh, 600px);
@@ -1399,7 +1447,7 @@ const LandingPage = () => {
         /* Responsive adjustments for scrollbar */
         @media (max-width: 1600px) {
           .scrollbar-container {
-            right: 15px;
+            right: 30px;
             height: 58vh;
             max-height: 550px;
           }
@@ -1407,16 +1455,16 @@ const LandingPage = () => {
 
         @media (max-width: 1400px) {
           .scrollbar-container {
-            right: 12px;
-            height: 55vh;
+            right: 22px;
+            height: 53vh;
             max-height: 500px;
           }
         }
 
         @media (max-width: 1200px) {
           .scrollbar-container {
-            right: 10px;
-            height: 50vh;
+            right: 22px;
+            height: 55vh;
             max-height: 450px;
             width: 25px;
             top: 52%;
@@ -1992,7 +2040,7 @@ const LandingPage = () => {
           Cards will go here...
         </div>
       </div> */}
-
+<main id="main-content"> 
       <section className="hero-section" aria-label="Willkommensbereich">
         <div className="panel">
           {/* <h1 className="top-text">Schön, dass du hier bist bei</h1>
@@ -2152,6 +2200,8 @@ const LandingPage = () => {
         className="content-section"
         style={{ minHeight: "300vh", position: "relative", zIndex: 2 }}
       ></div>
+</main>
+
 
       {/* Modal for card details */}
       <div className="modal" id="modal" style={{ display: "none" }}>
@@ -2201,73 +2251,67 @@ const LandingPage = () => {
       <footer className="footer">
         <div className="footer-content">
           {/* Ticker */}
-          {!tickerClosed && (
-            <aside
-              className="ticker-container"
-              id="newsTickerContainer"
-              aria-label="Nachrichten Ticker"
-              style={{
-                margin: "0",
-                outline: "5px solid #ffffff",
-              }}
-            >
-              <div className="ticker-label">UNGARN-INSIDER</div>
-              <div className="ticker-content">
-                <div className="ticker-wrapper">
-                  {[
-                    "Neue Soros-Netzwerk Enthüllungen",
-                    "300% Preisunterschied: Warenkorb im Europa-Vergleich",
-                    "Streit um Smalltalk: Was Ungarn wirklich denken",
-                    "EU-Kommission kritisiert ungarische Mediengesetze",
-                    "Budapest: Neue Entwicklungen am Immobilienmarkt",
-                  ].map((news, i, arr) => (
-                    <React.Fragment key={i}>
-                      <span className="ticker-item">
-                        <a href="#" className="news-link">
-                          {news}
-                        </a>
-                      </span>
-                      {i < arr.length - 1 && (
-                        <span className="ticker-separator" aria-hidden="true">
-                          |
-                        </span>
-                      )}
-                    </React.Fragment>
-                  ))}
-
-                  {/* Duplicate for smooth scroll */}
-                  {[
-                    "Neue Soros-Netzwerk Enthüllungen",
-                    "300% Preisunterschied: Warenkorb im Europa-Vergleich",
-                    "Streit um Smalltalk: Was Ungarn wirklich denken",
-                    "EU-Kommission kritisiert ungarische Mediengesetze",
-                    "Budapest: Neue Entwicklungen am Immobilienmarkt",
-                  ].map((news, i, arr) => (
-                    <React.Fragment key={"dup-" + i}>
-                      <span className="ticker-item">
-                        <a href="#" className="news-link">
-                          {news}
-                        </a>
-                      </span>
-                      {i < arr.length - 1 && (
-                        <span className="ticker-separator" aria-hidden="true">
-                          |
-                        </span>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-              <button
-                type="button"
-                className="close-button"
-                onClick={handleCloseTicker}
-                aria-label="Ticker schließen"
+          <div className="footer-ticker">
+            {!tickerClosed && (
+              <aside
+                className="ticker-container"
+                id="newsTickerContainer"
+                aria-label="Nachrichten Ticker"
               >
-                ✕
-              </button>
-            </aside>
-          )}
+                <div className="ticker-label">UNGARN-INSIDER</div>
+                <div className="ticker-content">
+                  <div className="ticker-wrapper">
+                    {[
+                      "Neue Soros-Netzwerk Enthüllungen",
+                      "300% Preisunterschied: Warenkorb im Europa-Vergleich",
+                      "Streit um Smalltalk: Was Ungarn wirklich denken",
+                      "EU-Kommission kritisiert ungarische Mediengesetze",
+                      "Budapest: Neue Entwicklungen am Immobilienmarkt",
+                    ].map((news, i, arr) => (
+                      <React.Fragment key={i}>
+                        <span className="ticker-item">
+                          <a href="#" className="news-link">
+                            {news}
+                          </a>
+                        </span>
+                        <span className="ticker-separator" aria-hidden="true">
+                          |
+                        </span>
+                      </React.Fragment>
+                    ))}
+
+                    {/* Duplicate for smooth scroll */}
+                    {[
+                      "Neue Soros-Netzwerk Enthüllungen",
+                      "300% Preisunterschied: Warenkorb im Europa-Vergleich",
+                      "Streit um Smalltalk: Was Ungarn wirklich denken",
+                      "EU-Kommission kritisiert ungarische Mediengesetze",
+                      "Budapest: Neue Entwicklungen am Immobilienmarkt",
+                    ].map((news, i, arr) => (
+                      <React.Fragment key={"dup-" + i}>
+                        <span className="ticker-item">
+                          <a href="#" className="news-link">
+                            {news}
+                          </a>
+                        </span>
+                        <span className="ticker-separator" aria-hidden="true">
+                          |
+                        </span>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="close-button"
+                  onClick={handleCloseTicker}
+                  aria-label="Ticker schließen"
+                >
+                  ✕
+                </button>
+              </aside>
+            )}
+          </div>
 
           {/* <div>
             <div className="cards cursor-pointer" onClick={routerServerGlobal}>
@@ -2426,6 +2470,13 @@ const LandingPage = () => {
         Bitte laden Sie die Seite neu (F5)
         <br />
         für die perfekte Ansicht
+      </div>
+
+      {/* Tablet Intro Image */}
+      <div className="tablet_intro_image">
+        <div className="intro_image_cnt">
+          <img src="/assets/welcome-message-tablet.png" alt="tablet welcome image" />
+        </div>
       </div>
 
       {/* Discovery Deck - Mobile Card Stack */}
@@ -2737,6 +2788,298 @@ const LandingPage = () => {
               className="card-image"
               draggable="false"
             />
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Bottom Button Bar */}
+      <div className="mobile-btm-button">
+        <button
+          className="profile-btn"
+          onClick={() => openPopup("profilePopup")}
+        >
+          MEIN PROFIL
+        </button>
+        <button
+          className="widget-btn"
+          onClick={() => openPopup("widgetPopup")}
+        >
+          WERKZEUGE
+        </button>
+      </div>
+
+      {/* Popup Overlay */}
+      <div
+        className={`popup-overlay ${activePopup ? "active" : ""}`}
+        onClick={closeAllPopups}
+      ></div>
+
+      {/* MEIN PROFIL Popup */}
+      <div
+        className={`popup-panel ${
+          activePopup === "profilePopup" ? "active" : ""
+        }`}
+        id="profilePopup"
+      >
+        <button className="popup-close" onClick={closeAllPopups}>
+          ✕
+        </button>
+        <div className="popup-content">
+          <h2>Mein Profil</h2>
+
+          {/* Login Form */}
+          <div className="login-form" id="loginForm">
+            <form>
+              <div className="form-group">
+                <label htmlFor="email">E-Mail</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Ihre E-Mail-Adresse"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Passwort</label>
+                <input type="password" id="password" placeholder="Ihr Passwort" />
+              </div>
+              <button type="submit" className="btn-submit">
+                Anmelden
+              </button>
+              <a href="#" className="forgot-password">
+                Passwort vergessen?
+              </a>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* WERKZEUGE Popup */}
+      <div
+        className={`popup-panel ${
+          activePopup === "widgetPopup" ? "active" : ""
+        }`}
+        id="widgetPopup"
+      >
+        <button className="popup-close" onClick={closeAllPopups}>
+          ✕
+        </button>
+        <div className="popup-content">
+          <h2>Werkzeuge</h2>
+
+          <div className="widget-grid">
+            {/* Currency Converter */}
+            <div
+              className="widget-item"
+              onClick={() => openDetailPopup("currencyPopup")}
+            >
+              <i className="fas fa-exchange-alt"></i>
+              <h3>Währungsrechner</h3>
+              <p>EUR ⇔ HUF</p>
+            </div>
+
+            {/* Calendar */}
+            <div
+              className="widget-item"
+              onClick={() => openDetailPopup("calendarPopup")}
+            >
+              <i className="fas fa-calendar-alt"></i>
+              <h3>Kalender</h3>
+              <p>Ungarische Namenstage</p>
+            </div>
+
+            {/* Favorites */}
+            <div
+              className="widget-item"
+              onClick={() => openDetailPopup("favoritesPopup")}
+            >
+              <i className="fas fa-star"></i>
+              <h3>Favoriten</h3>
+              <p>Gespeicherte Inhalte</p>
+            </div>
+
+            {/* History */}
+            <div
+              className="widget-item"
+              onClick={() => openDetailPopup("historyPopup")}
+            >
+              <i className="fas fa-history"></i>
+              <h3>Verlauf</h3>
+              <p>Besuchte Seiten</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Currency Converter Detail Popup */}
+      <div
+        className={`detail-popup ${
+          activeDetailPopup === "currencyPopup" ? "active" : ""
+        }`}
+        id="currencyPopup"
+      >
+        <div className="detail-header">
+          <button className="detail-back" onClick={closeDetailPopup}>
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <h2>Währungsrechner</h2>
+          <button className="popup-close" onClick={closeAllPopups}>
+            ✕
+          </button>
+        </div>
+        <div className="detail-content">
+          <div className="currency-converter">
+            <div className="converter-group">
+              <label>Euro (EUR)</label>
+              <input type="number" id="eurInput" placeholder="0.00" defaultValue="100" />
+            </div>
+
+            <div className="converter-icon">
+              <i className="fas fa-exchange-alt"></i>
+            </div>
+
+            <div className="converter-group">
+              <label>Forint (HUF)</label>
+              <input type="number" id="hufInput" placeholder="0.00" readOnly />
+            </div>
+
+            <div className="exchange-rate">
+              <p>Aktueller Kurs: 1 EUR = 395.50 HUF</p>
+              <p className="rate-date">Stand: 13.11.2025</p>
+            </div>
+
+            <button className="btn-convert">Umrechnen</button>
+          </div>
+        </div>
+      </div>
+
+      {/* Calendar Detail Popup */}
+      <div
+        className={`detail-popup ${
+          activeDetailPopup === "calendarPopup" ? "active" : ""
+        }`}
+        id="calendarPopup"
+      >
+        <div className="detail-header">
+          <button className="detail-back" onClick={closeDetailPopup}>
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <h2>Kalender</h2>
+          <button className="popup-close" onClick={closeAllPopups}>
+            ✕
+          </button>
+        </div>
+        <div className="detail-content">
+          <div className="calendar-widget">
+            <div className="calendar-current">
+              <h3>Heute</h3>
+              <div className="today-info">
+                <p className="today-date">13. November 2025</p>
+                <p className="today-name">Namenstag: Szilvia</p>
+              </div>
+            </div>
+
+            <div className="upcoming-names">
+              <h4>Kommende Namenstage</h4>
+              <div className="name-list">
+                <div className="name-item">
+                  <span className="date">14.11.</span>
+                  <span className="name">Aliz</span>
+                </div>
+                <div className="name-item">
+                  <span className="date">15.11.</span>
+                  <span className="name">Albert, Lipót</span>
+                </div>
+                <div className="name-item">
+                  <span className="date">16.11.</span>
+                  <span className="name">Ödön</span>
+                </div>
+                <div className="name-item">
+                  <span className="date">17.11.</span>
+                  <span className="name">Gergő, Hortenzia</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Favorites Detail Popup */}
+      <div
+        className={`detail-popup ${
+          activeDetailPopup === "favoritesPopup" ? "active" : ""
+        }`}
+        id="favoritesPopup"
+      >
+        <div className="detail-header">
+          <button className="detail-back" onClick={closeDetailPopup}>
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <h2>Favoriten</h2>
+          <button className="popup-close" onClick={closeAllPopups}>
+            ✕
+          </button>
+        </div>
+        <div className="detail-content">
+          <div className="favorites-list">
+            <div className="favorite-item">
+              <i className="fas fa-book"></i>
+              <div className="fav-info">
+                <h4>Ungarisch Grammatik</h4>
+                <p>Gespeichert am 10.11.2025</p>
+              </div>
+            </div>
+            <div className="favorite-item">
+              <i className="fas fa-utensils"></i>
+              <div className="fav-info">
+                <h4>Somlói Galuska Rezept</h4>
+                <p>Gespeichert am 08.11.2025</p>
+              </div>
+            </div>
+            <div className="favorite-item">
+              <i className="fas fa-map-marked-alt"></i>
+              <div className="fav-info">
+                <h4>Budapest Sehenswürdigkeiten</h4>
+                <p>Gespeichert am 05.11.2025</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* History Detail Popup */}
+      <div
+        className={`detail-popup ${
+          activeDetailPopup === "historyPopup" ? "active" : ""
+        }`}
+        id="historyPopup"
+      >
+        <div className="detail-header">
+          <button className="detail-back" onClick={closeDetailPopup}>
+            <i className="fas fa-arrow-left"></i>
+          </button>
+          <h2>Verlauf</h2>
+          <button className="popup-close" onClick={closeAllPopups}>
+            ✕
+          </button>
+        </div>
+        <div className="detail-content">
+          <div className="history-list">
+            <div className="history-item">
+              <span className="history-time">Heute, 14:30</span>
+              <h4>Zahlentrainer</h4>
+            </div>
+            <div className="history-item">
+              <span className="history-time">Heute, 12:15</span>
+              <h4>Kulinarische Seele</h4>
+            </div>
+            <div className="history-item">
+              <span className="history-time">Gestern, 18:45</span>
+              <h4>Ungarisch Grammatik</h4>
+            </div>
+            <div className="history-item">
+              <span className="history-time">Gestern, 10:20</span>
+              <h4>Budapest Guide</h4>
+            </div>
           </div>
         </div>
       </div>
