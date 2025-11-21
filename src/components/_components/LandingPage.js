@@ -1284,25 +1284,7 @@ const LandingPage = () => {
             onClick={() => setSearchBarActive(!searchBarActive)}
             style={{ cursor: "pointer", width: "25px", height: "25px" }}
           />
-          <img
-            src="/assets/icons/Wishlist-icon.jpeg"
-            alt="Wishlist"
-            className="wishlist-icon"
-            onClick={() => {
-              setShowFavorites(!showFavorites);
-            }}
-            style={{ cursor: "pointer", width: "25px", height: "25px" }}
-          />
-          <img
-            src="/assets/icons/user-icon.jpeg"
-            alt="User"
-            className="user-icon"
-            onClick={() => {
-              // Navigate to profile page
-              route.push("/profile");
-            }}
-            style={{ cursor: "pointer", width: "25px", height: "25px" }}
-          />
+          
           <img
             src="/assets/icons/hamberger-menu.jpeg"
             alt="Menu"

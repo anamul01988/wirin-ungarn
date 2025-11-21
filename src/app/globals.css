@@ -743,9 +743,20 @@ body {
 
 /* Tablet intro image - hidden by default */
 
+.tablet_intro_image {
+  display: none;
+}
+
 .tablet_intro_image img {
   width: 100%;
   max-width: 100%;
+}
+
+/* Hide tablet intro image on mobile */
+@media (max-width: 767px) {
+  .tablet_intro_image {
+    display: none !important;
+  }
 }
 
 /* Hungarian flag colors in logo */
@@ -2516,12 +2527,12 @@ div[class*="Toastify"] {
 @media screen and (min-width: 520px) and (max-width: 767px) {
   .card-image {
     width: auto;
-    height: 100%;
+    height: calc(100vh - 214px) !important;
     object-fit: cover;
   }
   .mobile-card {
     width: auto;
-    height: 100%;
+    height: calc(100vh - 214px) !important;
   }
 
   .card-stack {
