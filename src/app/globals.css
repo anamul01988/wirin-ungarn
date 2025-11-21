@@ -103,7 +103,7 @@ body {
 
 .header-buttons {
   display: flex;
-  gap: 45px;
+  gap: 25px;
   /* margin-left: 50px; */
 }
 
@@ -852,8 +852,8 @@ body {
 
 /* Panel styles for hero section content */
 .panel {
-  max-width: 50.52vw;
-  min-width: 41.67vw;
+  max-width: 930px;
+  min-width: 800px;
   margin: 20px auto;
   padding: 1.04vw;
   text-transform: uppercase;
