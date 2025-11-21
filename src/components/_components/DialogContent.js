@@ -82,14 +82,7 @@ export default function DialogContent({
   };
 
   // Log routePrefix and other props for debugging
-  console.log("contentsssssssssssss", postId, pathname);
-  // if (contentType === "sprachkurs") {
-  //   console.log("Sprachkurs postContent:", postContent);
-  // }
-
-  // const navigateToPreviousPage = () => {
-  //   route.back();
-  // };
+  // console.log("contentsssssssssssss", isSinglePage, contentType);
 
   const handleClose = () => {
     setOpen(false);
@@ -110,15 +103,6 @@ export default function DialogContent({
     typeof content === "string" && content?.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
 
-  // console.log("DialogContent content:", content, typeof content, title);
-  // console.log(
-  //   "routePrefix & contentType:",
-  //   routePrefix,
-  //   contentType,
-  //   typeof routePrefix,
-  //   typeof contentType
-  // );
-
   return (
     <>
       <Dialog
@@ -133,6 +117,8 @@ export default function DialogContent({
           <ModalIcons
             onClose={handleClose}
             isSinglePage={isSinglePage}
+            showFavorite={contentType === "page" || !contentType ? false : true}
+            showLayers={contentType !== "page" && !contentType ? false : true}
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}
@@ -158,6 +144,14 @@ export default function DialogContent({
             </div>
             {routePrefix !== "einfach-lesen" && (
               <h1 className="single__page_title text-[#494158]">{title}</h1>
+            )}
+            {contentType === "wissenswert" && (
+              <div className="mb-6 py-4 rounded-lg">
+                <p
+                  className="single__page_description"
+                  dangerouslySetInnerHTML={{ __html: content?.introText }}
+                />
+              </div>
             )}
 
             {!contentType === "page" && (
@@ -193,7 +187,7 @@ export default function DialogContent({
 
             {/* Excerpt */}
             {excerpt && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="mb-6 p-4">
                 <p className="text-gray-700">{excerpt}</p>
               </div>
             )}
@@ -359,11 +353,11 @@ export default function DialogContent({
             )}
 
             {contentType === "wissenswert" && (
-              <div className="mb-6 py-4 bg-gray-50 rounded-lg">
-                <p
+              <div className="mb-6 py-0 mt-4">
+                {/* <p
                   className="single__page_description"
                   dangerouslySetInnerHTML={{ __html: content?.introText }}
-                />
+                /> */}
                 {content?.postContent?.length > 0 ? (
                   <>
                     {" "}
@@ -373,10 +367,10 @@ export default function DialogContent({
                           <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
                             <div
                               className="w-full h-full cursor-pointer"
-                              style={{
-                                background:
-                                  "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-                              }}
+                              // style={{
+                              //   background:
+                              //     "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+                              // }}
                             >
                               <div>
                                 {item.icon && item.icon.length > 0 ? (
@@ -430,7 +424,7 @@ export default function DialogContent({
                   <>
                     {" "}
                     {content?.shortsPostContent && (
-                      <div className="mb-6 py-4 bg-gray-50 rounded-lg">
+                      <div className="mb-6 py-4">
                         <p
                           className="single__page_description"
                           dangerouslySetInnerHTML={{
@@ -445,9 +439,9 @@ export default function DialogContent({
             )}
 
             {contentType === "shorts" && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="mb-6 p-0 mt-4">
                 <p
-                  className="text-gray-700 italic"
+                  className="text-sm leading-relaxed text-left mb-2"
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
                 {content?.postContent?.map((item, index) => (
@@ -456,10 +450,10 @@ export default function DialogContent({
                       <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
                         <div
                           className="w-full h-full cursor-pointer"
-                          style={{
-                            background:
-                              "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-                          }}
+                          // style={{
+                          //   background:
+                          //     "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+                          // }}
                         >
                           <div>
                             {item.icon && item.icon.length > 0 ? (
@@ -512,9 +506,9 @@ export default function DialogContent({
             )}
 
             {contentType === "sprachkurs" && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="mb-6 p-0 mt-4">
                 <p
-                  className="text-gray-700 italic"
+                  className="text-sm leading-relaxed text-left mb-2"
                   dangerouslySetInnerHTML={{ __html: content?.introText }}
                 />
                 {content?.postContent?.map((item, index) => (
@@ -523,10 +517,10 @@ export default function DialogContent({
                       <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
                         <div
                           className="w-full h-full cursor-pointer"
-                          style={{
-                            background:
-                              "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-                          }}
+                          // style={{
+                          //   background:
+                          //     "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+                          // }}
                         >
                           <div>
                             {item.icon && item.icon.length > 0 ? (
@@ -578,7 +572,7 @@ export default function DialogContent({
               </div>
             )}
             {contentType === "kulinarische-seele" && (
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <div className="mb-6 p-0 mt-4">
                 <p
                   className="text-sm leading-relaxed text-left mb-2"
                   dangerouslySetInnerHTML={{ __html: content?.introText }}
@@ -589,10 +583,10 @@ export default function DialogContent({
                       <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
                         <div
                           className="w-full h-full cursor-pointer"
-                          style={{
-                            background:
-                              "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-                          }}
+                          // style={{
+                          //   background:
+                          //     "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+                          // }}
                         >
                           <div>
                             {item.icon && item.icon.length > 0 ? (

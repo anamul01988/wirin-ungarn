@@ -123,10 +123,10 @@ export default function LiedTexteDialogContent({
                   <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
                     <div
                       className="w-full h-full cursor-pointer"
-                      style={{
-                        background:
-                          "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-                      }}
+                      // style={{
+                      //   background:
+                      //     "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+                      // }}
                     >
                       <div>
                         {item.icon && item.icon.length > 0 ? (

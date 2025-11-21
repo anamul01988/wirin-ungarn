@@ -2810,6 +2810,7 @@ div[class*="Toastify"] {
   font-weight: 500;
   margin-bottom: 8px !important;
   padding-bottom: 0px;
+  line-height: 38px;
 }
 .single__page-content {
   padding: 0 10px;

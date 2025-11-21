@@ -242,12 +242,12 @@ export const footerLinks = [
   //   endpoint: "/posts",
   //   primary: true,
   // },
-  {
-    title: "Neuigkeiten",
-    key: "news",
-    endpoint: "/neuigkeiten-bei-wir-in-ungarn",
-    primary: true,
-  },
+  // {
+  //   title: "Neuigkeiten",
+  //   key: "news",
+  //   endpoint: "/neuigkeiten-bei-wir-in-ungarn",
+  //   primary: true,
+  // },
   { title: "Über uns", key: "about", endpoint: "/uber-uns", primary: true },
   {
     title: "Philosophie",
