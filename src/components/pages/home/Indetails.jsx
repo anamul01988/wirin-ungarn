@@ -29,9 +29,9 @@ const Indetails = ({ onBack }) => {
         <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
           <div
             className="w-full h-full cursor-pointer"
-            style={{
-              background: "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-            }}
+            // style={{
+            //   background: "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+            // }}
           >
             {fakeData.secondIcon}
           </div>
@@ -70,9 +70,9 @@ const Indetails = ({ onBack }) => {
         <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start justify-center mr-3">
           <div
             className="w-[100%] h-[100%]"
-            style={{
-              background: "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-            }}
+            // style={{
+            //   background: "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+            // }}
           >
             {fakeData.secondIcon}
           </div>
@@ -105,9 +105,9 @@ const Indetails = ({ onBack }) => {
         <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start justify-center mr-3">
           <div
             className="w-[100%] h-[100%]"
-            style={{
-              background: "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-            }}
+            // style={{
+            //   background: "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
+            // }}
           >
             {fakeData.secondIcon}
           </div>

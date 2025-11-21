@@ -22,7 +22,7 @@ const LiedTextePage = () => {
   const [algoliaResults, setAlgoliaResults] = useState([]);
   const [algoliaSearching, setAlgoliaSearching] = useState(false);
   const [searchDebounce, setSearchDebounce] = useState(null);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
@@ -55,7 +55,7 @@ const LiedTextePage = () => {
     } else {
       setCurrentPage(pageNumber);
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSearch = async () => {
@@ -230,14 +230,20 @@ const LiedTextePage = () => {
   if (error) return <div>{error}</div>;
 
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-  
+
   // Get posts to display
-  const displayPosts = isSearching ? getCurrentSearchResults() : getCurrentPosts();
-  const totalPages = isSearching ? Math.ceil((searchResults?.edges?.length || 0) / postsPerPage) : getTotalPages();
+  const displayPosts = isSearching
+    ? getCurrentSearchResults()
+    : getCurrentPosts();
+  const totalPages = isSearching
+    ? Math.ceil((searchResults?.edges?.length || 0) / postsPerPage)
+    : getTotalPages();
   const activePage = isSearching ? searchCurrentPage : currentPage;
-  const totalPosts = isSearching ? (searchResults?.edges?.length || 0) : allPosts.length;
-  
-  console.log("liedTextePage data: allPosts:", allPosts);
+  const totalPosts = isSearching
+    ? searchResults?.edges?.length || 0
+    : allPosts.length;
+
+  // console.log("liedTextePage data: allPosts:", allPosts);
   return (
     <div className="mx-auto">
       {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
@@ -393,13 +399,14 @@ const LiedTextePage = () => {
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
           <>
-            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge - Angezeigt werden{" "}
-            {displayPosts?.length || 0} Beiträge.
+            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt{" "}
+            {totalPosts} Beiträge - Angezeigt werden {displayPosts?.length || 0}{" "}
+            Beiträge.
           </>
         ) : (
           <>
-            Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge - Angezeigt werden{" "}
-            {displayPosts?.length || 0} Beiträge.
+            Seite {activePage} von {totalPages} - Insgesamt {totalPosts}{" "}
+            Beiträge - Angezeigt werden {displayPosts?.length || 0} Beiträge.
           </>
         )}
       </Typography>
@@ -422,87 +429,92 @@ const LiedTextePage = () => {
                 </Typography>
               </div>
             ) : (
-              displayPosts?.map(
-                (edge, idx) => {
-                  return (
-                    <div key={edge.node.id}>
-                      <CustomPost
-                        title={edge.node?.title}
-                        image={edge.node?.featuredImage?.node?.sourceUrl}
-                        imageAlt={edge.node?.featuredImage?.node?.altText}
-                        description={edge.node.postContentLyrik?.postContent}
-                        onlyHeadings={onlyHeadings}
-                        slug={edge.node.slug}
-                        routePrefix="liedtexte"
-                      />
-                      {/* Divider except last */}
-                      {!onlyHeadings && idx < displayPosts?.length - 1 && (
-                        <hr className="my-6 border-gray-300" />
-                      )}
-                    </div>
-                  );
-                }
-              )
+              displayPosts?.map((edge, idx) => {
+                return (
+                  <div key={edge.node.id}>
+                    <CustomPost
+                      title={edge.node?.title}
+                      image={edge.node?.featuredImage?.node?.sourceUrl}
+                      imageAlt={edge.node?.featuredImage?.node?.altText}
+                      description={edge.node.postContentLyrik?.postContent}
+                      onlyHeadings={onlyHeadings}
+                      slug={edge.node.slug}
+                      routePrefix="liedtexte"
+                    />
+                    {/* Divider except last */}
+                    {!onlyHeadings && idx < displayPosts?.length - 1 && (
+                      <hr className="my-6 border-gray-300" />
+                    )}
+                  </div>
+                );
+              })
             )}
 
             {/* Numbered Pagination - Only show if not searching with empty results and more than 1 page */}
             {!(
               isSearching &&
               (!searchResults?.edges || searchResults.edges.length === 0)
-            ) && totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
-                {/* Previous button */}
-                <button
-                  onClick={() => handlePageChange(activePage - 1)}
-                  disabled={activePage === 1}
-                  className="pagination-number"
-                >
-                  &laquo;
-                </button>
+            ) &&
+              totalPages > 1 && (
+                <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
+                  {/* Previous button */}
+                  <button
+                    onClick={() => handlePageChange(activePage - 1)}
+                    disabled={activePage === 1}
+                    className="pagination-number"
+                  >
+                    &laquo;
+                  </button>
 
-                {/* Page numbers */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
-                  // Show first page, last page, current page, and pages around current
-                  const showPage = 
-                    pageNum === 1 || 
-                    pageNum === totalPages || 
-                    (pageNum >= activePage - 2 && pageNum <= activePage + 2);
-                  
-                  const showEllipsis = 
-                    (pageNum === activePage - 3 && activePage > 4) ||
-                    (pageNum === activePage + 3 && activePage < totalPages - 3);
+                  {/* Page numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (pageNum) => {
+                      // Show first page, last page, current page, and pages around current
+                      const showPage =
+                        pageNum === 1 ||
+                        pageNum === totalPages ||
+                        (pageNum >= activePage - 2 &&
+                          pageNum <= activePage + 2);
 
-                  if (showEllipsis) {
-                    return (
-                      <span key={pageNum} className="px-2 text-gray-500">
-                        ...
-                      </span>
-                    );
-                  }
+                      const showEllipsis =
+                        (pageNum === activePage - 3 && activePage > 4) ||
+                        (pageNum === activePage + 3 &&
+                          activePage < totalPages - 3);
 
-                  if (!showPage) return null;
+                      if (showEllipsis) {
+                        return (
+                          <span key={pageNum} className="px-2 text-gray-500">
+                            ...
+                          </span>
+                        );
+                      }
 
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => handlePageChange(pageNum)}
-                      className={`pagination-number ${pageNum === activePage ? 'active' : ''}`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
+                      if (!showPage) return null;
 
-                {/* Next button */}
-                <button
-                  onClick={() => handlePageChange(activePage + 1)}
-                  disabled={activePage === totalPages}
-                  className="pagination-number"
-                >
-                  &raquo;
-                </button>
-              </div>
-            )}
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => handlePageChange(pageNum)}
+                          className={`pagination-number ${
+                            pageNum === activePage ? "active" : ""
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    }
+                  )}
+
+                  {/* Next button */}
+                  <button
+                    onClick={() => handlePageChange(activePage + 1)}
+                    disabled={activePage === totalPages}
+                    className="pagination-number"
+                  >
+                    &raquo;
+                  </button>
+                </div>
+              )}
           </>
         )}
       </div>

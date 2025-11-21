@@ -28,8 +28,8 @@ export default function ModalIcons({
   onLayers,
   onShare,
   onLearningBox,
-  showFavorite = true,
-  showLayers = true,
+  showFavorite = false,
+  showLayers = false,
   showShare = true,
   showLearningBox = false,
   topIconsStyle,
@@ -37,7 +37,7 @@ export default function ModalIcons({
   type,
   pageTitle,
   customRoute,
-  isSinglePage = false,
+  isSinglePage = true,
 }) {
   const pathname = usePathname();
   const [isFavorite, setIsFavorite] = useState(false);
