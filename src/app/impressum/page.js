@@ -45,7 +45,7 @@ export default function ImpsModal() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] custom__modal_area flex flex-col"
+        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross+ Love Icons */}
         {open && (
@@ -57,10 +57,10 @@ export default function ImpsModal() {
           />
         )}
 
-        <DialogBody className="overflow-auto flex-1 pl-4 mr-1 my-1">
-          <div className="">
-            <ImpressumDetails />
-          </div>
+        <DialogBody className="overflow-auto custom__modal_area flex-1 mr-1">
+          {/* <div className=""> */}
+          <ImpressumDetails />
+          {/* </div> */}
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">

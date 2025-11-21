@@ -39,7 +39,7 @@ export default function AnkiKartenModal() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] custom__modal_area flex flex-col"
+        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -51,7 +51,7 @@ export default function AnkiKartenModal() {
           />
         )}
 
-        <DialogBody className="overflow-auto pl-4 mr-1 my-1 flex-1">
+        <DialogBody className="overflow-auto custom__modal_area mr-1 flex-1">
           {/* Breadcrumb */}
           <div className="mb-4 px-0 pt-2">
             <Breadcrumb className="text-sm" />

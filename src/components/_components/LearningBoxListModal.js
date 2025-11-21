@@ -146,7 +146,7 @@ export default function LearningBoxListModal({ open, onClose }) {
       size="lg"
       // dismiss={{ enabled: false }}
       // data-dialog="learning-box-list-modal"
-      className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] custom__modal_area flex flex-col"
+      className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
     >
       {/* Floating Cross Icon - outside DialogBody */}
       {open && (
@@ -159,7 +159,7 @@ export default function LearningBoxListModal({ open, onClose }) {
         />
       )}
 
-      <DialogBody className="overflow-auto p-[30px]">
+      <DialogBody className="overflow-auto custom__modal_area mr-1 flex-1 p-[30px]">
         {/* Header with Logo */}
         <div className="flex items-center gap-3">
           {/* <Image

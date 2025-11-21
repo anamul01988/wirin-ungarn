@@ -83,7 +83,7 @@ export default function LiedTexteDialogContent({
           />
         )}
         {/* Dialog Body */}
-        <DialogBody className="overflow-auto custom__modal_area flex-1 pl-4 mr-1 my-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1 mr-1 p-[30px]">
           <div>
             {/* <div className="mb-4">
               <button

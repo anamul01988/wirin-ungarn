@@ -58,15 +58,15 @@ export default function InsiderComponent() {
           />
         )}
 
-        <DialogBody className="overflow-auto pl-4 mr-1 my-1 custom__modal_area flex-1">
+        <DialogBody className="overflow-auto mr-1 custom__modal_area flex-1">
           {/* Breadcrumb */}
-          <div className="mb-4 px-0 pt-2">
+          <div className="mb-2 px-0 pt-2">
             <Breadcrumb className="text-sm" />
           </div>
 
-          <div className="">
-            <UngarnInsiderPage />
-          </div>
+          {/* <div className=""> */}
+          <UngarnInsiderPage />
+          {/* </div> */}
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">

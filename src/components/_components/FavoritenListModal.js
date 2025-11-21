@@ -87,7 +87,7 @@ export default function FavoritenListModal({ open, onClose }) {
       open={open}
       handler={onClose}
       size="lg"
-      className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] custom__modal_area flex flex-col"
+      className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
     >
       {/* Floating Cross Icon */}
       {open && (
@@ -100,7 +100,7 @@ export default function FavoritenListModal({ open, onClose }) {
         />
       )}
 
-      <DialogBody className="overflow-auto p-[30px]">
+      <DialogBody className="overflow-auto custom__modal_area mr-1 flex-1 p-[30px]">
         {/* Header */}
         <div className="w-full relative flex items-center justify-center mt-0 mb-5">
           <h1

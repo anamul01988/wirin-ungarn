@@ -38,7 +38,7 @@ export default function PhilosophieModal() {
         dismiss={{
           enabled: false,
         }}
-        className="overflow-auto custom__modal_area bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
+        className="overflow-auto bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -50,9 +50,9 @@ export default function PhilosophieModal() {
           />
         )}
 
-        <DialogBody className="flex-1 pl-4 mr-1 my-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1 mr-1">
           {/* Breadcrumb */}
-          <div className="mb-4 px-0 pt-2">
+          <div className="mb-2 px-0 pt-2">
             <Breadcrumb className="text-sm" />
           </div>
 

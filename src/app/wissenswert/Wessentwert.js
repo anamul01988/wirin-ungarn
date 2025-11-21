@@ -59,15 +59,15 @@ export default function Wissenswert() {
           />
         )}
 
-        <DialogBody className="overflow-auto custom__modal_area flex-1 border-0 pl-4 mr-1 my-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1 border-0 mr-1 p-[30px]">
           {/* Breadcrumb */}
-          {/* <div className="mb-4 px-0 pt-2">
+          {/* <div className="mb-2 px-0 pt-2">
             <Breadcrumb className="text-sm" />
           </div> */}
 
-          <div className="">
-            <WissenswertPage />
-          </div>
+          {/* <div className=""> */}
+          <WissenswertPage />
+          {/* </div> */}
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">

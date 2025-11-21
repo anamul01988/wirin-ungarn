@@ -57,7 +57,7 @@ export default function Profile() {
           />
         )}
 
-        <DialogBody className="overflow-auto custom__modal_area flex-1 border-0 pl-4 mr-1 my-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1 border-0 mr-1 p-[30px]">
           <div className="">
             <ProfileModal />
           </div>

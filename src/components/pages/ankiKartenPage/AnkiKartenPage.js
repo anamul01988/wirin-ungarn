@@ -40,7 +40,7 @@ export default function AnkiKartenPage() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] custom__modal_area flex flex-col"
+        className="bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -52,7 +52,7 @@ export default function AnkiKartenPage() {
           />
         )}
 
-        <DialogBody className="overflow-y-auto p-6">
+        <DialogBody className="overflow-y-auto custom__modal_area mr-1 flex-1 p-[30px]">
           <div className="mx-auto">
             {/* Main Title */}
             {/* <Typography

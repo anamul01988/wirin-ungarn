@@ -80,7 +80,7 @@ const KategorienPage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="w-full relative flex items-center justify-center mt-3 mb-5">
+      <div className="w-full relative flex items-center justify-center mt-0 mb-5">
         <Image
           src="/kategorian.jpeg"
           alt={title || "Kategorien"}

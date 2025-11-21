@@ -48,7 +48,7 @@ export default function DatenschutzModal() {
           />
         )}
 
-        <DialogBody className="overflow-auto custom__modal_area flex-1 pl-4 mr-1 my-1">
+        <DialogBody className="overflow-auto custom__modal_area flex-1 mr-1 p-[30px]">
           {handleBackToMenu && (
             <button
               onClick={handleBackToMenu}

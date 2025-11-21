@@ -21,20 +21,27 @@ const ImpressumDetails = () => {
     fetchData();
   }, []);
 
-  if (loading) return (
-    <div>
-      <DefaultSpinner />
-    </div>
-  );
+  if (loading)
+    return (
+      <div>
+        <DefaultSpinner />
+      </div>
+    );
   if (error) return <div>{error}</div>;
-  if (!data || !data.data || !data.data.page) return <div>Keine Impressum-Daten gefunden.</div>;
+  if (!data || !data.data || !data.data.page)
+    return <div>Keine Impressum-Daten gefunden.</div>;
 
   const { title, content } = data.data.page;
 
   return (
     <div className="mx-auto">
-      <h1 className="single__page_title mb-3 text-2xl font-bold text-gray-800 pr-12 leading-snug">{title}</h1>
-      <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
+      <h1 className="single__page_title mb-3 text-2xl font-bold text-gray-800 pr-12 leading-snug">
+        {title}
+      </h1>
+      <div
+        className="prose prose-lg max-w-none"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     </div>
   );
 };
