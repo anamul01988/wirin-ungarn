@@ -82,14 +82,7 @@ export default function DialogContent({
   };
 
   // Log routePrefix and other props for debugging
-  console.log("contentsssssssssssss", postId, pathname);
-  // if (contentType === "sprachkurs") {
-  //   console.log("Sprachkurs postContent:", postContent);
-  // }
-
-  // const navigateToPreviousPage = () => {
-  //   route.back();
-  // };
+  // console.log("contentsssssssssssss", isSinglePage, contentType);
 
   const handleClose = () => {
     setOpen(false);
@@ -110,15 +103,6 @@ export default function DialogContent({
     typeof content === "string" && content?.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
 
-  // console.log("DialogContent content:", content, typeof content, title);
-  // console.log(
-  //   "routePrefix & contentType:",
-  //   routePrefix,
-  //   contentType,
-  //   typeof routePrefix,
-  //   typeof contentType
-  // );
-
   return (
     <>
       <Dialog
@@ -133,8 +117,8 @@ export default function DialogContent({
           <ModalIcons
             onClose={handleClose}
             isSinglePage={isSinglePage}
-            showFavorite={true}
-            showLayers={true}
+            showFavorite={contentType === "page" || !contentType ? false : true}
+            showLayers={contentType !== "page" && !contentType ? false : true}
             onFavorite={() => console.log("Favorite clicked")}
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}

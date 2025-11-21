@@ -166,10 +166,10 @@ export default function ImpressumModal({ open, setOpen, handleOpen }) {
               onLayers={() => console.log("Layers clicked")}
               onShare={() => console.log("Share clicked")}
               type="impressum"
-              topIconsStyle={{
-                top: "-0.5rem",
-                right: "-20rem",
-              }}
+              // topIconsStyle={{
+              //   top: "-0.5rem",
+              //   right: "-20rem",
+              // }}
             />
           )}
 
