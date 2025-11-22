@@ -236,7 +236,11 @@ const LandingPage = () => {
   const [activePopup, setActivePopup] = useState(null);
   const [activeDetailPopup, setActiveDetailPopup] = useState(null);
   const [filterBarActive, setFilterBarActive] = useState(false);
-  const [filterTags, setFilterTags] = useState(['Sprache', 'Uhrzeit', 'Zahlen']);
+  const [filterTags, setFilterTags] = useState([
+    "Sprache",
+    "Uhrzeit",
+    "Zahlen",
+  ]);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
@@ -816,7 +820,7 @@ const LandingPage = () => {
   };
 
   const removeTag = (tagToRemove) => {
-    setFilterTags(filterTags.filter(tag => tag !== tagToRemove));
+    setFilterTags(filterTags.filter((tag) => tag !== tagToRemove));
   };
 
   // Handle Escape key to close popups
@@ -1302,7 +1306,7 @@ const LandingPage = () => {
             onClick={() => setSearchBarActive(!searchBarActive)}
             style={{ cursor: "pointer", width: "25px", height: "25px" }}
           />
-          
+
           <img
             src="/assets/icons/hamberger-menu.jpeg"
             alt="Menu"
@@ -2041,10 +2045,10 @@ const LandingPage = () => {
           Cards will go here...
         </div>
       </div> */}
-<main id="main-content"> 
-      <section className="hero-section" aria-label="Willkommensbereich">
-        <div className="panel">
-          {/* <h1 className="top-text">Schön, dass du hier bist bei</h1>
+      <main id="main-content">
+        <section className="hero-section" aria-label="Willkommensbereich">
+          <div className="panel">
+            {/* <h1 className="top-text">Schön, dass du hier bist bei</h1>
 
           <div className="hero_logo">
             <img src="/assets/WIU-logo.png" alt="Main Logo" />
@@ -2068,141 +2072,140 @@ const LandingPage = () => {
             Die Suche oben rechts beantwortet dir auch komplette Fragen.
           </p> */}
 
-          <img
-            src="/assets/startmessage-creative-stack.png"
-            alt="Kreatives Kartenstapel Bild - Willkommen bei Wir in Ungarn"
-          />
-        </div>
-      </section>
+            <img
+              src="/assets/startmessage-creative-stack.png"
+              alt="Kreatives Kartenstapel Bild - Willkommen bei Wir in Ungarn"
+            />
+          </div>
+        </section>
 
-      <div
-        className="cards-container"
-        id="cardsContainer"
-        ref={cardsContainerRef}
-        role="region"
-        aria-label="Themen Karten"
-      >
-        {[
-          {
-            image: "/assets/tl-Zahlentrainer.avif",
-            title: "Zahlentrainer",
-            route: "/zahlentrainer",
-          },
-          {
-            image: "/assets/tl-Uhrzeittrainer.avif",
-            title: "Uhrzeittrainer",
-            route: "/wie-spaet-ist-es",
-          },
-          {
-            image: "/assets/tl-kulinarische-Selle.avif",
-            title: "Kulinarische Seele",
-            route: "/kulinarische-seele",
-          },
-          {
-            image: "/assets/tl-Raetsel.avif",
-            title: "Rätsel",
-            route: "/kreuzwortraetsel",
-          },
-          // {
-          //   image: "/assets/tl-Ungarn-Insider.avif",
-          //   title: "Ungarn Insider",
-          //   route: "/wissenswert",
-          // },
-          {
-            image: "/assets/tl-Zustand-in-einem-Wort.avif",
-            title: "Zustand in einem Wort",
-            route: "/einfach-lesen",
-          },
-          {
-            image: "/assets/tl-Plural.avif",
-            title: "Plural",
-            route: "/sprachkurs",
-          },
-          {
-            image: "/assets/tl-Makler-Tricks.avif",
-            title: "Makler Tricks",
-            route: "/wissenswert",
-          },
-          {
-            image: "/assets/tl-aus-dem-leben.avif",
-            title: "Aus dem Leben",
-            route: "/aus-dem-leben",
-          },
-          {
-            image: "/assets/tl-itt-ott.avif",
-            title: "Itt-Ott",
-            route: "/einfach-lesen",
-          },
-        ].map((card, index) => (
-          <article key={index} className="card-wrapper">
-            <div
-              className="card"
-              tabIndex={0}
-              role="button"
-              aria-label={`${card.title} Karte öffnen`}
-              onClick={() => {
-                // const modal = document.getElementById("modal");
-                // document.getElementById(
-                //   "modalTitle"
-                // ).textContent = `${card.title}`;
-                // document.getElementById(
-                //   "modalText"
-                // ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
-
-                // // Add a button to navigate to the page
-                // const buttonContainer =
-                //   modal.querySelector(".modal-content div");
-                // if (buttonContainer) {
-                //   // Clear existing buttons first
-                //   const existingNavigateBtn =
-                //     buttonContainer.querySelector(".navigate-btn");
-                //   if (existingNavigateBtn) {
-                //     existingNavigateBtn.remove();
-                //   }
-
-                //   // Create and add the navigation button
-                //   const navigateBtn = document.createElement("button");
-                //   navigateBtn.className = "close-modal navigate-btn";
-                //   navigateBtn.style.backgroundColor = "#4a7c59";
-                //   navigateBtn.textContent = "Zur Seite";
-                //   navigateBtn.onclick = () => {
-                //     route.push(card.route);
-                //   };
-                //   buttonContainer.appendChild(navigateBtn);
-                // }
-
-                // modal.style.display = "flex";
-                if (allowImpressumModal === true) {
-                  setAllowImpressumModal(false);
-                }
-                setAllowPostSlider(true);
-                setPostSliderDetails(card);
-                handleOpen();
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  e.currentTarget.click();
-                }
-              }}
-            >
+        <div
+          className="cards-container"
+          id="cardsContainer"
+          ref={cardsContainerRef}
+          role="region"
+          aria-label="Themen Karten"
+        >
+          {[
+            {
+              image: "/assets/tl-Zahlentrainer.avif",
+              title: "Zahlentrainer",
+              route: "/zahlentrainer",
+            },
+            {
+              image: "/assets/tl-Uhrzeittrainer.avif",
+              title: "Uhrzeittrainer",
+              route: "/wie-spaet-ist-es",
+            },
+            {
+              image: "/assets/tl-kulinarische-Selle.avif",
+              title: "Kulinarische Seele",
+              route: "/kulinarische-seele",
+            },
+            {
+              image: "/assets/tl-Raetsel.avif",
+              title: "Rätsel",
+              route: "/kreuzwortraetsel",
+            },
+            // {
+            //   image: "/assets/tl-Ungarn-Insider.avif",
+            //   title: "Ungarn Insider",
+            //   route: "/wissenswert",
+            // },
+            {
+              image: "/assets/tl-Zustand-in-einem-Wort.avif",
+              title: "Zustand in einem Wort",
+              route: "/einfach-lesen",
+            },
+            {
+              image: "/assets/tl-Plural.avif",
+              title: "Plural",
+              route: "/sprachkurs",
+            },
+            {
+              image: "/assets/tl-Makler-Tricks.avif",
+              title: "Makler Tricks",
+              route: "/wissenswert",
+            },
+            {
+              image: "/assets/tl-aus-dem-leben.avif",
+              title: "Aus dem Leben",
+              route: "/aus-dem-leben",
+            },
+            {
+              image: "/assets/tl-itt-ott.avif",
+              title: "Itt-Ott",
+              route: "/einfach-lesen",
+            },
+          ].map((card, index) => (
+            <article key={index} className="card-wrapper">
               <div
-                className="card-image"
-                style={{ backgroundImage: `url('${card.image}')` }}
-                role="img"
-                aria-label={card.title}
-              ></div>
-            </div>
-          </article>
-        ))}
-      </div>
+                className="card"
+                tabIndex={0}
+                role="button"
+                aria-label={`${card.title} Karte öffnen`}
+                onClick={() => {
+                  // const modal = document.getElementById("modal");
+                  // document.getElementById(
+                  //   "modalTitle"
+                  // ).textContent = `${card.title}`;
+                  // document.getElementById(
+                  //   "modalText"
+                  // ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
 
-      <div
-        className="content-section"
-        style={{ minHeight: "300vh", position: "relative", zIndex: 2 }}
-      ></div>
-</main>
+                  // // Add a button to navigate to the page
+                  // const buttonContainer =
+                  //   modal.querySelector(".modal-content div");
+                  // if (buttonContainer) {
+                  //   // Clear existing buttons first
+                  //   const existingNavigateBtn =
+                  //     buttonContainer.querySelector(".navigate-btn");
+                  //   if (existingNavigateBtn) {
+                  //     existingNavigateBtn.remove();
+                  //   }
 
+                  //   // Create and add the navigation button
+                  //   const navigateBtn = document.createElement("button");
+                  //   navigateBtn.className = "close-modal navigate-btn";
+                  //   navigateBtn.style.backgroundColor = "#4a7c59";
+                  //   navigateBtn.textContent = "Zur Seite";
+                  //   navigateBtn.onclick = () => {
+                  //     route.push(card.route);
+                  //   };
+                  //   buttonContainer.appendChild(navigateBtn);
+                  // }
+
+                  // modal.style.display = "flex";
+                  if (allowImpressumModal === true) {
+                    setAllowImpressumModal(false);
+                  }
+                  setAllowPostSlider(true);
+                  setPostSliderDetails(card);
+                  handleOpen();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.currentTarget.click();
+                  }
+                }}
+              >
+                <div
+                  className="card-image"
+                  style={{ backgroundImage: `url('${card.image}')` }}
+                  role="img"
+                  aria-label={card.title}
+                ></div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div
+          className="content-section"
+          style={{ minHeight: "300vh", position: "relative", zIndex: 2 }}
+        ></div>
+      </main>
 
       {/* Modal for card details */}
       <div className="modal" id="modal" style={{ display: "none" }}>
@@ -2476,7 +2479,10 @@ const LandingPage = () => {
       {/* Tablet Intro Image */}
       <div className="tablet_intro_image">
         <div className="intro_image_cnt">
-          <img src="/assets/welcome-message-tablet.png" alt="tablet welcome image" />
+          <img
+            src="/assets/welcome-message-tablet.png"
+            alt="tablet welcome image"
+          />
         </div>
       </div>
 
@@ -2801,10 +2807,7 @@ const LandingPage = () => {
         >
           MEIN PROFIL
         </button>
-        <button
-          className="widget-btn"
-          onClick={() => openPopup("widgetPopup")}
-        >
+        <button className="widget-btn" onClick={() => openPopup("widgetPopup")}>
           WERKZEUGE
         </button>
       </div>
@@ -2826,7 +2829,9 @@ const LandingPage = () => {
           ✕
         </button>
         <div className="popup-content">
-          <p className="text-[#4a7c59] text-2xl uppercase font-bold mb-6">Mein Profil</p>
+          <p className="text-[#4a7c59] text-2xl uppercase font-bold mb-6">
+            Mein Profil
+          </p>
 
           {/* Login Form */}
           <div className="login-form" id="loginForm">
@@ -2841,7 +2846,11 @@ const LandingPage = () => {
               </div>
               <div className="form-group">
                 <label htmlFor="password">Passwort</label>
-                <input type="password" id="password" placeholder="Ihr Passwort" />
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Ihr Passwort"
+                />
               </div>
               <button type="submit" className="btn-submit">
                 Anmelden
@@ -2867,7 +2876,9 @@ const LandingPage = () => {
         <div className="popup-content">
           {/* <h2>Werkzeuge</h2> */}
 
-          <p className="text-[#4a7c59] text-2xl font-bold uppercase mb-6">Werkzeuge</p>
+          <p className="text-[#4a7c59] text-2xl font-bold uppercase mb-6">
+            Werkzeuge
+          </p>
 
           <div className="widget-grid">
             {/* Currency Converter */}
@@ -2924,7 +2935,9 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Währungsrechner</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">
+            Währungsrechner
+          </h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -2933,7 +2946,12 @@ const LandingPage = () => {
           <div className="currency-converter">
             <div className="converter-group">
               <label>Euro (EUR)</label>
-              <input type="number" id="eurInput" placeholder="0.00" defaultValue="100" />
+              <input
+                type="number"
+                id="eurInput"
+                placeholder="0.00"
+                defaultValue="100"
+              />
             </div>
 
             <div className="converter-icon">
@@ -2966,7 +2984,9 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Kalender</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">
+            Kalender
+          </h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -3017,8 +3037,10 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Favoriten</h2>
-          
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">
+            Favoriten
+          </h2>
+
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -3061,7 +3083,9 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Verlauf</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">
+            Verlauf
+          </h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -3227,7 +3251,11 @@ const LandingPage = () => {
                 gewünschten Themen angezeigt.
               </div>
 
-              <div className="controls-row" role="group" aria-label="filter controls">
+              <div
+                className="controls-row"
+                role="group"
+                aria-label="filter controls"
+              >
                 <button className="info-btn" aria-label="Info" title="Info">
                   <img
                     src="/assets/filter-i-icon.jpeg"
@@ -3246,10 +3274,14 @@ const LandingPage = () => {
                   />
                 </div>
 
-                <div id="filter-tags" className="filter-tags" aria-label="active tags">
+                <div
+                  id="filter-tags"
+                  className="filter-tags"
+                  aria-label="active tags"
+                >
                   {filterTags.map((tag, index) => (
                     <div className="tag-pill" key={index}>
-                      {tag}{' '}
+                      {tag}{" "}
                       <button
                         className="tag-close"
                         aria-label={`remove ${tag}`}

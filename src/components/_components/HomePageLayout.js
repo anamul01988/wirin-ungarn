@@ -119,12 +119,12 @@ export default function HomePageLayout() {
           <div className="calendar-item">
             <button className="header-btn">
               <span className="ht_text">06.08. Zsuzsanna</span>{" "}
-              <Image
+              <img
                 src="/assets/calendar.png"
                 alt="calendar"
                 loading="lazy"
                 width={15}
-                height={17}
+                height={15}
               />
             </button>
             <CalendarMenu />
