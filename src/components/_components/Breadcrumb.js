@@ -10,7 +10,6 @@ const Breadcrumb = ({
   showHome = true,
   separator = "/",
   className = "",
-  isSinglePage = false,
 }) => {
   const pathname = usePathname();
 
@@ -85,26 +84,21 @@ const Breadcrumb = ({
 
   return (
     <nav
-      className={`flex items-center space-x-2 text-sm rounded-sm ${className} ${
-        isSinglePage && "bg-[#4a7c59] text-white px-5"
-      }`}
+      className={`flex items-center space-x-2 text-sm rounded-sm bg-[#4a7c59] text-white px-5 ${className}`}
       aria-label="Breadcrumb"
     >
       <ol className="flex items-center space-x-2">
         {breadcrumbItems.map((item, index) => (
           <li key={index} className="flex items-center">
             {index > 0 && (
-              <span
-                className={`mx-2 ${!isSinglePage && "text-gray-400"}`}
-                aria-hidden="true"
-              >
+              <span className="mx-2" aria-hidden="true">
                 {separator}
               </span>
             )}
             {item.isActive ? (
               <Typography
                 variant="small"
-                className={`font-medium ${!isSinglePage && "text-gray-600"}`}
+                className="font-medium"
                 aria-current="page"
               >
                 {item.label}
@@ -112,9 +106,7 @@ const Breadcrumb = ({
             ) : (
               <Link
                 href={item.href}
-                className={`hover:underline transition-colors ${
-                  !isSinglePage && "text-blue-600 hover:text-blue-800"
-                }`}
+                className="hover:underline transition-colors"
               >
                 <Typography variant="small" className="font-medium">
                   {item.label}
