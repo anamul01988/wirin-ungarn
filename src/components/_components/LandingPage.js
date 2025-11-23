@@ -244,6 +244,10 @@ const LandingPage = () => {
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
+  const [visibleLinks, setVisibleLinks] = useState([...footerLinks]);
+  const [hiddenLinks, setHiddenLinks] = useState([]);
+  const footerContainerRef = useRef(null);
+  const footerLinksRef = useRef([]);
   const handleOpen = () => setOpen(!open);
   const route = useRouter();
   const cardsContainerRef = useRef(null);
@@ -262,6 +266,76 @@ const LandingPage = () => {
     setAllowImpressumModal(true);
     handleOpen();
   };
+
+  // Dynamic footer links calculation
+  useEffect(() => {
+    const calculateVisibleLinks = () => {
+      if (!footerContainerRef.current) return;
+
+      const container = footerContainerRef.current;
+      const containerWidth = container.offsetWidth;
+      const moreButtonWidth = 80; // Approximate width for "more" button
+      const gap = 8; // Gap between items
+      let availableWidth = containerWidth - moreButtonWidth - gap * 2;
+
+      const allLinks = [...footerLinks];
+      const visible = [];
+      const hidden = [];
+
+      // Calculate actual font size from clamp
+      const viewportWidth = window.innerWidth;
+      const vwValue = viewportWidth * 0.0073; // 0.73vw
+      const fontSize = Math.max(11, Math.min(vwValue, 16));
+
+      // Temporarily measure each link
+      let accumulatedWidth = 0;
+
+      allLinks.forEach((link, index) => {
+        // Create temporary element to measure with actual computed font size
+        const tempElement = document.createElement("span");
+        tempElement.style.cssText = `
+          position: absolute;
+          visibility: hidden;
+          white-space: nowrap;
+          font-size: ${fontSize}px;
+          font-family: "Roboto Condensed", sans-serif;
+          padding: 0px 5px;
+        `;
+        tempElement.textContent = link.title;
+        document.body.appendChild(tempElement);
+        const linkWidth = tempElement.offsetWidth;
+        document.body.removeChild(tempElement);
+
+        if (accumulatedWidth + linkWidth + gap <= availableWidth) {
+          visible.push(link);
+          accumulatedWidth += linkWidth + gap;
+        } else {
+          hidden.push(link);
+        }
+      });
+
+      setVisibleLinks(visible);
+      setHiddenLinks(hidden);
+    };
+
+    // Small delay to ensure container is properly sized
+    const timeoutId = setTimeout(() => {
+      calculateVisibleLinks();
+    }, 100);
+
+    const resizeObserver = new ResizeObserver(() => {
+      calculateVisibleLinks();
+    });
+
+    if (footerContainerRef.current) {
+      resizeObserver.observe(footerContainerRef.current);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     // Check ticker status and reset daily if needed
@@ -1437,87 +1511,13 @@ const LandingPage = () => {
         /* Custom Scrollbar Container */
         .scrollbar-container {
             position: fixed;
-            right: clamp(15px, 2vw, 25px);
-            top: 58%;
-            transform: translateY(-50%);
+            right: 20px;
+            top: 28%;
+            bottom: 12%;
             width: 30px;
-            height: clamp(300px, 60vh, 600px);
-            max-height: 70vh;
             display: flex;
             flex-direction: column;
-            z-index: 998;
-        }
-
-        /* Responsive adjustments for scrollbar */
-        @media (max-width: 1600px) {
-          .scrollbar-container {
-            right: 30px;
-            height: 58vh;
-            max-height: 550px;
-          }
-        }
-
-        @media (max-width: 1400px) {
-          .scrollbar-container {
-            right: 22px;
-            height: 53vh;
-            max-height: 500px;
-          }
-        }
-
-        @media (max-width: 1200px) {
-          .scrollbar-container {
-            right: 22px;
-            height: 55vh;
-            max-height: 450px;
-            width: 25px;
-            top: 52%;
-          }
-          
-          .scrollbar-track {
-            width: 25px !important;
-          }
-          
-          .scrollbar-thumb {
-            width: 45px !important;
-            min-height: 45px !important;
-          }
-          
-          .arrow-button {
-            width: 25px !important;
-            height: 25px !important;
-          }
-        }
-
-        
-        @media (max-width: 992px) {
-          .scrollbar-container {
-            right: 28px;
-            height: 55vh;
-            max-height: 380px;
-            width: 22px;
-            top: 52%;
-          }
-          
-          .scrollbar-track {
-            width: 22px !important;
-          }
-          
-          .arrow-button {
-            width: 22px !important;
-            height: 22px !important;
-          }
-          
-          .scrollbar-thumb {
-            width: 38px !important;
-            min-height: 38px !important;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .scrollbar-container {
-            display: none !important;
-          }
+            z-index: 1000;
         }
 
         /* Arrow Buttons */
@@ -1580,6 +1580,41 @@ const LandingPage = () => {
             border-top-color: #c41e3a;
         }
 
+        @media screen and (max-width: 1290px) {
+            .arrow-button {
+                width: 22px !important;
+                height: 30px !important;
+            }
+
+            .scrollbar-container {
+                width: 30px !important;
+            }
+
+            .scrollbar-track {
+                width: 22px !important;
+            }
+
+            .scrollbar-thumb {
+                width: 35px !important;
+                min-height: 35px !important;
+            }
+
+            .header-btn {
+                padding-bottom: 8px;
+            }
+
+            .scrollbar-container {
+                top: 26% !important;
+                bottom: 14% !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+          .scrollbar-container {
+            display: none !important;
+          }
+        }
+
         /* Scrollbar Track */
         .scrollbar-track {
             flex: 1;
@@ -1595,7 +1630,7 @@ const LandingPage = () => {
             overflow: visible;
         }
 
-        /* Scrollbar Thumb with Image */
+        /* Scrollbar Thumb with Image - Wider than track */
         .scrollbar-thumb {
             position: absolute;
             width: 50px;
@@ -2330,71 +2365,77 @@ const LandingPage = () => {
             className="relative desktop-footer-nav"
           >
             {/* Main Footer Links */}
-            <div className="footer-links-container">
-              <div className="footer-links-grid">
-                {primaryLinks.map((link, index) => (
+            <div className="footer-links-container" ref={footerContainerRef}>
+              <div className="footer-links-wrapper">
+                {visibleLinks.map((link, index) => (
                   <React.Fragment key={link.key}>
-                    <Link href={link.endpoint} className="footer-link-item">
+                    <Link
+                      href={link.endpoint}
+                      className="footer-link-item"
+                      ref={(el) => (footerLinksRef.current[index] = el)}
+                    >
                       {link.title}
                     </Link>
                   </React.Fragment>
                 ))}
 
-                {/* More Button */}
-                <div className="relative footer-more-wrapper">
-                  <button
-                    type="button"
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="footer-link-item footer-more-btn"
-                    aria-expanded={isOpen}
-                    aria-label="Weitere Links anzeigen"
-                  >
-                    more
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={`transition-transform duration-200 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                      aria-hidden="true"
-                      style={{ marginLeft: "4px" }}
+                {/* More Button - Only show if there are hidden links */}
+                {hiddenLinks.length > 0 && (
+                  <div className="relative footer-more-wrapper">
+                    <button
+                      type="button"
+                      onClick={() => setIsOpen(!isOpen)}
+                      className="footer-link-item footer-more-btn"
+                      aria-expanded={isOpen}
+                      aria-label="Weitere Links anzeigen"
                     >
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                  </button>
-
-                  {/* Dropdown Menu */}
-                  {isOpen && (
-                    <>
-                      {/* Backdrop */}
-                      <div
-                        className="fixed inset-0 z-10"
-                        onClick={() => setIsOpen(false)}
+                      more
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`transition-transform duration-200 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
                         aria-hidden="true"
-                      />
+                        style={{ marginLeft: "4px" }}
+                      >
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
 
-                      {/* Menu */}
-                      <div className="absolute bottom-full right-0 mb-2 bg-[#e3e3e3] rounded-lg shadow-xl border-[3px] border-white py-2 min-w-[220px] z-20">
-                        {secondaryLinks.map((link) => (
-                          <Link
-                            key={link.key}
-                            href={link.endpoint}
-                            className="block px-4 py-2.5 text-sm font-semibold hover:bg-[#d2d0d0] transition-colors"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            {link.title}
-                          </Link>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
+                    {/* Dropdown Menu */}
+                    {isOpen && (
+                      <>
+                        {/* Backdrop */}
+                        <div
+                          className="fixed inset-0 z-10"
+                          onClick={() => setIsOpen(false)}
+                          aria-hidden="true"
+                        />
+
+                        {/* Menu */}
+                        <div className="absolute bottom-full right-0 mb-2 bg-[#e3e3e3] rounded-lg shadow-xl border-[3px] border-white py-2 min-w-[220px] z-20">
+                          {hiddenLinks.map((link) => (
+                            <Link
+                              key={link.key}
+                              href={link.endpoint}
+                              className="block px-4 py-2.5 text-sm font-semibold hover:bg-[#d2d0d0] transition-colors"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              {link.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </nav>
