@@ -236,10 +236,22 @@ const LandingPage = () => {
   const [activePopup, setActivePopup] = useState(null);
   const [activeDetailPopup, setActiveDetailPopup] = useState(null);
   const [filterBarActive, setFilterBarActive] = useState(false);
-  const [filterTags, setFilterTags] = useState(['Sprache', 'Uhrzeit', 'Zahlen']);
+  const [filterTags, setFilterTags] = useState([
+    "Sprache",
+    "Uhrzeit",
+    "Zahlen",
+  ]);
+  const [eurAmount, setEurAmount] = useState("100");
+  const [hufAmount, setHufAmount] = useState("39550");
+  const [pageHistory, setPageHistory] = useState([]);
+  const [widgetFavorites, setWidgetFavorites] = useState([]);
 
   const primaryLinks = footerLinks.filter((link) => link.primary);
   const secondaryLinks = footerLinks.filter((link) => !link.primary);
+  const [visibleLinks, setVisibleLinks] = useState([...footerLinks]);
+  const [hiddenLinks, setHiddenLinks] = useState([]);
+  const footerContainerRef = useRef(null);
+  const footerLinksRef = useRef([]);
   const handleOpen = () => setOpen(!open);
   const route = useRouter();
   const cardsContainerRef = useRef(null);
@@ -258,6 +270,76 @@ const LandingPage = () => {
     setAllowImpressumModal(true);
     handleOpen();
   };
+
+  // Dynamic footer links calculation
+  useEffect(() => {
+    const calculateVisibleLinks = () => {
+      if (!footerContainerRef.current) return;
+
+      const container = footerContainerRef.current;
+      const containerWidth = container.offsetWidth;
+      const moreButtonWidth = 80; // Approximate width for "more" button
+      const gap = 8; // Gap between items
+      let availableWidth = containerWidth - moreButtonWidth - gap * 2;
+
+      const allLinks = [...footerLinks];
+      const visible = [];
+      const hidden = [];
+
+      // Calculate actual font size from clamp
+      const viewportWidth = window.innerWidth;
+      const vwValue = viewportWidth * 0.0073; // 0.73vw
+      const fontSize = Math.max(11, Math.min(vwValue, 16));
+
+      // Temporarily measure each link
+      let accumulatedWidth = 0;
+
+      allLinks.forEach((link, index) => {
+        // Create temporary element to measure with actual computed font size
+        const tempElement = document.createElement("span");
+        tempElement.style.cssText = `
+          position: absolute;
+          visibility: hidden;
+          white-space: nowrap;
+          font-size: ${fontSize}px;
+          font-family: "Roboto Condensed", sans-serif;
+          padding: 0px 5px;
+        `;
+        tempElement.textContent = link.title;
+        document.body.appendChild(tempElement);
+        const linkWidth = tempElement.offsetWidth;
+        document.body.removeChild(tempElement);
+
+        if (accumulatedWidth + linkWidth + gap <= availableWidth) {
+          visible.push(link);
+          accumulatedWidth += linkWidth + gap;
+        } else {
+          hidden.push(link);
+        }
+      });
+
+      setVisibleLinks(visible);
+      setHiddenLinks(hidden);
+    };
+
+    // Small delay to ensure container is properly sized
+    const timeoutId = setTimeout(() => {
+      calculateVisibleLinks();
+    }, 100);
+
+    const resizeObserver = new ResizeObserver(() => {
+      calculateVisibleLinks();
+    });
+
+    if (footerContainerRef.current) {
+      resizeObserver.observe(footerContainerRef.current);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     // Check ticker status and reset daily if needed
@@ -343,7 +425,7 @@ const LandingPage = () => {
         scrollTrigger: {
           trigger: ".content-section",
           start: "top bottom",
-          end: "top+=800 bottom",
+          end: "top+=200 bottom",
           scrub: 2,
         },
       });
@@ -395,63 +477,77 @@ const LandingPage = () => {
         plusBtn.addEventListener("click", (e) => {
           e.stopPropagation();
 
-          // Get the card data to save to favorites
+          // Get the card data
           const cardIndex = Array.from(cardWrappers).indexOf(wrapper);
           const cardData = [
             {
               image: "/assets/tl-Zahlentrainer.avif",
               title: "Zahlentrainer",
               route: "/zahlentrainer",
+              tag: "Zahlen",
             },
             {
               image: "/assets/tl-Uhrzeittrainer.avif",
               title: "Uhrzeittrainer",
               route: "/wie-spaet-ist-es",
+              tag: "Uhrzeit",
             },
             {
               image: "/assets/tl-kulinarische-Selle.avif",
               title: "Kulinarische Seele",
               route: "/kulinarische-seele",
+              tag: "Kulinarik",
             },
             {
               image: "/assets/tl-Raetsel.avif",
               title: "Rätsel",
               route: "/kreuzwortraetsel",
+              tag: "Rätsel",
             },
             {
               image: "/assets/tl-Ungarn-Insider.avif",
               title: "Ungarn Insider",
               route: "/wissenswert",
+              tag: "Ungarn",
             },
             {
               image: "/assets/tl-Zustand-in-einem-Wort.avif",
               title: "Zustand in einem Wort",
               route: "/einfach-lesen",
+              tag: "Sprache",
             },
             {
               image: "/assets/tl-Plural.avif",
               title: "Plural",
               route: "/sprachkurs",
+              tag: "Sprache",
             },
             {
               image: "/assets/tl-Makler-Tricks.avif",
               title: "Makler Tricks",
               route: "/wissenswert",
+              tag: "Ungarn",
             },
             {
               image: "/assets/tl-aus-dem-leben.avif",
               title: "Aus dem Leben",
               route: "/aus-dem-leben",
+              tag: "Sprache",
             },
             {
               image: "/assets/tl-itt-ott.avif",
               title: "Itt-Ott",
               route: "/einfach-lesen",
+              tag: "Sprache",
             },
           ][cardIndex];
 
-          // Use the toggleFavorite utility which will show toasts
-          toggleFavorite(cardData.route, cardData.title);
+          // Open filter bar with the relevant tag for this card
+          // Trigger custom event that will be handled by React
+          const filterEvent = new CustomEvent("openFilterWithTag", {
+            detail: { tag: cardData.tag },
+          });
+          window.dispatchEvent(filterEvent);
         });
 
         const closeBtn = hoverButtons.querySelector(".hover-close");
@@ -470,12 +566,12 @@ const LandingPage = () => {
       });
 
       // Function to determine start positions for cards
-      function getStartPosition() {
+      function getStartPosition(index) {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
 
         const startX = Math.random() * (viewportWidth + 800) - 400;
-        const startY = viewportHeight + 400;
+        const startY = viewportHeight + 300;
 
         return { startX, startY };
       }
@@ -521,49 +617,79 @@ const LandingPage = () => {
         imagePromises.push(new Promise((resolve) => setTimeout(resolve, 100)));
       }
 
+      // Store final positions as percentages for better responsiveness
+      let finalPositionsPercent = [];
+
+      // Calculate positions as percentages of viewport
+      function calculatePositionsAsPercentages() {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const horizontalMargin = 0.06;
+        const verticalMargin = 0.02;
+
+        const areaWidth = viewportWidth * (1 - 2 * horizontalMargin);
+        const areaHeight = viewportHeight * (1 - 2 * verticalMargin);
+        const startAreaX = viewportWidth * horizontalMargin;
+        const startAreaY = viewportHeight * verticalMargin;
+
+        const minDistPercent = 15;
+        const positions = [];
+
+        function findGoodPosition(cardHeightPercent, cardWidthPercent) {
+          const maxXPercent =
+            ((areaWidth - (cardWidthPercent * viewportWidth) / 100) /
+              viewportWidth) *
+            100;
+          const maxYPercent =
+            ((areaHeight - (cardHeightPercent * viewportHeight) / 100) /
+              viewportHeight) *
+            100;
+
+          for (let attempts = 0; attempts < 50; attempts++) {
+            const xPercent =
+              (startAreaX / viewportWidth) * 100 + Math.random() * maxXPercent;
+            const yPercent =
+              (startAreaY / viewportHeight) * 100 + Math.random() * maxYPercent;
+
+            let tooClose = false;
+            for (let pos of positions) {
+              const dx = xPercent - pos.xPercent;
+              const dy = yPercent - pos.yPercent;
+              if (Math.sqrt(dx * dx + dy * dy) < minDistPercent) {
+                tooClose = true;
+                break;
+              }
+            }
+            if (!tooClose) {
+              return { xPercent, yPercent };
+            }
+          }
+          return {
+            xPercent:
+              (startAreaX / viewportWidth) * 100 + Math.random() * maxXPercent,
+            yPercent:
+              (startAreaY / viewportHeight) * 100 + Math.random() * maxYPercent,
+          };
+        }
+
+        const currentCardWrappers = document.querySelectorAll(".card-wrapper");
+        currentCardWrappers.forEach((wrapper) => {
+          const cardHeight = wrapper.clientHeight;
+          const cardWidth = wrapper.offsetWidth;
+          const cardHeightPercent = (cardHeight / viewportHeight) * 100;
+          const cardWidthPercent = (cardWidth / viewportWidth) * 100;
+
+          const pos = findGoodPosition(cardHeightPercent, cardWidthPercent);
+          positions.push(pos);
+        });
+
+        return positions;
+      }
+
       // Set up card animations after images load
       Promise.all(imagePromises)
         .then(() => {
           console.log("Images loaded, setting up card animations");
-          const viewportWidth = window.innerWidth;
-          const viewportHeight = window.innerHeight;
-          const horizontalMargin = 0.06;
-          const verticalMargin = 0.02;
-
-          const areaWidth = viewportWidth * (1 - 2 * horizontalMargin);
-          const areaHeight = viewportHeight * (1 - 2 * verticalMargin);
-          const startAreaX = viewportWidth * horizontalMargin;
-          const startAreaY = viewportHeight * verticalMargin;
-
-          const finalPositions = [];
-          // Make minimum distance responsive based on viewport width
-          const minDist = Math.max(150, viewportWidth * 0.15);
-
-          // Function to find non-overlapping positions for cards
-          function findGoodPosition(cardHeight, cardWidth) {
-            const maxX = Math.max(0, areaWidth - cardWidth);
-            const maxY = Math.max(0, areaHeight - cardHeight);
-            for (let attempts = 0; attempts < 50; attempts++) {
-              const x = startAreaX + Math.random() * maxX;
-              const y = startAreaY + Math.random() * maxY;
-              let tooClose = false;
-              for (let pos of finalPositions) {
-                const dx = x - pos.x;
-                const dy = y - pos.y;
-                if (Math.sqrt(dx * dx + dy * dy) < minDist) {
-                  tooClose = true;
-                  break;
-                }
-              }
-              if (!tooClose) {
-                return { x, y };
-              }
-            }
-            return {
-              x: startAreaX + Math.random() * Math.max(0, maxX),
-              y: startAreaY + Math.random() * Math.max(0, maxY),
-            };
-          }
 
           // Re-query card wrappers to ensure we have the latest elements
           const currentCardWrappers =
@@ -575,46 +701,39 @@ const LandingPage = () => {
             return;
           }
 
+          // Calculate positions as percentages
+          finalPositionsPercent = calculatePositionsAsPercentages();
+
           // Create scroll-triggered animation timeline
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: ".content-section",
               start: "top bottom",
-              end: "bottom top",
+              end: "70% top",
               scrub: 2,
-              onUpdate: (self) => {
-                console.log("ScrollTrigger progress:", self.progress);
-              },
             },
           });
 
           // Animate each card wrapper
           currentCardWrappers.forEach((wrapper, index) => {
-            const cardHeight = wrapper.clientHeight || 400;
-            const cardWidth = wrapper.clientWidth || 450;
-            const pos = findGoodPosition(cardHeight, cardWidth);
-            finalPositions.push(pos);
-            const { startX, startY } = getStartPosition();
+            const { startX, startY } = getStartPosition(index);
 
             console.log(`Setting up card ${index}:`, {
               startX,
               startY,
-              finalPos: pos,
-              cardWidth,
-              cardHeight,
+              finalPos: finalPositionsPercent[index],
             });
 
             gsap.set(wrapper, {
               x: startX,
               y: startY,
-              opacity: 0,
+              opacity: 1,
               zIndex: index + 10,
             });
 
             tl.to(
               wrapper,
               {
-                opacity: 1,
                 duration: 2,
                 ease: "power2.out",
               },
@@ -624,8 +743,12 @@ const LandingPage = () => {
             tl.to(
               wrapper,
               {
-                x: pos.x,
-                y: pos.y,
+                x: () =>
+                  (finalPositionsPercent[index].xPercent * window.innerWidth) /
+                  100,
+                y: () =>
+                  (finalPositionsPercent[index].yPercent * window.innerHeight) /
+                  100,
                 duration: 4,
                 ease: "power2.out",
               },
@@ -816,7 +939,7 @@ const LandingPage = () => {
   };
 
   const removeTag = (tagToRemove) => {
-    setFilterTags(filterTags.filter(tag => tag !== tagToRemove));
+    setFilterTags(filterTags.filter((tag) => tag !== tagToRemove));
   };
 
   // Handle Escape key to close popups
@@ -835,11 +958,28 @@ const LandingPage = () => {
     }
   }, [activePopup, activeDetailPopup]);
 
+  // Listen for filter bar open events from cards
+  useEffect(() => {
+    const handleOpenFilter = (e) => {
+      if (e.detail && e.detail.tag) {
+        openFilterBar(e.detail.tag);
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("openFilterWithTag", handleOpenFilter);
+      return () => {
+        window.removeEventListener("openFilterWithTag", handleOpenFilter);
+      };
+    }
+  }, [filterTags]);
+
   // Load favorites for mobile dropdown
   useEffect(() => {
     const loadFavorites = () => {
       const savedFavorites = getAllFavorites();
       setMobileFavorites(savedFavorites);
+      setWidgetFavorites(savedFavorites);
     };
 
     loadFavorites();
@@ -853,6 +993,512 @@ const LandingPage = () => {
       window.removeEventListener("favoritesUpdated", loadFavorites);
     };
   }, []);
+
+  // Load page history from localStorage (same key as desktop view)
+  useEffect(() => {
+    const loadHistory = () => {
+      try {
+        const historyStr = localStorage.getItem("userHistory") || "[]";
+        let history = JSON.parse(historyStr);
+
+        // Format history items for display
+        const formattedHistory = history.map((item) => {
+          let timeDisplay = "Kürzlich";
+
+          if (item.timestamp) {
+            const itemDate = new Date(item.timestamp);
+            const now = new Date();
+            const today = new Date(
+              now.getFullYear(),
+              now.getMonth(),
+              now.getDate()
+            );
+            const itemDay = new Date(
+              itemDate.getFullYear(),
+              itemDate.getMonth(),
+              itemDate.getDate()
+            );
+            const diffDays = Math.floor(
+              (today - itemDay) / (1000 * 60 * 60 * 24)
+            );
+
+            const hours = String(itemDate.getHours()).padStart(2, "0");
+            const minutes = String(itemDate.getMinutes()).padStart(2, "0");
+            const timeStr = `${hours}:${minutes}`;
+
+            if (diffDays === 0) {
+              timeDisplay = `Heute, ${timeStr}`;
+            } else if (diffDays === 1) {
+              timeDisplay = `Gestern, ${timeStr}`;
+            } else if (diffDays < 7) {
+              timeDisplay = `Vor ${diffDays} Tagen`;
+            } else {
+              timeDisplay = itemDate.toLocaleDateString("de-DE", {
+                day: "2-digit",
+                month: "2-digit",
+              });
+            }
+          }
+
+          return {
+            title: item.title || item.page || "Unbekannte Seite",
+            route: item.route || item.url || "/",
+            time: timeDisplay,
+          };
+        });
+
+        setPageHistory(formattedHistory.slice(0, 10)); // Get last 10 items
+      } catch (error) {
+        console.error("Error loading history:", error);
+        setPageHistory([]);
+      }
+    };
+
+    loadHistory();
+
+    // Add event listener to update history when it changes
+    const handleStorageChange = (e) => {
+      if (e.key === "userHistory") {
+        loadHistory();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("historyUpdated", loadHistory);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("historyUpdated", loadHistory);
+    };
+  }, []);
+
+  // Currency conversion function
+  const handleCurrencyConversion = () => {
+    const exchangeRate = 395.5; // 1 EUR = 395.5 HUF
+    const eur = parseFloat(eurAmount) || 0;
+    const huf = (eur * exchangeRate).toFixed(2);
+    setHufAmount(huf);
+  };
+
+  // Handle EUR input change
+  const handleEurChange = (e) => {
+    const value = e.target.value;
+    setEurAmount(value);
+    const exchangeRate = 395.5;
+    const eur = parseFloat(value) || 0;
+    const huf = (eur * exchangeRate).toFixed(2);
+    setHufAmount(huf);
+  };
+
+  // Hungarian name days data
+  const hungarianNameDays = {
+    "01": [
+      "Fruzsina",
+      "Pál",
+      "Genovéva",
+      "Titusz",
+      "Simon",
+      "Boldizsár",
+      "Attila",
+      "Gyöngyvér",
+      "Marcell",
+      "Melánia",
+      "Ágota",
+      "Ernő",
+      "Veronika",
+      "Bódog",
+      "Lóránt",
+      "Gusztáv",
+      "Antal",
+      "Piroska",
+      "Sára, Márió",
+      "Fábián, Sebestyén",
+      "Ágnes",
+      "Vince, Artúr",
+      "Zelma, Rajmund",
+      "Timót",
+      "Pál",
+      "Paula, Vanda",
+      "Angelika",
+      "Károly, Karola",
+      "Adél",
+      "Martina, Gerda",
+    ],
+    "02": [
+      "Ignác",
+      "Karolina, Aida",
+      "Balázs",
+      "Ráhel, Csenge",
+      "Ágota, Ingrid",
+      "Dorottya, Dóra",
+      "Tódor, Rómeó",
+      "Aranka",
+      "Abigél, Alex",
+      "Elvira",
+      "Bertold, Marietta",
+      "Lídia, Lívia",
+      "Ella, Linda",
+      "Bálint, Valentin",
+      "Kolos, Georgina",
+      "Julianna, Lilla",
+      "Donát",
+      "Bernadett",
+      "Zsuzsanna",
+      "Aladár, Álmos",
+      "Eleonóra",
+      "Gerzson",
+      "Alfréd",
+      "Mátyás",
+      "Géza",
+      "Edina",
+      "Ákos, Bátor",
+      "Elemér",
+    ],
+    "03": [
+      "Albin",
+      "Lujza, Lujza",
+      "Kornélia",
+      "Kázmér",
+      "Adorján, Adrián",
+      "Leonóra, Inez",
+      "Tamás",
+      "Zoltán",
+      "Franciska, Fanni",
+      "Ildikó",
+      "Szilárd",
+      "Gergely",
+      "Krisztián, Ajtony",
+      "Matild",
+      "Kristóf",
+      "Henriette",
+      "Gertrúd, Patrik",
+      "Sándor, Ede",
+      "József, Bánk",
+      "Klaudia",
+      "Benedek",
+      "Beáta, Izolda",
+      "Emőke",
+      "Gábor, Karina",
+      "Irén, Irisz",
+      "Emánuel",
+      "Hajnalka",
+      "Gedeon, Johanna",
+      "Auguszta",
+      "Zalán",
+    ],
+    "04": [
+      "Hugó",
+      "Áron",
+      "Richárd",
+      "Izidor",
+      "Vince",
+      "Vilmos, Bíborka",
+      "Herman",
+      "Dénes",
+      "Erhard",
+      "Zsolt",
+      "Leó, Szaniszló",
+      "Gyula",
+      "Ida",
+      "Tibor",
+      "Anasztázia, Tas",
+      "Csongor",
+      "Rudolf",
+      "Andrea, Ilma",
+      "Emma",
+      "Tivadar",
+      "Konrád",
+      "Csilla, Noémi",
+      "Béla",
+      "György",
+      "Márk",
+      "Ervin",
+      "Zita",
+      "Valéria",
+      "Péter",
+    ],
+    "05": [
+      "Fülöp, Jakab",
+      "Zsigmond",
+      "Tímea, Irma",
+      "Mónika, Flórián",
+      "Györgyi",
+      "Ivett, Frida",
+      "Gizella",
+      "Mihály",
+      "Gergely",
+      "Ármin, Pálma",
+      "Ferenc",
+      "Pongrác",
+      "Szervác, Imola",
+      "Bonifác",
+      "Zsófia, Szonja",
+      "Mózes, Botond",
+      "Paszkál",
+      "Erik, Alexandra",
+      "Ivó, Milán",
+      "Bernát, Felícia",
+      "Konstantin",
+      "Júlia, Rita",
+      "Dezső",
+      "Eszter, Eliza",
+      "Orbán",
+      "Fülöp, Evelin",
+      "Hella",
+      "Emil, Csanád",
+      "Magdolna",
+      "Janka, Zsanett",
+    ],
+    "06": [
+      "Tünde",
+      "Kármen, Anita",
+      "Klotild",
+      "Bulcsú",
+      "Fatime",
+      "Norbert, Cintia",
+      "Róbert",
+      "Medárd",
+      "Félix",
+      "Margit, Gréta",
+      "Barnabás",
+      "Villő",
+      "Antal, Anett",
+      "Vazul",
+      "Jolán, Vid",
+      "Jusztin",
+      "Laura, Alida",
+      "Arnold, Levente",
+      "Gyárfás",
+      "Rafael",
+      "Alajos, Leila",
+      "Paulina",
+      "Zoltán",
+      "Iván",
+      "Vilmos",
+      "János, Pál",
+      "László",
+      "Levente, Irén",
+      "Péter, Pál",
+      "Pál",
+    ],
+    "07": [
+      "Tihamér, Annamária",
+      "Ottó",
+      "Kornél, Soma",
+      "Ulrik",
+      "Emese, Sarolta",
+      "Csaba",
+      "Apollónia",
+      "Ellák",
+      "Lukrécia",
+      "Amália",
+      "Nóra, Lili",
+      "Izabella, Dalma",
+      "Jenő",
+      "Örs, Stella",
+      "Henrik, Roland",
+      "Valter",
+      "Endre, Elek",
+      "Frigyes",
+      "Emília",
+      "Illés",
+      "Dániel, Daniella",
+      "Magdolna",
+      "Lenke",
+      "Kinga, Kincső",
+      "Kristóf, Jakab",
+      "Anna, Anikó",
+      "Olga, Liliána",
+      "Szabolcs",
+      "Márta, Flóra",
+      "Judit, Xénia",
+    ],
+    "08": [
+      "Boglárka",
+      "Lehel",
+      "Hermina",
+      "Domonkos, Dominika",
+      "Krisztina",
+      "Berta, Bettina",
+      "Ibolya",
+      "László",
+      "Emőd",
+      "Lörinc",
+      "Zsuzsanna, Tiborc",
+      "Klára",
+      "Ipoly",
+      "Marcell",
+      "Mária",
+      "Ábrahám",
+      "Jácint",
+      "Ilona",
+      "Huba",
+      "István",
+      "Sámuel, Hajna",
+      "Menyhért, Mirjam",
+      "Bence",
+      "Bertalan",
+      "Lajos, Patrícia",
+      "Izsó",
+      "Gáspár",
+      "Ágoston",
+      "Beatrix, Erna",
+      "Rózsa",
+      "Bella, Erika",
+    ],
+    "09": [
+      "Egyed, Egon",
+      "Rebeka, Dorina",
+      "Hilda",
+      "Rozália",
+      "Viktor, Lőrinc",
+      "Zakariás",
+      "Regina",
+      "Mária, Adrienn",
+      "Ádám",
+      "Nikolett, Hunor",
+      "Teodóra",
+      "Mária",
+      "Kornél",
+      "Szeréna, Roxána",
+      "Enikő, Melitta",
+      "Edit",
+      "Zsófia",
+      "Diána",
+      "Vilhelmina",
+      "Friderika",
+      "Máté, Mirella",
+      "Móric",
+      "Tekla",
+      "Gellért, Mercédesz",
+      "Eufrozina, Kende",
+      "Jusztina",
+      "Adalbert",
+      "Vencel",
+      "Mihály",
+      "Jeromos",
+    ],
+    10: [
+      "Malvin",
+      "Petra",
+      "Helga",
+      "Ferenc",
+      "Aurél",
+      "Brúnó, Renáta",
+      "Amália",
+      "Koppány",
+      "Dénes",
+      "Gedeon",
+      "Brigitta",
+      "Miksa",
+      "Kálmán, Ede",
+      "Helén",
+      "Teréz",
+      "Gál",
+      "Hedvig",
+      "Lukács",
+      "Nándor",
+      "Vendel",
+      "Orsolya",
+      "Előd",
+      "Gyöngyi",
+      "Salamon",
+      "Bianka, Blanka",
+      "Dömötör",
+      "Szabina",
+      "Simon, Szimonetta",
+      "Nárcisz",
+      "Alfonz",
+      "Farkas",
+    ],
+    11: [
+      "Marianna",
+      "Achilles",
+      "Győző",
+      "Károly",
+      "Imre",
+      "Lénárd",
+      "Rezső",
+      "Zsombor",
+      "Tivadar",
+      "Réka",
+      "Márton",
+      "Jónás, Renátó",
+      "Szilvia",
+      "Aliz",
+      "Albert, Lipót",
+      "Ödön",
+      "Horténzia, Gergő",
+      "Jenő",
+      "Erzsébet",
+      "Jolán",
+      "Olivér",
+      "Cecília",
+      "Kelemen, Klementina",
+      "Emma",
+      "Katalin",
+      "Virág",
+      "Virgil",
+      "Stefánia",
+      "Taksony",
+      "András, Andor",
+    ],
+    12: [
+      "Elza",
+      "Melinda, Vivien",
+      "Ferenc, Olívia",
+      "Borbála, Barbara",
+      "Vilma",
+      "Miklós",
+      "Ambrus",
+      "Mária",
+      "Natália",
+      "Judit",
+      "Árpád",
+      "Gabriella",
+      "Luca, Otília",
+      "Szilárda",
+      "Valér",
+      "Etelka, Aletta",
+      "Lázár, Olimpia",
+      "Auguszta",
+      "Viola",
+      "Teofil",
+      "Tamás",
+      "Zéno",
+      "Viktória",
+      "Ádám, Éva",
+      "Eugénia",
+      "István",
+      "János",
+      "Kamilla",
+      "Tamás, Tamara",
+      "Dávid",
+      "Szilveszter",
+    ],
+  };
+
+  // Get current date info for calendar
+  const getCurrentDateInfo = () => {
+    const today = new Date();
+    const options = { day: "2-digit", month: "long", year: "numeric" };
+    const dateString = today.toLocaleDateString("de-DE", options);
+
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = today.getDate();
+    const monthNames = hungarianNameDays[month] || [];
+    const todayName = monthNames[day - 1] || "Unbekannt";
+
+    return { dateString, todayName };
+  };
+
+  // Get name day for a specific date
+  const getNameDayForDate = (date) => {
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = date.getDate();
+    const monthNames = hungarianNameDays[month] || [];
+    return monthNames[day - 1] || "Unbekannt";
+  };
 
   const scrollbarContainerRef = useRef(null);
   const trackRef = useRef(null);
@@ -1118,6 +1764,12 @@ const LandingPage = () => {
       14: "/wie-spaet-ist-es/", // Label-15
     };
 
+    // Apply initial rotations from data-rotation attribute
+    cards.forEach((card) => {
+      const rotation = parseFloat(card.dataset.rotation) || 0;
+      gsap.set(card, { rotation: rotation });
+    });
+
     const handleTouchStart = (e) => {
       const touch = e.touches[0];
       startX = touch.clientX;
@@ -1148,10 +1800,11 @@ const LandingPage = () => {
         const rightIndicator = document.getElementById("swipeRight");
 
         if (activeCard) {
-          const rotation = deltaX * 0.05;
+          const originalRotation = parseFloat(activeCard.dataset.rotation) || 0;
+          const additionalRotation = deltaX * 0.05;
           gsap.set(activeCard, {
             x: deltaX,
-            rotation: rotation,
+            rotation: originalRotation + additionalRotation,
           });
 
           // Show swipe indicators
@@ -1223,10 +1876,12 @@ const LandingPage = () => {
             const nextIndex = (currentCardIndex + 1) % totalCards;
             setCurrentCardIndex(nextIndex);
 
-            // Reset the swiped card
+            // Reset the swiped card with its original rotation
+            const originalRotation =
+              parseFloat(activeCard.dataset.rotation) || 0;
             gsap.set(activeCard, {
               x: 0,
-              rotation: 0,
+              rotation: originalRotation,
               opacity: 1,
             });
 
@@ -1245,10 +1900,11 @@ const LandingPage = () => {
           },
         });
       } else {
-        // Snap back to center
+        // Snap back to center with original rotation
+        const originalRotation = parseFloat(activeCard.dataset.rotation) || 0;
         gsap.to(activeCard, {
           x: 0,
-          rotation: 0,
+          rotation: originalRotation,
           duration: 0.3,
           ease: "elastic.out(1, 0.5)",
         });
@@ -1289,9 +1945,9 @@ const LandingPage = () => {
       <header className="mobile-header">
         <div className="mobile-logo">
           <img
-            src="/assets/WIU-logo.png"
+            src="/assets/WIU-Logo-mobile.png"
             alt="Wir in Ungarn"
-            style={{ width: "200px" }}
+            style={{ width: "240px", height: "auto" }}
           />
         </div>
         <div className="mobile-icons">
@@ -1300,9 +1956,9 @@ const LandingPage = () => {
             alt="Search"
             className="search-icon"
             onClick={() => setSearchBarActive(!searchBarActive)}
-            style={{ cursor: "pointer", width: "25px", height: "25px" }}
+            style={{ cursor: "pointer", width: "28px", height: "28px" }}
           />
-          
+
           <img
             src="/assets/icons/hamberger-menu.jpeg"
             alt="Menu"
@@ -1311,7 +1967,7 @@ const LandingPage = () => {
               // Toggle mobile menu to show footer navigation
               setMobileMenuOpen(!mobileMenuOpen);
             }}
-            style={{ cursor: "pointer", width: "25px", height: "25px" }}
+            style={{ cursor: "pointer", width: "28px", height: "28px" }}
           />
         </div>
 
@@ -1328,9 +1984,9 @@ const LandingPage = () => {
               maxHeight: "400px",
               overflowY: "auto",
               backgroundColor: "white",
-              padding: "10px",
+              // padding: "10px",
               borderRadius: "8px",
-              marginTop: "10px",
+              // marginTop: "10px",
             }}
           ></div>
         </div>
@@ -1433,87 +2089,13 @@ const LandingPage = () => {
         /* Custom Scrollbar Container */
         .scrollbar-container {
             position: fixed;
-            right: clamp(15px, 2vw, 25px);
-            top: 58%;
-            transform: translateY(-50%);
+            right: 20px;
+            top: 28%;
+            bottom: 12%;
             width: 30px;
-            height: clamp(300px, 60vh, 600px);
-            max-height: 70vh;
             display: flex;
             flex-direction: column;
-            z-index: 998;
-        }
-
-        /* Responsive adjustments for scrollbar */
-        @media (max-width: 1600px) {
-          .scrollbar-container {
-            right: 30px;
-            height: 58vh;
-            max-height: 550px;
-          }
-        }
-
-        @media (max-width: 1400px) {
-          .scrollbar-container {
-            right: 22px;
-            height: 53vh;
-            max-height: 500px;
-          }
-        }
-
-        @media (max-width: 1200px) {
-          .scrollbar-container {
-            right: 22px;
-            height: 55vh;
-            max-height: 450px;
-            width: 25px;
-            top: 52%;
-          }
-          
-          .scrollbar-track {
-            width: 25px !important;
-          }
-          
-          .scrollbar-thumb {
-            width: 45px !important;
-            min-height: 45px !important;
-          }
-          
-          .arrow-button {
-            width: 25px !important;
-            height: 25px !important;
-          }
-        }
-
-        
-        @media (max-width: 992px) {
-          .scrollbar-container {
-            right: 28px;
-            height: 55vh;
-            max-height: 380px;
-            width: 22px;
-            top: 52%;
-          }
-          
-          .scrollbar-track {
-            width: 22px !important;
-          }
-          
-          .arrow-button {
-            width: 22px !important;
-            height: 22px !important;
-          }
-          
-          .scrollbar-thumb {
-            width: 38px !important;
-            min-height: 38px !important;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .scrollbar-container {
-            display: none !important;
-          }
+            z-index: 1000;
         }
 
         /* Arrow Buttons */
@@ -1576,6 +2158,41 @@ const LandingPage = () => {
             border-top-color: #c41e3a;
         }
 
+        @media screen and (max-width: 1290px) {
+            .arrow-button {
+                width: 22px !important;
+                height: 30px !important;
+            }
+
+            .scrollbar-container {
+                width: 30px !important;
+            }
+
+            .scrollbar-track {
+                width: 22px !important;
+            }
+
+            .scrollbar-thumb {
+                width: 35px !important;
+                min-height: 35px !important;
+            }
+
+            .header-btn {
+                padding-bottom: 8px;
+            }
+
+            .scrollbar-container {
+                top: 26% !important;
+                bottom: 14% !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+          .scrollbar-container {
+            display: none !important;
+          }
+        }
+
         /* Scrollbar Track */
         .scrollbar-track {
             flex: 1;
@@ -1591,7 +2208,7 @@ const LandingPage = () => {
             overflow: visible;
         }
 
-        /* Scrollbar Thumb with Image */
+        /* Scrollbar Thumb with Image - Wider than track */
         .scrollbar-thumb {
             position: absolute;
             width: 50px;
@@ -2041,10 +2658,10 @@ const LandingPage = () => {
           Cards will go here...
         </div>
       </div> */}
-<main id="main-content"> 
-      <section className="hero-section" aria-label="Willkommensbereich">
-        <div className="panel">
-          {/* <h1 className="top-text">Schön, dass du hier bist bei</h1>
+      <main id="main-content">
+        <section className="hero-section" aria-label="Willkommensbereich">
+          <div className="panel">
+            {/* <h1 className="top-text">Schön, dass du hier bist bei</h1>
 
           <div className="hero_logo">
             <img src="/assets/WIU-logo.png" alt="Main Logo" />
@@ -2068,141 +2685,140 @@ const LandingPage = () => {
             Die Suche oben rechts beantwortet dir auch komplette Fragen.
           </p> */}
 
-          <img
-            src="/assets/startmessage-creative-stack.png"
-            alt="Kreatives Kartenstapel Bild - Willkommen bei Wir in Ungarn"
-          />
-        </div>
-      </section>
+            <img
+              src="/assets/startmessage-creative-stack.png"
+              alt="Kreatives Kartenstapel Bild - Willkommen bei Wir in Ungarn"
+            />
+          </div>
+        </section>
 
-      <div
-        className="cards-container"
-        id="cardsContainer"
-        ref={cardsContainerRef}
-        role="region"
-        aria-label="Themen Karten"
-      >
-        {[
-          {
-            image: "/assets/tl-Zahlentrainer.avif",
-            title: "Zahlentrainer",
-            route: "/zahlentrainer",
-          },
-          {
-            image: "/assets/tl-Uhrzeittrainer.avif",
-            title: "Uhrzeittrainer",
-            route: "/wie-spaet-ist-es",
-          },
-          {
-            image: "/assets/tl-kulinarische-Selle.avif",
-            title: "Kulinarische Seele",
-            route: "/kulinarische-seele",
-          },
-          {
-            image: "/assets/tl-Raetsel.avif",
-            title: "Rätsel",
-            route: "/kreuzwortraetsel",
-          },
-          // {
-          //   image: "/assets/tl-Ungarn-Insider.avif",
-          //   title: "Ungarn Insider",
-          //   route: "/wissenswert",
-          // },
-          {
-            image: "/assets/tl-Zustand-in-einem-Wort.avif",
-            title: "Zustand in einem Wort",
-            route: "/einfach-lesen",
-          },
-          {
-            image: "/assets/tl-Plural.avif",
-            title: "Plural",
-            route: "/sprachkurs",
-          },
-          {
-            image: "/assets/tl-Makler-Tricks.avif",
-            title: "Makler Tricks",
-            route: "/wissenswert",
-          },
-          {
-            image: "/assets/tl-aus-dem-leben.avif",
-            title: "Aus dem Leben",
-            route: "/aus-dem-leben",
-          },
-          {
-            image: "/assets/tl-itt-ott.avif",
-            title: "Itt-Ott",
-            route: "/einfach-lesen",
-          },
-        ].map((card, index) => (
-          <article key={index} className="card-wrapper">
-            <div
-              className="card"
-              tabIndex={0}
-              role="button"
-              aria-label={`${card.title} Karte öffnen`}
-              onClick={() => {
-                // const modal = document.getElementById("modal");
-                // document.getElementById(
-                //   "modalTitle"
-                // ).textContent = `${card.title}`;
-                // document.getElementById(
-                //   "modalText"
-                // ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
-
-                // // Add a button to navigate to the page
-                // const buttonContainer =
-                //   modal.querySelector(".modal-content div");
-                // if (buttonContainer) {
-                //   // Clear existing buttons first
-                //   const existingNavigateBtn =
-                //     buttonContainer.querySelector(".navigate-btn");
-                //   if (existingNavigateBtn) {
-                //     existingNavigateBtn.remove();
-                //   }
-
-                //   // Create and add the navigation button
-                //   const navigateBtn = document.createElement("button");
-                //   navigateBtn.className = "close-modal navigate-btn";
-                //   navigateBtn.style.backgroundColor = "#4a7c59";
-                //   navigateBtn.textContent = "Zur Seite";
-                //   navigateBtn.onclick = () => {
-                //     route.push(card.route);
-                //   };
-                //   buttonContainer.appendChild(navigateBtn);
-                // }
-
-                // modal.style.display = "flex";
-                if (allowImpressumModal === true) {
-                  setAllowImpressumModal(false);
-                }
-                setAllowPostSlider(true);
-                setPostSliderDetails(card);
-                handleOpen();
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  e.currentTarget.click();
-                }
-              }}
-            >
+        <div
+          className="cards-container"
+          id="cardsContainer"
+          ref={cardsContainerRef}
+          role="region"
+          aria-label="Themen Karten"
+        >
+          {[
+            {
+              image: "/assets/tl-Zahlentrainer.avif",
+              title: "Zahlentrainer",
+              route: "/zahlentrainer",
+            },
+            {
+              image: "/assets/tl-Uhrzeittrainer.avif",
+              title: "Uhrzeittrainer",
+              route: "/wie-spaet-ist-es",
+            },
+            {
+              image: "/assets/tl-kulinarische-Selle.avif",
+              title: "Kulinarische Seele",
+              route: "/kulinarische-seele",
+            },
+            {
+              image: "/assets/tl-Raetsel.avif",
+              title: "Rätsel",
+              route: "/kreuzwortraetsel",
+            },
+            // {
+            //   image: "/assets/tl-Ungarn-Insider.avif",
+            //   title: "Ungarn Insider",
+            //   route: "/wissenswert",
+            // },
+            {
+              image: "/assets/tl-Zustand-in-einem-Wort.avif",
+              title: "Zustand in einem Wort",
+              route: "/einfach-lesen",
+            },
+            {
+              image: "/assets/tl-Plural.avif",
+              title: "Plural",
+              route: "/sprachkurs",
+            },
+            {
+              image: "/assets/tl-Makler-Tricks.avif",
+              title: "Makler Tricks",
+              route: "/wissenswert",
+            },
+            {
+              image: "/assets/tl-aus-dem-leben.avif",
+              title: "Aus dem Leben",
+              route: "/aus-dem-leben",
+            },
+            {
+              image: "/assets/tl-itt-ott.avif",
+              title: "Itt-Ott",
+              route: "/einfach-lesen",
+            },
+          ].map((card, index) => (
+            <article key={index} className="card-wrapper">
               <div
-                className="card-image"
-                style={{ backgroundImage: `url('${card.image}')` }}
-                role="img"
-                aria-label={card.title}
-              ></div>
-            </div>
-          </article>
-        ))}
-      </div>
+                className="card"
+                tabIndex={0}
+                role="button"
+                aria-label={`${card.title} Karte öffnen`}
+                onClick={() => {
+                  // const modal = document.getElementById("modal");
+                  // document.getElementById(
+                  //   "modalTitle"
+                  // ).textContent = `${card.title}`;
+                  // document.getElementById(
+                  //   "modalText"
+                  // ).textContent = `Klicken Sie auf "Zur Seite", um mehr über ${card.title} zu erfahren.`;
 
-      <div
-        className="content-section"
-        style={{ minHeight: "300vh", position: "relative", zIndex: 2 }}
-      ></div>
-</main>
+                  // // Add a button to navigate to the page
+                  // const buttonContainer =
+                  //   modal.querySelector(".modal-content div");
+                  // if (buttonContainer) {
+                  //   // Clear existing buttons first
+                  //   const existingNavigateBtn =
+                  //     buttonContainer.querySelector(".navigate-btn");
+                  //   if (existingNavigateBtn) {
+                  //     existingNavigateBtn.remove();
+                  //   }
 
+                  //   // Create and add the navigation button
+                  //   const navigateBtn = document.createElement("button");
+                  //   navigateBtn.className = "close-modal navigate-btn";
+                  //   navigateBtn.style.backgroundColor = "#4a7c59";
+                  //   navigateBtn.textContent = "Zur Seite";
+                  //   navigateBtn.onclick = () => {
+                  //     route.push(card.route);
+                  //   };
+                  //   buttonContainer.appendChild(navigateBtn);
+                  // }
+
+                  // modal.style.display = "flex";
+                  if (allowImpressumModal === true) {
+                    setAllowImpressumModal(false);
+                  }
+                  setAllowPostSlider(true);
+                  setPostSliderDetails(card);
+                  handleOpen();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.currentTarget.click();
+                  }
+                }}
+              >
+                <div
+                  className="card-image"
+                  style={{ backgroundImage: `url('${card.image}')` }}
+                  role="img"
+                  aria-label={card.title}
+                ></div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div
+          className="content-section"
+          style={{ minHeight: "300vh", position: "relative", zIndex: 2 }}
+        ></div>
+      </main>
 
       {/* Modal for card details */}
       <div className="modal" id="modal" style={{ display: "none" }}>
@@ -2327,71 +2943,77 @@ const LandingPage = () => {
             className="relative desktop-footer-nav"
           >
             {/* Main Footer Links */}
-            <div className="footer-links-container">
-              <div className="footer-links-grid">
-                {primaryLinks.map((link, index) => (
+            <div className="footer-links-container" ref={footerContainerRef}>
+              <div className="footer-links-wrapper">
+                {visibleLinks.map((link, index) => (
                   <React.Fragment key={link.key}>
-                    <Link href={link.endpoint} className="footer-link-item">
+                    <Link
+                      href={link.endpoint}
+                      className="footer-link-item"
+                      ref={(el) => (footerLinksRef.current[index] = el)}
+                    >
                       {link.title}
                     </Link>
                   </React.Fragment>
                 ))}
 
-                {/* More Button */}
-                <div className="relative footer-more-wrapper">
-                  <button
-                    type="button"
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="footer-link-item footer-more-btn"
-                    aria-expanded={isOpen}
-                    aria-label="Weitere Links anzeigen"
-                  >
-                    more
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={`transition-transform duration-200 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                      aria-hidden="true"
-                      style={{ marginLeft: "4px" }}
+                {/* More Button - Only show if there are hidden links */}
+                {hiddenLinks.length > 0 && (
+                  <div className="relative footer-more-wrapper">
+                    <button
+                      type="button"
+                      onClick={() => setIsOpen(!isOpen)}
+                      className="footer-link-item footer-more-btn"
+                      aria-expanded={isOpen}
+                      aria-label="Weitere Links anzeigen"
                     >
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                  </button>
-
-                  {/* Dropdown Menu */}
-                  {isOpen && (
-                    <>
-                      {/* Backdrop */}
-                      <div
-                        className="fixed inset-0 z-10"
-                        onClick={() => setIsOpen(false)}
+                      more
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`transition-transform duration-200 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
                         aria-hidden="true"
-                      />
+                        style={{ marginLeft: "4px" }}
+                      >
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </button>
 
-                      {/* Menu */}
-                      <div className="absolute bottom-full right-0 mb-2 bg-[#e3e3e3] rounded-lg shadow-xl border-[3px] border-white py-2 min-w-[220px] z-20">
-                        {secondaryLinks.map((link) => (
-                          <Link
-                            key={link.key}
-                            href={link.endpoint}
-                            className="block px-4 py-2.5 text-sm font-semibold hover:bg-[#d2d0d0] transition-colors"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            {link.title}
-                          </Link>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
+                    {/* Dropdown Menu */}
+                    {isOpen && (
+                      <>
+                        {/* Backdrop */}
+                        <div
+                          className="fixed inset-0 z-10"
+                          onClick={() => setIsOpen(false)}
+                          aria-hidden="true"
+                        />
+
+                        {/* Menu */}
+                        <div className="absolute bottom-full right-0 mb-2 bg-[#e3e3e3] rounded-lg shadow-xl border-[3px] border-white py-2 min-w-[220px] z-20">
+                          {hiddenLinks.map((link) => (
+                            <Link
+                              key={link.key}
+                              href={link.endpoint}
+                              className="block px-4 py-2.5 text-sm font-semibold hover:bg-[#d2d0d0] transition-colors"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              {link.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </nav>
@@ -2476,7 +3098,10 @@ const LandingPage = () => {
       {/* Tablet Intro Image */}
       <div className="tablet_intro_image">
         <div className="intro_image_cnt">
-          <img src="/assets/welcome-message-tablet.png" alt="tablet welcome image" />
+          <img
+            src="/assets/welcome-message-tablet.png"
+            alt="tablet welcome image"
+          />
         </div>
       </div>
 
@@ -2801,10 +3426,7 @@ const LandingPage = () => {
         >
           MEIN PROFIL
         </button>
-        <button
-          className="widget-btn"
-          onClick={() => openPopup("widgetPopup")}
-        >
+        <button className="widget-btn" onClick={() => openPopup("widgetPopup")}>
           WERKZEUGE
         </button>
       </div>
@@ -2826,7 +3448,9 @@ const LandingPage = () => {
           ✕
         </button>
         <div className="popup-content">
-          <p className="text-[#4a7c59] text-2xl uppercase font-bold mb-6">Mein Profil</p>
+          <p className="text-[#4a7c59] text-2xl uppercase font-bold mb-6">
+            Mein Profil
+          </p>
 
           {/* Login Form */}
           <div className="login-form" id="loginForm">
@@ -2841,7 +3465,11 @@ const LandingPage = () => {
               </div>
               <div className="form-group">
                 <label htmlFor="password">Passwort</label>
-                <input type="password" id="password" placeholder="Ihr Passwort" />
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Ihr Passwort"
+                />
               </div>
               <button type="submit" className="btn-submit">
                 Anmelden
@@ -2867,7 +3495,9 @@ const LandingPage = () => {
         <div className="popup-content">
           {/* <h2>Werkzeuge</h2> */}
 
-          <p className="text-[#4a7c59] text-2xl font-bold uppercase mb-6">Werkzeuge</p>
+          <p className="text-[#4a7c59] text-2xl font-bold uppercase mb-6">
+            Werkzeuge
+          </p>
 
           <div className="widget-grid">
             {/* Currency Converter */}
@@ -2924,7 +3554,9 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Währungsrechner</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">
+            Währungsrechner
+          </h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -2933,7 +3565,13 @@ const LandingPage = () => {
           <div className="currency-converter">
             <div className="converter-group">
               <label>Euro (EUR)</label>
-              <input type="number" id="eurInput" placeholder="0.00" defaultValue="100" />
+              <input
+                type="number"
+                id="eurInput"
+                placeholder="0.00"
+                value={eurAmount}
+                onChange={handleEurChange}
+              />
             </div>
 
             <div className="converter-icon">
@@ -2942,15 +3580,25 @@ const LandingPage = () => {
 
             <div className="converter-group">
               <label>Forint (HUF)</label>
-              <input type="number" id="hufInput" placeholder="0.00" readOnly />
+              <input
+                type="number"
+                id="hufInput"
+                placeholder="0.00"
+                value={hufAmount}
+                readOnly
+              />
             </div>
 
             <div className="exchange-rate">
               <p>Aktueller Kurs: 1 EUR = 395.50 HUF</p>
-              <p className="rate-date">Stand: 13.11.2025</p>
+              <p className="rate-date">
+                Stand: {new Date().toLocaleDateString("de-DE")}
+              </p>
             </div>
 
-            <button className="btn-convert">Umrechnen</button>
+            <button className="btn-convert" onClick={handleCurrencyConversion}>
+              Umrechnen
+            </button>
           </div>
         </div>
       </div>
@@ -2966,7 +3614,9 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Kalender</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">
+            Kalender
+          </h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
@@ -2976,30 +3626,38 @@ const LandingPage = () => {
             <div className="calendar-current">
               <h3>Heute</h3>
               <div className="today-info">
-                <p className="today-date">13. November 2025</p>
-                <p className="today-name">Namenstag: Szilvia</p>
+                <p className="today-date">{getCurrentDateInfo().dateString}</p>
+                <p className="today-name">
+                  Namenstag: {getCurrentDateInfo().todayName}
+                </p>
               </div>
             </div>
 
             <div className="upcoming-names">
               <h4>Kommende Namenstage</h4>
               <div className="name-list">
-                <div className="name-item">
-                  <span className="date">14.11.</span>
-                  <span className="name">Aliz</span>
-                </div>
-                <div className="name-item">
-                  <span className="date">15.11.</span>
-                  <span className="name">Albert, Lipót</span>
-                </div>
-                <div className="name-item">
-                  <span className="date">16.11.</span>
-                  <span className="name">Ödön</span>
-                </div>
-                <div className="name-item">
-                  <span className="date">17.11.</span>
-                  <span className="name">Gergő, Hortenzia</span>
-                </div>
+                {(() => {
+                  const today = new Date();
+                  const upcomingDays = [];
+                  for (let i = 1; i <= 4; i++) {
+                    const nextDay = new Date(today);
+                    nextDay.setDate(today.getDate() + i);
+                    const day = nextDay.getDate();
+                    const month = String(nextDay.getMonth() + 1).padStart(
+                      2,
+                      "0"
+                    );
+                    const dateStr = `${day}.${month}.`;
+                    const nameDayName = getNameDayForDate(nextDay);
+                    upcomingDays.push({ date: dateStr, name: nameDayName });
+                  }
+                  return upcomingDays.map((item, idx) => (
+                    <div className="name-item" key={idx}>
+                      <span className="date">{item.date}</span>
+                      <span className="name">{item.name}</span>
+                    </div>
+                  ));
+                })()}
               </div>
             </div>
           </div>
@@ -3017,35 +3675,57 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Favoriten</h2>
-          
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">
+            Favoriten
+          </h2>
+
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
         </div>
         <div className="detail-content">
           <div className="favorites-list">
-            <div className="favorite-item">
-              <i className="fas fa-book"></i>
-              <div className="fav-info">
-                <h4>Ungarisch Grammatik</h4>
-                <p>Gespeichert am 10.11.2025</p>
+            {widgetFavorites.length > 0 ? (
+              widgetFavorites.map((favorite, index) => (
+                <div
+                  key={index}
+                  className="favorite-item"
+                  onClick={() => {
+                    route.push(favorite.route);
+                    closeAllPopups();
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  <i className="fas fa-star"></i>
+                  <div className="fav-info">
+                    <h4>{favorite.title}</h4>
+                    <p>Gespeichert</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "40px 20px",
+                  color: "#666",
+                }}
+              >
+                <i
+                  className="fas fa-star"
+                  style={{
+                    fontSize: "48px",
+                    marginBottom: "16px",
+                    opacity: 0.3,
+                  }}
+                ></i>
+                <p style={{ fontSize: "16px" }}>Keine Favoriten gespeichert</p>
+                <p style={{ fontSize: "14px", marginTop: "8px" }}>
+                  Fügen Sie Ihre Lieblingsseiten hinzu, indem Sie auf das{" "}
+                  <span style={{ fontWeight: "bold" }}>+</span> Symbol klicken
+                </p>
               </div>
-            </div>
-            <div className="favorite-item">
-              <i className="fas fa-utensils"></i>
-              <div className="fav-info">
-                <h4>Somlói Galuska Rezept</h4>
-                <p>Gespeichert am 08.11.2025</p>
-              </div>
-            </div>
-            <div className="favorite-item">
-              <i className="fas fa-map-marked-alt"></i>
-              <div className="fav-info">
-                <h4>Budapest Sehenswürdigkeiten</h4>
-                <p>Gespeichert am 05.11.2025</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -3061,29 +3741,56 @@ const LandingPage = () => {
           <button className="detail-back" onClick={closeDetailPopup}>
             <i className="fas fa-arrow-left"></i>
           </button>
-          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">Verlauf</h2>
+          <h2 className="text-[#4a7c59] text-2xl uppercase font-bold">
+            Verlauf
+          </h2>
           <button className="popup-close" onClick={closeAllPopups}>
             ✕
           </button>
         </div>
         <div className="detail-content">
           <div className="history-list">
-            <div className="history-item">
-              <span className="history-time">Heute, 14:30</span>
-              <h4>Zahlentrainer</h4>
-            </div>
-            <div className="history-item">
-              <span className="history-time">Heute, 12:15</span>
-              <h4>Kulinarische Seele</h4>
-            </div>
-            <div className="history-item">
-              <span className="history-time">Gestern, 18:45</span>
-              <h4>Ungarisch Grammatik</h4>
-            </div>
-            <div className="history-item">
-              <span className="history-time">Gestern, 10:20</span>
-              <h4>Budapest Guide</h4>
-            </div>
+            {pageHistory && pageHistory.length > 0 ? (
+              pageHistory.map((item, index) => (
+                <div
+                  key={index}
+                  className="history-item"
+                  onClick={() => {
+                    if (item.route) {
+                      route.push(item.route);
+                      closeAllPopups();
+                    }
+                  }}
+                  style={{ cursor: item.route ? "pointer" : "default" }}
+                >
+                  <span className="history-time">
+                    {item.time || "Kürzlich"}
+                  </span>
+                  <h4>{item.title || "Unbekannte Seite"}</h4>
+                </div>
+              ))
+            ) : (
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "40px 20px",
+                  color: "#666",
+                }}
+              >
+                <i
+                  className="fas fa-history"
+                  style={{
+                    fontSize: "48px",
+                    marginBottom: "16px",
+                    opacity: 0.3,
+                  }}
+                ></i>
+                <p style={{ fontSize: "16px" }}>Kein Verlauf vorhanden</p>
+                <p style={{ fontSize: "14px", marginTop: "8px" }}>
+                  Ihr Seitenverlauf wird hier angezeigt
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -3227,7 +3934,11 @@ const LandingPage = () => {
                 gewünschten Themen angezeigt.
               </div>
 
-              <div className="controls-row" role="group" aria-label="filter controls">
+              <div
+                className="controls-row"
+                role="group"
+                aria-label="filter controls"
+              >
                 <button className="info-btn" aria-label="Info" title="Info">
                   <img
                     src="/assets/filter-i-icon.jpeg"
@@ -3246,10 +3957,14 @@ const LandingPage = () => {
                   />
                 </div>
 
-                <div id="filter-tags" className="filter-tags" aria-label="active tags">
+                <div
+                  id="filter-tags"
+                  className="filter-tags"
+                  aria-label="active tags"
+                >
                   {filterTags.map((tag, index) => (
                     <div className="tag-pill" key={index}>
-                      {tag}{' '}
+                      {tag}{" "}
                       <button
                         className="tag-close"
                         aria-label={`remove ${tag}`}
