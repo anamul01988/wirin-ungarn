@@ -188,7 +188,7 @@ export default function DialogContent({
               <Breadcrumb className="text-sm" isSinglePage={isSinglePage} />
             </div>
             {routePrefix !== "einfach-lesen" && (
-              <h1 className="single__page_title text-[#494158]">{title}</h1>
+              <h1 className="single__page_title text-[#436f4d]">{title}</h1>
             )}
             {contentType === "wissenswert" && (
               <div className="mb-6 py-4 rounded-lg">
@@ -438,9 +438,8 @@ export default function DialogContent({
                                   <Image
                                     src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
                                     alt={item.icon[0]}
-                                    width={70}
-                                    height={70}
-                                    className="w-full h-auto"
+                                    width={50}
+                                    height={50}
                                     loading="lazy"
                                   />
                                 ) : (
@@ -699,10 +698,23 @@ export default function DialogContent({
               </div>
             )}
             {contentType === "kurz-und-knapp" && (
+              <div>
               <p
                 className="text-sm leading-relaxed text-left mb-2"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
+              <div className=" flex flex-col float-end justify-end gap-5">
+                <button 
+                  onClick={() => route.push('/kurz-und-knapp/')}
+                  className="bg-[#436f4d] hover:bg-[#5a7a5e] text-white text-sm font-medium px-4 py-2 rounded transition-colors"
+                >
+                  zur Fragen-Übersicht
+                </button>
+                <button className="bg-[#c03] hover:bg-[#a02828] text-white text-sm font-medium px-2 py-2 rounded transition-colors">
+                  Fehler gefunden?
+                </button>
+              </div>
+              </div>
             )}
 
             {/* ---------------------------------------- */}

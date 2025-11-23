@@ -11,6 +11,8 @@ import Image from "next/image";
 import algoliasearch from "algoliasearch/lite";
 import { toggleFavorite, getAllFavorites } from "@/lib/utils/favoritesManager";
 import CommonCardChip from "../ui/CommonCardChip";
+import MobileLoginView from "./MobileLoginView";
+import MobileCurrencyConverter from "./MobileCurrencyConverter";
 
 class ListSearch {
   constructor(config, mobileMode = false) {
@@ -3448,37 +3450,12 @@ const LandingPage = () => {
           ✕
         </button>
         <div className="popup-content">
-          <p className="text-[#4a7c59] text-2xl uppercase font-bold mb-6">
+          {/* <p className="text-[#4a7c59] text-2xl uppercase font-bold mb-6">
             Mein Profil
-          </p>
+          </p> */}
 
-          {/* Login Form */}
-          <div className="login-form" id="loginForm">
-            <form>
-              <div className="form-group">
-                <label htmlFor="email">E-Mail</label>
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="Ihre E-Mail-Adresse"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Passwort</label>
-                <input
-                  type="password"
-                  id="password"
-                  placeholder="Ihr Passwort"
-                />
-              </div>
-              <button type="submit" className="btn-submit">
-                Anmelden
-              </button>
-              <a href="#" className="forgot-password">
-                Passwort vergessen?
-              </a>
-            </form>
-          </div>
+          {/* Login Component */}
+          <MobileLoginView onClose={closeAllPopups} />
         </div>
       </div>
 
@@ -3562,44 +3539,7 @@ const LandingPage = () => {
           </button>
         </div>
         <div className="detail-content">
-          <div className="currency-converter">
-            <div className="converter-group">
-              <label>Euro (EUR)</label>
-              <input
-                type="number"
-                id="eurInput"
-                placeholder="0.00"
-                value={eurAmount}
-                onChange={handleEurChange}
-              />
-            </div>
-
-            <div className="converter-icon">
-              <i className="fas fa-exchange-alt"></i>
-            </div>
-
-            <div className="converter-group">
-              <label>Forint (HUF)</label>
-              <input
-                type="number"
-                id="hufInput"
-                placeholder="0.00"
-                value={hufAmount}
-                readOnly
-              />
-            </div>
-
-            <div className="exchange-rate">
-              <p>Aktueller Kurs: 1 EUR = 395.50 HUF</p>
-              <p className="rate-date">
-                Stand: {new Date().toLocaleDateString("de-DE")}
-              </p>
-            </div>
-
-            <button className="btn-convert" onClick={handleCurrencyConversion}>
-              Umrechnen
-            </button>
-          </div>
+          <MobileCurrencyConverter />
         </div>
       </div>
 

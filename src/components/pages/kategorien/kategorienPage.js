@@ -91,7 +91,7 @@ const KategorienPage = () => {
       </div>
 
       {/* Checkbox */}
-      <div className="flex items-center justify-end mb-4">
+      {/* <div className="flex items-center justify-end mb-4">
         <Checkbox
           color="red"
           checked={onlyHeadings}
@@ -99,24 +99,25 @@ const KategorienPage = () => {
           label="ausschließlich Überschriften anzeigen"
           crossOrigin={undefined} // needed for React strict mode
         />
-      </div>
+      </div> */}
 
       {/* Description */}
       <Typography
         variant="paragraph"
         className="archive__page_description leading-relaxed font-bold mb-6"
       >
-        Auf dieser Übersichtsseite findest du alle Artikel, die die
-        verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
-        durch die Beiträge stöbern oder die Filterfunktion nutzen, um gezielt
-        nach bestimmten Inhalten zu suchen.
+        Wir haben die meisten unserer detaillierten Texte, von der Seite
+        "Wissenswert", zu verschiedenen übergreifenden Themen zusammengefasst.
+        Alle diese Übersichten findest Du hier. Diese "Themen" verlinken dann
+        auf alle einzelnen Posts, die im Detail alles Hintergrund-Wissen
+        vermitteln, was Du als Ungarn-Auswanderer benötigst.
       </Typography>
 
       {/* Footer info */}
-      <Typography variant="small" color="gray" className="mt-4">
+      {/* <Typography variant="small" color="gray" className="mt-4">
         Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge -
         Angezeigt werden {displayPosts?.length || 0} Beiträge.
-      </Typography>
+      </Typography> */}
       <div className="pt-6 pb-2 max-w-5xl mx-auto">
         <>
           {displayPosts?.map((edge, idx) => {
