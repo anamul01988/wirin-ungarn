@@ -107,14 +107,19 @@ body {
   /* margin-left: 50px; */
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1140px) {
   .sidebar {
-    width: 15vw;
+    width: 15vw !important;
+  }
+
+  .header-btn.register {
+    background: #c41e3a;
+    margin-top: 2px;
   }
 
   .header-btn {
     padding: 4px 16px;
-    padding-bottom: 2px !important;
+    /* padding-bottom: 2px !important; */
     /* padding-bottom: 7px !important; */
   }
 
@@ -140,7 +145,7 @@ body {
   text-align: left;
   display: inline-flex;
   align-items: center;
-  padding-bottom: 4px;
+  /* padding-bottom: 4px; */
 }
 
 .header-btn .ht_text {
