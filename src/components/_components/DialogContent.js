@@ -98,6 +98,51 @@ export default function DialogContent({
     return () => window.removeEventListener("keydown", handleEsc);
   }, [open]);
 
+  // Lazy loaded featured image component with placeholder
+  const LazyFeaturedImage = ({ imageUrl, imageAlt }) => {
+    const [loaded, setLoaded] = useState(false);
+    const [error, setError] = useState(false);
+
+    if (!imageUrl) return null;
+
+    return (
+      <div className="mb-3 h-56 md:h-68 rounded-[28px] overflow-hidden relative max-w-xl mx-auto">
+        {/* Loading placeholder/skeleton */}
+        {!loaded && !error && (
+          <div className="absolute inset-0 bg-gray-300 animate-pulse flex items-center justify-center">
+            <div className="w-full h-full bg-gray-200 rounded-[28px]" />
+          </div>
+        )}
+
+        {/* Error placeholder */}
+        {error && (
+          <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-[28px]">
+            <span className="text-gray-400 text-sm">Image not available</span>
+          </div>
+        )}
+
+        {/* Actual image */}
+        <Image
+          src={imageUrl}
+          alt={imageAlt || "Featured image"}
+          fill
+          sizes="(max-width: 768px) 100vw, 672px"
+          loading="lazy"
+          onLoad={() => setLoaded(true)}
+          onError={() => {
+            setError(true);
+            setLoaded(false);
+          }}
+          className={`
+            object-cover rounded-[28px]
+            ${loaded && !error ? "opacity-100" : "opacity-0"}
+            transition-opacity duration-300
+          `}
+        />
+      </div>
+    );
+  };
+
   // Check if content contains a contact form
   const hasContactForm =
     typeof content === "string" && content?.includes("wpcf7-form");
@@ -255,6 +300,14 @@ export default function DialogContent({
             {imageFeature &&
               routePrefix !== "sprachkurs" &&
               routePrefix !== "einfach-lesen" && (
+                <LazyFeaturedImage
+                  imageUrl={imageFeature}
+                  imageAlt={imageAlt || title}
+                />
+              )}
+            {/* {imageFeature &&
+              routePrefix !== "sprachkurs" &&
+              routePrefix !== "einfach-lesen" && (
                 <div
                   className="mb-3 h-56 md:h-68 rounded-[28px] overflow-hidden relative max-w-xl mx-auto"
                   style={{
@@ -265,7 +318,7 @@ export default function DialogContent({
                   }}
                   role="img"
                 ></div>
-              )}
+              )} */}
 
             {contentType === "einfach-lesen" && (
               <div className="mb-6">
