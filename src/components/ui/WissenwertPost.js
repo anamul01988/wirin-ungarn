@@ -170,7 +170,7 @@ const WissenwertPost = ({
           {/* {badge === "SHORTS"
             ? truncateText(description, 15)
             :truncateText(introText, 25)} */}
-            {truncateText(introText, 25)}
+          {truncateText(introText, 25)}
         </p>
         <button className="text-orange-500 text-sm font-semibold hover:text-orange-600 transition-colors">
           Weiterlesen
@@ -220,8 +220,7 @@ const WissenwertPostGrid = ({
     );
   }, []);
 
-  console.log('2222222222222222', posts);
-  
+  console.log("2222222222222222", posts);
 
   // Update filtered posts when posts change (filtering is handled at API level)
   useEffect(() => {
@@ -339,11 +338,12 @@ const WissenwertPostGrid = ({
       <div className="mb-4">
         <Typography
           variant="paragraph"
-          className="text-[#386e44] font-normal leading-relaxed archive__page_description"
+          className="text-[#386e44] font-bold leading-relaxed archive__page_description"
         >
-          Entdecke unsere Artikel entweder visuell, indem du durch die
-          Themenkacheln stöberst, oder finde gezielt, was du suchst: Nutze
-          einfach die Themen-Tags zur Filterung oder die freie Suche.
+          Auf dieser Übersichtsseite findest du alle Artikel, die die
+          verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
+          durch die Beiträge stöbern oder die Filterfunktion nutzen, um gezielt
+          nach bestimmten Inhalten zu suchen.
         </Typography>
       </div>
 
