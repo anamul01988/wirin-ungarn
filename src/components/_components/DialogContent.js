@@ -637,10 +637,23 @@ export default function DialogContent({
               </div>
             )}
             {contentType === "kurz-und-knapp" && (
+              <div>
               <p
                 className="text-sm leading-relaxed text-left mb-2"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
+              <div className=" flex flex-col float-end justify-end gap-5">
+                <button 
+                  onClick={() => route.push('/kurz-und-knapp/')}
+                  className="bg-[#436f4d] hover:bg-[#5a7a5e] text-white text-sm font-medium px-4 py-2 rounded transition-colors"
+                >
+                  zur Fragen-Übersicht
+                </button>
+                <button className="bg-[#c03] hover:bg-[#a02828] text-white text-sm font-medium px-2 py-2 rounded transition-colors">
+                  Fehler gefunden?
+                </button>
+              </div>
+              </div>
             )}
             {/* ---------------------------------------- */}
             {(contentType !== "kulinarische-seele" ||

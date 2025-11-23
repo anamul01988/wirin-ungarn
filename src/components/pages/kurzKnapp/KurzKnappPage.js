@@ -118,13 +118,14 @@ const KurzKnappPage = () => {
   return (
     <div className="knowledge-page">
       {/* Page Title */}
-      {title && <h1 className="knowledge-title">{title}</h1>}
+      {title && (
+        <p className="text-[30px] font-medium text-[#494158] leading-[1.9em] py-2 -ml-[0.05em] -mt-2 not-italic tracking-[-0.04em]">
+          {title}
+        </p>
+      )}
       {/* Page Content */}
       {content && (
-        <div
-          className="page-content"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+        <div className="prose" dangerouslySetInnerHTML={{ __html: content }} />
       )}
 
       {/* Search Section */}
@@ -150,10 +151,8 @@ const KurzKnappPage = () => {
       {/* Info Message */}
       <div className="knowledge-info">
         <p className="knowledge-info__text">
-          <strong>
-            Gib den gewünschten Suchbegriff ein und finde einfach die Fragen und
-            Antworten
-          </strong>
+          Gib den gewünschten Suchbegriff ein und finde einfach die Fragen und
+          Antworten
         </p>
       </div>
 
