@@ -64,14 +64,14 @@ export default function Profile() {
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
-        <Button
+               {/* <Button
           onClick={navigateToHome}
           color="blue"
           size="lg"
           className="px-6 py-3 capitalize"
         >
           Navigate to Home
-        </Button>
+        </Button> */}
       </div>
     </>
   );
