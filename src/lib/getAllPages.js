@@ -2710,6 +2710,48 @@ export async function GetkulinarischeSinglePostBySlug(slug) {
     return null;
   }
 }
+
+export async function GetAusDemLebenSinglePostBySlug(slug) {
+  try {
+    const postQuery = `
+      query {
+        ausDemLeben(id: "${slug}", idType: SLUG) {
+          id
+          databaseId
+          title
+          date
+          slug
+          content
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+              title
+            }
+          }
+        }
+      }
+    `;
+
+    const postData = await fetchPage(postQuery);
+
+    // If post exists, return it with a type indicator
+    if (postData?.data?.ausDemLeben) {
+      const result = {
+        type: "post",
+        data: postData,
+      };
+      console.log("Returning result:", result);
+      return result;
+    }
+
+    // Post doesn't exist
+    return null;
+  } catch (error) {
+    console.error("Error fetching aus-dem-leben post by slug:", error);
+    return null;
+  }
+}
 export async function GetkurzUndKnappPostBySlug(slug) {
   try {
     const postQuery = `

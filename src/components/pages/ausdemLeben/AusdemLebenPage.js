@@ -129,6 +129,7 @@ const AusDemLebenPage = () => {
             const transformed = apiData.data.ausDemLebens.nodes.map(
               (item, index) => ({
                 id: item.databaseId || index + 1,
+                slug: item.slug || "",
                 image: item.featuredImage?.node?.sourceUrl || "",
                 title: item.title || "",
                 subtitle: item.title || "",
@@ -176,40 +177,34 @@ const AusDemLebenPage = () => {
     [ausDemLebens]
   );
 
-  // Open details
+  // Open details - navigate to single page
   const openDetails = React.useCallback(
     (imageId) => {
-      setCurrentImageId(imageId);
       const imageData = getImageData(imageId);
       if (!imageData) return;
 
-      // Update URL
+      // Store current image data in localStorage
       if (typeof window !== "undefined") {
-        const url = new URL(window.location);
-        url.searchParams.set("id", imageId);
-        window.history.pushState({}, "", url);
-      }
-
-      // Scroll to details on desktop
-      if (typeof window !== "undefined") {
-        if (window.innerWidth > 767) {
-          setTimeout(() => {
-            const detailsContainer =
-              document.getElementById("detailsContainer");
-            if (detailsContainer) {
-              detailsContainer.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }
-          }, 100);
-        } else {
-          // Prevent body scroll on mobile when popup is open
-          document.body.style.overflow = "hidden";
+        try {
+          localStorage.setItem(
+            "ausDemLebenCurrentData",
+            JSON.stringify({
+              id: imageData.id,
+              title: imageData.title,
+              subtitle: imageData.subtitle,
+              content: imageData.content,
+              image: imageData.image,
+            })
+          );
+        } catch (error) {
+          console.error("Error storing data in localStorage:", error);
         }
       }
+
+      // Navigate to single page using id
+      router.push(`/aus-dem-leben/${imageData.id}`);
     },
-    [getImageData]
+    [getImageData, router]
   );
 
   // Close details
