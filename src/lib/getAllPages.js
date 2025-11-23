@@ -452,6 +452,7 @@ export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
               }
               postOrder
               shortTitle
+              introText
             }
             featuredImage {
               node {

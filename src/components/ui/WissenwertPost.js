@@ -116,12 +116,13 @@ const truncateText = (text, maxWords = 30) => {
 
 const WissenwertPost = ({
   title,
+  introText,
   description,
   image,
   imageAlt,
   slug,
   category = "all",
-  badge = "ARTIKEL",
+  badge,
   routePrefix = "wissenswert",
 }) => {
   const router = useRouter();
@@ -166,7 +167,10 @@ const WissenwertPost = ({
           {title}
         </h2>
         <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
-          {truncateText(description, 25)}
+          {/* {badge === "SHORTS"
+            ? truncateText(description, 15)
+            :truncateText(introText, 25)} */}
+            {truncateText(introText, 25)}
         </p>
         <button className="text-orange-500 text-sm font-semibold hover:text-orange-600 transition-colors">
           Weiterlesen
@@ -215,6 +219,9 @@ const WissenwertPostGrid = ({
       }
     );
   }, []);
+
+  console.log('2222222222222222', posts);
+  
 
   // Update filtered posts when posts change (filtering is handled at API level)
   useEffect(() => {
@@ -453,6 +460,7 @@ const WissenwertPostGrid = ({
               <WissenwertPost
                 key={post.id || index}
                 title={post.title}
+                introText={post.introText}
                 description={post.description}
                 image={post.image}
                 imageAlt={post.imageAlt}

@@ -143,7 +143,7 @@ export default function DialogContent({
               <Breadcrumb className="text-sm" isSinglePage={isSinglePage} />
             </div>
             {routePrefix !== "einfach-lesen" && (
-              <h1 className="single__page_title text-[#494158]">{title}</h1>
+              <h1 className="single__page_title text-[#436f4d]">{title}</h1>
             )}
             {contentType === "wissenswert" && (
               <div className="mb-6 py-4 rounded-lg">
@@ -377,9 +377,8 @@ export default function DialogContent({
                                   <Image
                                     src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
                                     alt={item.icon[0]}
-                                    width={70}
-                                    height={70}
-                                    className="w-full h-auto"
+                                    width={50}
+                                    height={50}
                                     loading="lazy"
                                   />
                                 ) : (

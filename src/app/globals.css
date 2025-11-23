@@ -2857,8 +2857,10 @@ div[class*="Toastify"] {
   font-size: 24px;
 }
 .single__page_description {
-  font-size: 16px;
+  font-size: 14px;
   color: #56646f;
+  font-weight: 300;
+  line-height: 26px;
 }
 
 /* Pagination Styles */

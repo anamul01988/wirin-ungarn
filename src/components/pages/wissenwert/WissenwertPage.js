@@ -179,6 +179,7 @@ const WissenswertPage = () => {
         edge.node.postContent?.postContent?.[0]?.content ||
         edge.node.postContent?.shortTitle ||
         "",
+      introText: edge.node.postContent?.introText || edge.node.seo?.metaDesc || "",
       image: edge.node.featuredImage?.node?.sourceUrl || null,
       imageAlt: edge.node.featuredImage?.node?.altText || edge.node.title,
       slug: edge.node.slug,
