@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { GetAllAusDemLebens } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import "./AusdemLebenPage.css";
 
 const AusDemLebenPage = () => {
@@ -293,6 +294,51 @@ const AusDemLebenPage = () => {
     });
   }, []);
 
+  // Lazy loaded image component with placeholder
+  const LazyGalleryImage = ({ item }) => {
+    const [loaded, setLoaded] = useState(false);
+    const [error, setError] = useState(false);
+
+    return (
+      <div className="relative w-full h-full">
+        {/* Loading placeholder/skeleton */}
+        {!loaded && !error && (
+          <div className="absolute inset-0 bg-gray-300 animate-pulse flex items-center justify-center">
+            <div className="w-full h-full bg-gray-200 rounded" />
+          </div>
+        )}
+
+        {/* Error placeholder */}
+        {/* {error && (
+          <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-400 text-sm">Image not available</span>
+          </div>
+        )} */}
+
+        {/* Actual image */}
+        {item.image && (
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            loading="lazy"
+            onLoad={() => setLoaded(true)}
+            onError={() => {
+              setError(true);
+              setLoaded(false);
+            }}
+            className={`
+              object-cover
+              ${loaded && !error ? "opacity-100" : "opacity-0"}
+              transition-opacity duration-300
+            `}
+          />
+        )}
+      </div>
+    );
+  };
+
   // Render gallery
   const renderGallery = () => {
     // Group items into columns (2 items per column)
@@ -312,7 +358,7 @@ const AusDemLebenPage = () => {
             data-id={item.id}
             onClick={() => openDetails(item.id)}
           >
-            <img src={item.image} alt={item.title} />
+            <LazyGalleryImage item={item} />
             <div className="ool-overlay-text">
               <h3>{item.title}</h3>
               <p>{item.subtitle}</p>

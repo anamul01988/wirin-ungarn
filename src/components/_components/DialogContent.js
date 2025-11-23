@@ -153,6 +153,14 @@ export default function DialogContent({
                 />
               </div>
             )}
+            {contentType === "aus-dem-leben" && (
+              <div className="mb-6 p-0 mt-4">
+                <div
+                  className="text-sm leading-relaxed text-left mb-2"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              </div>
+            )}
 
             {!contentType === "page" && (
               <>
@@ -643,14 +651,7 @@ export default function DialogContent({
                 dangerouslySetInnerHTML={{ __html: content }}
               />
             )}
-            {contentType === "aus-dem-leben" && (
-              <div className="mb-6 p-0 mt-4">
-                <div
-                  className="text-sm leading-relaxed text-left mb-2"
-                  dangerouslySetInnerHTML={{ __html: content }}
-                />
-              </div>
-            )}
+
             {/* ---------------------------------------- */}
             {(contentType !== "kulinarische-seele" ||
               contentType !== "sprachkurs") &&
