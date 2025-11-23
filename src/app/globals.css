@@ -403,9 +403,9 @@ body {
   width: clamp(200px, 21vw, 410px);
   max-width: 410px; */
   position: fixed;
-            left: 1.04vw;
-            bottom: 9vh;
-            width: 19.79vw;
+  left: 1.04vw;
+  bottom: 9vh;
+  width: 19.79vw;
 }
 
 .main-logo img {

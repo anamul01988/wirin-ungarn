@@ -484,68 +484,68 @@ const LandingPage = () => {
               image: "/assets/tl-Zahlentrainer.avif",
               title: "Zahlentrainer",
               route: "/zahlentrainer",
-              tag: "Zahlen"
+              tag: "Zahlen",
             },
             {
               image: "/assets/tl-Uhrzeittrainer.avif",
               title: "Uhrzeittrainer",
               route: "/wie-spaet-ist-es",
-              tag: "Uhrzeit"
+              tag: "Uhrzeit",
             },
             {
               image: "/assets/tl-kulinarische-Selle.avif",
               title: "Kulinarische Seele",
               route: "/kulinarische-seele",
-              tag: "Kulinarik"
+              tag: "Kulinarik",
             },
             {
               image: "/assets/tl-Raetsel.avif",
               title: "Rätsel",
               route: "/kreuzwortraetsel",
-              tag: "Rätsel"
+              tag: "Rätsel",
             },
             {
               image: "/assets/tl-Ungarn-Insider.avif",
               title: "Ungarn Insider",
               route: "/wissenswert",
-              tag: "Ungarn"
+              tag: "Ungarn",
             },
             {
               image: "/assets/tl-Zustand-in-einem-Wort.avif",
               title: "Zustand in einem Wort",
               route: "/einfach-lesen",
-              tag: "Sprache"
+              tag: "Sprache",
             },
             {
               image: "/assets/tl-Plural.avif",
               title: "Plural",
               route: "/sprachkurs",
-              tag: "Sprache"
+              tag: "Sprache",
             },
             {
               image: "/assets/tl-Makler-Tricks.avif",
               title: "Makler Tricks",
               route: "/wissenswert",
-              tag: "Ungarn"
+              tag: "Ungarn",
             },
             {
               image: "/assets/tl-aus-dem-leben.avif",
               title: "Aus dem Leben",
               route: "/aus-dem-leben",
-              tag: "Sprache"
+              tag: "Sprache",
             },
             {
               image: "/assets/tl-itt-ott.avif",
               title: "Itt-Ott",
               route: "/einfach-lesen",
-              tag: "Sprache"
+              tag: "Sprache",
             },
           ][cardIndex];
 
           // Open filter bar with the relevant tag for this card
           // Trigger custom event that will be handled by React
           const filterEvent = new CustomEvent("openFilterWithTag", {
-            detail: { tag: cardData.tag }
+            detail: { tag: cardData.tag },
           });
           window.dispatchEvent(filterEvent);
         });
@@ -647,11 +647,9 @@ const LandingPage = () => {
 
           for (let attempts = 0; attempts < 50; attempts++) {
             const xPercent =
-              (startAreaX / viewportWidth) * 100 +
-              Math.random() * maxXPercent;
+              (startAreaX / viewportWidth) * 100 + Math.random() * maxXPercent;
             const yPercent =
-              (startAreaY / viewportHeight) * 100 +
-              Math.random() * maxYPercent;
+              (startAreaY / viewportHeight) * 100 + Math.random() * maxYPercent;
 
             let tooClose = false;
             for (let pos of positions) {
@@ -668,11 +666,9 @@ const LandingPage = () => {
           }
           return {
             xPercent:
-              (startAreaX / viewportWidth) * 100 +
-              Math.random() * maxXPercent,
+              (startAreaX / viewportWidth) * 100 + Math.random() * maxXPercent,
             yPercent:
-              (startAreaY / viewportHeight) * 100 +
-              Math.random() * maxYPercent,
+              (startAreaY / viewportHeight) * 100 + Math.random() * maxYPercent,
           };
         }
 
@@ -694,7 +690,7 @@ const LandingPage = () => {
       Promise.all(imagePromises)
         .then(() => {
           console.log("Images loaded, setting up card animations");
-          
+
           // Re-query card wrappers to ensure we have the latest elements
           const currentCardWrappers =
             document.querySelectorAll(".card-wrapper");
@@ -748,12 +744,10 @@ const LandingPage = () => {
               wrapper,
               {
                 x: () =>
-                  (finalPositionsPercent[index].xPercent *
-                    window.innerWidth) /
+                  (finalPositionsPercent[index].xPercent * window.innerWidth) /
                   100,
                 y: () =>
-                  (finalPositionsPercent[index].yPercent *
-                    window.innerHeight) /
+                  (finalPositionsPercent[index].yPercent * window.innerHeight) /
                   100,
                 duration: 4,
                 ease: "power2.out",
@@ -1006,22 +1000,32 @@ const LandingPage = () => {
       try {
         const historyStr = localStorage.getItem("userHistory") || "[]";
         let history = JSON.parse(historyStr);
-        
+
         // Format history items for display
         const formattedHistory = history.map((item) => {
           let timeDisplay = "Kürzlich";
-          
+
           if (item.timestamp) {
             const itemDate = new Date(item.timestamp);
             const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const itemDay = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate());
-            const diffDays = Math.floor((today - itemDay) / (1000 * 60 * 60 * 24));
-            
-            const hours = String(itemDate.getHours()).padStart(2, '0');
-            const minutes = String(itemDate.getMinutes()).padStart(2, '0');
+            const today = new Date(
+              now.getFullYear(),
+              now.getMonth(),
+              now.getDate()
+            );
+            const itemDay = new Date(
+              itemDate.getFullYear(),
+              itemDate.getMonth(),
+              itemDate.getDate()
+            );
+            const diffDays = Math.floor(
+              (today - itemDay) / (1000 * 60 * 60 * 24)
+            );
+
+            const hours = String(itemDate.getHours()).padStart(2, "0");
+            const minutes = String(itemDate.getMinutes()).padStart(2, "0");
             const timeStr = `${hours}:${minutes}`;
-            
+
             if (diffDays === 0) {
               timeDisplay = `Heute, ${timeStr}`;
             } else if (diffDays === 1) {
@@ -1029,20 +1033,20 @@ const LandingPage = () => {
             } else if (diffDays < 7) {
               timeDisplay = `Vor ${diffDays} Tagen`;
             } else {
-              timeDisplay = itemDate.toLocaleDateString("de-DE", { 
-                day: "2-digit", 
-                month: "2-digit" 
+              timeDisplay = itemDate.toLocaleDateString("de-DE", {
+                day: "2-digit",
+                month: "2-digit",
               });
             }
           }
-          
+
           return {
             title: item.title || item.page || "Unbekannte Seite",
             route: item.route || item.url || "/",
-            time: timeDisplay
+            time: timeDisplay,
           };
         });
-        
+
         setPageHistory(formattedHistory.slice(0, 10)); // Get last 10 items
       } catch (error) {
         console.error("Error loading history:", error);
@@ -1051,17 +1055,17 @@ const LandingPage = () => {
     };
 
     loadHistory();
-    
+
     // Add event listener to update history when it changes
     const handleStorageChange = (e) => {
       if (e.key === "userHistory") {
         loadHistory();
       }
     };
-    
+
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("historyUpdated", loadHistory);
-    
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("historyUpdated", loadHistory);
@@ -1088,18 +1092,390 @@ const LandingPage = () => {
 
   // Hungarian name days data
   const hungarianNameDays = {
-    "01": ["Fruzsina", "Pál", "Genovéva", "Titusz", "Simon", "Boldizsár", "Attila", "Gyöngyvér", "Marcell", "Melánia", "Ágota", "Ernő", "Veronika", "Bódog", "Lóránt", "Gusztáv", "Antal", "Piroska", "Sára, Márió", "Fábián, Sebestyén", "Ágnes", "Vince, Artúr", "Zelma, Rajmund", "Timót", "Pál", "Paula, Vanda", "Angelika", "Károly, Karola", "Adél", "Martina, Gerda"],
-    "02": ["Ignác", "Karolina, Aida", "Balázs", "Ráhel, Csenge", "Ágota, Ingrid", "Dorottya, Dóra", "Tódor, Rómeó", "Aranka", "Abigél, Alex", "Elvira", "Bertold, Marietta", "Lídia, Lívia", "Ella, Linda", "Bálint, Valentin", "Kolos, Georgina", "Julianna, Lilla", "Donát", "Bernadett", "Zsuzsanna", "Aladár, Álmos", "Eleonóra", "Gerzson", "Alfréd", "Mátyás", "Géza", "Edina", "Ákos, Bátor", "Elemér"],
-    "03": ["Albin", "Lujza, Lujza", "Kornélia", "Kázmér", "Adorján, Adrián", "Leonóra, Inez", "Tamás", "Zoltán", "Franciska, Fanni", "Ildikó", "Szilárd", "Gergely", "Krisztián, Ajtony", "Matild", "Kristóf", "Henriette", "Gertrúd, Patrik", "Sándor, Ede", "József, Bánk", "Klaudia", "Benedek", "Beáta, Izolda", "Emőke", "Gábor, Karina", "Irén, Irisz", "Emánuel", "Hajnalka", "Gedeon, Johanna", "Auguszta", "Zalán"],
-    "04": ["Hugó", "Áron", "Richárd", "Izidor", "Vince", "Vilmos, Bíborka", "Herman", "Dénes", "Erhard", "Zsolt", "Leó, Szaniszló", "Gyula", "Ida", "Tibor", "Anasztázia, Tas", "Csongor", "Rudolf", "Andrea, Ilma", "Emma", "Tivadar", "Konrád", "Csilla, Noémi", "Béla", "György", "Márk", "Ervin", "Zita", "Valéria", "Péter"],
-    "05": ["Fülöp, Jakab", "Zsigmond", "Tímea, Irma", "Mónika, Flórián", "Györgyi", "Ivett, Frida", "Gizella", "Mihály", "Gergely", "Ármin, Pálma", "Ferenc", "Pongrác", "Szervác, Imola", "Bonifác", "Zsófia, Szonja", "Mózes, Botond", "Paszkál", "Erik, Alexandra", "Ivó, Milán", "Bernát, Felícia", "Konstantin", "Júlia, Rita", "Dezső", "Eszter, Eliza", "Orbán", "Fülöp, Evelin", "Hella", "Emil, Csanád", "Magdolna", "Janka, Zsanett"],
-    "06": ["Tünde", "Kármen, Anita", "Klotild", "Bulcsú", "Fatime", "Norbert, Cintia", "Róbert", "Medárd", "Félix", "Margit, Gréta", "Barnabás", "Villő", "Antal, Anett", "Vazul", "Jolán, Vid", "Jusztin", "Laura, Alida", "Arnold, Levente", "Gyárfás", "Rafael", "Alajos, Leila", "Paulina", "Zoltán", "Iván", "Vilmos", "János, Pál", "László", "Levente, Irén", "Péter, Pál", "Pál"],
-    "07": ["Tihamér, Annamária", "Ottó", "Kornél, Soma", "Ulrik", "Emese, Sarolta", "Csaba", "Apollónia", "Ellák", "Lukrécia", "Amália", "Nóra, Lili", "Izabella, Dalma", "Jenő", "Örs, Stella", "Henrik, Roland", "Valter", "Endre, Elek", "Frigyes", "Emília", "Illés", "Dániel, Daniella", "Magdolna", "Lenke", "Kinga, Kincső", "Kristóf, Jakab", "Anna, Anikó", "Olga, Liliána", "Szabolcs", "Márta, Flóra", "Judit, Xénia"],
-    "08": ["Boglárka", "Lehel", "Hermina", "Domonkos, Dominika", "Krisztina", "Berta, Bettina", "Ibolya", "László", "Emőd", "Lörinc", "Zsuzsanna, Tiborc", "Klára", "Ipoly", "Marcell", "Mária", "Ábrahám", "Jácint", "Ilona", "Huba", "István", "Sámuel, Hajna", "Menyhért, Mirjam", "Bence", "Bertalan", "Lajos, Patrícia", "Izsó", "Gáspár", "Ágoston", "Beatrix, Erna", "Rózsa", "Bella, Erika"],
-    "09": ["Egyed, Egon", "Rebeka, Dorina", "Hilda", "Rozália", "Viktor, Lőrinc", "Zakariás", "Regina", "Mária, Adrienn", "Ádám", "Nikolett, Hunor", "Teodóra", "Mária", "Kornél", "Szeréna, Roxána", "Enikő, Melitta", "Edit", "Zsófia", "Diána", "Vilhelmina", "Friderika", "Máté, Mirella", "Móric", "Tekla", "Gellért, Mercédesz", "Eufrozina, Kende", "Jusztina", "Adalbert", "Vencel", "Mihály", "Jeromos"],
-    "10": ["Malvin", "Petra", "Helga", "Ferenc", "Aurél", "Brúnó, Renáta", "Amália", "Koppány", "Dénes", "Gedeon", "Brigitta", "Miksa", "Kálmán, Ede", "Helén", "Teréz", "Gál", "Hedvig", "Lukács", "Nándor", "Vendel", "Orsolya", "Előd", "Gyöngyi", "Salamon", "Bianka, Blanka", "Dömötör", "Szabina", "Simon, Szimonetta", "Nárcisz", "Alfonz", "Farkas"],
-    "11": ["Marianna", "Achilles", "Győző", "Károly", "Imre", "Lénárd", "Rezső", "Zsombor", "Tivadar", "Réka", "Márton", "Jónás, Renátó", "Szilvia", "Aliz", "Albert, Lipót", "Ödön", "Horténzia, Gergő", "Jenő", "Erzsébet", "Jolán", "Olivér", "Cecília", "Kelemen, Klementina", "Emma", "Katalin", "Virág", "Virgil", "Stefánia", "Taksony", "András, Andor"],
-    "12": ["Elza", "Melinda, Vivien", "Ferenc, Olívia", "Borbála, Barbara", "Vilma", "Miklós", "Ambrus", "Mária", "Natália", "Judit", "Árpád", "Gabriella", "Luca, Otília", "Szilárda", "Valér", "Etelka, Aletta", "Lázár, Olimpia", "Auguszta", "Viola", "Teofil", "Tamás", "Zéno", "Viktória", "Ádám, Éva", "Eugénia", "István", "János", "Kamilla", "Tamás, Tamara", "Dávid", "Szilveszter"]
+    "01": [
+      "Fruzsina",
+      "Pál",
+      "Genovéva",
+      "Titusz",
+      "Simon",
+      "Boldizsár",
+      "Attila",
+      "Gyöngyvér",
+      "Marcell",
+      "Melánia",
+      "Ágota",
+      "Ernő",
+      "Veronika",
+      "Bódog",
+      "Lóránt",
+      "Gusztáv",
+      "Antal",
+      "Piroska",
+      "Sára, Márió",
+      "Fábián, Sebestyén",
+      "Ágnes",
+      "Vince, Artúr",
+      "Zelma, Rajmund",
+      "Timót",
+      "Pál",
+      "Paula, Vanda",
+      "Angelika",
+      "Károly, Karola",
+      "Adél",
+      "Martina, Gerda",
+    ],
+    "02": [
+      "Ignác",
+      "Karolina, Aida",
+      "Balázs",
+      "Ráhel, Csenge",
+      "Ágota, Ingrid",
+      "Dorottya, Dóra",
+      "Tódor, Rómeó",
+      "Aranka",
+      "Abigél, Alex",
+      "Elvira",
+      "Bertold, Marietta",
+      "Lídia, Lívia",
+      "Ella, Linda",
+      "Bálint, Valentin",
+      "Kolos, Georgina",
+      "Julianna, Lilla",
+      "Donát",
+      "Bernadett",
+      "Zsuzsanna",
+      "Aladár, Álmos",
+      "Eleonóra",
+      "Gerzson",
+      "Alfréd",
+      "Mátyás",
+      "Géza",
+      "Edina",
+      "Ákos, Bátor",
+      "Elemér",
+    ],
+    "03": [
+      "Albin",
+      "Lujza, Lujza",
+      "Kornélia",
+      "Kázmér",
+      "Adorján, Adrián",
+      "Leonóra, Inez",
+      "Tamás",
+      "Zoltán",
+      "Franciska, Fanni",
+      "Ildikó",
+      "Szilárd",
+      "Gergely",
+      "Krisztián, Ajtony",
+      "Matild",
+      "Kristóf",
+      "Henriette",
+      "Gertrúd, Patrik",
+      "Sándor, Ede",
+      "József, Bánk",
+      "Klaudia",
+      "Benedek",
+      "Beáta, Izolda",
+      "Emőke",
+      "Gábor, Karina",
+      "Irén, Irisz",
+      "Emánuel",
+      "Hajnalka",
+      "Gedeon, Johanna",
+      "Auguszta",
+      "Zalán",
+    ],
+    "04": [
+      "Hugó",
+      "Áron",
+      "Richárd",
+      "Izidor",
+      "Vince",
+      "Vilmos, Bíborka",
+      "Herman",
+      "Dénes",
+      "Erhard",
+      "Zsolt",
+      "Leó, Szaniszló",
+      "Gyula",
+      "Ida",
+      "Tibor",
+      "Anasztázia, Tas",
+      "Csongor",
+      "Rudolf",
+      "Andrea, Ilma",
+      "Emma",
+      "Tivadar",
+      "Konrád",
+      "Csilla, Noémi",
+      "Béla",
+      "György",
+      "Márk",
+      "Ervin",
+      "Zita",
+      "Valéria",
+      "Péter",
+    ],
+    "05": [
+      "Fülöp, Jakab",
+      "Zsigmond",
+      "Tímea, Irma",
+      "Mónika, Flórián",
+      "Györgyi",
+      "Ivett, Frida",
+      "Gizella",
+      "Mihály",
+      "Gergely",
+      "Ármin, Pálma",
+      "Ferenc",
+      "Pongrác",
+      "Szervác, Imola",
+      "Bonifác",
+      "Zsófia, Szonja",
+      "Mózes, Botond",
+      "Paszkál",
+      "Erik, Alexandra",
+      "Ivó, Milán",
+      "Bernát, Felícia",
+      "Konstantin",
+      "Júlia, Rita",
+      "Dezső",
+      "Eszter, Eliza",
+      "Orbán",
+      "Fülöp, Evelin",
+      "Hella",
+      "Emil, Csanád",
+      "Magdolna",
+      "Janka, Zsanett",
+    ],
+    "06": [
+      "Tünde",
+      "Kármen, Anita",
+      "Klotild",
+      "Bulcsú",
+      "Fatime",
+      "Norbert, Cintia",
+      "Róbert",
+      "Medárd",
+      "Félix",
+      "Margit, Gréta",
+      "Barnabás",
+      "Villő",
+      "Antal, Anett",
+      "Vazul",
+      "Jolán, Vid",
+      "Jusztin",
+      "Laura, Alida",
+      "Arnold, Levente",
+      "Gyárfás",
+      "Rafael",
+      "Alajos, Leila",
+      "Paulina",
+      "Zoltán",
+      "Iván",
+      "Vilmos",
+      "János, Pál",
+      "László",
+      "Levente, Irén",
+      "Péter, Pál",
+      "Pál",
+    ],
+    "07": [
+      "Tihamér, Annamária",
+      "Ottó",
+      "Kornél, Soma",
+      "Ulrik",
+      "Emese, Sarolta",
+      "Csaba",
+      "Apollónia",
+      "Ellák",
+      "Lukrécia",
+      "Amália",
+      "Nóra, Lili",
+      "Izabella, Dalma",
+      "Jenő",
+      "Örs, Stella",
+      "Henrik, Roland",
+      "Valter",
+      "Endre, Elek",
+      "Frigyes",
+      "Emília",
+      "Illés",
+      "Dániel, Daniella",
+      "Magdolna",
+      "Lenke",
+      "Kinga, Kincső",
+      "Kristóf, Jakab",
+      "Anna, Anikó",
+      "Olga, Liliána",
+      "Szabolcs",
+      "Márta, Flóra",
+      "Judit, Xénia",
+    ],
+    "08": [
+      "Boglárka",
+      "Lehel",
+      "Hermina",
+      "Domonkos, Dominika",
+      "Krisztina",
+      "Berta, Bettina",
+      "Ibolya",
+      "László",
+      "Emőd",
+      "Lörinc",
+      "Zsuzsanna, Tiborc",
+      "Klára",
+      "Ipoly",
+      "Marcell",
+      "Mária",
+      "Ábrahám",
+      "Jácint",
+      "Ilona",
+      "Huba",
+      "István",
+      "Sámuel, Hajna",
+      "Menyhért, Mirjam",
+      "Bence",
+      "Bertalan",
+      "Lajos, Patrícia",
+      "Izsó",
+      "Gáspár",
+      "Ágoston",
+      "Beatrix, Erna",
+      "Rózsa",
+      "Bella, Erika",
+    ],
+    "09": [
+      "Egyed, Egon",
+      "Rebeka, Dorina",
+      "Hilda",
+      "Rozália",
+      "Viktor, Lőrinc",
+      "Zakariás",
+      "Regina",
+      "Mária, Adrienn",
+      "Ádám",
+      "Nikolett, Hunor",
+      "Teodóra",
+      "Mária",
+      "Kornél",
+      "Szeréna, Roxána",
+      "Enikő, Melitta",
+      "Edit",
+      "Zsófia",
+      "Diána",
+      "Vilhelmina",
+      "Friderika",
+      "Máté, Mirella",
+      "Móric",
+      "Tekla",
+      "Gellért, Mercédesz",
+      "Eufrozina, Kende",
+      "Jusztina",
+      "Adalbert",
+      "Vencel",
+      "Mihály",
+      "Jeromos",
+    ],
+    10: [
+      "Malvin",
+      "Petra",
+      "Helga",
+      "Ferenc",
+      "Aurél",
+      "Brúnó, Renáta",
+      "Amália",
+      "Koppány",
+      "Dénes",
+      "Gedeon",
+      "Brigitta",
+      "Miksa",
+      "Kálmán, Ede",
+      "Helén",
+      "Teréz",
+      "Gál",
+      "Hedvig",
+      "Lukács",
+      "Nándor",
+      "Vendel",
+      "Orsolya",
+      "Előd",
+      "Gyöngyi",
+      "Salamon",
+      "Bianka, Blanka",
+      "Dömötör",
+      "Szabina",
+      "Simon, Szimonetta",
+      "Nárcisz",
+      "Alfonz",
+      "Farkas",
+    ],
+    11: [
+      "Marianna",
+      "Achilles",
+      "Győző",
+      "Károly",
+      "Imre",
+      "Lénárd",
+      "Rezső",
+      "Zsombor",
+      "Tivadar",
+      "Réka",
+      "Márton",
+      "Jónás, Renátó",
+      "Szilvia",
+      "Aliz",
+      "Albert, Lipót",
+      "Ödön",
+      "Horténzia, Gergő",
+      "Jenő",
+      "Erzsébet",
+      "Jolán",
+      "Olivér",
+      "Cecília",
+      "Kelemen, Klementina",
+      "Emma",
+      "Katalin",
+      "Virág",
+      "Virgil",
+      "Stefánia",
+      "Taksony",
+      "András, Andor",
+    ],
+    12: [
+      "Elza",
+      "Melinda, Vivien",
+      "Ferenc, Olívia",
+      "Borbála, Barbara",
+      "Vilma",
+      "Miklós",
+      "Ambrus",
+      "Mária",
+      "Natália",
+      "Judit",
+      "Árpád",
+      "Gabriella",
+      "Luca, Otília",
+      "Szilárda",
+      "Valér",
+      "Etelka, Aletta",
+      "Lázár, Olimpia",
+      "Auguszta",
+      "Viola",
+      "Teofil",
+      "Tamás",
+      "Zéno",
+      "Viktória",
+      "Ádám, Éva",
+      "Eugénia",
+      "István",
+      "János",
+      "Kamilla",
+      "Tamás, Tamara",
+      "Dávid",
+      "Szilveszter",
+    ],
   };
 
   // Get current date info for calendar
@@ -1107,12 +1483,12 @@ const LandingPage = () => {
     const today = new Date();
     const options = { day: "2-digit", month: "long", year: "numeric" };
     const dateString = today.toLocaleDateString("de-DE", options);
-    
+
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const day = today.getDate();
     const monthNames = hungarianNameDays[month] || [];
     const todayName = monthNames[day - 1] || "Unbekannt";
-    
+
     return { dateString, todayName };
   };
 
@@ -1501,7 +1877,8 @@ const LandingPage = () => {
             setCurrentCardIndex(nextIndex);
 
             // Reset the swiped card with its original rotation
-            const originalRotation = parseFloat(activeCard.dataset.rotation) || 0;
+            const originalRotation =
+              parseFloat(activeCard.dataset.rotation) || 0;
             gsap.set(activeCard, {
               x: 0,
               rotation: originalRotation,
@@ -3203,18 +3580,20 @@ const LandingPage = () => {
 
             <div className="converter-group">
               <label>Forint (HUF)</label>
-              <input 
-                type="number" 
-                id="hufInput" 
-                placeholder="0.00" 
+              <input
+                type="number"
+                id="hufInput"
+                placeholder="0.00"
                 value={hufAmount}
-                readOnly 
+                readOnly
               />
             </div>
 
             <div className="exchange-rate">
               <p>Aktueller Kurs: 1 EUR = 395.50 HUF</p>
-              <p className="rate-date">Stand: {new Date().toLocaleDateString("de-DE")}</p>
+              <p className="rate-date">
+                Stand: {new Date().toLocaleDateString("de-DE")}
+              </p>
             </div>
 
             <button className="btn-convert" onClick={handleCurrencyConversion}>
@@ -3248,7 +3627,9 @@ const LandingPage = () => {
               <h3>Heute</h3>
               <div className="today-info">
                 <p className="today-date">{getCurrentDateInfo().dateString}</p>
-                <p className="today-name">Namenstag: {getCurrentDateInfo().todayName}</p>
+                <p className="today-name">
+                  Namenstag: {getCurrentDateInfo().todayName}
+                </p>
               </div>
             </div>
 
@@ -3262,7 +3643,10 @@ const LandingPage = () => {
                     const nextDay = new Date(today);
                     nextDay.setDate(today.getDate() + i);
                     const day = nextDay.getDate();
-                    const month = String(nextDay.getMonth() + 1).padStart(2, "0");
+                    const month = String(nextDay.getMonth() + 1).padStart(
+                      2,
+                      "0"
+                    );
                     const dateStr = `${day}.${month}.`;
                     const nameDayName = getNameDayForDate(nextDay);
                     upcomingDays.push({ date: dateStr, name: nameDayName });
@@ -3329,7 +3713,11 @@ const LandingPage = () => {
               >
                 <i
                   className="fas fa-star"
-                  style={{ fontSize: "48px", marginBottom: "16px", opacity: 0.3 }}
+                  style={{
+                    fontSize: "48px",
+                    marginBottom: "16px",
+                    opacity: 0.3,
+                  }}
                 ></i>
                 <p style={{ fontSize: "16px" }}>Keine Favoriten gespeichert</p>
                 <p style={{ fontSize: "14px", marginTop: "8px" }}>
@@ -3375,7 +3763,9 @@ const LandingPage = () => {
                   }}
                   style={{ cursor: item.route ? "pointer" : "default" }}
                 >
-                  <span className="history-time">{item.time || "Kürzlich"}</span>
+                  <span className="history-time">
+                    {item.time || "Kürzlich"}
+                  </span>
                   <h4>{item.title || "Unbekannte Seite"}</h4>
                 </div>
               ))
@@ -3389,7 +3779,11 @@ const LandingPage = () => {
               >
                 <i
                   className="fas fa-history"
-                  style={{ fontSize: "48px", marginBottom: "16px", opacity: 0.3 }}
+                  style={{
+                    fontSize: "48px",
+                    marginBottom: "16px",
+                    opacity: 0.3,
+                  }}
                 ></i>
                 <p style={{ fontSize: "16px" }}>Kein Verlauf vorhanden</p>
                 <p style={{ fontSize: "14px", marginTop: "8px" }}>
