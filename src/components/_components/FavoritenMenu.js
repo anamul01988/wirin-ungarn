@@ -48,9 +48,9 @@ const FavoritenMenu = () => {
         <div
           className="menu-item history-item favoriten-item cursor-pointer"
           onClick={() => setFavoritenModalOpen(true)}
-          title="Verwaltung Der Favoriten"
+          title="Meine Favoriten"
         >
-          <span className="history-title">Verwaltung Der Favoriten</span>
+          <span className="history-title">Meine Favoriten</span>
         </div>
 
         {/* Favorites list */}
