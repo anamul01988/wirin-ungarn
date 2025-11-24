@@ -61,7 +61,7 @@ export default function AnkiKartenModal() {
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
-               {/* <Button
+        {/* <Button
           onClick={navigateToHome}
           color="blue"
           size="lg"
@@ -69,7 +69,6 @@ export default function AnkiKartenModal() {
         >
           Navigate to Home
         </Button> */}
-  
       </div>
     </>
   );

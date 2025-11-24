@@ -60,9 +60,9 @@ export default function AusflugszieleComponent() {
 
         <DialogBody className="custom__modal_area overflow-auto flex-1 mr-1">
           {/* Breadcrumb */}
-          <div className="mb-2 px-0 pt-0">
+          {/* <div className="mb-2 px-0 pt-0">
             <Breadcrumb className="text-sm" />
-          </div>
+          </div> */}
 
           <div className="">
             <AusflugszielePage />
@@ -70,7 +70,7 @@ export default function AusflugszieleComponent() {
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
-               {/* <Button
+        {/* <Button
           onClick={navigateToHome}
           color="blue"
           size="lg"

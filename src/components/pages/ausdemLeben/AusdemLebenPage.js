@@ -5,6 +5,7 @@ import { DefaultSpinner } from "@/components/_components/Spinners";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import "./AusdemLebenPage.css";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 const AusDemLebenPage = () => {
   const [pageData, setPageData] = useState(null);
@@ -387,8 +388,14 @@ const AusDemLebenPage = () => {
   return (
     <div className="ool-page">
       {/* Page Header */}
-      <div className="ool-page-header">
+      {/* <div className="ool-page-header">
         <h1 className="ool-page-title">{title || "aus dem Leben"}</h1>
+      </div> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/aus-dem-Leben.jpg"
+          imageAlt="aus dem Leben"
+        />
       </div>
 
       {/* Description Section (Collapsible) */}

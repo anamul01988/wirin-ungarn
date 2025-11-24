@@ -1,3 +1,4 @@
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 import { Typography } from "@material-tailwind/react";
 import React, { useState, useEffect } from "react";
 
@@ -447,7 +448,7 @@ const HungarianQuiz = () => {
 
   return (
     <div>
-      <div
+      {/* <div
         className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center"
         // style={styles.wrapper}
       >
@@ -457,6 +458,12 @@ const HungarianQuiz = () => {
         >
           Kultour Ungarn
         </Typography>
+      </div> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/kultour-Ungarn.jpg"
+          imageAlt="kultour Ungarn"
+        />
       </div>
 
       <div style={styles.container}>

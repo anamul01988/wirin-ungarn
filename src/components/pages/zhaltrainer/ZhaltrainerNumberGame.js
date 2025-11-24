@@ -1,3 +1,4 @@
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 import React, { useState, useEffect, useRef } from "react";
 
 // Sample data - replace with full JSON
@@ -435,23 +436,20 @@ const HungarianNumberGame = () => {
   return (
     <div
       style={{
-        maxWidth: "900px",
+        // maxWidth: "900px",
         margin: "0 auto",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
+        // padding: "20px",
+        // fontFamily: "Arial, sans-serif",
       }}
     >
       <audio ref={audioRef} />
 
-      <h1
-        style={{
-          fontSize: "28px",
-          marginBottom: "30px",
-          fontWeight: "normal",
-        }}
-      >
-        ungarische Zahlen üben
-      </h1>
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Zahlentrainer.jpg"
+          imageAlt="Zahlentrainer"
+        />
+      </div>
 
       {/* Difficulty Selection */}
       <div style={{ marginBottom: "30px" }}>

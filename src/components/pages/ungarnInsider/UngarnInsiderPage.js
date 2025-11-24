@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { GetAllUngarnInsider } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import "./UngarnInsiderPage.css";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 const UngarnInsiderPage = () => {
   const [pageData, setPageData] = useState(null);
@@ -215,7 +216,13 @@ const UngarnInsiderPage = () => {
       </div>
 
       {/* Page Title */}
-      <h1 className="insider-page__title">{title || "Ungarn-Insider"}</h1>
+      {/* <h1 className="insider-page__title">{title || "Ungarn-Insider"}</h1> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Ungarn-Insider.jpg"
+          imageAlt="Ungarn Insider"
+        />
+      </div>
 
       {/* Intro Section */}
       {content && (

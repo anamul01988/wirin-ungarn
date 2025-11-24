@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { GetAllImpulse } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import "./UngarischImpulsePage.css";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 const UngarischImpulsePage = () => {
   const [pageData, setPageData] = useState(null);
@@ -55,7 +56,11 @@ const UngarischImpulsePage = () => {
   const handleLessonSelect = useCallback(
     (e) => {
       const selectedIndex = parseInt(e.target.value);
-      if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < impulses.length) {
+      if (
+        !isNaN(selectedIndex) &&
+        selectedIndex >= 0 &&
+        selectedIndex < impulses.length
+      ) {
         setCurrentLessonIndex(selectedIndex);
         setCurrentLesson(impulses[selectedIndex]);
         setAnswersBlurred(true);
@@ -63,7 +68,10 @@ const UngarischImpulsePage = () => {
         pauseAllAudio();
         // Scroll to top
         if (contentRef.current) {
-          contentRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+          contentRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }
       }
     },
@@ -73,20 +81,23 @@ const UngarischImpulsePage = () => {
   // Handle next lesson button
   const handleNextLesson = useCallback(() => {
     if (impulses.length === 0) return;
-    
+
     let nextIndex;
-    if (currentLessonIndex === null || currentLessonIndex === impulses.length - 1) {
+    if (
+      currentLessonIndex === null ||
+      currentLessonIndex === impulses.length - 1
+    ) {
       // Random lesson
       nextIndex = Math.floor(Math.random() * impulses.length);
     } else {
       nextIndex = currentLessonIndex + 1;
     }
-    
+
     setCurrentLessonIndex(nextIndex);
     setCurrentLesson(impulses[nextIndex]);
     setAnswersBlurred(true);
     pauseAllAudio();
-    
+
     // Scroll to top
     if (contentRef.current) {
       contentRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -94,49 +105,55 @@ const UngarischImpulsePage = () => {
   }, [currentLessonIndex, impulses]);
 
   // Audio control functions
-  const handlePlayPause = useCallback((audioId, audioUrl) => {
-    if (!audioUrl) return;
+  const handlePlayPause = useCallback(
+    (audioId, audioUrl) => {
+      if (!audioUrl) return;
 
-    // Pause any currently playing audio
-    pauseAllAudio();
+      // Pause any currently playing audio
+      pauseAllAudio();
 
-    // Get or create audio object
-    let audio = audioObjects[audioId];
-    
-    if (!audio) {
-      audio = new Audio(audioUrl);
-      setAudioObjects((prev) => ({ ...prev, [audioId]: audio }));
+      // Get or create audio object
+      let audio = audioObjects[audioId];
 
-      // Reset playing state when audio ends
-      audio.addEventListener("ended", () => {
+      if (!audio) {
+        audio = new Audio(audioUrl);
+        setAudioObjects((prev) => ({ ...prev, [audioId]: audio }));
+
+        // Reset playing state when audio ends
+        audio.addEventListener("ended", () => {
+          setPlayingAudioId(null);
+        });
+
+        // Error handling
+        audio.addEventListener("error", () => {
+          console.error("Error loading audio file:", audioUrl);
+          alert("Audio konnte nicht geladen werden.");
+          setPlayingAudioId(null);
+        });
+      }
+
+      // Toggle play/pause
+      if (audio.paused) {
+        audio.play();
+        setPlayingAudioId(audioId);
+      } else {
+        audio.pause();
         setPlayingAudioId(null);
-      });
+      }
+    },
+    [audioObjects]
+  );
 
-      // Error handling
-      audio.addEventListener("error", () => {
-        console.error("Error loading audio file:", audioUrl);
-        alert("Audio konnte nicht geladen werden.");
-        setPlayingAudioId(null);
-      });
-    }
-
-    // Toggle play/pause
-    if (audio.paused) {
-      audio.play();
-      setPlayingAudioId(audioId);
-    } else {
-      audio.pause();
-      setPlayingAudioId(null);
-    }
-  }, [audioObjects]);
-
-  const handleRewind = useCallback((audioId) => {
-    const audio = audioObjects[audioId];
-    if (audio) {
-      const newTime = audio.currentTime - 5;
-      audio.currentTime = newTime > 0 ? newTime : 0;
-    }
-  }, [audioObjects]);
+  const handleRewind = useCallback(
+    (audioId) => {
+      const audio = audioObjects[audioId];
+      if (audio) {
+        const newTime = audio.currentTime - 5;
+        audio.currentTime = newTime > 0 ? newTime : 0;
+      }
+    },
+    [audioObjects]
+  );
 
   const pauseAllAudio = useCallback(() => {
     Object.values(audioObjects).forEach((audio) => {
@@ -159,7 +176,11 @@ const UngarischImpulsePage = () => {
     const audioRegex = /data-audio-url=["']([^"']+)["']/g;
     let match;
     while ((match = audioRegex.exec(content)) !== null) {
-      const audioId = match[1].split("/").pop().replace(".ogg", "").replace(".mp3", "");
+      const audioId = match[1]
+        .split("/")
+        .pop()
+        .replace(".ogg", "")
+        .replace(".mp3", "");
       audioUrls[audioId] = match[1];
     }
     return audioUrls;
@@ -171,10 +192,10 @@ const UngarischImpulsePage = () => {
 
     // Extract audio URLs
     const audioUrls = extractAudioUrls(currentLesson.content);
-    
+
     // Process content to add audio controls
     let processedContent = currentLesson.content;
-    
+
     // Replace audio button containers with React-compatible structure
     processedContent = processedContent.replace(
       /<div class="himpulse-play-button-container">[\s\S]*?<\/div>/g,
@@ -182,7 +203,11 @@ const UngarischImpulsePage = () => {
         const audioUrlMatch = match.match(/data-audio-url=["']([^"']+)["']/);
         if (audioUrlMatch) {
           const audioUrl = audioUrlMatch[1];
-          const audioId = audioUrl.split("/").pop().replace(".ogg", "").replace(".mp3", "");
+          const audioId = audioUrl
+            .split("/")
+            .pop()
+            .replace(".ogg", "")
+            .replace(".mp3", "");
           return `<div class="audio-control-container" data-audio-id="${audioId}" data-audio-url="${audioUrl}"></div>`;
         }
         return match;
@@ -200,31 +225,37 @@ const UngarischImpulsePage = () => {
     // Update content ref
     if (contentRef.current) {
       contentRef.current.innerHTML = processedContent;
-      
+
       // Add event listeners for audio controls
-      const audioContainers = contentRef.current.querySelectorAll(".audio-control-container");
+      const audioContainers = contentRef.current.querySelectorAll(
+        ".audio-control-container"
+      );
       audioContainers.forEach((container) => {
         const audioId = container.getAttribute("data-audio-id");
         const audioUrl = container.getAttribute("data-audio-url");
-        
+
         if (audioId && audioUrl) {
           // Create audio controls
           const controlsDiv = document.createElement("div");
           controlsDiv.className = "audio-controls";
-          
+
           const backwardBtn = document.createElement("button");
           backwardBtn.className = "audio-backward-button";
           backwardBtn.setAttribute("data-audio-id", audioId);
           backwardBtn.setAttribute("aria-label", "Rewind 5 seconds");
           backwardBtn.addEventListener("click", () => handleRewind(audioId));
-          
+
           const playBtn = document.createElement("button");
-          playBtn.className = `audio-play-button ${playingAudioId === audioId ? "playing" : ""}`;
+          playBtn.className = `audio-play-button ${
+            playingAudioId === audioId ? "playing" : ""
+          }`;
           playBtn.setAttribute("data-audio-id", audioId);
           playBtn.setAttribute("data-audio-url", audioUrl);
           playBtn.setAttribute("aria-label", "Play audio");
-          playBtn.addEventListener("click", () => handlePlayPause(audioId, audioUrl));
-          
+          playBtn.addEventListener("click", () =>
+            handlePlayPause(audioId, audioUrl)
+          );
+
           controlsDiv.appendChild(backwardBtn);
           controlsDiv.appendChild(playBtn);
           container.appendChild(controlsDiv);
@@ -232,7 +263,8 @@ const UngarischImpulsePage = () => {
       });
 
       // Add click handler for blurred answers
-      const blurredSection = contentRef.current.querySelector(".antworten-blurred");
+      const blurredSection =
+        contentRef.current.querySelector(".antworten-blurred");
       const italicPara = contentRef.current.querySelector(".italic_para");
       if (blurredSection) {
         blurredSection.addEventListener("click", handleToggleAnswers);
@@ -241,7 +273,15 @@ const UngarischImpulsePage = () => {
         italicPara.addEventListener("click", handleToggleAnswers);
       }
     }
-  }, [currentLesson, answersBlurred, playingAudioId, handlePlayPause, handleRewind, handleToggleAnswers, extractAudioUrls]);
+  }, [
+    currentLesson,
+    answersBlurred,
+    playingAudioId,
+    handlePlayPause,
+    handleRewind,
+    handleToggleAnswers,
+    extractAudioUrls,
+  ]);
 
   // Cleanup audio on unmount
   useEffect(() => {
@@ -277,10 +317,14 @@ const UngarischImpulsePage = () => {
     <div className="impulse-page">
       {/* Page Header */}
       <div className="impulse-header">
-        <h1>{title || "Ungarisch-Impulse"}</h1>
-        <p className="impulse-intro">
-          {pageIntro}
-        </p>
+        {/* <h1>{title || "Ungarisch-Impulse"}</h1> */}
+        <div className="w-full relative flex items-center justify-center mb-3">
+          <ArchivePageHeaderImage
+            imageUrl="/headlineImages/Ungarisch-Impulse.jpg"
+            imageAlt="Ungarisch Impulse"
+          />
+        </div>
+        <p className="impulse-intro">{pageIntro}</p>
         <p className="impulse-note">
           <strong>Wähle hier die gewünschte Schwierigkeitsstufe aus:</strong>
         </p>
@@ -304,7 +348,9 @@ const UngarischImpulsePage = () => {
           </select>
         </div>
         <div className="impulse-lesson-number">
-          {currentLessonIndex !== null ? `Lec ${currentLessonIndex + 1}` : "Lec"}
+          {currentLessonIndex !== null
+            ? `Lec ${currentLessonIndex + 1}`
+            : "Lec"}
         </div>
         <button
           className="impulse-next-button"
@@ -341,4 +387,3 @@ const UngarischImpulsePage = () => {
 };
 
 export default UngarischImpulsePage;
-

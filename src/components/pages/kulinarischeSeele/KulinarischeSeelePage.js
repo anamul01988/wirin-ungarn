@@ -5,6 +5,7 @@ import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import algoliasearch from "algoliasearch/lite";
 import CustomPost from "@/components/ui/CustomPost";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 const KulinarischeSeelePage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -254,13 +255,19 @@ const KulinarischeSeelePage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      {/* <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
           variant="h4"
           className="archive__page_title font-bold text-center text-[#FFF]"
         >
           {title}
         </Typography>
+      </div> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Kulinarische-Seele.jpg"
+          imageAlt="kulinarische Seele"
+        />
       </div>
 
       {/* Checkbox */}

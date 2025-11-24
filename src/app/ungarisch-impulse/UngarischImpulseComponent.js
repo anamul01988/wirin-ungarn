@@ -60,9 +60,9 @@ export default function UngarischImpulseComponent() {
 
         <DialogBody className="overflow-auto mr-1 custom__modal_area flex-1">
           {/* Breadcrumb */}
-          <div className="mb-2 px-0 pt-0">
+          {/* <div className="mb-2 px-0 pt-0">
             <Breadcrumb className="text-sm" />
-          </div>
+          </div> */}
 
           <div className="">
             <UngarischImpulsePage />
@@ -70,7 +70,7 @@ export default function UngarischImpulseComponent() {
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
-               {/* <Button
+        {/* <Button
           onClick={navigateToHome}
           color="blue"
           size="lg"

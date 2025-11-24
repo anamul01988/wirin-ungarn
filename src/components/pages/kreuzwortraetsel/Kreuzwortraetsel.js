@@ -5,6 +5,7 @@ import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import algoliasearch from "algoliasearch/lite";
 import CustomPost from "@/components/ui/CustomPost";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 const KreuzwortraetselPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -212,11 +213,11 @@ const KreuzwortraetselPage = () => {
     async function fetchData() {
       try {
         const apiData = await GetKreuzwortratsel();
-        console.log(
-          "apiData 2221122222222111",
-          apiData?.data,
-          apiData?.data.crosswords
-        );
+        // console.log(
+        //   "apiData 2221122222222111",
+        //   apiData?.data,
+        //   apiData?.data.crosswords
+        // );
         setCookieData(apiData);
         // Store all crosswords in state
         setAllCrosswords(apiData.data.crosswords.edges || []);
@@ -252,7 +253,7 @@ const KreuzwortraetselPage = () => {
     ? searchResults?.edges?.length || 0
     : allCrosswords.length;
 
-  console.log("kreuzwortraetsel data: allCrosswords:", allCrosswords);
+  // console.log("kreuzwortraetsel data: allCrosswords:", allCrosswords);
   return (
     <div className="mx-auto">
       {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
@@ -261,13 +262,19 @@ const KreuzwortraetselPage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      {/* <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
           variant="h4"
           className="archive__page_title font-bold text-center text-[#FFF]"
         >
           {title}
         </Typography>
+      </div> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Kreuzwortraetsel.jpg"
+          imageAlt="Kreuzwortraetsel"
+        />
       </div>
 
       {/* Checkbox */}

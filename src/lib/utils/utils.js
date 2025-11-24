@@ -1,6 +1,8 @@
 import NewsCard from "@/components/_components/NewsCard";
 import NewscardHeader from "@/components/_components/NewscardHeader";
 import NewsCardParent from "@/components/_components/NewsCardParent";
+import Image from "next/image";
+import { useState } from "react";
 
 export const fakeData = {
   title: "Einleitung: Der Duft von Sommer, Markt und purer Lebensfreude",
@@ -785,3 +787,49 @@ export const landingCards = [
     route: "/einfach-lesen",
   },
 ];
+
+export const ArchivePageHeaderImage = ({ imageUrl, imageAlt }) => {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+
+  return (
+    <div className="relative w-auto h-auto">
+      {/* Loading placeholder/skeleton */}
+      {!loaded && !error && (
+        <div className="w-[500px] h-[80px] bg-gray-300 animate-pulse flex items-center justify-center rounded">
+          <div className="w-full h-full bg-gray-200 rounded" />
+        </div>
+      )}
+
+      {/* Error placeholder */}
+      {error && (
+        <div className="w-[500px] h-[80px] bg-gray-200 flex items-center justify-center rounded">
+          <span className="text-gray-400 text-sm">Image not available</span>
+        </div>
+      )}
+
+      {/* Actual image */}
+      {imageUrl && !error && (
+        <Image
+          src={imageUrl}
+          alt={imageAlt}
+          width={500}
+          height={0}
+          style={{ height: "50px" }}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          loading="lazy"
+          onLoad={() => setLoaded(true)}
+          onError={() => {
+            setError(true);
+            setLoaded(false);
+          }}
+          className={`
+              object-contain
+              ${loaded ? "opacity-100" : "opacity-0"}
+              transition-opacity duration-300
+            `}
+        />
+      )}
+    </div>
+  );
+};
