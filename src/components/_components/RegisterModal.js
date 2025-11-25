@@ -160,7 +160,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 auth-modal">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] auth-modal">
       <div className="bg-white rounded-lg p-2  w-full max-w-2xl  relative auth-modal-content">
         <div className=" border-2 border-black rounded-lg border-solid">
           <div className="py-6 px-16">
