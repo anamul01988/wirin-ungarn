@@ -5,6 +5,7 @@ import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import algoliasearch from "algoliasearch/lite";
 import CustomPost from "@/components/ui/CustomPost";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 const LiedTextePage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -246,19 +247,20 @@ const LiedTextePage = () => {
   // console.log("liedTextePage data: allPosts:", allPosts);
   return (
     <div className="mx-auto">
-      {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
-      <div
-        className="prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: content }}
-      /> */}
       {/* Header */}
-      <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      {/* <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
           variant="h4"
           className="archive__page_title font-bold text-center text-[#FFF]"
         >
           {title}
         </Typography>
+      </div> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Liedtexte.jpg"
+          imageAlt="liedtexte"
+        />
       </div>
 
       {/* Checkbox */}

@@ -4,6 +4,7 @@ import { GetAllKnowledges } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { useRouter } from "next/navigation";
 import "./KurzKnappPage.css";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 const KurzKnappPage = () => {
   const [pageData, setPageData] = useState(null);
@@ -118,11 +119,17 @@ const KurzKnappPage = () => {
   return (
     <div className="knowledge-page">
       {/* Page Title */}
-      {title && (
+      {/* {title && (
         <p className="text-[30px] font-medium text-[#494158] leading-[1.9em] py-2 -ml-[0.05em] -mt-2 not-italic tracking-[-0.04em]">
           {title}
         </p>
-      )}
+      )} */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/kurz-knapp.jpg"
+          imageAlt="kurz und knapp"
+        />
+      </div>
       {/* Page Content */}
       {content && (
         <div className="prose" dangerouslySetInnerHTML={{ __html: content }} />

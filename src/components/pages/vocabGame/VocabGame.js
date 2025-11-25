@@ -1,3 +1,4 @@
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 import { Typography } from "@material-tailwind/react";
 import React, { useState, useEffect } from "react";
 
@@ -146,13 +147,19 @@ function VocabGame() {
 
   return (
     <div style={styles.container}>
-      <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] text-[#fff] flex items-center justify-center">
+      {/* <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] text-[#fff] flex items-center justify-center">
         <Typography
           variant="h4"
           className="archive__page_title font-bold text-center text-[#FFF]"
         >
           Vokabel-Entdecker
         </Typography>
+      </div> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Vokabelentdecker.jpg"
+          imageAlt="Vokabelentdecker"
+        />
       </div>
       <div style={styles.instructBox}>
         <div
@@ -224,10 +231,10 @@ function VocabGame() {
 
 const styles = {
   container: {
-    fontFamily: "Arial, sans-serif",
+    // fontFamily: "Arial, sans-serif",
     // maxWidth: "800px",
     margin: "0 auto",
-    padding: "20px",
+    // padding: "20px",
   },
   instructBox: {
     border: "3px solid #436f4d",

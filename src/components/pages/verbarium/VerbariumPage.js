@@ -4,6 +4,7 @@ import { GetAllVerbariums } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { useRouter } from "next/navigation";
 import "./VerbariumPage.css";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 const VerbariumPage = () => {
   const [pageData, setPageData] = useState(null);
@@ -170,8 +171,14 @@ const VerbariumPage = () => {
             <div className="content-inner">
               {/* Page Header */}
               <div id="term">
-                <div className="term-title">
+                {/* <div className="term-title">
                   <h1>{title || "Verbarium"}</h1>
+                </div> */}
+                <div className="w-full relative flex items-center justify-center mb-3">
+                  <ArchivePageHeaderImage
+                    imageUrl="/headlineImages/Verbarium.jpg"
+                    imageAlt="Verbarium"
+                  />
                 </div>
               </div>
 

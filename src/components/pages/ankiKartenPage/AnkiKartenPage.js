@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import ModalIcons from "@/components/_components/ModalIcons";
 import "./AnkiKartenPage.css";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 export default function AnkiKartenPage() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -355,12 +356,18 @@ export default function AnkiKartenPage() {
               </div>
             </div> */}
             {/* ---------------------------------- */}
-            <Typography
+            {/* <Typography
               variant="h2"
               className="font-bold text-gray-900 mb-6 text-left text-[32px]"
             >
               Lerne Ungarisch mit Anki — Der Turbo für deinen Wortschatz!
-            </Typography>
+            </Typography> */}
+            <div className="w-full relative flex items-center justify-center mb-3">
+              <ArchivePageHeaderImage
+                imageUrl="/headlineImages/Anki-Karten.jpg"
+                imageAlt="Anki Karten"
+              />
+            </div>
             <div class="anki_karten-container">
               <p class="anki_karten-intro-text ai-optimize-7 ai-optimize-introduction">
                 Du möchtest deinen ungarischen Wortschatz nicht nur lernen,

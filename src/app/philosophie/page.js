@@ -5,7 +5,7 @@ import DialogContent from "@/components/_components/DialogContent";
 export default async function PhilosophieModal() {
   try {
     const data = await GetPhilosophiePages();
-    
+
     if (!data || !data.data || !data.data.page) {
       return notFound();
     }
@@ -14,10 +14,11 @@ export default async function PhilosophieModal() {
 
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <DialogContent 
-          title={title} 
-          content={content} 
+        <DialogContent
+          title={title}
+          content={content}
           contentType="page"
+          routePrefix="philosophie"
         />
       </div>
     );

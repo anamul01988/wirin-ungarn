@@ -19,6 +19,7 @@ import SuffixHeroGrammarExplanations from "./SuffixHeroStatic";
 import KategorianCollapsibleComment from "./kategorian_collapsibleForm";
 import Link from "next/link";
 import LearningBoxModal from "./LearningBoxModal";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 export default function DialogContent({
   title,
   content,
@@ -147,6 +148,7 @@ export default function DialogContent({
   const hasContactForm =
     typeof content === "string" && content?.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
+  console.log("isContactPage", isContactPage, routePrefix);
 
   return (
     <>
@@ -184,10 +186,41 @@ export default function DialogContent({
         <DialogBody className="overflow-auto custom__modal_area flex-1 mr-1 p-[30px]">
           <div className="single__page-content">
             {/* Breadcrumb */}
-            <div className="mb-2 px-0 pt-0">
-              <Breadcrumb className="text-sm" isSinglePage={isSinglePage} />
-            </div>
-            {routePrefix !== "einfach-lesen" && (
+            {title &&
+              !title.toLowerCase().includes("kontakt") &&
+              pathname !== "/wie-spaet-ist-es/" &&
+              routePrefix !== "philosophie" && (
+                <div className="mb-2 px-0 pt-0">
+                  <Breadcrumb className="text-sm" isSinglePage={isSinglePage} />
+                </div>
+              )}
+
+            {pathname === "/wie-spaet-ist-es/" && (
+              <div className="w-full relative flex items-center justify-center mb-3">
+                <ArchivePageHeaderImage
+                  imageUrl="/headlineImages/wie-spaet-ist-es.jpg"
+                  imageAlt="wie-spaet-ist-es"
+                />
+              </div>
+            )}
+
+            {title && title.toLowerCase().includes("kontakt") && (
+              <div className="w-full relative flex items-center justify-center mb-3">
+                <ArchivePageHeaderImage
+                  imageUrl="/headlineImages/Kontakt.jpg"
+                  imageAlt="kontakt"
+                />
+              </div>
+            )}
+            {routePrefix === "philosophie" && (
+              <div className="w-full relative flex items-center justify-center mb-3">
+                <ArchivePageHeaderImage
+                  imageUrl="/headlineImages/Philosophie.jpg"
+                  imageAlt="philosophie"
+                />
+              </div>
+            )}
+            {routePrefix !== "einfach-lesen" && !isContactPage && (
               <h1 className="single__page_title text-[#436f4d]">{title}</h1>
             )}
             {contentType === "wissenswert" && (
@@ -699,21 +732,21 @@ export default function DialogContent({
             )}
             {contentType === "kurz-und-knapp" && (
               <div>
-              <p
-                className="text-sm leading-relaxed text-left mb-2"
-                dangerouslySetInnerHTML={{ __html: content }}
-              />
-              <div className=" flex flex-col float-end justify-end gap-5">
-                <button 
-                  onClick={() => route.push('/kurz-und-knapp/')}
-                  className="bg-[#436f4d] hover:bg-[#5a7a5e] text-white text-sm font-medium px-4 py-2 rounded transition-colors"
-                >
-                  zur Fragen-Übersicht
-                </button>
-                <button className="bg-[#c03] hover:bg-[#a02828] text-white text-sm font-medium px-2 py-2 rounded transition-colors">
-                  Fehler gefunden?
-                </button>
-              </div>
+                <p
+                  className="text-sm leading-relaxed text-left mb-2"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+                <div className=" flex flex-col float-end justify-end gap-5">
+                  <button
+                    onClick={() => route.push("/kurz-und-knapp/")}
+                    className="bg-[#436f4d] hover:bg-[#5a7a5e] text-white text-sm font-medium px-4 py-2 rounded transition-colors"
+                  >
+                    zur Fragen-Übersicht
+                  </button>
+                  <button className="bg-[#c03] hover:bg-[#a02828] text-white text-sm font-medium px-2 py-2 rounded transition-colors">
+                    Fehler gefunden?
+                  </button>
+                </div>
               </div>
             )}
 

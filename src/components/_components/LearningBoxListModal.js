@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getLearningBoxCards } from "./LearningBoxModal";
 import Image from "next/image";
 import ModalIcons from "@/components/_components/ModalIcons";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 export default function LearningBoxListModal({ open, onClose }) {
   const { user } = useAuth();
@@ -183,24 +184,11 @@ export default function LearningBoxListModal({ open, onClose }) {
             meine Lernkiste
           </h1> */}
         </div>
-        <div className="w-full relative flex items-center justify-center mt-0 mb-5">
-          <Image
-            src="/Meine_Lernkiste_logo.jpeg"
-            alt="Meine Lernkiste"
-            width={500}
-            height={100}
-            className="object-contain"
+        <div className="w-full relative flex items-center justify-center mb-3">
+          <ArchivePageHeaderImage
+            imageUrl="/headlineImages/meine-Lernkiste.jpg"
+            imageAlt="meine Lernkiste"
           />
-          {/* 
-          <span
-            className={`absolute top-3 right-3 px-3 py-1 text-xs font-bold rounded-full ${
-              badge === "SHORTS"
-                ? "bg-[#436F4D] text-white"
-                : "bg-green-500 text-white"
-            }`}
-          >
-            {badge}
-          </span> */}
         </div>
         {/* Description Text */}
         <p className="text-gray-700 mb-6 text-sm leading-relaxed">

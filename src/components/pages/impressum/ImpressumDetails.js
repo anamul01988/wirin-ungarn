@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GetImpressumPages } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 const ImpressumDetails = () => {
   const [data, setData] = useState(null);
@@ -35,9 +36,15 @@ const ImpressumDetails = () => {
 
   return (
     <div className="mx-auto">
-      <h1 className="single__page_title mb-3 text-2xl font-bold text-gray-800 pr-12 leading-snug">
+      {/* <h1 className="single__page_title mb-3 text-2xl font-bold text-gray-800 pr-12 leading-snug">
         {title}
-      </h1>
+      </h1> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Impressum.jpg"
+          imageAlt="Impressum"
+        />
+      </div>
       <div
         className="prose prose-lg max-w-none"
         dangerouslySetInnerHTML={{ __html: content }}

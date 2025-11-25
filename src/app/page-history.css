@@ -31,7 +31,7 @@
 .history-title {
   font-weight: bold;
   overflow: hidden;
-  max-width: 180px;
+  max-width: 280px;
   flex-grow: 1;
 }
 

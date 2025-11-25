@@ -5,6 +5,7 @@ import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import algoliasearch from "algoliasearch/lite";
 import CustomPost from "@/components/ui/CustomPost";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 const EinFachPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,7 @@ const EinFachPage = () => {
   const [algoliaResults, setAlgoliaResults] = useState([]);
   const [algoliaSearching, setAlgoliaSearching] = useState(false);
   const [searchDebounce, setSearchDebounce] = useState(null);
-  
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
@@ -55,7 +56,7 @@ const EinFachPage = () => {
     } else {
       setCurrentPage(pageNumber);
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSearch = async () => {
@@ -229,13 +230,19 @@ const EinFachPage = () => {
   // if (!cookieData || !cookieData.data || !cookieData.data.page)
   //   return <div>Keine Cookie-Daten gefunden.</div>;
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
-  
+
   // Get posts to display
-  const displayPosts = isSearching ? getCurrentSearchResults() : getCurrentPosts();
-  const totalPages = isSearching ? Math.ceil((searchResults?.edges?.length || 0) / postsPerPage) : getTotalPages();
+  const displayPosts = isSearching
+    ? getCurrentSearchResults()
+    : getCurrentPosts();
+  const totalPages = isSearching
+    ? Math.ceil((searchResults?.edges?.length || 0) / postsPerPage)
+    : getTotalPages();
   const activePage = isSearching ? searchCurrentPage : currentPage;
-  const totalPosts = isSearching ? (searchResults?.edges?.length || 0) : allPosts.length;
-  
+  const totalPosts = isSearching
+    ? searchResults?.edges?.length || 0
+    : allPosts.length;
+
   console.log("einfach data: allPosts:", allPosts);
 
   return (
@@ -246,13 +253,19 @@ const EinFachPage = () => {
         dangerouslySetInnerHTML={{ __html: content }}
       /> */}
       {/* Header */}
-      <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
+      {/* <div className="mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center">
         <Typography
           variant="h4"
           className="archive__page_title font-bold text-center text-[#FFF]"
         >
           {title}
         </Typography>
+      </div> */}
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/einfach-lesen.jpg"
+          imageAlt="einfach lesen"
+        />
       </div>
 
       {/* Checkbox */}
@@ -393,13 +406,14 @@ const EinFachPage = () => {
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
           <>
-            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge - Angezeigt werden{" "}
-            {displayPosts?.length || 0} Beiträge.
+            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt{" "}
+            {totalPosts} Beiträge - Angezeigt werden {displayPosts?.length || 0}{" "}
+            Beiträge.
           </>
         ) : (
           <>
-            Seite {activePage} von {totalPages} - Insgesamt {totalPosts} Beiträge - Angezeigt werden{" "}
-            {displayPosts?.length || 0} Beiträge.
+            Seite {activePage} von {totalPages} - Insgesamt {totalPosts}{" "}
+            Beiträge - Angezeigt werden {displayPosts?.length || 0} Beiträge.
           </>
         )}
       </Typography>
@@ -410,28 +424,26 @@ const EinFachPage = () => {
           </div>
         ) : (
           <>
-            {displayPosts?.map(
-              (edge, idx) => {
-                return (
-                  <div key={edge.node.id}>
-                    <CustomPost
-                      title={edge.node?.title}
-                      image={edge.node?.featuredImage?.node?.sourceUrl}
-                      imageAlt={edge.node?.featuredImage?.node?.altText}
-                      description={edge.node?.content}
-                      excerpt={null}
-                      onlyHeadings={onlyHeadings}
-                      slug={edge.node.slug}
-                      routePrefix="einfach-lesen"
-                    />
-                    {/* Divider except last */}
-                    {!onlyHeadings && idx < displayPosts?.length - 1 && (
-                      <hr className="my-6 border-gray-300" />
-                    )}
-                  </div>
-                );
-              }
-            )}
+            {displayPosts?.map((edge, idx) => {
+              return (
+                <div key={edge.node.id}>
+                  <CustomPost
+                    title={edge.node?.title}
+                    image={edge.node?.featuredImage?.node?.sourceUrl}
+                    imageAlt={edge.node?.featuredImage?.node?.altText}
+                    description={edge.node?.content}
+                    excerpt={null}
+                    onlyHeadings={onlyHeadings}
+                    slug={edge.node.slug}
+                    routePrefix="einfach-lesen"
+                  />
+                  {/* Divider except last */}
+                  {!onlyHeadings && idx < displayPosts?.length - 1 && (
+                    <hr className="my-6 border-gray-300" />
+                  )}
+                </div>
+              );
+            })}
 
             {/* Numbered Pagination - Only show if more than 1 page */}
             {totalPages > 1 && (
@@ -446,37 +458,42 @@ const EinFachPage = () => {
                 </button>
 
                 {/* Page numbers */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
-                  // Show first page, last page, current page, and pages around current
-                  const showPage = 
-                    pageNum === 1 || 
-                    pageNum === totalPages || 
-                    (pageNum >= activePage - 2 && pageNum <= activePage + 2);
-                  
-                  const showEllipsis = 
-                    (pageNum === activePage - 3 && activePage > 4) ||
-                    (pageNum === activePage + 3 && activePage < totalPages - 3);
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (pageNum) => {
+                    // Show first page, last page, current page, and pages around current
+                    const showPage =
+                      pageNum === 1 ||
+                      pageNum === totalPages ||
+                      (pageNum >= activePage - 2 && pageNum <= activePage + 2);
 
-                  if (showEllipsis) {
+                    const showEllipsis =
+                      (pageNum === activePage - 3 && activePage > 4) ||
+                      (pageNum === activePage + 3 &&
+                        activePage < totalPages - 3);
+
+                    if (showEllipsis) {
+                      return (
+                        <span key={pageNum} className="px-2 text-gray-500">
+                          ...
+                        </span>
+                      );
+                    }
+
+                    if (!showPage) return null;
+
                     return (
-                      <span key={pageNum} className="px-2 text-gray-500">
-                        ...
-                      </span>
+                      <button
+                        key={pageNum}
+                        onClick={() => handlePageChange(pageNum)}
+                        className={`pagination-number ${
+                          pageNum === activePage ? "active" : ""
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
                     );
                   }
-
-                  if (!showPage) return null;
-
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => handlePageChange(pageNum)}
-                      className={`pagination-number ${pageNum === activePage ? 'active' : ''}`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
+                )}
 
                 {/* Next button */}
                 <button
