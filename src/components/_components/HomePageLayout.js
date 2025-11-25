@@ -167,7 +167,7 @@ export default function HomePageLayout() {
               >
                 <span
                   className="ht_text flex gap-5"
-                  style={{ marginRight: "2px" }}
+                  style={{ marginRight: "15px" }}
                 >
                   Anmelden
                 </span>

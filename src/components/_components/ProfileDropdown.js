@@ -46,10 +46,10 @@ const ProfileDropdown = () => {
       {/* Profile button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="header-btn register flex items-center gap-2 rounded-md px-3 py-2"
+        className="header-btn register flex items-center"
       >
         {/* Avatar */}
-        <div className="w-8 h-8 user-avatar rounded-full flex items-center justify-center text-sm font-medium">
+        {/* <div className="w-8 h-8 user-avatar rounded-full flex items-center justify-center text-sm font-medium">
           {user?.avatar ? (
             <Image
               src={user.avatar}
@@ -62,10 +62,13 @@ const ProfileDropdown = () => {
           ) : (
             getInitials(user?.name)
           )}
-        </div>
+        </div> */}
 
         {/* User name */}
-        <span className="ht_text text-sm font-medium">
+        <span
+          className="ht_text text-[11px] font-normal"
+          style={{ marginRight: "15px" }}
+        >
           {user?.name || "User"}
         </span>
 

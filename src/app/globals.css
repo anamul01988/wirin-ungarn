@@ -134,6 +134,7 @@ body {
 .header-btn {
   background: #c41e3a;
   color: #f7f7f7;
+  height: 30px;
   border: none;
   padding: 6px 16px;
   border-radius: 4px;
