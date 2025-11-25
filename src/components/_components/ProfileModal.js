@@ -89,7 +89,7 @@ const ProfileModal = () => {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="bg-[#CC2233] mb-6 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center text-[#fff]">
+      <div className="bg-[#CC2233] mb-6 rounded-[18px] h-[50px] flex items-center justify-center text-[#fff]">
         <Typography
           variant="h4"
           className="archive__page_title font-bold text-center text-[#FFF]"
@@ -99,7 +99,7 @@ const ProfileModal = () => {
       </div>
 
       {/* Profile Content */}
-      <div className="bg-white rounded-lg shadow-lg p-8">
+      <div className="p-8">
         {/* Profile Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
@@ -142,7 +142,7 @@ const ProfileModal = () => {
             color="red"
             onClick={isEditing ? handleSave : handleEdit}
             disabled={isLoading}
-            className="px-6 py-2"
+            className="px-6 py-2 bg-[#CC2233] !important"
           >
             {isLoading
               ? "Speichern..."
@@ -168,8 +168,11 @@ const ProfileModal = () => {
               value={formData.firstName}
               onChange={handleInputChange}
               disabled={!isEditing}
-              crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
+              className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
+              labelProps={{
+                className: "hidden",
+              }}
+              containerProps={{ className: "min-w-[100px]" }}
             />
           </div>
 
@@ -187,8 +190,11 @@ const ProfileModal = () => {
               value={formData.lastName}
               onChange={handleInputChange}
               disabled={!isEditing}
-              crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
+              className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
+              labelProps={{
+                className: "hidden",
+              }}
+              containerProps={{ className: "min-w-[100px]" }}
             />
           </div>
 
@@ -206,8 +212,15 @@ const ProfileModal = () => {
               value={formData.email}
               onChange={handleInputChange}
               disabled={!isEditing}
-              crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
+              // labelProps={{
+              //   className: "hidden",
+              // }}
+              // className="!border-gray-300  !border-dark-700"
+              className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
+              labelProps={{
+                className: "hidden",
+              }}
+              containerProps={{ className: "min-w-[100px]" }}
             />
             {isEditing && (
               <Typography variant="small" className="text-gray-500 mt-1">
@@ -230,8 +243,14 @@ const ProfileModal = () => {
               value={formData.phone}
               onChange={handleInputChange}
               disabled={!isEditing}
-              crossOrigin={undefined}
-              className="!border-gray-300 focus:!border-red-500"
+              // labelProps={{
+              //   className: "hidden",
+              // }}
+              className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
+              labelProps={{
+                className: "hidden",
+              }}
+              containerProps={{ className: "min-w-[100px]" }}
             />
           </div>
 
@@ -247,8 +266,15 @@ const ProfileModal = () => {
               type="text"
               value={formData.joinDate}
               disabled={true}
-              crossOrigin={undefined}
-              className="!border-gray-300 !bg-gray-50"
+              // labelProps={{
+              //   className: "hidden",
+              // }}
+              // className="!border-gray-300 !bg-gray-50"
+              className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
+              labelProps={{
+                className: "hidden",
+              }}
+              containerProps={{ className: "min-w-[100px]" }}
             />
           </div>
         </div>
@@ -268,7 +294,7 @@ const ProfileModal = () => {
               color="red"
               onClick={handleSave}
               disabled={isLoading}
-              className="px-6 py-2"
+              className="px-6 py-2 bg-[#CC2233] !important"
             >
               {isLoading ? "Speichern..." : "Änderungen speichern"}
             </Button>

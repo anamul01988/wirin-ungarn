@@ -2097,7 +2097,8 @@ const LandingPage = () => {
             width: 30px;
             display: flex;
             flex-direction: column;
-            z-index: 1000;
+            // z-index: 1000;
+            z-index: 100;
         }
 
         /* Arrow Buttons */
