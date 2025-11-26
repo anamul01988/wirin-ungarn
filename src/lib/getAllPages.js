@@ -733,6 +733,34 @@ export function GetKreuzwortratsel(first = 1000, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
+
+export const GetRelatedPostsForKurzKnapp = (slug) => {
+  console.log('33333333333333333', slug);
+  
+  const QUERY = `
+    query KnowledgeId {
+      knowledge(id: "${slug}", idType: SLUG) {
+        id
+        title
+        content
+        date
+        knowledgeFields {
+          relatedItems {
+            edges {
+              node {
+
+                  id
+                
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  return fetchPage(QUERY);
+}
+
 // export function GetSprachkursPages(search = "") {
 //   const SEARCH_QUERY = `
 //       query GetSprachkursPageAndPosts($search: String) {
