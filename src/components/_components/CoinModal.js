@@ -6,6 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { fetchPage } from "@/lib/getAllPages";
 import { InlineLoader } from "./Loader";
 
+// Brand color used in the WIU wallet design
+
 export function GetUserCreditHistory(userId) {
   // Determine the appropriate ID type based on the user ID format
   let idType = "DATABASE_ID";
@@ -91,7 +93,7 @@ const CoinModal = () => {
         if (data?.errors) {
           console.error("GraphQL errors:", data.errors);
           setError(
-            "Failed to load credit history. This might be because you're a new OAuth user."
+            "Der Kontostand konnte nicht geladen werden. Möglicherweise bist du ein neuer OAuth-Nutzer."
           );
           setCreditHistory([]);
         } else {
@@ -101,7 +103,9 @@ const CoinModal = () => {
         }
       } catch (err) {
         console.error("Error fetching credit history via fetchPage:", err);
-        setError("Failed to load credit history. Please try again later.");
+        setError(
+          "Fehler beim Laden des Kontostands. Bitte versuche es später erneut."
+        );
         setCreditHistory([]);
       }
       setLoading(false);
@@ -110,23 +114,67 @@ const CoinModal = () => {
   }, [user]);
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <Typography variant="h2" className="font-bold text-gray-800 mb-2 mt-4">
-        My WIU balance
+    <div
+      className="max-w-5xl mx-auto"
+      style={{ fontSize: "14px" }} // base font size for remaining text
+    >
+      <Typography
+        variant="h1"
+        className="mb-3"
+        style={{
+          fontSize: "30px",
+          fontWeight: 500,
+          color: "#494158",
+          fontFamily: "Open Sans, sans-serif",
+        }}
+      >
+        mein WIU-Geldbeutel
       </Typography>
-      <Typography variant="paragraph" className="mb-4 text-lg text-gray-600">
-        Here's an overview of account transactions, including all information on
-        income and expenses. Want to learn more about our WIU Coin system?
-        Please read the{" "}
-        <span className="text-red-600">description under "WIU Coins."</span>
+
+      <Typography
+        variant="h4"
+        className="mb-2"
+        style={{
+          fontSize: "22px",
+          fontWeight: 400,
+          color: "#494158",
+        }}
+      >
+        Mein WIU-Saldo
       </Typography>
-      <Typography variant="h4" className="font-bold text-green-700 mb-4">
-        my current account balance:
+
+      <Typography
+        variant="paragraph"
+        className="mb-4 text-[#56646F]"
+        style={{ fontSize: "14px" }}
+      >
+        Hier ist die Übersicht über die Konto-Transaktionen mit allen
+        Informationen über Einnahmen und Ausgaben. Du möchtest mehr über unser
+        WIU-Münzen-System wissen? Dann lies gerne die{" "}
+        <span className="text-red-600">
+          Beschreibung unter &quot;WIU-Münzen&quot;.
+        </span>
+      </Typography>
+
+      <Typography
+        variant="h4"
+        className="mb-4"
+        style={{
+          fontSize: "17px",
+          fontWeight: 700,
+          color: "#436f4d",
+        }}
+      >
+        mein aktueller Kontostand:
       </Typography>
 
       {error && (
         <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded-md">
-          <Typography variant="small" className="text-yellow-800">
+          <Typography
+            variant="small"
+            className="text-yellow-800"
+            style={{ fontSize: "14px" }}
+          >
             {error}
           </Typography>
         </div>
@@ -135,52 +183,92 @@ const CoinModal = () => {
       <div className="overflow-x-auto mb-6">
         <table className="min-w-full border-collapse">
           <thead>
-            <tr className="bg-green-700 text-white">
-              <th className="py-3 px-4 text-left">Date</th>
-              <th className="py-3 px-4 text-left">action</th>
-              <th className="py-3 px-4 text-left">+ / -</th>
-              <th className="py-3 px-4 text-left">Account balance</th>
+            <tr style={{ backgroundColor: "#436f4d", color: "#FFFFFF" }}>
+              <th
+                className="py-3 px-4 text-left"
+                style={{ fontSize: "14px", borderRight: "1px solid #FFFFFF" }}
+              >
+                Datum
+              </th>
+              <th
+                className="py-3 px-4 text-left"
+                style={{ fontSize: "14px", borderRight: "1px solid #FFFFFF" }}
+              >
+                Aktion
+              </th>
+              <th
+                className="py-3 px-4 text-left"
+                style={{ fontSize: "14px", borderRight: "1px solid #FFFFFF" }}
+              >
+                + / -
+              </th>
+              <th className="py-3 px-4 text-left" style={{ fontSize: "14px" }}>
+                Kontostand
+              </th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={4} className="py-6 text-center">
-                  <InlineLoader size="medium" text="Loading..." />
+                <td
+                  colSpan={4}
+                  className="py-6 text-center"
+                  style={{ fontSize: "14px" }}
+                >
+                  <InlineLoader size="medium" />
                 </td>
               </tr>
             ) : creditHistory.length === 0 ? (
               <tr>
-                <td colSpan={4} className="py-6 text-center text-gray-500">
-                  No transactions found.
+                <td
+                  colSpan={4}
+                  className="py-6 text-center text-gray-500"
+                  style={{ fontSize: "14px" }}
+                >
+                  Keine Transaktionen gefunden.
                 </td>
               </tr>
             ) : (
               creditHistory.map((item, idx) => (
                 <tr key={idx} className="border-b">
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-4" style={{ fontSize: "14px" }}>
                     {item.date
-                      ? new Date(Number(item.date) * 1000).toLocaleDateString()
+                      ? new Date(Number(item.date) * 1000).toLocaleDateString(
+                          "de-DE"
+                        )
                       : "-"}
                   </td>
-                  <td className="py-2 px-4">{item.transaction}</td>
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-4" style={{ fontSize: "14px" }}>
+                    {item.transaction}
+                  </td>
+                  <td className="py-2 px-4" style={{ fontSize: "14px" }}>
                     {Array.isArray(item.creditStatus)
                       ? item.creditStatus.join(", ")
                       : item.creditStatus}
                   </td>
-                  <td className="py-2 px-4 font-bold">{item.balance}</td>
+                  <td
+                    className="py-2 px-4 font-bold"
+                    style={{ fontSize: "14px" }}
+                  >
+                    {item.balance}
+                  </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
-      <Typography variant="paragraph" className="mt-4 text-lg text-gray-600">
-        You'll soon be able to exchange your WIU coins for cool and useful
-        things. We're currently working on setting up this system. In the
-        meantime, you can collect coins by submitting suggestions for improving
-        our posts. Thank you for your support!
+
+      <Typography
+        variant="paragraph"
+        className="mt-4 text-[#56646F]"
+        style={{ fontSize: "14px" }}
+      >
+        Du kannst deine WIU-Münzen bald gegen tolle und nützliche Dinge
+        eintauschen. Wir arbeiten derzeit daran, dieses System aufzubauen. In
+        der Zwischenzeit kannst du Münzen sammeln, indem du uns
+        Verbesserungsvorschläge für unsere Beiträge übermittelst. Vielen Dank
+        für deine Unterstützung!
       </Typography>
     </div>
   );

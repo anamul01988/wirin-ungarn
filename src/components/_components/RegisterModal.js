@@ -20,6 +20,41 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
   const { register } = useAuth();
 
+  // Check if a user already exists for the given email via GraphQL
+  const checkUserExists = async (email) => {
+    try {
+      const response = await fetch("https://wir-in-ungarn.hu/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            query CheckUser($email: String!) {
+              userExists(email: $email)
+            }
+          `,
+          variables: { email },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.errors) {
+        // If the backend returns an error, treat as "cannot register"
+        console.error("CheckUser error:", result.errors);
+        throw new Error(
+          result.errors[0]?.message || "Fehler bei der Benutzerprüfung"
+        );
+      }
+
+      return Boolean(result.data?.userExists);
+    } catch (err) {
+      console.error("CheckUser request failed:", err);
+      throw err;
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -70,6 +105,16 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     }
 
     try {
+      // First: check if a user already exists with this email
+      const exists = await checkUserExists(formData.email);
+      if (exists) {
+        setError(
+          "Für diese E-Mail-Adresse existiert bereits ein Nutzerkonto. Bitte melde Dich an oder nutze 'Passwort vergessen'."
+        );
+        setIsLoading(false);
+        return;
+      }
+
       const result = await register(
         formData.username,
         formData.email,
@@ -102,21 +147,20 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     onClose();
   };
 
-
   // Escape key closes modal
   useEffect(() => {
     if (!isOpen) return;
     const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 auth-modal">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] auth-modal">
       <div className="bg-white rounded-lg p-2  w-full max-w-2xl  relative auth-modal-content">
         <div className=" border-2 border-black rounded-lg border-solid">
           <div className="py-6 px-16">
