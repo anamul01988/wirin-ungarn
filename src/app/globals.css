@@ -1588,6 +1588,19 @@ div[class*="Toastify"] {
   display: none;
 }
 
+/* Sprachkurs Modal Responsive Styles */
+
+/* Reduce padding for smaller devices */
+@media screen and (max-width: 792px) {
+  .sprachkurs-modal {
+    max-width: 70% !important;
+    min-width: 30% !important;
+  }
+  .sprachkurs-modal .custom__modal_area {
+    padding: 15px !important;
+  }
+}
+
 /* Fixed modal width for Sprachkurs page - above 1160px screen size */
 @media screen and (min-width: 1200px) {
   [role="dialog"]:not([data-dialog="impressum-modal"]):not(
