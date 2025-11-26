@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import ModalIcons from "./ModalIcons";
+import Breadcrumb from "./Breadcrumb";
 export default function LiedTexteDialogContent({
   title,
   content,
@@ -107,19 +108,27 @@ export default function LiedTexteDialogContent({
                 </svg>
               </button>
             </div> */}
-            <h1 className="text-3xl font-bold mb-6">{title}</h1>
+            <div className="mb-2 px-0 pt-0">
+              <Breadcrumb className="text-sm" isSinglePage={true} />
+            </div>
+            <h1
+              className="text-[30px] text-[#436f4d] font-bold mb-6"
+              style={{ lineHeight: "38px" }}
+            >
+              {title}
+            </h1>
 
             <Typography
               variant="paragraph"
               color="blue-gray"
-              className="text-sm leading-relaxed text-left mb-2"
+              className="text-[16px] text-[#436f4d] font-[500] leading-relaxed text-left mb-2"
             >
               {content?.introText}
             </Typography>
 
             {content?.postContent?.map((item, index) => (
               <div key={index} className="mb-2">
-                <div className="flex pt-10 items-start justify-start mb-2">
+                <div className="flex pt-5 items-start justify-start mb-2">
                   <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
                     <div
                       className="w-full h-full cursor-pointer"
@@ -161,11 +170,17 @@ export default function LiedTexteDialogContent({
                   </div>
 
                   <div className="flex-1 pl-3">
+                    <h3
+                      className="font-[500] text-[24px] text-[#436f4d] mb-2"
+                      style={{ lineHeight: "34px" }}
+                    >
+                      {item.title}
+                    </h3>
                     {/* Content */}
                     <Typography
                       variant="paragraph"
                       color="blue-gray"
-                      className="text-sm leading-relaxed text-left mb-2"
+                      className="text-sm leading-relaxed text-left mb-2 text-[#436f4d]"
                       dangerouslySetInnerHTML={{ __html: item.content }}
                     />
                   </div>

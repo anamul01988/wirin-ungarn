@@ -72,7 +72,34 @@ body {
 } */
 
 /* Sticky Header */
-
+/* ---------------------------------- for single page especial style  --------------------------- */
+table {
+  text-align: left;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 1em;
+  border: 0;
+  border-collapse: collapse;
+}
+tr {
+  background: #fff;
+  border-bottom: 1px solid #eaeaea;
+}
+td:first-child {
+  border-left: none;
+}
+td {
+  line-height: inherit;
+  vertical-align: top;
+  color: #56646f;
+  padding: 10px;
+  border-left: 1px solid #ddd;
+}
+.single-sprachlektion h3 {
+  font-size: 19px;
+  font-weight: 600;
+}
+/* ---------------------------------- for single page especial style  --------------------------- */
 .main__page {
   /* min-height: 100vh;
   position: relative;
@@ -3308,4 +3335,39 @@ div[class*="Toastify"] {
     font-size: 12px;
     padding: 6px 10px;
   }
+}
+
+/* ---------------------------------- for single page especial style  --------------------------- */
+/* table {
+  text-align: left;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 1em;
+  border: 0;
+  border-collapse: collapse;
+} */
+.single-sprachlektion h3 {
+  font-size: 19px;
+  font-weight: 600;
+}
+.ai-optimize-15 {
+  font-size: 19px;
+  font-weight: 600;
+}
+/* ---------------------------------- for single page especial style  --------------------------- */
+/* ------------------------------- aus dem leben -------------------------------------------------------------------------------- */
+
+blockquote {
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+blockquote p {
+  font-family: inherit;
+  line-height: 1.5em;
+}
+
+blockquote:before {
+  margin: -24px 0 0 -55px;
+  font-size: 4em;
 }

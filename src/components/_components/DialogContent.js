@@ -221,7 +221,7 @@ export default function DialogContent({
               </div>
             )}
             {routePrefix !== "einfach-lesen" && !isContactPage && (
-              <h1 className="single__page_title text-[#436f4d]">{title}</h1>
+              <h1 className="single__page_title text-[#494158]">{title}</h1>
             )}
             {contentType === "wissenswert" && (
               <div className="mb-6 py-4 rounded-lg">
@@ -231,14 +231,14 @@ export default function DialogContent({
                 />
               </div>
             )}
-            {contentType === "aus-dem-leben" && (
+            {/* {contentType === "aus-dem-leben" && (
               <div className="mb-6 p-0 mt-4">
                 <div
                   className="text-sm leading-relaxed text-left mb-2"
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
               </div>
-            )}
+            )} */}
 
             {!contentType === "page" && (
               <>
@@ -338,6 +338,14 @@ export default function DialogContent({
                   imageAlt={imageAlt || title}
                 />
               )}
+            {contentType === "aus-dem-leben" && (
+              <div className="mb-6 p-0 mt-4">
+                <div
+                  className="text-sm leading-relaxed text-left mb-2"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              </div>
+            )}
             {/* {imageFeature &&
               routePrefix !== "sprachkurs" &&
               routePrefix !== "einfach-lesen" && (
@@ -581,7 +589,10 @@ export default function DialogContent({
                       </div>
 
                       <div className="flex-1 pl-3">
-                        <h3 className="font-semibold text-20px text-[#436f4d] mb-2">
+                        <h3
+                          className="font-[500] text-[24px] text-[#436f4d] mb-2"
+                          style={{ lineHeight: "34px" }}
+                        >
                           {item.title}
                         </h3>
                         {/* Content */}
@@ -648,16 +659,23 @@ export default function DialogContent({
                       </div>
 
                       <div className="flex-1 pl-3">
-                        <h3 className="font-semibold text-20px text-[#436f4d] mb-2">
+                        <h3
+                          className="font-[500] text-[24px] text-[#436f4d] mb-2"
+                          style={{ lineHeight: "34px" }}
+                        >
                           {item.title}
                         </h3>
+                        <div
+                          className="text-sm leading-relaxed text-left mb-2 text-[#56646F]"
+                          dangerouslySetInnerHTML={{ __html: item.content }}
+                        />
                         {/* Content */}
-                        <Typography
+                        {/* <Typography
                           variant="paragraph"
                           color="blue-gray"
                           className="text-sm leading-relaxed text-left mb-2"
                           dangerouslySetInnerHTML={{ __html: item.content }}
-                        />
+                        /> */}
                       </div>
                     </div>
                   </div>
@@ -714,7 +732,10 @@ export default function DialogContent({
                       </div>
 
                       <div className="flex-1 pl-3">
-                        <h3 className="font-semibold text-20px text-[#436f4d] mb-2">
+                        <h3
+                          className="font-[500] text-[24px] text-[#436f4d] mb-2"
+                          style={{ lineHeight: "34px" }}
+                        >
                           {item.title}
                         </h3>
                         {/* Content */}
