@@ -118,6 +118,7 @@ const WissenwertPost = ({
   title,
   introText,
   description,
+  shortsPostContent,
   image,
   imageAlt,
   slug,
@@ -127,6 +128,7 @@ const WissenwertPost = ({
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  
 
   const handleClick = () => {
     dispatch(setRoutePrefix(routePrefix));
@@ -167,10 +169,7 @@ const WissenwertPost = ({
           {title}
         </h2>
         <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
-          {/* {badge === "SHORTS"
-            ? truncateText(description, 15)
-            :truncateText(introText, 25)} */}
-          {truncateText(introText, 25)}
+          {badge === "SHORTS" ? truncateText(shortsPostContent, 15) : truncateText(introText, 25)}
         </p>
         <button className="text-orange-500 text-sm font-semibold hover:text-orange-600 transition-colors">
           Weiterlesen
@@ -461,6 +460,7 @@ const WissenwertPostGrid = ({
                 key={post.id || index}
                 title={post.title}
                 introText={post.introText}
+                shortsPostContent={post.shortsPostContent}
                 description={post.description}
                 image={post.image}
                 imageAlt={post.imageAlt}
@@ -483,33 +483,6 @@ const WissenwertPostGrid = ({
               )}
             </div>
           )}
-          {/* {!hasNextPage && filteredPosts.length > 0 && (
-            <div className="text-center mt-6 mb-4">
-              <Typography variant="small" color="gray" className="text-sm">
-                Alle Beiträge wurden geladen.
-              </Typography>
-            </div>
-          )} */}
-
-          {/* Pagination - Commented out for infinite scroll */}
-          {/* <div className="flex justify-center gap-4 mt-2">
-            <Button
-              color="red"
-              onClick={() => onPageChange && onPageChange("previous")}
-              disabled={!hasPreviousPage || loadingPage}
-              className="px-8 py-3 bg-[#CC2233] hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loadingPage ? "Lade..." : "Previous"}
-            </Button>
-            <Button
-              color="red"
-              onClick={() => onPageChange && onPageChange("next")}
-              disabled={!hasNextPage || loadingPage}
-              className="px-8 py-3 bg-[#CC2233] hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loadingPage ? "Lade..." : "Next"}
-            </Button>
-          </div> */}
 
           {/* Results Info */}
           <div className="text-center mt-6">

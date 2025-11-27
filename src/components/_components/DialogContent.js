@@ -20,6 +20,7 @@ import KategorianCollapsibleComment from "./kategorian_collapsibleForm";
 import Link from "next/link";
 import LearningBoxModal from "./LearningBoxModal";
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
+import KurzKnappRelatedItem from "./KurzKnappRelatedItem";
 export default function DialogContent({
   title,
   content,
@@ -754,20 +755,30 @@ export default function DialogContent({
             {contentType === "kurz-und-knapp" && (
               <div>
                 <p
-                  className="text-sm leading-relaxed text-left mb-2"
+                  className=" text-base leading-relaxed text-[#56646f] text-left mb-2"
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
-                <div className=" flex flex-col float-end justify-end gap-5">
-                  <button
-                    onClick={() => route.push("/kurz-und-knapp/")}
-                    className="bg-[#436f4d] hover:bg-[#5a7a5e] text-white text-sm font-medium px-4 py-2 rounded transition-colors"
-                  >
-                    zur Fragen-Übersicht
-                  </button>
-                  <button className="bg-[#c03] hover:bg-[#a02828] text-white text-sm font-medium px-2 py-2 rounded transition-colors">
-                    Fehler gefunden?
-                  </button>
+                <div className="flex gap-5 justify-end">
+                  <div className="flex gap-3 flex-col">
+                    <button
+                      onClick={() => route.push("/kurz-und-knapp/")}
+                      className="bg-[#436f4d] hover:bg-[#5a7a5e] text-white text-sm font-medium px-4 py-2 rounded transition-colors"
+                    >
+                      zur Fragen-Übersicht
+                    </button>
+                    <button className="bg-[#c03] hover:bg-[#a02828] text-white text-sm font-medium px-2 py-2 rounded transition-colors">
+                      Fehler gefunden?
+                    </button>
+                  </div>
                 </div>
+
+                <KurzKnappRelatedItem
+                  slug={
+                    typeof window !== "undefined"
+                      ? sessionStorage.getItem("currentKnowledgeSlug")
+                      : null
+                  }
+                />
               </div>
             )}
 
