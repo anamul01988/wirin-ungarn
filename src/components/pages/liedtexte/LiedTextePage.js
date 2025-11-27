@@ -24,40 +24,6 @@ const LiedTextePage = () => {
   const [algoliaSearching, setAlgoliaSearching] = useState(false);
   const [searchDebounce, setSearchDebounce] = useState(null);
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchCurrentPage, setSearchCurrentPage] = useState(1);
-  const postsPerPage = 10;
-
-  // Get current posts to display based on pagination
-  const getCurrentPosts = () => {
-    const startIndex = (currentPage - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    return allPosts.slice(startIndex, endIndex);
-  };
-
-  // Calculate total pages
-  const getTotalPages = () => {
-    return Math.ceil(allPosts.length / postsPerPage);
-  };
-
-  // Get current search results to display based on pagination
-  const getCurrentSearchResults = () => {
-    if (!searchResults?.edges) return [];
-    const startIndex = (searchCurrentPage - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    return searchResults.edges.slice(startIndex, endIndex);
-  };
-
-  // Handle page change
-  const handlePageChange = (pageNumber) => {
-    if (isSearching) {
-      setSearchCurrentPage(pageNumber);
-    } else {
-      setCurrentPage(pageNumber);
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   const handleSearch = async () => {
     if (!search.trim()) {
@@ -110,8 +76,6 @@ const LiedTextePage = () => {
         );
         setSearchResults(apiData.data.posts);
       }
-
-      setSearchCurrentPage(1);
     } catch (err) {
       console.error("Search error:", err);
       setError("Fehler beim Suchen.");
@@ -124,7 +88,6 @@ const LiedTextePage = () => {
     setSearch("");
     setIsSearching(false);
     setSearchResults({});
-    setSearchCurrentPage(1);
     setAlgoliaResults([]);
   };
 
@@ -212,7 +175,6 @@ const LiedTextePage = () => {
         setCookieData(apiData);
         // Store all posts in state
         setAllPosts(apiData.data.liedtexte.edges || []);
-        setCurrentPage(1);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");
       } finally {
@@ -232,14 +194,10 @@ const LiedTextePage = () => {
 
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
 
-  // Get posts to display
+  // Get posts to display - show all posts without pagination
   const displayPosts = isSearching
-    ? getCurrentSearchResults()
-    : getCurrentPosts();
-  const totalPages = isSearching
-    ? Math.ceil((searchResults?.edges?.length || 0) / postsPerPage)
-    : getTotalPages();
-  const activePage = isSearching ? searchCurrentPage : currentPage;
+    ? searchResults?.edges || []
+    : allPosts;
   const totalPosts = isSearching
     ? searchResults?.edges?.length || 0
     : allPosts.length;
@@ -401,14 +359,13 @@ const LiedTextePage = () => {
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
           <>
-            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt{" "}
-            {totalPosts} Beiträge - Angezeigt werden {displayPosts?.length || 0}{" "}
-            Beiträge.
+            Suchergebnisse – Insgesamt {totalPosts} Beiträge – Angezeigt werden{" "}
+            {displayPosts?.length || 0} Beiträge.
           </>
         ) : (
           <>
-            Seite {activePage} von {totalPages} - Insgesamt {totalPosts}{" "}
-            Beiträge - Angezeigt werden {displayPosts?.length || 0} Beiträge.
+            Insgesamt {totalPosts} Beiträge – Angezeigt werden{" "}
+            {displayPosts?.length || 0} Beiträge.
           </>
         )}
       </Typography>
@@ -436,7 +393,7 @@ const LiedTextePage = () => {
                   <div key={edge.node.id}>
                     <CustomPost
                       title={edge.node?.title}
-                      image={edge.node?.featuredImage?.node?.sourceUrl}
+                      // image={edge.node?.featuredImage?.node?.sourceUrl}
                       imageAlt={edge.node?.featuredImage?.node?.altText}
                       description={edge.node.postContentLyrik?.postContent}
                       onlyHeadings={onlyHeadings}
@@ -451,72 +408,6 @@ const LiedTextePage = () => {
                 );
               })
             )}
-
-            {/* Numbered Pagination - Only show if not searching with empty results and more than 1 page */}
-            {!(
-              isSearching &&
-              (!searchResults?.edges || searchResults.edges.length === 0)
-            ) &&
-              totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
-                  {/* Previous button */}
-                  <button
-                    onClick={() => handlePageChange(activePage - 1)}
-                    disabled={activePage === 1}
-                    className="pagination-number"
-                  >
-                    &laquo;
-                  </button>
-
-                  {/* Page numbers */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (pageNum) => {
-                      // Show first page, last page, current page, and pages around current
-                      const showPage =
-                        pageNum === 1 ||
-                        pageNum === totalPages ||
-                        (pageNum >= activePage - 2 &&
-                          pageNum <= activePage + 2);
-
-                      const showEllipsis =
-                        (pageNum === activePage - 3 && activePage > 4) ||
-                        (pageNum === activePage + 3 &&
-                          activePage < totalPages - 3);
-
-                      if (showEllipsis) {
-                        return (
-                          <span key={pageNum} className="px-2 text-gray-500">
-                            ...
-                          </span>
-                        );
-                      }
-
-                      if (!showPage) return null;
-
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => handlePageChange(pageNum)}
-                          className={`pagination-number ${
-                            pageNum === activePage ? "active" : ""
-                          }`}
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    }
-                  )}
-
-                  {/* Next button */}
-                  <button
-                    onClick={() => handlePageChange(activePage + 1)}
-                    disabled={activePage === totalPages}
-                    className="pagination-number"
-                  >
-                    &raquo;
-                  </button>
-                </div>
-              )}
           </>
         )}
       </div>

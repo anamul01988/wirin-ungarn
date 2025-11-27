@@ -3367,6 +3367,11 @@ div[class*="Toastify"] {
   font-size: 19px;
   font-weight: 600;
 }
+
+.liedtexte_content p{
+  margin-bottom: 0.5em;
+  font-size: 14px;
+}
 /* ---------------------------------- for single page especial style  --------------------------- */
 /* ------------------------------- aus dem leben -------------------------------------------------------------------------------- */
 

@@ -111,17 +111,16 @@ export default function LiedTexteDialogContent({
             <div className="mb-2 px-0 pt-0">
               <Breadcrumb className="text-sm" isSinglePage={true} />
             </div>
-            <h1
-              className="text-[30px] text-[#436f4d] font-bold mb-6"
-              style={{ lineHeight: "38px" }}
+            <p
+              className="text-[30px] text-[#436f4d] font-medium mb-4"
             >
               {title}
-            </h1>
+            </p>
 
             <Typography
               variant="paragraph"
               color="blue-gray"
-              className="text-[16px] text-[#436f4d] font-[500] leading-relaxed text-left mb-2"
+              className="text-[16px] text-[#436f4d] font-normal leading-relaxed text-left mb-2"
             >
               {content?.introText}
             </Typography>
@@ -129,23 +128,17 @@ export default function LiedTexteDialogContent({
             {content?.postContent?.map((item, index) => (
               <div key={index} className="mb-2">
                 <div className="flex pt-5 items-start justify-start mb-2">
-                  <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
+                  <div className="flex-shrink-0 flex items-start mr-3">
                     <div
                       className="w-full h-full cursor-pointer"
-                      // style={{
-                      //   background:
-                      //     "radial-gradient(rgb(0 0 0 / 0.1), transparent)",
-                      // }}
                     >
                       <div>
                         {item.icon && item.icon.length > 0 ? (
-                          <Image
+                          <img
                             src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
                             alt={item.icon[0]}
-                            loading="lazy"
-                            width={70}
-                            height={70}
-                            className="w-full h-auto"
+                            height={50}
+                            width={50}
                           />
                         ) : (
                           <svg
@@ -169,7 +162,7 @@ export default function LiedTexteDialogContent({
                     </div>
                   </div>
 
-                  <div className="flex-1 pl-3">
+                  <div className="flex-1 liedtexte_content pl-3">
                     <h3
                       className="font-[500] text-[24px] text-[#436f4d] mb-2"
                       style={{ lineHeight: "34px" }}
@@ -180,18 +173,13 @@ export default function LiedTexteDialogContent({
                     <Typography
                       variant="paragraph"
                       color="blue-gray"
-                      className="text-sm leading-relaxed text-left mb-2 text-[#436f4d]"
+                      className="text-sm leading-relaxed text-left mb-2 font-normal text-[#436f4d]"
                       dangerouslySetInnerHTML={{ __html: item.content }}
                     />
                   </div>
                 </div>
               </div>
             ))}
-
-            {/* <div
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: content }}
-            /> */}
 
             {/* Next/Previous Post Navigation */}
             {(prevPostSlug || nextPostSlug) && (

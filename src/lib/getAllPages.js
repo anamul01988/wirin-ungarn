@@ -601,7 +601,8 @@ export function GetAusflugszielePages(first = 1000, after = null) {
 
 export function GetListingsVeranstaltungen(first = 1000, after = null) {
   const SEARCH_QUERY = `
-    query GetListingsVeranstaltungen($first: Int = 1000, $after: String) {
+    
+query GetListingsVeranstaltungen($first: Int = 1000, $after: String) {
       pages(where: { title: "Veranstaltungskalender" }) {
         nodes {
           id
@@ -646,7 +647,12 @@ export function GetListingsVeranstaltungen(first = 1000, after = null) {
             date
             listingFieldGroup {
               subtitle
+	      street
               description
+		category
+		subcategory
+		timefrom
+		timeto
             }
             featuredImage {
               node {

@@ -24,39 +24,14 @@ const KulinarischeSeelePage = () => {
   const [algoliaSearching, setAlgoliaSearching] = useState(false);
   const [searchDebounce, setSearchDebounce] = useState(null);
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchCurrentPage, setSearchCurrentPage] = useState(1);
-  const recipesPerPage = 10;
-
-  // Get current recipes to display based on pagination
+  // Without pagination: always use full lists
   const getCurrentRecipes = () => {
-    const startIndex = (currentPage - 1) * recipesPerPage;
-    const endIndex = startIndex + recipesPerPage;
-    return allRecipes.slice(startIndex, endIndex);
+    return allRecipes;
   };
 
-  // Calculate total pages
-  const getTotalPages = () => {
-    return Math.ceil(allRecipes.length / recipesPerPage);
-  };
-
-  // Get current search results to display based on pagination
   const getCurrentSearchResults = () => {
     if (!searchResults?.edges) return [];
-    const startIndex = (searchCurrentPage - 1) * recipesPerPage;
-    const endIndex = startIndex + recipesPerPage;
-    return searchResults.edges.slice(startIndex, endIndex);
-  };
-
-  // Handle page change
-  const handlePageChange = (pageNumber) => {
-    if (isSearching) {
-      setSearchCurrentPage(pageNumber);
-    } else {
-      setCurrentPage(pageNumber);
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    return searchResults.edges;
   };
 
   const handleSearch = async () => {
@@ -112,7 +87,7 @@ const KulinarischeSeelePage = () => {
         setSearchResults(apiData.data.posts);
       }
 
-      setSearchCurrentPage(1);
+      // reset any pagination-related state if needed (none now)
     } catch (err) {
       console.error("Search error:", err);
       setError("Fehler beim Suchen.");
@@ -125,7 +100,7 @@ const KulinarischeSeelePage = () => {
     setSearch("");
     setIsSearching(false);
     setSearchResults({});
-    setSearchCurrentPage(1);
+    // reset any pagination-related state if needed (none now)
     setAlgoliaResults([]);
   };
 
@@ -212,9 +187,8 @@ const KulinarischeSeelePage = () => {
         console.log("shorts data:", apiData.data.posts);
         console.log("shorts data: alll 222222", apiData);
         setCookieData(apiData);
-        // Store all recipes in state
+        // Store all recipes in state (no pagination)
         setAllRecipes(apiData.data.recipes.edges || []);
-        setCurrentPage(1);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");
       } finally {
@@ -235,14 +209,10 @@ const KulinarischeSeelePage = () => {
   console.log("shorts data: allRecipes:", allRecipes);
   const { title, content } = cookieData.data.pages?.nodes[0] || {};
 
-  // Get recipes to display
+  // Get recipes to display (no pagination)
   const displayRecipes = isSearching
     ? getCurrentSearchResults()
     : getCurrentRecipes();
-  const totalPages = isSearching
-    ? Math.ceil((searchResults?.edges?.length || 0) / recipesPerPage)
-    : getTotalPages();
-  const activePage = isSearching ? searchCurrentPage : currentPage;
   const totalRecipes = isSearching
     ? searchResults?.edges?.length || 0
     : allRecipes.length;
@@ -284,12 +254,18 @@ const KulinarischeSeelePage = () => {
       {/* Description */}
       <Typography
         variant="paragraph"
-        className="archive__page_description leading-relaxed font-bold mb-6"
+        className="archive__page_description leading-relaxed font-semibold mb-6"
       >
-        Auf dieser Übersichtsseite findest du alle Artikel, die die
-        verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
-        durch die Beiträge stöbern oder die Filterfunktion nutzen, um gezielt
-        nach bestimmten Inhalten zu suchen.
+        Willkommen zum Vermächtnis der ungarischen Küche! In unserem
+        Online-Kochbuch findest du nicht einfach nur Rezepte – wir entschlüsseln
+        für dich die Seele jedes einzelnen Gerichts. Wir glauben, dass
+        authentischer Geschmack im Detail liegt. Deshalb bieten wir dir die
+        ausführlichsten Schritt-für-Schritt-Anleitungen, die du finden wirst.
+        Jedes unserer traditionellen Rezepte wird ergänzt durch die Geschichte
+        und Herkunft des Gerichts, die wichtigsten Geheimtipps für die perfekte
+        Zubereitung und die Warenkunde zu den entscheidenden Zutaten. Lerne mit
+        uns, die Klassiker der ungarischen Hausmannskost so zu kochen, dass sie
+        schmecken wie bei Oma in Ungarn.
       </Typography>
 
       {/* Search Box */}
@@ -404,18 +380,17 @@ const KulinarischeSeelePage = () => {
         </div>
       )}
 
-      {/* Footer info */}
+      {/* Footer info without pagination */}
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
           <>
-            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt{" "}
-            {totalRecipes} Beiträge - Angezeigt werden{" "}
-            {displayRecipes?.length || 0} Beiträge.
+            Suchergebnisse – Insgesamt {totalRecipes} Beiträge – Angezeigt
+            werden {displayRecipes?.length || 0} Beiträge.
           </>
         ) : (
           <>
-            Seite {activePage} von {totalPages} - Insgesamt {totalRecipes}{" "}
-            Beiträge - Angezeigt werden {displayRecipes?.length || 0} Beiträge.
+            Insgesamt {totalRecipes} Beiträge – Angezeigt werden{" "}
+            {displayRecipes?.length || 0} Beiträge.
           </>
         )}
       </Typography>
@@ -458,75 +433,25 @@ const KulinarischeSeelePage = () => {
                 );
               })
             )}
-
-            {/* Numbered Pagination - Only show if not searching with empty results and more than 1 page */}
-            {!(
-              isSearching &&
-              (!searchResults?.edges || searchResults.edges.length === 0)
-            ) &&
-              totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
-                  {/* Previous button */}
-                  <button
-                    onClick={() => handlePageChange(activePage - 1)}
-                    disabled={activePage === 1}
-                    className="pagination-number"
-                  >
-                    &laquo;
-                  </button>
-
-                  {/* Page numbers */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (pageNum) => {
-                      // Show first page, last page, current page, and pages around current
-                      const showPage =
-                        pageNum === 1 ||
-                        pageNum === totalPages ||
-                        (pageNum >= activePage - 2 &&
-                          pageNum <= activePage + 2);
-
-                      const showEllipsis =
-                        (pageNum === activePage - 3 && activePage > 4) ||
-                        (pageNum === activePage + 3 &&
-                          activePage < totalPages - 3);
-
-                      if (showEllipsis) {
-                        return (
-                          <span key={pageNum} className="px-2 text-gray-500">
-                            ...
-                          </span>
-                        );
-                      }
-
-                      if (!showPage) return null;
-
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => handlePageChange(pageNum)}
-                          className={`pagination-number ${
-                            pageNum === activePage ? "active" : ""
-                          }`}
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    }
-                  )}
-
-                  {/* Next button */}
-                  <button
-                    onClick={() => handlePageChange(activePage + 1)}
-                    disabled={activePage === totalPages}
-                    className="pagination-number"
-                  >
-                    &raquo;
-                  </button>
-                </div>
-              )}
           </>
         )}
       </div>
+
+      <div>
+        <hr />
+      </div>
+
+      <p className="mt-10 text-[#56646F] text-sm leading-6">
+        Die ungarische Küche ist weltberühmt für ihre herzhaften Eintöpfe wie
+        Gulyás und Pörkölt, deren Basis oft edelsüßes Paprikapulver aus Szeged
+        oder Kalocsa bildet. Doch die kulinarische Tradition Ungarns bietet weit
+        mehr als nur Hühnerpaprikasch oder Lángos. Entdecke auf unserer Seite
+        die Vielfalt von deftiger Hausmannskost wie Töltött Káposzta
+        (Krautwickel) bis hin zu feinsten Desserts aus der k.u.k.-Zeit wie dem
+        Zserbó Szelet. Wir erklären dir die Unterschiede der Gerichte im Detail
+        und geben dir die besten Traditionsrezepte an die Hand, damit jedes
+        Gericht gelingt.
+      </p>
     </div>
   );
 };

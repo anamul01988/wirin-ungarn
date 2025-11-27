@@ -69,6 +69,7 @@ const CustomPost = ({
   slug,
   onlyHeadings,
   routePrefix = "liedtexte",
+  subtitle,
   subcategory = "",
 }) => {
   const route = useRouter();
@@ -92,8 +93,8 @@ const CustomPost = ({
     if (routePrefix === "ausflugsziele") {
       return (
         <div className="space-y-4">
-          <div className="text-[14px] text-[#566497] text-justify">
-            {subcategory}
+          <div className="text-[14px] text-[#56646F] text-justify">
+            {subtitle}
           </div>
           <div
             className="archive__page_content text-justify"
@@ -237,10 +238,11 @@ const CustomPost = ({
             <Typography
               variant="h6"
               color="blue-gray"
-              className="font-normal mb-2 cursor-pointer text-[24px] text-[#000]"
+              className="font-normal flex justify-between items-center mb-2 cursor-pointer text-[24px] text-[#494158]"
               onClick={() => handleClick(slug)}
             >
               {title}
+              <span className="text-[14px] text-[#56646F]">{subcategory}</span>
             </Typography>
 
             {renderDescription()}
