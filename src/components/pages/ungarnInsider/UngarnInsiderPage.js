@@ -4,6 +4,7 @@ import { GetAllUngarnInsider } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import "./UngarnInsiderPage.css";
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
+import Image from "next/image";
 
 const UngarnInsiderPage = () => {
   const [pageData, setPageData] = useState(null);
@@ -233,18 +234,17 @@ const UngarnInsiderPage = () => {
       )}
 
       {/* Liability Notice */}
-      <div className="insider-notice insider-notice--liability">
+      <div className="insider-notice">
         <p>
-          <span className="insider-notice__label">Haftung für Links:</span>
-          Wir übernehmen keine Gewähr für externe Inhalte. Für diese sind allein
-          die jeweiligen Anbieter verantwortlich. Sobald wir von rechtswidrigen
-          Inhalten erfahren, die mit dem Button gemeldet werden können,
-          entfernen wir den betreffenden Link umgehend.
+          Haftung für Links: Wir übernehmen keine Gewähr für externe Inhalte.
+          Für diese sind allein die jeweiligen Anbieter verantwortlich. Sobald
+          wir von rechtswidrigen Inhalten erfahren, die mit dem Button gemeldet
+          werden können, entfernen wir den betreffenden Link umgehend.
         </p>
       </div>
 
       {/* Telegram CTA */}
-      <div className="insider-cta insider-cta--telegram">
+      <div className="insider-cta--telegram">
         <a
           href="https://t.me/ungarn_insider"
           target="_blank"
@@ -262,8 +262,8 @@ const UngarnInsiderPage = () => {
       </div>
 
       {/* Contributor CTA */}
-      <div className="insider-cta insider-cta--contributor">
-        <p>
+      <div className="insider-cta--contributor">
+        <p className="insider-cta">
           Gestalte Ungarn-Insider aktiv mit! Teile deine Entdeckungen und
           Empfehlungen.{" "}
           <a
@@ -313,7 +313,7 @@ const UngarnInsiderPage = () => {
         </div>
 
         {/* Add New Button */}
-        <div className="insider-filter__group insider-filter__group--add">
+        {/* <div className="insider-filter__group insider-filter__group--add">
           <a
             href="https://wir-in-ungarn.hu/ungarn-insider-eintrag-einreichen/"
             target="_blank"
@@ -324,7 +324,7 @@ const UngarnInsiderPage = () => {
               alt="Add new insider"
             />
           </a>
-        </div>
+        </div> */}
 
         <div className="clearfix"></div>
       </div>
@@ -386,7 +386,12 @@ const UngarnInsiderPage = () => {
                 </div>
 
                 <div className="insider-content">
-                  <h3 className="insider-content__title">{insider.title}</h3>
+                  <p className="insider-content__title">{insider.title}</p>
+
+                  <div
+                    className="text-sm leading-5 text-[#000] mb-3 block mt-[5px] normal-case"
+                    dangerouslySetInnerHTML={{ __html: insider.content }}
+                  />
 
                   {outgoingLink && (
                     <p className="insider-content__link">
@@ -401,9 +406,18 @@ const UngarnInsiderPage = () => {
                   )}
 
                   {comment && (
-                    <blockquote className="insider-content__comment">
-                      {comment}
-                    </blockquote>
+                    <div className=" flex items-start gap-2">
+                      <img
+                        src="/assets/blockquote.jpg"
+                        height={30}
+                        width={30}
+                        alt="Comment icon"
+                      />
+                      <p className=" text-[#808080] font-normal text-md  ">
+                        {" "}
+                        {comment}{" "}
+                      </p>
+                    </div>
                   )}
 
                   <div className="insider-actions">

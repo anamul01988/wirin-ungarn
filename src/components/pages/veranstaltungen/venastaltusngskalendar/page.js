@@ -4,6 +4,7 @@ import { SearchAllPosts, GetListingsVeranstaltungen } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
+import CustomPostForEvent from "../CustomPostForEvent";
 const VenastaltusngskalendarPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -256,17 +257,27 @@ const VenastaltusngskalendarPage = () => {
                 {displayListings?.map((edge, idx) => {
                   return (
                     <div className="relative" key={edge.node.id}>
-                      <CustomPost
+                      {/* <CustomPost
                         title={edge.node?.title}
                         description={edge.node.listingFieldGroup?.description}
                         onlyHeadings={onlyHeadings}
                         slug={edge.node.slug}
                         routePrefix="veranstaltungen"
+                      /> */}
+
+                      <CustomPostForEvent
+                        title={edge.node?.title}
+                        date={edge.node?.date}
+                        subtitle={edge.node.listingFieldGroup?.subtitle}
+                        street={edge.node.listingFieldGroup?.street}
+                        description={edge.node.listingFieldGroup?.description}
+                        category={edge.node.listingFieldGroup?.category}
+                        subcategory={edge.node.listingFieldGroup?.subcategory}
+                        timefrom={edge.node.listingFieldGroup?.timefrom}
+                        timeto={edge.node.listingFieldGroup?.timeto}
+                        slug={edge.node?.slug}
+                        accentColor={idx % 2 === 0 ? "red" : "green"}
                       />
-                      {/* Divider except last */}
-                      {!onlyHeadings && idx < displayListings?.length - 1 && (
-                        <hr className="my-6 border-gray-300" />
-                      )}
                     </div>
                   );
                 })}

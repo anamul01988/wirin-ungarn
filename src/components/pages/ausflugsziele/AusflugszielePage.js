@@ -224,6 +224,7 @@ const AusflugszielePage = () => {
                   <div className="relative" key={edge.node.id}>
                     <CustomPost
                       title={edge.node?.title}
+                      subtitle={edge.node.listingFieldGroup?.subtitle}
                       subcategory={edge.node.listingFieldGroup?.subcategory}
                       description={edge.node.listingFieldGroup?.description}
                       onlyHeadings={onlyHeadings}

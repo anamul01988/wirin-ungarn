@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
           href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css"
         />
       </head>
-      <body className={openSans.className}>
+      <body className={`${openSans.className} ${robotoCondensed.variable}`}>
         <SessionProvider>
           <ReduxProvider>
             <ThemeProvider>
