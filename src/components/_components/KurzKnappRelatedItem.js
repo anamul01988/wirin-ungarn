@@ -106,9 +106,9 @@ const KurzKnappRelatedItem = ({ slug }) => {
 
   return (
     <section className="mt-10 border-t border-gray-200 pt-6">
-      <h2 className="text-2xl font-semibold text-red-700 mb-6">
+      <p className="text-2xl font-semibold text-[#cc2233] mb-4">
         Artikel, die dieses Thema aufgreifen
-      </h2>
+      </p>
 
       <div className="space-y-10">
         {relatedPosts.map((post) => {
@@ -139,12 +139,12 @@ const KurzKnappRelatedItem = ({ slug }) => {
               )}
 
               <div className="w-full md:flex-1">
-                <h3 className="text-lg md:text-xl font-semibold text-gray-900 group-hover:text-red-700 group-hover:underline">
+                <p className="text-lg md:text-xl font-normal text-[#494158] group-hover:text-red-700 group-hover:underline">
                   {post.title}
-                </h3>
+                </p>
 
                 {excerpt && (
-                  <p className="mt-3 text-sm md:text-base text-gray-700 leading-relaxed">
+                  <p className="mt-2 text-sm md:text-sm text-gray-700 leading-relaxed">
                     {excerpt}
                   </p>
                 )}
