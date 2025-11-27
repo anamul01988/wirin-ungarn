@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { notFound, usePathname } from "next/navigation";
 import DialogContent from "@/components/_components/DialogContent";
+import HistoryTracker from "@/components/_components/HistoryTracker";
 import { GetDynamicContent, GetDynamicContentV2 } from "@/lib/getAllPages";
 import Loader from "@/components/_components/Loader";
 // import { current } from "@reduxjs/toolkit";
@@ -98,99 +99,114 @@ export default function DynamicPageClient({ slug }) {
     // Special handling for topicsPostContent
     if (contentType === "kategorien" && postContent?.topicsPostContent) {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <DialogContent
-            title={title}
-            content={content}
-            imageFeature={imageUrl}
-            contentType={contentType}
-            routePrefix={routePrefix || detectedPrefix}
-            customFields={{
-              topicsPostContent: postContent.topicsPostContent,
-              shortTitle: postContent.shortTitle,
-              postOrder: postContent.postOrder,
-            }}
-            isSinglePage={true}
-          />
-        </div>
+        <>
+          <HistoryTracker />
+          <div className="min-h-screen flex items-center justify-center">
+            <DialogContent
+              title={title}
+              content={content}
+              imageFeature={imageUrl}
+              contentType={contentType}
+              routePrefix={routePrefix || detectedPrefix}
+              customFields={{
+                topicsPostContent: postContent.topicsPostContent,
+                shortTitle: postContent.shortTitle,
+                postOrder: postContent.postOrder,
+              }}
+              isSinglePage={true}
+            />
+          </div>
+        </>
       );
     }
 
     // Special handling for sprachkurs content
     if (contentType === "sprachkurs") {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <DialogContent
-            title={title}
-            content={content}
-            imageFeature={imageUrl}
-            contentType={contentType}
-            routePrefix={routePrefix || detectedPrefix}
-            postContent={postContent} // Pass the entire postContent object for sprachkursContent
-            nextPostSlug={contentData.nextPostSlug}
-            prevPostSlug={contentData.prevPostSlug}
-            postId={contentData.data.data.post.postId}
-            isSinglePage={true}
-          />
-        </div>
+        <>
+          <HistoryTracker />
+          <div className="min-h-screen flex items-center justify-center">
+            <DialogContent
+              title={title}
+              content={content}
+              imageFeature={imageUrl}
+              contentType={contentType}
+              routePrefix={routePrefix || detectedPrefix}
+              postContent={postContent} // Pass the entire postContent object for sprachkursContent
+              nextPostSlug={contentData.nextPostSlug}
+              prevPostSlug={contentData.prevPostSlug}
+              postId={contentData.data.data.post.postId}
+              isSinglePage={true}
+            />
+          </div>
+        </>
       );
     }
 
     // Special handling for wissenswert content
     if (contentType === "wissenswert") {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <DialogContent
-            postId={contentData.data.data.post.postId}
-            title={title}
-            content={content === null ? postContent?.introText : content}
-            imageFeature={imageUrl}
-            singlePostContent={
-              postContent?.postContent?.length > 0
-                ? postContent?.postContent
-                : []
-            }
-            contentType="wissenswert"
-            routePrefix={routePrefix || detectedPrefix}
-            isSinglePage={true}
-          />
-        </div>
+        <>
+          <HistoryTracker />
+          <div className="min-h-screen flex items-center justify-center">
+            <DialogContent
+              postId={contentData.data.data.post.postId}
+              title={title}
+              content={content === null ? postContent?.introText : content}
+              imageFeature={imageUrl}
+              singlePostContent={
+                postContent?.postContent?.length > 0
+                  ? postContent?.postContent
+                  : []
+              }
+              contentType="wissenswert"
+              routePrefix={routePrefix || detectedPrefix}
+              isSinglePage={true}
+            />
+          </div>
+        </>
       );
     }
 
     // Special handling for shorts content
     if (contentType === "shorts") {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <DialogContent
-            postId={contentData.data.data.post.postId}
-            title={title}
-            content={
-              content === null ? postContent?.shortsPostContent : content
-            }
-            imageFeature={imageUrl}
-            contentType="shorts"
-            routePrefix={routePrefix || detectedPrefix}
-            nextPostSlug={contentData.nextPostSlug}
-            prevPostSlug={contentData.prevPostSlug}
-            isSinglePage={true}
-          />
-        </div>
+        <>
+          <HistoryTracker />
+          <div className="min-h-screen flex items-center justify-center">
+            <DialogContent
+              postId={contentData.data.data.post.postId}
+              title={title}
+              content={
+                content === null ? postContent?.shortsPostContent : content
+              }
+              imageFeature={imageUrl}
+              contentType="shorts"
+              routePrefix={routePrefix || detectedPrefix}
+              nextPostSlug={contentData.nextPostSlug}
+              prevPostSlug={contentData.prevPostSlug}
+              isSinglePage={true}
+            />
+          </div>
+        </>
       );
     }
 
     // Default handling for other post types
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <DialogContent
-          title={title}
-          content={content === null ? postContent?.shortsPostContent : content}
-          imageFeature={imageUrl}
-          contentType={contentType}
-          routePrefix={routePrefix || detectedPrefix}
-          isSinglePage={true}
-        />
-      </div>
+      <>
+        <HistoryTracker />
+        <div className="min-h-screen flex items-center justify-center">
+          <DialogContent
+            title={title}
+            content={content === null ? postContent?.shortsPostContent : content}
+            imageFeature={imageUrl}
+            contentType={contentType}
+            routePrefix={routePrefix || detectedPrefix}
+            isSinglePage={true}
+          />
+        </div>
+      </>
     );
   }
 
