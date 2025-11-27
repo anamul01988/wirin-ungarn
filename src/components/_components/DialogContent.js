@@ -772,7 +772,13 @@ export default function DialogContent({
                   </div>
                 </div>
 
-                <KurzKnappRelatedItem slug={typeof window !== 'undefined' ? sessionStorage.getItem('currentKnowledgeSlug') : null} />
+                <KurzKnappRelatedItem
+                  slug={
+                    typeof window !== "undefined"
+                      ? sessionStorage.getItem("currentKnowledgeSlug")
+                      : null
+                  }
+                />
               </div>
             )}
 

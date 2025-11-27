@@ -733,10 +733,9 @@ export function GetKreuzwortratsel(first = 1000, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-
 export const GetRelatedPostsForKurzKnapp = (slug) => {
-  console.log('33333333333333333', slug);
-  
+  console.log("GetRelatedPostsForKurzKnapp called with slug:", slug);
+
   const QUERY = `
     query KnowledgeId {
       knowledge(id: "${slug}", idType: SLUG) {
@@ -759,7 +758,55 @@ export const GetRelatedPostsForKurzKnapp = (slug) => {
     }
   `;
   return fetchPage(QUERY);
-}
+};
+
+// Helper: fetch a single Wissenwert/Kurz & Knapp related post by its global ID
+export const GetKurzKnappPostById = (id) => {
+  console.log("GetKurzKnappPostById called with id:", id);
+
+  const QUERY = `
+    query KurzKnappPostById {
+      post(id: "${id}", idType: ID) {
+        id
+        title
+        slug
+        link
+        date
+        content
+        postContent {
+          postContent {
+            title
+            icon
+            content
+          }
+          postOrder
+          shortTitle
+          introText
+          shortsPostContent
+        }
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+            title
+            uri
+          }
+        }
+        imageLong {
+          featuredImageMobile {
+            node {
+              id
+              sourceUrl
+              altText
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  return fetchPage(QUERY);
+};
 
 // export function GetSprachkursPages(search = "") {
 //   const SEARCH_QUERY = `

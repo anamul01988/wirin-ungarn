@@ -99,8 +99,8 @@ const KurzKnappPage = () => {
   // Handle knowledge item click - navigate to detail page
   const handleKnowledgeClick = (slug) => {
     // Store the slug in sessionStorage for use in the detail page
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem('currentKnowledgeSlug', slug);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("currentKnowledgeSlug", slug);
     }
     router.push(`/kurz-und-knapp/${slug}`);
   };
