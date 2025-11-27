@@ -15,7 +15,6 @@ import { ThemeProvider } from "@material-tailwind/react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ReduxProvider from "@/lib/store/ReduxProvider";
 import SessionProvider from "@/components/providers/SessionProvider";
-import HistoryTracker from "@/components/_components/HistoryTracker";
 
 // Note: Metadata cannot be exported from client components.
 // Individual pages have their own metadata via generateMetadata() functions.
@@ -57,8 +56,6 @@ export default function RootLayout({ children }) {
             <ThemeProvider>
               <AuthProvider>
                 {children}
-                {/* Track user navigation history */}
-                <HistoryTracker />
               </AuthProvider>
               <ToastContainer
                 position="top-right"
