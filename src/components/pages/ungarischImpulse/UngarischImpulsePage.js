@@ -311,7 +311,7 @@ const UngarischImpulsePage = () => {
   const { title, content: pageContent } = pageData || {};
   const pageIntro = pageContent
     ? pageContent.replace(/<[^>]*>/g, "").substring(0, 200) + "..."
-    : "Diese Lernseite bietet dir verschiedene Themen zur ungarischen Sprache mit ausführlichen Erklärungen.";
+    : "Diese Lernseite bietet dir, abseits von einer Lern-Reihenfolge, verschiedene Themen zur ungarischen Sprache mit ausführlichen Erklärungen. Du darfst dich bei dem, was der Zufall für dich auswählt, einfach darauf verlassen, dass es für dich passt. Und falls es dir für den Moment doch zu kompliziert ist (oder du es schon weißt), klicke einfach auf den Pfeil für „nächsten Impuls anzeigen“.";
 
   return (
     <div className="impulse-page">
@@ -326,7 +326,7 @@ const UngarischImpulsePage = () => {
         </div>
         <p className="impulse-intro">{pageIntro}</p>
         <p className="impulse-note">
-          <strong>Wähle hier die gewünschte Schwierigkeitsstufe aus:</strong>
+          Wähle hier die gewünschte Schwierigkeitsstufe aus:
         </p>
       </div>
 

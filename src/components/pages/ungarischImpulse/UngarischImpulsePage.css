@@ -1,13 +1,3 @@
-/* ============================================
-   UNGARISCH-IMPULSE STYLES
-   All-in-one CSS for Hungarian Language Learning Page
-   ============================================ */
-
-/* ============================================
-   1. FONTS & BASE TYPOGRAPHY
-   ============================================ */
-
-/* Hungarian Word Styling */
 .hu-word,
 .himpulse-expressions .hu_word,
 .himpulse-description .hu_word,
@@ -49,7 +39,7 @@ strong .hu_word,
 .impulse-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  /* padding: 20px; */
   background-color: #fff;
 }
 
@@ -121,11 +111,16 @@ strong .hu_word,
 .impulse-intro {
   line-height: 1.6;
   margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #56646F;
 }
 
 .impulse-note {
   margin-top: 10px;
-  font-style: italic;
+  font-weight: 600;
+  color: #56646F;
+  font-size: 15px;
 }
 
 /* ============================================
