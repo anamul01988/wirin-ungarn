@@ -18,9 +18,9 @@
 }
 
 /* History menu needs wider width for 35+ characters */
-.history-hover-menu {
+/* .history-hover-menu {
   min-width: 380px !important;
-}
+} */
 
 .calendar-item:hover .hover-menu {
   opacity: 1;
