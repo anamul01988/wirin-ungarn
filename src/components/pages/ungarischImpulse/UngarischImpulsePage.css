@@ -1,20 +1,10 @@
-/* ============================================
-   UNGARISCH-IMPULSE STYLES
-   All-in-one CSS for Hungarian Language Learning Page
-   ============================================ */
-
-/* ============================================
-   1. FONTS & BASE TYPOGRAPHY
-   ============================================ */
-
-/* Hungarian Word Styling */
 .hu-word,
 .himpulse-expressions .hu_word,
 .himpulse-description .hu_word,
 .himpulse-expressions-vertiefung .hu_word,
 .himpulse-expressions-ubungen .hu_word,
 .himpulse-expressions-antworten .hu_word {
-  font-family: 'Noto Sans Mono', monospace;
+  font-family: "Noto Sans Mono", monospace;
   font-weight: 400;
   font-optical-sizing: auto;
   font-style: normal;
@@ -25,7 +15,7 @@ strong .hu-word,
 .hu-word strong,
 strong .hu_word,
 .hu_word strong {
-  font-family: 'Noto Sans Mono', monospace;
+  font-family: "Noto Sans Mono", monospace;
   font-weight: 600;
 }
 
@@ -41,7 +31,7 @@ strong .hu_word,
   position: relative;
   margin: 0;
   padding: 0;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "Noto Sans", sans-serif;
   color: #2e5136;
   background-color: #f5f5f5;
 }
@@ -49,7 +39,7 @@ strong .hu_word,
 .impulse-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  /* padding: 20px; */
   background-color: #fff;
 }
 
@@ -109,7 +99,9 @@ strong .hu_word,
 .impulse-page .green_title {
   color: #436f4d;
 }
-
+.impulse-lesson p {
+  font-size: 14px;
+}
 /* ============================================
    4. PAGE HEADER
    ============================================ */
@@ -121,11 +113,16 @@ strong .hu_word,
 .impulse-intro {
   line-height: 1.6;
   margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #56646f;
 }
 
 .impulse-note {
   margin-top: 10px;
-  font-style: italic;
+  font-weight: 600;
+  color: #56646f;
+  font-size: 15px;
 }
 
 /* ============================================
@@ -168,6 +165,17 @@ strong .hu_word,
   text-align: center;
   height: 40px;
   line-height: 24px;
+}
+
+.button-option {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  flex: 1;
+  text-align: center;
+  user-select: none;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .impulse-next-button {
@@ -292,7 +300,7 @@ strong .hu_word,
 }
 
 .audio-play-button {
-  background: url('https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/PLAY.png');
+  background: url("https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/PLAY.png");
   background-size: cover !important;
   width: 80px;
   height: 26px;
@@ -306,12 +314,12 @@ strong .hu_word,
 }
 
 .audio-play-button.playing {
-  background: url('https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/pause.png');
+  background: url("https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/pause.png");
   background-size: cover !important;
 }
 
 .audio-backward-button {
-  background: url('https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/5SEC.png');
+  background: url("https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/5SEC.png");
   background-size: cover !important;
   width: 80px;
   height: 26px;
@@ -355,16 +363,19 @@ strong .hu_word,
 
 .impulse-cta-button {
   width: 100%;
-  padding: 15px;
-  background-color: #006400;
+  padding: 8px;
+  background-color: #436f4d;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 400;
   text-align: center;
   transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .impulse-cta-button:hover {
@@ -522,4 +533,3 @@ strong .hu_word,
     filter: none;
   }
 }
-

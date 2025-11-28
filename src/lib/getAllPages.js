@@ -1284,47 +1284,41 @@ export function GetAllImpulses(first = 50, after = null) {
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
-export function GetAllImpulse(first = 50, after = null) {
+export function GetAllImpulse(first = 220, after = null, level = "A1") {
+  console.log("GetAllImpulse called with level:", level);
   const SEARCH_QUERY = `
-    query GetAllImpulse($first: Int = 50, $after: String) {
-      # Get the "Impulse" Page
-      pages(where: { title: "Impulse" }) {
-        nodes {
-          id
-          title
-          isContentNode
-          slug
-          content
-          status
-          seo {
-            title
-            metaDesc
-            opengraphTitle
-            opengraphDescription
+    query AllUimpulseMeta{
+  ungarischImpulses(
+    first: 220
+    where: {
+      stati: [PUBLISH, DRAFT]
+      metaQuery: {
+        metaArray: [
+          {
+            key: "impulse_level"
+            value: "${level}"
+            compare: EQUAL_TO
           }
-        }
-      }
-
-      # Get Ungarisch Impulse CPT
-      ungarischImpulses(first: $first, after: $after, where: { stati: [PUBLISH, DRAFT] }) {
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          endCursor
-          startCursor
-        }
-        nodes {
-          id
-          databaseId
-          title
-          date
-          slug
-          content
-        }
+        ]
       }
     }
+  ) {
+    nodes {
+      id
+      title
+      date
+      slug
+      content
+      impulsesFields {
+        impulseLevel
+        impulseCode
+      }
+    }
+  }
+}
   `;
 
+  console.log("GetAllImpulse query executed with level:", level);
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 
