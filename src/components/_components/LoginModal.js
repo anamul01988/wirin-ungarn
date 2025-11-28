@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 const LoginModal = ({
   isOpen,
@@ -18,7 +19,7 @@ const LoginModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { login, loginWithGoogle, loginWithFacebook } = useAuth();
+  const { login, loginWithGoogle, loginWithFacebook, logout } = useAuth();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +60,40 @@ const LoginModal = ({
     onClose();
   };
 
+  const checkUserExists = async (email) => {
+    try {
+      const response = await fetch("https://wir-in-ungarn.hu/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            query CheckUser($email: String!) {
+              userExists(email: $email)
+            }
+          `,
+          variables: { email },
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.errors) {
+        // If the backend returns an error, treat as "cannot register"
+        console.error("CheckUser error:", result.errors);
+        throw new Error(
+          result.errors[0]?.message || "Fehler bei der Benutzerprüfung"
+        );
+      }
+
+      return Boolean(result.data?.userExists);
+    } catch (err) {
+      console.error("CheckUser request failed:", err);
+      throw err;
+    }
+  };
+
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     setError("");
@@ -66,7 +101,47 @@ const LoginModal = ({
     const result = await loginWithGoogle();
 
     if (result.success) {
-      onClose();
+      // Check if user exists in the backend
+      try {
+        // Get the session to retrieve user email
+        const { getSession } = await import("next-auth/react");
+        const session = await getSession();
+
+        if (session?.user?.email) {
+          const userExists = await checkUserExists(session.user.email);
+
+          if (!userExists) {
+            // User doesn't exist in backend, sign them out
+            await logout();
+            toast.error(
+              "Kein Konto gefunden. Bitte registrieren Sie sich zuerst.",
+              {
+                position: "top-right",
+                autoClose: 5000,
+              }
+            );
+            setIsLoading(false);
+            return;
+          }
+        }
+
+        // User exists, proceed with login
+        toast.success("Erfolgreich angemeldet!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        onClose();
+      } catch (err) {
+        console.error("Error checking user existence:", err);
+        await logout();
+        toast.error(
+          "Fehler bei der Anmeldung. Bitte versuchen Sie es erneut.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+          }
+        );
+      }
     } else {
       setError(result.error);
     }
@@ -81,7 +156,47 @@ const LoginModal = ({
     const result = await loginWithFacebook();
 
     if (result.success) {
-      onClose();
+      // Check if user exists in the backend
+      try {
+        // Get the session to retrieve user email
+        const { getSession } = await import("next-auth/react");
+        const session = await getSession();
+
+        if (session?.user?.email) {
+          const userExists = await checkUserExists(session.user.email);
+
+          if (!userExists) {
+            // User doesn't exist in backend, sign them out
+            await logout();
+            toast.error(
+              "Kein Konto gefunden. Bitte registrieren Sie sich zuerst.",
+              {
+                position: "top-right",
+                autoClose: 5000,
+              }
+            );
+            setIsLoading(false);
+            return;
+          }
+        }
+
+        // User exists, proceed with login
+        toast.success("Erfolgreich angemeldet!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        onClose();
+      } catch (err) {
+        console.error("Error checking user existence:", err);
+        await logout();
+        toast.error(
+          "Fehler bei der Anmeldung. Bitte versuchen Sie es erneut.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+          }
+        );
+      }
     } else {
       setError(result.error);
     }
@@ -93,10 +208,10 @@ const LoginModal = ({
   React.useEffect(() => {
     if (!isOpen) return;
     const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
