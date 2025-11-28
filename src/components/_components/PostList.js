@@ -25,10 +25,10 @@ export default function PostList({ initialApiData }) {
   useEffect(() => {
     if (!open) return;
     const handleEsc = (e) => {
-      if (e.key === 'Escape') handleClose();
+      if (e.key === "Escape") handleClose();
     };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
   }, [open]);
 
   const navigateToHome = () => {
@@ -45,7 +45,7 @@ export default function PostList({ initialApiData }) {
         }}
         handler={handleOpen}
         size={"lg"}
-        className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl  h-[96vh] flex flex-col"
+        className="dialog-post-list bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl  h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -62,7 +62,7 @@ export default function PostList({ initialApiData }) {
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
-               {/* <Button
+        {/* <Button
           onClick={navigateToHome}
           color="blue"
           size="lg"

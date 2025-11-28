@@ -151,6 +151,16 @@ export default function DialogContent({
   const isContactPage = title && title.toLowerCase().includes("kontakt");
   console.log("isContactPage", isContactPage, routePrefix);
 
+  // Generate dynamic route-based className from pathname
+  const getRouteClassName = () => {
+    if (!pathname) return "";
+    // Remove leading/trailing slashes and convert to kebab-case
+    const routePath = pathname.replace(/^\/|\/$/g, "").replace(/\//g, "-");
+    return routePath ? `dialog-route-${routePath}` : "";
+  };
+
+  const routeClassName = getRouteClassName();
+
   return (
     <>
       <Dialog
@@ -158,7 +168,7 @@ export default function DialogContent({
         handler={handleOpen}
         size="lg"
         dismiss={{ enabled: false }}
-        className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className={`dialog-content ${routeClassName} bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col`.trim()}
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -224,7 +234,7 @@ export default function DialogContent({
             {routePrefix !== "einfach-lesen" && !isContactPage && (
               <h1 className="single__page_title text-[#494158]">{title}</h1>
             )}
-            {contentType === "wissenswert" && (
+            {contentType === "wissenswert" && content?.introText && (
               <div className="mb-6 py-4 rounded-lg">
                 <p
                   className="single__page_description"

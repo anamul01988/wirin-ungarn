@@ -72,7 +72,7 @@ export default function LiedTexteDialogContent({
         handler={handleOpen}
         size="lg"
         dismiss={{ enabled: false }}
-        className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="dialog-liedtexte-content bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -111,9 +111,7 @@ export default function LiedTexteDialogContent({
             <div className="mb-2 px-0 pt-0">
               <Breadcrumb className="text-sm" isSinglePage={true} />
             </div>
-            <p
-              className="text-[30px] text-[#436f4d] font-medium mb-4"
-            >
+            <p className="text-[30px] text-[#436f4d] font-medium mb-4">
               {title}
             </p>
 
@@ -129,9 +127,7 @@ export default function LiedTexteDialogContent({
               <div key={index} className="mb-2">
                 <div className="flex pt-5 items-start justify-start mb-2">
                   <div className="flex-shrink-0 flex items-start mr-3">
-                    <div
-                      className="w-full h-full cursor-pointer"
-                    >
+                    <div className="w-full h-full cursor-pointer">
                       <div>
                         {item.icon && item.icon.length > 0 ? (
                           <img
