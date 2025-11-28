@@ -44,6 +44,7 @@ export default function DialogContent({
   prevPostTitle, // Add prevPostTitle prop
   // backupShortsPostContent,
   isSinglePage = false,
+  // isSinglePost = false,
 }) {
   const [open, setOpen] = useState(true);
   const [learningBoxOpen, setLearningBoxOpen] = useState(false);
@@ -168,7 +169,9 @@ export default function DialogContent({
         handler={handleOpen}
         size="lg"
         dismiss={{ enabled: false }}
-        className={`dialog-content ${routeClassName} bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col`.trim()}
+        className={`dialog-content ${routeClassName} ${
+          isSinglePost ? `${routePrefix}_single-post` : "archive__page"
+        } bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col`.trim()}
       >
         {/* Floating Cross + Love Icons */}
         {open && (

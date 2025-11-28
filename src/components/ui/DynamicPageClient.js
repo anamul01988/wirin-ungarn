@@ -114,6 +114,7 @@ export default function DynamicPageClient({ slug }) {
                 postOrder: postContent.postOrder,
               }}
               isSinglePage={true}
+              // isSinglePost={true}
             />
           </div>
         </>
@@ -137,6 +138,7 @@ export default function DynamicPageClient({ slug }) {
               prevPostSlug={contentData.prevPostSlug}
               postId={contentData.data.data.post.postId}
               isSinglePage={true}
+              // isSinglePost={true}
             />
           </div>
         </>
@@ -162,6 +164,7 @@ export default function DynamicPageClient({ slug }) {
               contentType="wissenswert"
               routePrefix={routePrefix || detectedPrefix}
               isSinglePage={true}
+              // isSinglePost={true}
             />
           </div>
         </>
@@ -186,6 +189,7 @@ export default function DynamicPageClient({ slug }) {
               nextPostSlug={contentData.nextPostSlug}
               prevPostSlug={contentData.prevPostSlug}
               isSinglePage={true}
+              // isSinglePost={true}
             />
           </div>
         </>
@@ -199,11 +203,14 @@ export default function DynamicPageClient({ slug }) {
         <div className="min-h-screen flex items-center justify-center">
           <DialogContent
             title={title}
-            content={content === null ? postContent?.shortsPostContent : content}
+            content={
+              content === null ? postContent?.shortsPostContent : content
+            }
             imageFeature={imageUrl}
             contentType={contentType}
             routePrefix={routePrefix || detectedPrefix}
             isSinglePage={true}
+            // isSinglePost={true}
           />
         </div>
       </>
