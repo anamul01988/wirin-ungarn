@@ -350,6 +350,7 @@ const LandingPage = () => {
     // Zoom detection
     let initialZoom = window.devicePixelRatio;
     let zoomTimeout;
+    let refreshTimeout;
 
     const handleZoomDetection = () => {
       const currentZoom = window.devicePixelRatio;
@@ -359,10 +360,19 @@ const LandingPage = () => {
         if (toast) {
           toast.classList.add("show");
 
+          // Clear any existing timeouts
           clearTimeout(zoomTimeout);
+          clearTimeout(refreshTimeout);
+
+          // Hide toast after 3 seconds
           zoomTimeout = setTimeout(() => {
             toast.classList.remove("show");
-          }, 4000);
+          }, 1000);
+
+          // Auto-refresh page after 3.5 seconds (gives time to see the message)
+          refreshTimeout = setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         }
       }
     };
@@ -800,6 +810,8 @@ const LandingPage = () => {
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleZoomDetection);
+      clearTimeout(zoomTimeout);
+      clearTimeout(refreshTimeout);
     };
   }, []);
 
@@ -2048,22 +2060,21 @@ const LandingPage = () => {
       <style>{`
         /* Zoom Toast Notification */
         .zoom-toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #c41e3a;
-            color: white;
-            padding: 20px 40px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            display: none;
-            text-align: center;
-            outline: 5px solid #ffffff;
-            font-family: "Open Sans", sans-serif;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #c41e3a;
+    color: white;
+    padding: 20px 40px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: none;
+    text-align: center;
+    outline: 5px solid #ffffff;
         }
 
         .zoom-toast.show {
@@ -2447,7 +2458,7 @@ const LandingPage = () => {
             </div>
             <div
               id="results-container"
-              className="results-list bg-white p-4 rounded-md mt-4"
+              className="results-list bg-white p-4 rounded-md"
               style={{ width: "600px" }}
             ></div>
             <div
@@ -3093,9 +3104,8 @@ const LandingPage = () => {
         role="alert"
         aria-live="polite"
       >
-        Bitte laden Sie die Seite neu (F5)
-        <br />
-        für die perfekte Ansicht
+        Da du die Größe deines Browsers geändert hast, werden wir die Seite in 3
+        Sekunden neu laden, damit sie korrekt angezeigt wird.
       </div>
 
       {/* Tablet Intro Image */}
