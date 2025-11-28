@@ -191,7 +191,7 @@ export default function LearningBoxModal({ open, onClose, sourceUrl, title }) {
       size="sm"
       dismiss={{ enabled: false }}
       data-dialog="learning-box-modal"
-      className="bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl max-h-[90vh] overflow-hidden z-[10000]"
+      className="dialog-learning-box-modal bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl max-h-[90vh] overflow-hidden z-[10000]"
       style={{ maxWidth: "650px", width: "100%" }}
     >
       <DialogBody className="overflow-auto p-6 max-h-[80vh]">

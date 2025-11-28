@@ -47,7 +47,7 @@ export default function SprachkursComponent() {
         dismiss={{
           enabled: false,
         }}
-        className="sprachkurs-modal bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col outline-none"
+        className="dialog-sprachkurs sprachkurs-modal bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col outline-none"
       >
         {open && (
           <ModalIcons
@@ -71,7 +71,7 @@ export default function SprachkursComponent() {
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
-               {/* <Button
+        {/* <Button
           onClick={navigateToHome}
           color="blue"
           size="lg"

@@ -46,7 +46,7 @@ export default function AusDemLebenComponent() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="dialog-aus-dem-leben bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
@@ -67,7 +67,7 @@ export default function AusDemLebenComponent() {
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
-               {/* <Button
+        {/* <Button
           onClick={navigateToHome}
           color="blue"
           size="lg"

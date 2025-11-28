@@ -6,8 +6,8 @@ export default function CommonLayout({ children }) {
   return (
     <>
       {/* {children} */}
-      <HomePageLayout />
       {children}
+      <HomePageLayout />
     </>
   );
 }

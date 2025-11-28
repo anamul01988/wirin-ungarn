@@ -46,7 +46,7 @@ export default function KulinarischeComponent() {
         dismiss={{
           enabled: false,
         }}
-        className="bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="dialog-kulinarische-seele bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
