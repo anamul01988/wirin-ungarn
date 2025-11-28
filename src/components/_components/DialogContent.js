@@ -170,7 +170,7 @@ export default function DialogContent({
         size="lg"
         dismiss={{ enabled: false }}
         className={`dialog-content ${routeClassName} ${
-          isSinglePost ? `${routePrefix}_single-post` : "archive__page"
+          isSinglePage ? `${routePrefix}_single-page` : "archive__page"
         } bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col`.trim()}
       >
         {/* Floating Cross + Love Icons */}
