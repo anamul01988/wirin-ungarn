@@ -15,6 +15,7 @@ const UngarischImpulsePage = () => {
   const [audioObjects, setAudioObjects] = useState({});
   const [playingAudioId, setPlayingAudioId] = useState(null);
   const [answersBlurred, setAnswersBlurred] = useState(true);
+  const [selectedLevel, setSelectedLevel] = useState("A1"); // Default to A1
   const contentRef = useRef(null);
 
   // Fetch data
@@ -22,12 +23,14 @@ const UngarischImpulsePage = () => {
     async function fetchData() {
       try {
         setLoading(true);
-        const apiData = await GetAllImpulse(50, null);
+        console.log("Fetching impulses with level:", selectedLevel);
+        const apiData = await GetAllImpulse(220, null, selectedLevel);
         console.log("Ungarisch-Impulse data:", apiData);
+        console.log("API Response for level", selectedLevel, ":", apiData);
 
         if (apiData?.data) {
-          // Set page data
-          if (apiData.data.pages?.nodes?.length > 0) {
+          // Set page data (only on first load or if page data is missing)
+          if (!pageData && apiData.data.pages?.nodes?.length > 0) {
             setPageData(apiData.data.pages.nodes[0]);
           }
 
@@ -40,6 +43,17 @@ const UngarischImpulsePage = () => {
             );
             setCurrentLessonIndex(randomIndex);
             setCurrentLesson(apiData.data.ungarischImpulses.nodes[randomIndex]);
+            console.log(
+              "Loaded",
+              apiData.data.ungarischImpulses.nodes.length,
+              "impulses for level",
+              selectedLevel
+            );
+          } else {
+            console.log("No impulses found for level", selectedLevel);
+            setImpulses([]);
+            setCurrentLessonIndex(null);
+            setCurrentLesson(null);
           }
         }
       } catch (err) {
@@ -50,7 +64,7 @@ const UngarischImpulsePage = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [selectedLevel]);
 
   // Handle lesson selector change
   const handleLessonSelect = useCallback(
@@ -138,6 +152,7 @@ const UngarischImpulsePage = () => {
         setPlayingAudioId(audioId);
       } else {
         audio.pause();
+
         setPlayingAudioId(null);
       }
     },
@@ -330,8 +345,50 @@ const UngarischImpulsePage = () => {
         </p>
       </div>
 
+      <div className="flex gap-2 mb-6">
+        <button
+          className="button-option"
+          onClick={() => {
+            console.log("A1 button clicked");
+            setSelectedLevel("A1");
+          }}
+          style={{
+            backgroundColor: selectedLevel === "A1" ? "#dc3545" : "",
+            color: selectedLevel === "A1" ? "#fff" : "",
+          }}
+        >
+          A1
+        </button>
+        <button
+          className="button-option"
+          onClick={() => {
+            console.log("A2 button clicked");
+            setSelectedLevel("A2");
+          }}
+          style={{
+            backgroundColor: selectedLevel === "A2" ? "#dc3545" : "",
+            color: selectedLevel === "A2" ? "#fff" : "",
+          }}
+        >
+          A2
+        </button>
+        <button
+          className="button-option"
+          onClick={() => {
+            console.log("B1 button clicked");
+            setSelectedLevel("B1");
+          }}
+          style={{
+            backgroundColor: selectedLevel === "B1" ? "#dc3545" : "",
+            color: selectedLevel === "B1" ? "#fff" : "",
+          }}
+        >
+          B1
+        </button>
+      </div>
+
       {/* Top Control Bar */}
-      <div className="impulse-control-bar">
+      {/* <div className="impulse-control-bar">
         <div className="impulse-selector-wrapper">
           <select
             className="impulse-selector"
@@ -359,10 +416,10 @@ const UngarischImpulsePage = () => {
           type="button"
         ></button>
         <div className="clear"></div>
-      </div>
+      </div> */}
 
       {/* Main Content Container */}
-      <div className="impulse-content" ref={contentRef}>
+      <div className="mt-10 impulse-lesson" ref={contentRef}>
         {currentLesson ? (
           <div
             dangerouslySetInnerHTML={{ __html: currentLesson.content }}
