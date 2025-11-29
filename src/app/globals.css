@@ -1588,10 +1588,7 @@ div[class*="Toastify"] {
   display: none;
 }
 
-/* Sprachkurs Modal Responsive Styles */
-
-/* Reduce padding for smaller devices */
-@media screen and (max-width: 792px) {
+/* @media screen and (max-width: 792px) {
   .sprachkurs-modal {
     max-width: 70% !important;
     min-width: 30% !important;
@@ -1601,9 +1598,29 @@ div[class*="Toastify"] {
   }
 }
 
-/* Move dialog 100px to the left for very small screens */
+
 @media screen and (max-width: 500px) {
   .sprachkurs-modal {
+    transform: translateX(-20px) !important;
+  }
+} */
+
+/* General Dialog/Modal Responsive Styles - Applied to all dialogs */
+
+/* Reduce padding and adjust width for smaller devices */
+@media screen and (max-width: 792px) {
+  [role="dialog"] {
+    max-width: 70% !important;
+    min-width: 30% !important;
+  }
+  [role="dialog"] .custom__modal_area {
+    padding: 15px !important;
+  }
+}
+
+/* Move dialog to the left for very small screens */
+@media screen and (max-width: 500px) {
+  [role="dialog"] {
     transform: translateX(-20px) !important;
   }
 }
