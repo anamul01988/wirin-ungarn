@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { SearchAllPosts, GetAusflugszielePages } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
+import algoliasearch from "algoliasearch/lite";
 import CustomPost from "@/components/ui/CustomPost";
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
@@ -16,6 +17,13 @@ const AusflugszielePage = () => {
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
+
+  // Algolia search client
+  const algoliaClient = useRef(null);
+  const searchIndex = useRef(null);
+  const [algoliaResults, setAlgoliaResults] = useState([]);
+  const [algoliaSearching, setAlgoliaSearching] = useState(false);
+  const [searchDebounce, setSearchDebounce] = useState(null);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,11 +69,48 @@ const AusflugszielePage = () => {
 
     setFiltering(true);
     setIsSearching(true);
+
     try {
-      const apiData = await SearchAllPosts(search, 1000);
-      setSearchResults(apiData.data.posts);
+      // If we already have Algolia results, use them
+      if (algoliaResults.length > 0) {
+        // Filter results to include only Listings items
+        const filteredResults = algoliaResults.filter(
+          (hit) => hit.post_type_label === window.ausflugszielePostTypeFilter
+        );
+
+        // Create a structure compatible with your existing code
+        const processedResults = {
+          edges: filteredResults.map((hit) => ({
+            node: {
+              id: hit.objectID,
+              title: hit.post_title,
+              slug: hit.permalink
+                ? hit.permalink.split("/").filter(Boolean).pop()
+                : "",
+              listingFieldGroup: {
+                subtitle: hit.subtitle || "",
+                description: hit.post_excerpt || "",
+                subcategory: hit.subcategory || "",
+              },
+            },
+          })),
+        };
+
+        setSearchResults(processedResults);
+      } else {
+        // Fall back to the original search method with post type filter
+        const apiData = await SearchAllPosts(
+          search,
+          1000,
+          null,
+          window.ausflugszielePostTypeFilter
+        );
+        setSearchResults(apiData.data.posts);
+      }
+
       setSearchCurrentPage(1);
     } catch (err) {
+      console.error("Search error:", err);
       setError("Fehler beim Suchen.");
     } finally {
       setFiltering(false);
@@ -77,7 +122,86 @@ const AusflugszielePage = () => {
     setIsSearching(false);
     setSearchResults({});
     setSearchCurrentPage(1);
+    setAlgoliaResults([]);
   };
+
+  // Algolia search with debouncing
+  useEffect(() => {
+    // Clear previous debounce timeout
+    if (searchDebounce) {
+      clearTimeout(searchDebounce);
+    }
+
+    // Skip if search is empty or search index not initialized
+    if (!search.trim() || !searchIndex.current) {
+      setAlgoliaResults([]);
+      return;
+    }
+
+    // Set debounce timeout
+    const debounceTimer = setTimeout(async () => {
+      setAlgoliaSearching(true);
+
+      try {
+        const searchParams = {
+          hitsPerPage: 10,
+          attributesToRetrieve: [
+            "objectID",
+            "post_title",
+            "permalink",
+            "post_excerpt",
+            "post_type",
+            "post_type_label",
+            "subtitle",
+            "subcategory",
+          ],
+          attributesToHighlight: ["post_title", "post_excerpt"],
+          highlightPreTag: "<strong>",
+          highlightPostTag: "</strong>",
+          filters: window.ausflugszielePostTypeFilter
+            ? `post_type_label:"${window.ausflugszielePostTypeFilter}"`
+            : "",
+        };
+
+        const response = await searchIndex.current.search(search, searchParams);
+        console.log("Algolia search results:", response);
+        setAlgoliaResults(response.hits);
+
+        // Also use hits for the main search results when appropriate
+        if (response.hits.length > 0) {
+          setIsSearching(true);
+        }
+      } catch (error) {
+        console.error("Algolia search error:", error);
+      } finally {
+        setAlgoliaSearching(false);
+      }
+    }, 300); // 300ms debounce
+
+    setSearchDebounce(debounceTimer);
+
+    // Cleanup timeout on component unmount
+    return () => {
+      if (searchDebounce) {
+        clearTimeout(searchDebounce);
+      }
+    };
+  }, [search]);
+
+  // Initialize Algolia client with post type filter
+  useEffect(() => {
+    // Initialize Algolia client
+    algoliaClient.current = algoliasearch(
+      "4BNRIJHLXZ",
+      "0707974c58f2e7c53a70e1e58eeec381"
+    );
+    searchIndex.current = algoliaClient.current.initIndex(
+      "wp_searchable_posts"
+    );
+
+    // Store the post type filter for use in search
+    window.ausflugszielePostTypeFilter = "Listings";
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -170,9 +294,14 @@ const AusflugszielePage = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             crossOrigin={undefined}
+            className={algoliaSearching ? "opacity-70" : ""}
           />
-          <Button color="red" onClick={handleSearch} disabled={filtering}>
-            {filtering ? "Suche..." : "SUCHE"}
+          <Button
+            color="red"
+            onClick={handleSearch}
+            disabled={filtering || algoliaSearching}
+          >
+            {filtering || algoliaSearching ? "Suche..." : "SUCHE"}
           </Button>
           {isSearching && (
             <Button color="gray" onClick={clearSearch} className="px-4 py-2">
@@ -181,6 +310,61 @@ const AusflugszielePage = () => {
           )}
         </div>
       </div>
+
+      {/* Algolia search results preview */}
+      {search && algoliaResults.length > 0 && (
+        <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <Typography variant="small" className="font-semibold mb-2">
+            {algoliaResults.length} schnelle Suchergebnisse gefunden
+          </Typography>
+          <div className="space-y-2">
+            {algoliaResults.slice(0, 5).map((hit) => (
+              <div
+                key={hit.objectID}
+                className="p-2 hover:bg-gray-100 rounded cursor-pointer"
+                onClick={() => {
+                  const slug = hit.permalink
+                    ? hit.permalink.split("/").filter(Boolean).pop()
+                    : "";
+                  if (slug) {
+                    window.location.href = `/ausflugsziele/${slug}`;
+                  }
+                }}
+              >
+                <Typography
+                  variant="small"
+                  className="font-medium text-blue-600 hover:text-blue-800"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      hit._highlightResult?.post_title?.value || hit.post_title,
+                  }}
+                />
+                {hit._highlightResult?.post_excerpt?.value && (
+                  <Typography
+                    variant="small"
+                    className="text-gray-600 text-xs mt-1"
+                    dangerouslySetInnerHTML={{
+                      __html: hit._highlightResult.post_excerpt.value,
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          {algoliaResults.length > 5 && (
+            <Typography variant="small" className="text-gray-500 mt-2">
+              Weitere {algoliaResults.length - 5} Ergebnisse verfügbar
+            </Typography>
+          )}
+        </div>
+      )}
+
+      {search && algoliaResults.length === 0 && !algoliaSearching && (
+        <Typography variant="small" className="text-gray-500 mb-4">
+          Keine schnellen Suchergebnisse gefunden. Klicken Sie auf "SUCHE" für
+          eine vollständige Suche.
+        </Typography>
+      )}
 
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
