@@ -103,10 +103,11 @@ const CustomPostForEvent = ({
       : "";
 
   return (
-    <div className="flex gap-4 mb-6">
+    <div className="border rounded px-2 py-4 mb-3">
+    <div className="flex gap-4">
       {/* Date Section */}
-      <div className="flex-shrink-0 w-20">
-        <div className="text-right">
+      <div className="flex-start align-center justify-center text-center w-20">
+        <div className="">
           <div className="text-md font-normal" style={{ color: colors.light }}>
             {dateInfo.month}
           </div>
@@ -118,7 +119,7 @@ const CustomPostForEvent = ({
           </div>
           <div className="flex justify-center my-2">
             <div
-              className="border-t w-4"
+              className="border-t w-2"
               style={{ borderColor: colors.light }}
             ></div>
           </div>
@@ -231,6 +232,7 @@ const CustomPostForEvent = ({
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

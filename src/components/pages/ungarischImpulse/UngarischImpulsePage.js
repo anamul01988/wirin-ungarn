@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { GetAllImpulse } from "@/lib/getAllPages";
+import {
+  GetAllImpulse,
+  GetAllImpulseIds,
+  GetImpulseById,
+} from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import "./UngarischImpulsePage.css";
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
@@ -16,13 +20,21 @@ const UngarischImpulsePage = () => {
   const [playingAudioId, setPlayingAudioId] = useState(null);
   const [answersBlurred, setAnswersBlurred] = useState(true);
   const [selectedLevel, setSelectedLevel] = useState("A1"); // Default to A1
+  const [impulseIds, setImpulseIds] = useState([]);
+  const [currentImpulseIndex, setCurrentImpulseIndex] = useState(-1);
+  const [loadingImpulses, setLoadingImpulses] = useState(false);
+  const isInitialLoad = useRef(true);
   const contentRef = useRef(null);
 
   // Fetch data
   useEffect(() => {
     async function fetchData() {
       try {
-        setLoading(true);
+        // Only show loader on initial load
+        if (isInitialLoad.current) {
+          setLoading(true);
+          isInitialLoad.current = false;
+        }
         console.log("Fetching impulses with level:", selectedLevel);
         const apiData = await GetAllImpulse(220, null, selectedLevel);
         console.log("Ungarisch-Impulse data:", apiData);
@@ -183,6 +195,71 @@ const UngarischImpulsePage = () => {
   const handleToggleAnswers = useCallback(() => {
     setAnswersBlurred((prev) => !prev);
   }, []);
+
+  // Initialize impulse IDs when level changes
+  useEffect(() => {
+    async function initializeIds() {
+      try {
+        const idsResponse = await GetAllImpulseIds(selectedLevel);
+        const ids = idsResponse?.data?.ungarischImpulses?.nodes || [];
+        setImpulseIds(ids);
+        setCurrentImpulseIndex(-1); // Reset index when level changes
+        console.log(
+          "Initialized impulse IDs for level",
+          selectedLevel,
+          ":",
+          ids.length
+        );
+      } catch (err) {
+        console.error("Error fetching impulse IDs:", err);
+      }
+    }
+    initializeIds();
+  }, [selectedLevel]);
+
+  // Handle button click to fetch next impulse by ID
+  const handleFetchNextImpulse = useCallback(async () => {
+    try {
+      setLoadingImpulses(true);
+
+      // If IDs are not loaded yet, load them first
+      let ids = impulseIds;
+      if (ids.length === 0) {
+        const idsResponse = await GetAllImpulseIds(selectedLevel);
+        ids = idsResponse?.data?.ungarischImpulses?.nodes || [];
+        setImpulseIds(ids);
+      }
+
+      if (ids.length === 0) {
+        console.log("No impulse IDs found for level", selectedLevel);
+        setLoadingImpulses(false);
+        return;
+      }
+
+      // Calculate next index (cycle through)
+      const nextIndex = (currentImpulseIndex + 1) % ids.length;
+      setCurrentImpulseIndex(nextIndex);
+
+      // Fetch the next impulse by ID
+      const nextId = ids[nextIndex].id;
+      const impulseResponse = await GetImpulseById(nextId);
+      const fetchedImpulse = impulseResponse?.data?.ungarischImpulse;
+
+      if (fetchedImpulse) {
+        // Update currentLesson with the fetched content
+        setCurrentLesson(fetchedImpulse);
+        setAnswersBlurred(true);
+        pauseAllAudio();
+
+        console.log("Fetched next impulse:", fetchedImpulse);
+      }
+    } catch (err) {
+      console.error("Error fetching next impulse by ID:", err);
+      setError("Fehler beim Laden des Impulses.");
+    } finally {
+      setLoadingImpulses(false);
+    }
+  }, [selectedLevel, impulseIds, currentImpulseIndex, pauseAllAudio]);
 
   // Extract audio URLs from content
   const extractAudioUrls = useCallback((content) => {
@@ -387,36 +464,44 @@ const UngarischImpulsePage = () => {
         </button>
       </div>
 
-      {/* Top Control Bar */}
-      {/* <div className="impulse-control-bar">
-        <div className="impulse-selector-wrapper">
-          <select
-            className="impulse-selector"
-            id="lessonSelector"
-            value={currentLessonIndex !== null ? currentLessonIndex : ""}
-            onChange={handleLessonSelect}
-          >
-            <option value="">-- Zufälligen Impuls wählen --</option>
-            {impulses.map((impulse, index) => (
-              <option key={impulse.id} value={index}>
-                {impulse.title}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="impulse-lesson-number">
-          {currentLessonIndex !== null
-            ? `Lec ${currentLessonIndex + 1}`
-            : "Lec"}
-        </div>
+      <div className="flex items-center justify-end gap-2 mb-6">
         <button
-          className="impulse-next-button"
-          onClick={handleNextLesson}
-          aria-label="Next lesson"
-          type="button"
-        ></button>
-        <div className="clear"></div>
-      </div> */}
+          className="bg-[#006400] text-white px-4 py-2 rounded font-medium hover:bg-green-700 transition-colors"
+          title="Copy lesson ID"
+        >
+          {currentLesson?.databaseId
+            ? `#${selectedLevel}-${currentLesson.databaseId}`
+            : currentLesson?.impulsesFields?.impulseCode
+            ? `#${selectedLevel}-${currentLesson.impulsesFields.impulseCode}`
+            : "id"}
+        </button>
+        <button
+          className="bg-[#006400] text-white w-10 h-10 rounded flex items-center justify-center hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={handleFetchNextImpulse}
+          disabled={loadingImpulses}
+          aria-label="Next impulse"
+          title="Next impulse"
+        >
+          {loadingImpulses ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          )}
+        </button>
+      </div>
 
       {/* Main Content Container */}
       <div className="mt-10 impulse-lesson" ref={contentRef}>

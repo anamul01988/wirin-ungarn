@@ -564,7 +564,13 @@ export function GetAusflugszielePages(first = 1000, after = null) {
       }
 
       # Get Listings CPT
-      listings(first: $first, after: $after) {
+      listings(
+        first: $first
+        after: $after
+        where: {
+          orderby: { field: DATE, order: ASC }
+        }
+      ) {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -965,7 +971,13 @@ export function GetKulinarischeSeelePages(first = 1000, after = null) {
       }
 
       # Get Listings CPT
-      recipes(first: $first, after: $after) {
+      recipes(
+        first: $first
+        after: $after
+        where: {
+          orderby: { field: DATE, order: ASC }
+        }
+      ) {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -1320,6 +1332,54 @@ export function GetAllImpulse(first = 220, after = null, level = "A1") {
 
   console.log("GetAllImpulse query executed with level:", level);
   return fetchPage(SEARCH_QUERY, { first, after });
+}
+
+// Function to get only impulse IDs for a specific level
+export function GetAllImpulseIds(level = "A1") {
+  const SEARCH_QUERY = `
+    query AllUimpulseMeta{
+      ungarischImpulses(
+        first: 220
+        where: {
+          stati: [PUBLISH, DRAFT]
+          metaQuery: {
+            metaArray: [
+              {
+                key: "impulse_level"
+                value: "${level}"
+                compare: EQUAL_TO
+              }
+            ]
+          }
+        }
+      ) {
+        nodes {
+          id
+        }
+      }
+    }
+  `;
+  return fetchPage(SEARCH_QUERY);
+}
+
+// Function to get a single impulse by ID using ID type
+export function GetImpulseById(id) {
+  const SEARCH_QUERY = `
+    query ungarischImpulse {
+      ungarischImpulse(id: "${id}", idType: ID) {
+        id
+        databaseId
+        title
+        content
+        date
+        impulsesFields {
+          impulseLevel
+          impulseCode
+        }
+      }
+    }
+  `;
+  return fetchPage(SEARCH_QUERY);
 }
 
 // Function to fetch all recipes by paginating through all pages
