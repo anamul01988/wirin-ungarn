@@ -26,6 +26,7 @@ export default async function LiedTexteDetailsPage({ params }) {
             postContent?.liedtexteContent || texteDetails.postContentLyrik
           }
           imageFeature={texteDetails.featuredImage}
+          isSinglePage={true}
           contentType="liedtexte"
           routePrefix="liedtexte"
           nextPostSlug={contentData.nextPostSlug}

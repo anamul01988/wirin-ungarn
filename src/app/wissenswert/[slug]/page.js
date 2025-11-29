@@ -18,6 +18,7 @@ export default async function WissenswertDynamicPage({ params }) {
             content={postContent || content || "<p>No content available.</p>"}
             imageFeature={imageUrl}
             contentType="wissenswert"
+            routePrefix="wissenswert"
             isSinglePage={true}
           />
         </div>
@@ -30,7 +31,11 @@ export default async function WissenswertDynamicPage({ params }) {
 
       return (
         <div className="min-h-screen flex items-center justify-center">
-          <DialogContent title={title} content={content} />
+          <DialogContent
+            title={title}
+            content={content}
+            // routeName={slug}
+          />
         </div>
       );
     }
