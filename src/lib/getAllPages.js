@@ -369,6 +369,7 @@ export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
   // Build the where clause conditionally
   const whereClause = categoryId
     ? `where: {
+        orderby: { field: MENU_ORDER, order: ASC }
         categoryId: $categoryId
         metaQuery: {
           relation: OR
@@ -387,6 +388,7 @@ export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
         }
       }`
     : `where: {
+        orderby: { field: MENU_ORDER, order: ASC }
         metaQuery: {
           relation: OR
           metaArray: [

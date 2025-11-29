@@ -5,6 +5,7 @@ import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
 import CustomPostForEvent from "../CustomPostForEvent";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 const VenastaltusngskalendarPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -115,7 +116,7 @@ const VenastaltusngskalendarPage = () => {
     async function fetchData() {
       try {
         const apiData = await GetListingsVeranstaltungen();
-        console.log("apiData 2221122222222111", apiData);
+        // console.log("apiData 2221122222222111", apiData);
         setCookieData(apiData);
         // Store all listings in state
         setAllListings(apiData.data.listings.edges || []);
@@ -154,21 +155,12 @@ const VenastaltusngskalendarPage = () => {
   console.log("ausflugsziele data: allListings:", allListings);
   return (
     <div className="mx-auto">
-      {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
-      <div
-        className="prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: content }}
-      /> */}
-      {/* Header */}
-      <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] flex items-center justify-center text-[#fff]">
-        <Typography
-          variant="h4"
-          className="archive__page_title font-bold text-center text-[#FFF]"
-        >
-          {title}
-        </Typography>
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/veranstaltungen.jpg"
+          imageAlt="veranstaltungen"
+        />
       </div>
-
       {/* Checkbox */}
       <div className="flex items-center justify-end mb-4">
         <Checkbox

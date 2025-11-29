@@ -235,7 +235,7 @@ const KulinarischeSeelePage = () => {
       </div> */}
       <div className="w-full relative flex items-center justify-center mb-3">
         <ArchivePageHeaderImage
-          imageUrl="/headlineImages/Kulinarische-Seele.jpg"
+          imageUrl="/headlineImages/kulinarische-Seele.jpg"
           imageAlt="kulinarische Seele"
         />
       </div>

@@ -156,7 +156,7 @@ const HungarianQuiz = () => {
       {/* <h1 style={styles.mainTitle}>KulTour Ungarn</h1> */}
       <div className="w-full relative flex items-center justify-center mb-3">
         <ArchivePageHeaderImage
-          imageUrl="/headlineImages/kultour-Ungarn.jpg"
+          imageUrl="/headlineImages/Kultour-Ungarn.jpg"
           imageAlt="kultour Ungarn"
         />
       </div>

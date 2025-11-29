@@ -234,9 +234,11 @@ export default function DialogContent({
                 />
               </div>
             )}
-            {routePrefix !== "einfach-lesen" && !isContactPage && (
-              <h1 className="single__page_title text-[#494158]">{title}</h1>
-            )}
+            {routePrefix !== "einfach-lesen" &&
+              !isContactPage &&
+              pathname !== "/wie-spaet-ist-es/" && (
+                <h1 className="single__page_title text-[#494158]">{title}</h1>
+              )}
             {contentType === "wissenswert" && content?.introText && (
               <div className="mb-6 py-4 rounded-lg">
                 <p
@@ -868,8 +870,8 @@ export default function DialogContent({
                 <div
                   dangerouslySetInnerHTML={{
                     __html:
-                      content.length > 203
-                        ? content.slice(0, 200) + "..."
+                      content.length > 503
+                        ? content.slice(0, 500) + "..."
                         : content,
                   }}
                 />

@@ -245,7 +245,7 @@ const TimetellingGame = () => {
           max-width: 400px;
           height: auto;
           border-radius: 50%;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         .options-section {

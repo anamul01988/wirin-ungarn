@@ -49,7 +49,7 @@ export default function AusDemLebenSinglePage({ params }) {
 
   return (
     <>
-      <HistoryTracker />
+      {/* <HistoryTracker /> */}
       <div className="min-h-screen flex items-center justify-center">
         <DialogContent
           title={contentData.title}
