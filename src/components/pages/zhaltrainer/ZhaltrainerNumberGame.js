@@ -1,180 +1,9 @@
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
+import { zahelentrainer_data } from "@/lib/utils/zahelentrainer_data";
 import React, { useState, useEffect, useRef } from "react";
 
-// Sample data - replace with full JSON
-const numbersData = {
-  10001: {
-    value: "1/2",
-    word_hu: "egy ketted",
-    kind: "Bruch",
-    difficulty: "1",
-    format: "0/0",
-    numbers: "12",
-    audio_file: "10001",
-  },
-  10002: {
-    value: "3/4",
-    word_hu: "háromnegyed",
-    kind: "Bruch",
-    difficulty: "1",
-    format: "0/0",
-    numbers: "34",
-    audio_file: "10002",
-  },
-  10003: {
-    value: "1/4",
-    word_hu: "egy negyed",
-    kind: "Bruch",
-    difficulty: "1",
-    format: "0/0",
-    numbers: "14",
-    audio_file: "10003",
-  },
-  10031: {
-    value: "0,1",
-    word_hu: "nulla egész egy tized",
-    kind: "Dezimalzahl",
-    difficulty: "1",
-    format: "0,0",
-    numbers: "01",
-    audio_file: "10031",
-  },
-  10032: {
-    value: "2,5",
-    word_hu: "kettő egész öt tized",
-    kind: "Dezimalzahl",
-    difficulty: "1",
-    format: "0,0",
-    numbers: "25",
-    audio_file: "10032",
-  },
-  10044: {
-    value: "7",
-    word_hu: "hét",
-    kind: "Grundzahl",
-    difficulty: "1",
-    format: "0",
-    numbers: "7",
-    audio_file: "10044",
-  },
-  10045: {
-    value: "13",
-    word_hu: "tizenhárom",
-    kind: "Grundzahl",
-    difficulty: "1",
-    format: "00",
-    numbers: "13",
-    audio_file: "10045",
-  },
-  10046: {
-    value: "99",
-    word_hu: "kilencvenkilenc",
-    kind: "Grundzahl",
-    difficulty: "1",
-    format: "00",
-    numbers: "99",
-    audio_file: "10046",
-  },
-  10120: {
-    value: "350 g",
-    word_hu: "háromszázötven gramm",
-    kind: "Maßeinheit",
-    difficulty: "1",
-    format: "000 g",
-    numbers: "350",
-    audio_file: "10120",
-  },
-  10163: {
-    value: "200 Ft",
-    word_hu: "kétszáz forint",
-    kind: "Preis",
-    difficulty: "1",
-    format: "000 Ft",
-    numbers: "200",
-    audio_file: "10163",
-  },
-  10184: {
-    value: "01:23",
-    word_hu: "egy óra huszonhárom perc",
-    kind: "Uhrzeit",
-    difficulty: "1",
-    format: "00:00",
-    numbers: "0123",
-    audio_file: "10184",
-  },
-  20077: {
-    value: "10,3",
-    word_hu: "tíz egész három tized",
-    kind: "Dezimalzahl",
-    difficulty: "2",
-    format: "00,0",
-    numbers: "103",
-    audio_file: "20077",
-  },
-  20136: {
-    value: "256",
-    word_hu: "kétszázötvenhat",
-    kind: "Grundzahl",
-    difficulty: "2",
-    format: "000",
-    numbers: "256",
-    audio_file: "20136",
-  },
-  20137: {
-    value: "512",
-    word_hu: "ötszáztizenkettő",
-    kind: "Grundzahl",
-    difficulty: "2",
-    format: "000",
-    numbers: "512",
-    audio_file: "20137",
-  },
-  20235: {
-    value: "12:34",
-    word_hu: "tizenkettő óra harmincnégy perc",
-    kind: "Uhrzeit",
-    difficulty: "2",
-    format: "00:00",
-    numbers: "1234",
-    audio_file: "20235",
-  },
-  30074: {
-    value: "210",
-    word_hu: "kétszáztíz",
-    kind: "Grundzahl",
-    difficulty: "3",
-    format: "000",
-    numbers: "210",
-    audio_file: "30074",
-  },
-  30075: {
-    value: "222",
-    word_hu: "kétszázhuszonkettő",
-    kind: "Grundzahl",
-    difficulty: "3",
-    format: "000",
-    numbers: "222",
-    audio_file: "30075",
-  },
-  40044: {
-    value: "10329",
-    word_hu: "tízezer-háromszázhuszonkilenc",
-    kind: "Grundzahl",
-    difficulty: "4",
-    format: "00000",
-    numbers: "10329",
-    audio_file: "40044",
-  },
-  40045: {
-    value: "12056",
-    word_hu: "tizenkétezer-ötvenhat",
-    kind: "Grundzahl",
-    difficulty: "4",
-    format: "00000",
-    numbers: "12056",
-    audio_file: "40045",
-  },
-};
+// Base audio path
+const BASE_AUDIO_PATH = "https://wir-in-ungarn.hu/wiucontent/uploads/hn_audio/";
 
 const HungarianNumberGame = () => {
   const [difficulty, setDifficulty] = useState(1);
@@ -190,8 +19,22 @@ const HungarianNumberGame = () => {
   const [usedIds, setUsedIds] = useState(new Set());
   const audioRef = useRef(null);
 
+  // Get audio URL based on speed selection
+  const getAudioUrl = (audioFile, speedValue) => {
+    const speedMap = {
+      65: { dir: "nt65", ext: 1 },
+      75: { dir: "nt75", ext: 2 },
+      85: { dir: "nt85", ext: 3 },
+      95: { dir: "nt95", ext: 4 },
+    };
+
+    const speedInfo = speedMap[speedValue];
+    return `${BASE_AUDIO_PATH}${speedInfo.dir}/${audioFile}_${speedInfo.ext}.mp3`;
+  };
+
+  // Get random question by difficulty
   const getRandomQuestion = (diff) => {
-    const filtered = Object.entries(numbersData).filter(
+    const filtered = Object.entries(zahelentrainer_data).filter(
       ([_, item]) => parseInt(item.difficulty) === diff
     );
 
@@ -200,6 +43,7 @@ const HungarianNumberGame = () => {
     const availableQuestions = filtered.filter(([id]) => !usedIds.has(id));
     const questionsToUse =
       availableQuestions.length > 0 ? availableQuestions : filtered;
+
     if (availableQuestions.length === 0) {
       setUsedIds(new Set());
     }
@@ -211,6 +55,7 @@ const HungarianNumberGame = () => {
     return question;
   };
 
+  // Update question
   const updatePlaySection = () => {
     const question = getRandomQuestion(difficulty);
     if (!question) return;
@@ -236,6 +81,7 @@ const HungarianNumberGame = () => {
     updatePlaySection();
   }, [difficulty]);
 
+  // Format number input
   const formatNumberInput = (format) => {
     if (!format) return [];
 
@@ -310,6 +156,7 @@ const HungarianNumberGame = () => {
     return elements;
   };
 
+  // Handle input change
   const handleInputChange = (index, value) => {
     if (!/^\d?$/.test(value)) return;
 
@@ -323,6 +170,7 @@ const HungarianNumberGame = () => {
     }
   };
 
+  // Handle backspace
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace") {
       if (!userInputs[index] && index > 0) {
@@ -340,22 +188,32 @@ const HungarianNumberGame = () => {
     }
   };
 
+  // Play audio
   const playAudio = () => {
-    if (!currentQuestion) return;
+    if (!currentQuestion || !audioRef.current) return;
 
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(currentQuestion.word_hu);
-      utterance.lang = "hu-HU";
-      utterance.rate = speed / 100;
-      window.speechSynthesis.speak(utterance);
-    }
+    const audioUrl = getAudioUrl(currentQuestion.audio_file, speed);
 
+    audioRef.current.src = audioUrl;
+    audioRef.current.load();
+
+    audioRef.current
+      .play()
+      .then(() => {
+        console.log("Playing audio:", audioUrl);
+      })
+      .catch((err) => {
+        console.error("Audio playback failed:", err);
+        console.log("Attempted URL:", audioUrl);
+      });
+
+    // Focus back to first empty input
     const emptyIndex = userInputs.findIndex((val) => !val);
     const focusIndex = emptyIndex >= 0 ? emptyIndex : 0;
     inputRefs[focusIndex]?.current?.focus();
   };
 
+  // Validate input
   const validateInput = () => {
     if (!currentQuestion) return;
 
@@ -382,6 +240,7 @@ const HungarianNumberGame = () => {
     }
   };
 
+  // Handle check button
   const handleCheck = () => {
     if (checkClickCount === 0) {
       validateInput();
@@ -399,6 +258,7 @@ const HungarianNumberGame = () => {
     }
   };
 
+  // Keyboard shortcuts
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {
       if (e.target.tagName === "INPUT") {
@@ -435,14 +295,16 @@ const HungarianNumberGame = () => {
 
   return (
     <div
-      style={{
-        // maxWidth: "900px",
-        margin: "0 auto",
-        // padding: "20px",
-        // fontFamily: "Arial, sans-serif",
-      }}
+      style={
+        {
+          // maxWidth: "900px",
+          // margin: "0 auto",
+          // padding: "20px",
+          // fontFamily: "Arial, sans-serif",
+        }
+      }
     >
-      <audio ref={audioRef} />
+      <audio ref={audioRef} preload="auto" />
 
       <div className="w-full relative flex items-center justify-center mb-3">
         <ArchivePageHeaderImage

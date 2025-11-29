@@ -5,6 +5,8 @@ import { Typography } from "@material-tailwind/react";
 import { useAuth } from "@/contexts/AuthContext";
 import { fetchPage } from "@/lib/getAllPages";
 import { InlineLoader } from "./Loader";
+import Image from "next/image";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 // Brand color used in the WIU wallet design
 
@@ -118,18 +120,12 @@ const CoinModal = () => {
       className="max-w-5xl mx-auto"
       style={{ fontSize: "14px" }} // base font size for remaining text
     >
-      <Typography
-        variant="h1"
-        className="mb-3"
-        style={{
-          fontSize: "30px",
-          fontWeight: 500,
-          color: "#494158",
-          fontFamily: "Open Sans, sans-serif",
-        }}
-      >
-        mein WIU-Geldbeutel
-      </Typography>
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/WIU-Muenzen.jpg"
+          imageAlt="WIU-Muenzen"
+        />
+      </div>
 
       <Typography
         variant="h4"

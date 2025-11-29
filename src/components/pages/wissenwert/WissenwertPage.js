@@ -180,7 +180,8 @@ const WissenswertPage = () => {
         edge.node.postContent?.shortTitle ||
         "",
       shortsPostContent: edge.node.postContent?.shortsPostContent || "",
-      introText: edge.node.postContent?.introText || edge.node.seo?.metaDesc || "",
+      introText:
+        edge.node.postContent?.introText || edge.node.seo?.metaDesc || "",
       image: edge.node.featuredImage?.node?.sourceUrl || null,
       imageAlt: edge.node.featuredImage?.node?.altText || edge.node.title,
       slug: edge.node.slug,
@@ -281,7 +282,7 @@ const WissenswertPage = () => {
   const currentPageInfo = isSearching ? searchPageInfo : pageInfo;
   const currentPageHistory = isSearching ? searchPageHistory : pageHistory;
 
-  console.log("currentPosts 2221122222222111", currentPosts);
+  // console.log("currentPosts 2221122222222111", currentPosts);
 
   return (
     <WissenwertPostGrid

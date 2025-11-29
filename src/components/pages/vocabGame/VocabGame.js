@@ -1,56 +1,101 @@
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
-import { Typography } from "@material-tailwind/react";
-import React, { useState, useEffect } from "react";
+import vocabularyData from "@/lib/utils/vocalGameData";
+import React, { useState, useEffect, useRef } from "react";
 
-const vocabularyData = {
-  Vásárlás: [
-    { hungarian: "üzlet", german: "Geschäft", audio_code: "EIW01" },
-    { hungarian: "áruház", german: "Kaufhaus", audio_code: "EIW02" },
-    {
-      hungarian: "bevásárlóközpont",
-      german: "Einkaufszentrum",
-      audio_code: "EIW03",
-    },
-    { hungarian: "szupermarket", german: "Supermarkt", audio_code: "EIW04" },
-    { hungarian: "piac", german: "Markt", audio_code: "EIW05" },
-    { hungarian: "pénztár", german: "Kasse", audio_code: "EIW06" },
-    {
-      hungarian: "Ma bevásárolok.",
-      german: "Heute kaufe ich ein.",
-      audio_code: "EIS01",
-    },
-  ],
-  Ruházat: [
-    { hungarian: "ruha", german: "Kleid", audio_code: "KLW01" },
-    { hungarian: "póló", german: "T-Shirt", audio_code: "KLW02" },
-    { hungarian: "ing", german: "Hemd", audio_code: "KLW03" },
-    { hungarian: "kabát", german: "Mantel", audio_code: "KLW06" },
-    { hungarian: "nadrág", german: "Hose", audio_code: "KLW07" },
-    { hungarian: "cipő", german: "Schuhe", audio_code: "KLW10" },
-  ],
-  "Étel és ital": [
-    { hungarian: "kenyér", german: "Brot", audio_code: "ESW01" },
-    { hungarian: "tej", german: "Milch", audio_code: "ESW02" },
-    { hungarian: "víz", german: "Wasser", audio_code: "ESW03" },
-    { hungarian: "kávé", german: "Kaffee", audio_code: "ESW04" },
-    { hungarian: "tea", german: "Tee", audio_code: "ESW05" },
-    { hungarian: "sör", german: "Bier", audio_code: "ESW06" },
-  ],
-  Számok: [
-    { hungarian: "egy", german: "eins", audio_code: "ZAW01" },
-    { hungarian: "kettő", german: "zwei", audio_code: "ZAW02" },
-    { hungarian: "három", german: "drei", audio_code: "ZAW03" },
-    { hungarian: "négy", german: "vier", audio_code: "ZAW04" },
-    { hungarian: "öt", german: "fünf", audio_code: "ZAW05" },
-    { hungarian: "hat", german: "sechs", audio_code: "ZAW06" },
-  ],
-};
+const themes = [
+  { value: "Vásárlás", label: "Vásárlás | Einkaufen" },
+  { value: "Ítalok", label: "Ítalok | Getränke" },
+  {
+    value: "Gyümölcs és zöldség",
+    label: "Gyümölcs és zöldség | Obst und Gemüse",
+  },
+  { value: "Gabonatermékek", label: "Gabonatermékek | Getreideprodukte" },
+  { value: "Hús és hal", label: "Hús és hal | Fleisch und Fisch" },
+  {
+    value: "Tej és tojástermékek",
+    label: "Tej és tojástermékek | Milch- und Ei-Produkte",
+  },
+  {
+    value: "Édességek és rágcsálnivalók",
+    label: "Édességek és rágcsálnivalók | Süßigkeiten und Snacks",
+  },
+  {
+    value: "Fűszerek és fűszernövények",
+    label: "Fűszerek és fűszernövények | Gewürze und Kräuter",
+  },
+  {
+    value: "A terített asztal",
+    label: "A terített asztal | Der gedeckte Tisch",
+  },
+  {
+    value: "Konyhai berendezések és eszközök",
+    label: "Konyhai berendezések és eszközök | Küchengeräte und -utensilien",
+  },
+  { value: "Család", label: "Család | Familie" },
+  { value: "Testrészek", label: "Testrészek | Körperteile" },
+  { value: "Érzelmek", label: "Érzelmek | Gefühle" },
+  { value: "Szakmák", label: "Szakmák | Berufe" },
+  { value: "Iskola", label: "Iskola | Schule" },
+  { value: "Ruházat", label: "Ruházat | Kleidung" },
+  {
+    value: "Épületek és helyiségek",
+    label: "Épületek és helyiségek | Gebäude und Räume",
+  },
+  { value: "Bútorok", label: "Bútorok | Möbel" },
+  { value: "Fürdőszoba", label: "Fürdőszoba | Badezimmer" },
+  { value: "Járművek", label: "Járművek | Fahrzeuge" },
+  { value: "Tömegközlekedés", label: "Tömegközlekedés | öffentlicher Verkehr" },
+  {
+    value: "Közlekedési táblák",
+    label: "Közlekedési táblák | Verkehrszeichen",
+  },
+  { value: "Országok", label: "Országok | Länder" },
+  {
+    value: "Hatóságok és intézmények",
+    label: "Hatóságok és intézmények | Behörden und Institutionen",
+  },
+  { value: "Banki ügyek", label: "Banki ügyek | Bankwesen" },
+  { value: "Elmegyünk szórakozni", label: "Elmegyünk szórakozni | Ausgehen" },
+  { value: "Nyaralás", label: "Nyaralás | Urlaub" },
+  {
+    value: "Ünnepek és fesztiválok",
+    label: "Ünnepek és fesztiválok | Feiertage und Feste",
+  },
+  { value: "Sport", label: "Sport | Sport" },
+  {
+    value: "Szabadidős tevékenységek",
+    label: "Szabadidős tevékenységek | Freizeitbeschäftigungen",
+  },
+  { value: "Hobbik", label: "Hobbik | Hobbys" },
+  { value: "Zene", label: "Zene | Musik" },
+  { value: "Művészet", label: "Művészet | Kunst" },
+  { value: "Természet", label: "Természet | Natur" },
+  { value: "Tájképek", label: "Tájképek | Landschaften" },
+  { value: "Időjárás", label: "Időjárás | Wetter" },
+  { value: "Növények", label: "Növények | Pflanzen" },
+  { value: "Állatok", label: "Állatok | Tiere" },
+  { value: "Kert", label: "Kert | Garten" },
+  { value: "Számítógép", label: "Számítógép | Computer" },
+  { value: "Mobiltelefon", label: "Mobiltelefon | Handy" },
+  {
+    value: "Szórakoztató elektronika",
+    label: "Szórakoztató elektronika | Unterhaltungselektronik",
+  },
+  {
+    value: "Szerszámok és gépek",
+    label: "Szerszámok és gépek | Werkzeug und Maschinen",
+  },
+];
+
+const AUDIO_BASE_URL =
+  "https://wir-in-ungarn.hu/wiuplugins/hungarian-vocab-game/assets/audio/";
 
 function VocabGame() {
   const [instructionsOpen, setInstructionsOpen] = useState(false);
-  const [theme, setTheme] = useState("Vásárlás");
+  const [theme, setTheme] = useState("Ruházat");
   const [cards, setCards] = useState([]);
   const [revealed, setRevealed] = useState(0);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     initGame(theme);
@@ -58,9 +103,44 @@ function VocabGame() {
 
   function initGame(selectedTheme) {
     const vocab = vocabularyData[selectedTheme] || [];
+
+    if (vocab.length === 0) {
+      setCards([]);
+      setRevealed(0);
+      return;
+    }
+
+    // Separate words and sentences based on audio_code
+    let wordPairs = [];
+    let sentencePairs = [];
+
+    vocab.forEach((pair) => {
+      const audioCode = pair.audio_code || "";
+      const lastThree = audioCode.slice(-3).toLowerCase();
+
+      if (lastThree.includes("w")) {
+        wordPairs.push(pair);
+      } else if (lastThree.includes("s")) {
+        sentencePairs.push(pair);
+      }
+    });
+
+    // Shuffle word pairs
+    if (wordPairs.length > 0) {
+      wordPairs = shuffleArray(wordPairs);
+    }
+
+    // Shuffle sentence pairs but keep them at the bottom
+    if (sentencePairs.length > 0) {
+      sentencePairs = shuffleArray(sentencePairs);
+    }
+
+    // Combine lists with word pairs first, then sentence pairs
+    const sortedVocabulary = [...wordPairs, ...sentencePairs];
+
     const newCards = [];
 
-    vocab.forEach((pair, i) => {
+    sortedVocabulary.forEach((pair, i) => {
       newCards.push({
         id: `h${i}`,
         text: pair.hungarian,
@@ -81,17 +161,19 @@ function VocabGame() {
       });
     });
 
-    // Blur random cards
+    // Blur exactly 20 random pairs (one card from each pair)
     const pairsBlurred = new Set();
     let blurCount = 0;
-    const maxBlur = Math.min(10, vocab.length);
+    const maxBlur = Math.min(20, sortedVocabulary.length);
 
     while (blurCount < maxBlur) {
-      const idx = Math.floor(Math.random() * newCards.length);
-      const card = newCards[idx];
-      if (!pairsBlurred.has(card.pair)) {
-        newCards[idx].blur = true;
-        pairsBlurred.add(card.pair);
+      const pairId = Math.floor(Math.random() * sortedVocabulary.length);
+
+      if (!pairsBlurred.has(pairId)) {
+        // Randomly choose Hungarian or German card from this pair
+        const cardIndex = Math.random() < 0.5 ? pairId * 2 : pairId * 2 + 1;
+        newCards[cardIndex].blur = true;
+        pairsBlurred.add(pairId);
         blurCount++;
       }
     }
@@ -100,18 +182,42 @@ function VocabGame() {
     setRevealed(0);
   }
 
+  function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
+  function playAudio(audioCode) {
+    if (!audioCode) return;
+
+    const audioUrl = `${AUDIO_BASE_URL}${audioCode}.ogg`;
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+
+    const audio = new Audio(audioUrl);
+    audioRef.current = audio;
+
+    audio.play().catch((error) => {
+      console.error("Audio playback failed:", error);
+    });
+  }
+
   function handleClick(clickedId) {
     const idx = cards.findIndex((c) => c.id === clickedId);
     if (idx === -1) return;
 
     const card = cards[idx];
 
+    // Play audio for Hungarian cards
     if (card.lang === "hun" && card.audio) {
-      console.log(`🔊 Audio: ${card.audio}.ogg`);
-      // Simulated audio playback
-      const audio = new Audio();
-      audio.src = `/assets/audio/${card.audio}.ogg`;
-      audio.play().catch((err) => console.log("Audio playback not available"));
+      playAudio(card.audio);
     }
 
     if (!card.blur) return;
@@ -120,7 +226,6 @@ function VocabGame() {
     updated[idx].blur = false;
     updated[idx].flash = true;
 
-    // Find another to blur
     const available = updated
       .map((c, i) => ({ c, i }))
       .filter(({ c }) => !c.blur && c.pair !== card.pair);
@@ -144,17 +249,10 @@ function VocabGame() {
   }
 
   const blurredCount = cards.filter((c) => c.blur).length;
+  const hasVocabulary = cards.length > 0;
 
   return (
     <div style={styles.container}>
-      {/* <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] text-[#fff] flex items-center justify-center">
-        <Typography
-          variant="h4"
-          className="archive__page_title font-bold text-center text-[#FFF]"
-        >
-          Vokabel-Entdecker
-        </Typography>
-      </div> */}
       <div className="w-full relative flex items-center justify-center mb-3">
         <ArchivePageHeaderImage
           imageUrl="/headlineImages/Vokabelentdecker.jpg"
@@ -176,10 +274,20 @@ function VocabGame() {
         {instructionsOpen && (
           <div style={styles.instructContent}>
             <p>
-              Klicke auf unscharfe Karten, um sie aufzudecken. Dabei wird eine
-              andere Karte unscharf. Ungarische Karten spielen Audio ab (siehe
-              Konsole).
+              In diesem Spiel kannst du ganz einfach neue Vokabeln lernen! Wähle
+              zunächst ein Thema aus dem Dropdown-Menü, z. B. "Obst und Gemüse".
+              Auf der Oberfläche siehst du Vokabelkarten in zwei Sprachen, wobei
+              einige Wörter unscharf dargestellt sind. Klicke auf eine solche
+              Karte, um das Wort aufzudecken – dabei wird eine andere Karte
+              unscharf.
             </p>
+            <p>
+              Besonders praktisch: Wenn du auf die ungarischen Karten klickst,
+              hörst du die richtige Aussprache der Wörter. Versuche, dir die
+              Übersetzungen zu merken, bevor du sie aufdeckst, und trainiere so
+              dein Gedächtnis und deine Sprachkenntnisse.
+            </p>
+            <p>Viel Spaß beim Lernen!</p>
           </div>
         )}
       </div>
@@ -191,40 +299,59 @@ function VocabGame() {
           onChange={(e) => setTheme(e.target.value)}
           style={styles.select}
         >
-          <option value="Vásárlás">Vásárlás | Einkaufen</option>
-          <option value="Ruházat">Ruházat | Kleidung</option>
-          <option value="Étel és ital">Étel és ital | Essen und Trinken</option>
-          <option value="Számok">Számok | Zahlen</option>
+          {themes.map((t) => (
+            <option key={t.value} value={t.value}>
+              {t.label}
+            </option>
+          ))}
         </select>
       </div>
 
-      <div style={styles.grid}>
-        {cards.map((card) => (
-          <div
-            key={card.id}
-            onClick={() => handleClick(card.id)}
-            style={{
-              ...styles.card,
-              ...(card.lang === "hun" ? styles.cardHun : styles.cardGer),
-              ...(card.flash ? styles.cardFlash : {}),
-            }}
-          >
-            <span
-              style={{
-                filter: card.blur ? "blur(5px)" : "none",
-                userSelect: card.blur ? "none" : "auto",
-              }}
-            >
-              {card.text}
-            </span>
-          </div>
-        ))}
-      </div>
+      {!hasVocabulary && (
+        <div style={styles.noDataMessage}>
+          <p>
+            Vocabulary data for this theme is not yet available. Please select
+            another theme.
+          </p>
+          <p style={styles.noDataSubtext}>
+            Die Vokabeldaten für dieses Thema sind noch nicht verfügbar. Bitte
+            wähle ein anderes Thema.
+          </p>
+        </div>
+      )}
 
-      <div style={styles.stats}>
-        <strong style={styles.statsNum}>{revealed}</strong> revealed |
-        <strong style={styles.statsNum}>{blurredCount}</strong> remaining
-      </div>
+      {hasVocabulary && (
+        <>
+          <div style={styles.grid}>
+            {cards.map((card) => (
+              <div
+                key={card.id}
+                onClick={() => handleClick(card.id)}
+                style={{
+                  ...styles.card,
+                  ...(card.lang === "hun" ? styles.cardHun : styles.cardGer),
+                  ...(card.flash ? styles.cardFlash : {}),
+                }}
+              >
+                <span
+                  style={{
+                    filter: card.blur ? "blur(5px)" : "none",
+                    userSelect: card.blur ? "none" : "auto",
+                  }}
+                >
+                  {card.text}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div style={styles.stats}>
+            Revealed words: <strong style={styles.statsNum}>{revealed}</strong>{" "}
+            | Words left to reveal:{" "}
+            <strong style={styles.statsNum}>{blurredCount}</strong>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -250,6 +377,7 @@ const styles = {
   },
   instructTitle: {
     fontWeight: "bold",
+    margin: 0,
   },
   instructToggle: {
     fontSize: "14px",
@@ -272,25 +400,39 @@ const styles = {
     fontSize: "16px",
     borderRadius: "4px",
     border: "1px solid #ddd",
-    minWidth: "280px",
+    minWidth: "300px",
+  },
+  noDataMessage: {
+    textAlign: "center",
+    padding: "40px 20px",
+    backgroundColor: "#fff3cd",
+    borderRadius: "8px",
+    border: "2px solid #ffc107",
+    marginTop: "20px",
+  },
+  noDataSubtext: {
+    color: "#666",
+    fontSize: "14px",
+    marginTop: "10px",
   },
   grid: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    gap: "12px",
+    gap: "10px",
     marginBottom: "20px",
   },
   card: {
-    padding: "18px",
+    padding: "15px",
     textAlign: "center",
-    borderRadius: "6px",
+    borderRadius: "5px",
     cursor: "pointer",
-    minHeight: "50px",
+    minHeight: "40px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     transition: "all 0.3s",
-    fontSize: "15px",
+    fontSize: "14px",
+    position: "relative",
   },
   cardHun: {
     border: "2px solid #436f4d",
@@ -313,7 +455,7 @@ const styles = {
   },
   statsNum: {
     color: "#436f4d",
-    margin: "0 8px",
+    margin: "0 5px",
   },
 };
 

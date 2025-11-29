@@ -128,7 +128,6 @@ const WissenwertPost = ({
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  
 
   const handleClick = () => {
     dispatch(setRoutePrefix(routePrefix));
@@ -169,7 +168,9 @@ const WissenwertPost = ({
           {title}
         </h2>
         <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
-          {badge === "SHORTS" ? truncateText(shortsPostContent, 15) : truncateText(introText, 25)}
+          {badge === "SHORTS"
+            ? truncateText(shortsPostContent, 15)
+            : truncateText(introText, 25)}
         </p>
         <button className="text-orange-500 text-sm font-semibold hover:text-orange-600 transition-colors">
           Weiterlesen
@@ -219,7 +220,7 @@ const WissenwertPostGrid = ({
     );
   }, []);
 
-  console.log("2222222222222222", posts);
+  // console.log("2222222222222222", posts);
 
   // Update filtered posts when posts change (filtering is handled at API level)
   useEffect(() => {
