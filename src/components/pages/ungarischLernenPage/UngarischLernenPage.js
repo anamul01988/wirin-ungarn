@@ -204,7 +204,7 @@ const UngarischLernenPage = () => {
               description={edge.node.postContentSprachlektion?.postContent}
               onlyHeadings={false}
               slug={edge.node.slug}
-              routePrefix="sprachkurs"
+              routePrefix="ungarisch-lernen"
             />
             {/* Divider except last */}
             {idx < fakeData.posts.edges.length - 1 && (

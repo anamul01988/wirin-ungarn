@@ -19,6 +19,7 @@ export default function LiedTexteDialogContent({
   prevPostSlug,
   nextPostTitle,
   prevPostTitle,
+  isSinglePage,
   //   imageFeature = "",
 }) {
   const [open, setOpen] = useState(true);
@@ -72,7 +73,9 @@ export default function LiedTexteDialogContent({
         handler={handleOpen}
         size="lg"
         dismiss={{ enabled: false }}
-        className="dialog-liedtexte-content bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className={`dialog-liedtexte-content ${
+          isSinglePage ? `${routePrefix}_single-page` : "archive__page"
+        } bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col`}
       >
         {/* Floating Cross + Love Icons */}
         {open && (

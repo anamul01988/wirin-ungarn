@@ -150,17 +150,9 @@ export default function DialogContent({
   const hasContactForm =
     typeof content === "string" && content?.includes("wpcf7-form");
   const isContactPage = title && title.toLowerCase().includes("kontakt");
-  console.log("isContactPage", isContactPage, routePrefix);
+  console.log("isContactPage", isContactPage, isSinglePage, routePrefix);
 
   // Generate dynamic route-based className from pathname
-  const getRouteClassName = () => {
-    if (!pathname) return "";
-    // Remove leading/trailing slashes and convert to kebab-case
-    const routePath = pathname.replace(/^\/|\/$/g, "").replace(/\//g, "-");
-    return routePath ? `dialog-route-${routePath}` : "";
-  };
-
-  const routeClassName = getRouteClassName();
 
   return (
     <>
@@ -169,7 +161,7 @@ export default function DialogContent({
         handler={handleOpen}
         size="lg"
         dismiss={{ enabled: false }}
-        className={`dialog-content ${routeClassName} ${
+        className={`dialog-content ${
           isSinglePage ? `${routePrefix}_single-page` : "archive__page"
         } bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col`.trim()}
       >

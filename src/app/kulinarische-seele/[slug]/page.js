@@ -26,6 +26,8 @@ export default async function kulinarischeSinglePage({ params }) {
             content={postContentRecipe}
             imageFeature={imageUrl}
             contentType="kulinarische-seele"
+            isSinglePage={true}
+            routePrefix="kulinarische-seele"
           />
         </div>
       );

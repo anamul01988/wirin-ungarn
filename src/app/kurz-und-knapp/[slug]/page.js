@@ -26,6 +26,8 @@ export default async function kulinarischeSinglePage({ params }) {
             content={content}
             imageFeature={imageUrl}
             contentType="kurz-und-knapp"
+            routePrefix="kurz-und-knapp"
+            isSinglePage={true}
           />
         </div>
       );

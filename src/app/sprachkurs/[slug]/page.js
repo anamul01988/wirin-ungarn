@@ -38,6 +38,7 @@ export default async function SprachkursDetailsPage({ params }) {
               sprachkursDetails.title
             }
             date={sprachkursDetails.date}
+            isSinglePage={true}
             contentType="sprachkurs"
             routePrefix="sprachkurs"
             postContent={postContent}

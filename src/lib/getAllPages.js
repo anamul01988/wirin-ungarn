@@ -370,7 +370,7 @@ export function GetWessenwertPages(first = 5, after = null, categoryId = null) {
   const whereClause = categoryId
     ? `where: {
         orderby: { field: MENU_ORDER, order: ASC }
-        categoryId: $categoryId
+        // categoryId: $categoryId
         metaQuery: {
           relation: OR
           metaArray: [

@@ -23,6 +23,7 @@ export default async function EinfachDynamicPage({ params }) {
           title={postDetails.title}
           content={postDetails.content}
           imageFeature={postDetails.featuredImage?.node?.sourceUrl || null}
+          isSinglePage={true}
           contentType="einfach-lesen"
           routePrefix="einfach-lesen"
           nextPostSlug={contentData.nextPostSlug}
