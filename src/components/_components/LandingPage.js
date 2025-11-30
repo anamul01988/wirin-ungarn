@@ -2641,19 +2641,40 @@ const LandingPage = () => {
                       <div key={columnIndex} className="menu-column">
                         {column.map((menuItem, j) => (
                           <li key={j} className="menu-item">
-                            <button
-                              type="button"
+                            <a
+                              href={
+                                menuItem.menuRoute === "insider_custom"
+                                  ? "#"
+                                  : menuItem.menuRoute
+                              }
                               onClick={(e) => {
                                 e.stopPropagation();
                                 if (menuItem.menuRoute === "insider_custom") {
+                                  e.preventDefault();
                                   routerServerGlobal();
                                 } else {
-                                  route.push(menuItem.menuRoute);
+                                  // Allow Ctrl/Cmd+click and middle-click to open in new tab
+                                  // Only prevent default for regular left-click
+                                  if (
+                                    e.button === 0 &&
+                                    !e.ctrlKey &&
+                                    !e.metaKey &&
+                                    !e.shiftKey
+                                  ) {
+                                    e.preventDefault();
+                                    route.push(menuItem.menuRoute);
+                                  }
+                                  // For right-click, middle-click, or Ctrl/Cmd+click, let browser handle it
                                 }
+                              }}
+                              style={{
+                                cursor: "pointer",
+                                textDecoration: "none",
+                                display: "block",
                               }}
                             >
                               {menuItem.menuName}
-                            </button>
+                            </a>
                           </li>
                         ))}
                       </div>
