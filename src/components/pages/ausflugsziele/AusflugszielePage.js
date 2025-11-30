@@ -369,11 +369,7 @@ const AusflugszielePage = () => {
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
-          <>
-            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt{" "}
-            {totalListings} Beiträge - Angezeigt werden{" "}
-            {displayListings?.length || 0} Beiträge.
-          </>
+          <></>
         ) : (
           <>
             Seite {activePage} von {totalPages} - Insgesamt {totalListings}{" "}
@@ -393,15 +389,7 @@ const AusflugszielePage = () => {
           <>
             {isSearching &&
             (!searchResults?.edges || searchResults.edges.length === 0) ? (
-              <div className="text-center py-8">
-                <Typography variant="h6" color="gray" className="mb-4">
-                  Keine Suchergebnisse gefunden
-                </Typography>
-                <Typography variant="paragraph" color="gray">
-                  Versuchen Sie es mit anderen Suchbegriffen oder schauen Sie
-                  sich alle verfügbaren Artikel an.
-                </Typography>
-              </div>
+              <div className="text-center py-8"></div>
             ) : (
               displayListings?.map((edge, idx) => {
                 return (

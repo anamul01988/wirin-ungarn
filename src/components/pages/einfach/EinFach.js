@@ -405,11 +405,7 @@ const EinFachPage = () => {
       {/* Footer info */}
       <Typography variant="small" color="gray" className="mt-4">
         {isSearching ? (
-          <>
-            Suchergebnisse - Seite {activePage} von {totalPages} - Insgesamt{" "}
-            {totalPosts} Beiträge - Angezeigt werden {displayPosts?.length || 0}{" "}
-            Beiträge.
-          </>
+          <></>
         ) : (
           <>
             Seite {activePage} von {totalPages} - Insgesamt {totalPosts}{" "}
