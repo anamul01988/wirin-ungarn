@@ -75,7 +75,29 @@ const CustomPost = ({
   const route = useRouter();
   const dispatch = useDispatch();
 
-  const handleClick = (slug) => {
+  // Helper function to get the href based on routePrefix
+  const getHref = (slug) => {
+    if (routePrefix === "kategorien") return `/${slug}`;
+    if (routePrefix === "sprachkurs") return `/${routePrefix}/${slug}`;
+    if (routePrefix === "einfach-lesen") return `/${routePrefix}/${slug}`;
+    if (routePrefix === "liedtexte") return `/${routePrefix}/${slug}`;
+    if (routePrefix === "kreuzwortraetsel") return `/${routePrefix}/${slug}`;
+    if (routePrefix === "kulinarische-seele") return `/${routePrefix}/${slug}`;
+    return `/${routePrefix}/${slug}`; // default fallback
+  };
+
+  const handleClick = (e, slug) => {
+    // Allow default behavior for Ctrl/Cmd+click (open in new tab)
+    // Right-click is handled by browser context menu automatically
+    if (e.ctrlKey || e.metaKey) {
+      return;
+    }
+
+    // Prevent default for normal left-click to use client-side navigation
+    e.preventDefault();
+
+    dispatch(setRoutePrefix(routePrefix));
+
     if (routePrefix === "kategorien") route.push(`/${slug}`);
     if (routePrefix === "sprachkurs") route.push(`/${routePrefix}/${slug}`);
     if (routePrefix === "einfach-lesen") route.push(`/${routePrefix}/${slug}`);
@@ -84,8 +106,6 @@ const CustomPost = ({
       route.push(`/${routePrefix}/${slug}`);
     if (routePrefix === "kulinarische-seele")
       route.push(`/${routePrefix}/${slug}`);
-
-    dispatch(setRoutePrefix(routePrefix));
   };
 
   // Description renderer (unchanged)
@@ -219,14 +239,13 @@ const CustomPost = ({
     <div className="flex flex-col md:flex-row gap-4 pb-6">
       {onlyHeadings ? (
         <div className="flex-1">
-          <Typography
-            variant="h6"
-            color="blue-gray"
-            className="font-semibold mb-2 cursor-pointer"
-            onClick={() => handleClick(slug)}
+          <a
+            href={getHref(slug)}
+            className="font-semibold mb-2 cursor-pointer text-blue-gray no-underline block"
+            onClick={(e) => handleClick(e, slug)}
           >
             {title}
-          </Typography>
+          </a>
         </div>
       ) : (
         <>
@@ -235,15 +254,14 @@ const CustomPost = ({
 
           {/* ✅ Right Content */}
           <div className="flex-1">
-            <Typography
-              variant="h6"
-              color="blue-gray"
-              className="font-normal flex justify-between items-center mb-2 cursor-pointer text-[24px] text-[#494158]"
-              onClick={() => handleClick(slug)}
+            <a
+              href={getHref(slug)}
+              className="font-normal flex justify-between items-center mb-2 cursor-pointer text-[24px] text-[#494158] no-underline"
+              onClick={(e) => handleClick(e, slug)}
             >
-              {title}
+              <span>{title}</span>
               <span className="text-[14px] text-[#56646F]">{subcategory}</span>
-            </Typography>
+            </a>
 
             {renderDescription()}
           </div>

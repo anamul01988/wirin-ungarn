@@ -129,7 +129,15 @@ const WissenwertPost = ({
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    // Allow default behavior for Ctrl/Cmd+click (open in new tab)
+    // Right-click is handled by browser context menu automatically
+    if (e.ctrlKey || e.metaKey) {
+      return;
+    }
+
+    // Prevent default for normal left-click to use client-side navigation
+    e.preventDefault();
     dispatch(setRoutePrefix(routePrefix));
     setTimeout(() => {
       router.push(`/${routePrefix}/${slug}`);
@@ -137,8 +145,9 @@ const WissenwertPost = ({
   };
 
   return (
-    <div
-      className="wissenwert-post-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
+    <a
+      href={`/${routePrefix}/${slug}`}
+      className="wissenwert-post-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 block no-underline"
       onClick={handleClick}
       data-category={category}
     >
@@ -172,11 +181,11 @@ const WissenwertPost = ({
             ? truncateText(shortsPostContent, 15)
             : truncateText(introText, 25)}
         </p>
-        <button className="text-orange-500 text-sm font-semibold hover:text-orange-600 transition-colors">
+        <span className="text-orange-500 text-sm font-semibold hover:text-orange-600 transition-colors">
           Weiterlesen
-        </button>
+        </span>
       </div>
-    </div>
+    </a>
   );
 };
 
