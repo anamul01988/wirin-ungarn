@@ -414,10 +414,6 @@ const KulinarischeSeelePage = () => {
                       slug={edge.node.slug}
                       routePrefix="kulinarische-seele"
                     />
-                    {/* Divider except last */}
-                    {!onlyHeadings && idx < displayRecipes?.length - 1 && (
-                      <hr className="my-6 border-gray-300" />
-                    )}
                   </div>
                 );
               })

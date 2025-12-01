@@ -236,7 +236,11 @@ const CustomPost = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 pb-6">
+    <div
+      className={`flex flex-col md:flex-row gap-4 ${
+        routePrefix === "kulinarische-seele" ? "pb-0" : "pb-6"
+      }`}
+    >
       {onlyHeadings ? (
         <div className="flex-1">
           <a
