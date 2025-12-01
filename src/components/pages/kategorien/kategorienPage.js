@@ -5,6 +5,7 @@ import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
 import Image from "next/image";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 const KategorienPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -74,33 +75,12 @@ const KategorienPage = () => {
 
   return (
     <div className="mx-auto">
-      {/* <h1 className="text-3xl font-bold mb-6">{title}</h1>
-      <div
-        className="prose prose-lg max-w-none"
-        dangerouslySetInnerHTML={{ __html: content }}
-      /> */}
-      {/* Header */}
-      <div className="w-full relative flex items-center justify-center mt-0 mb-5">
-        <Image
-          src="/kategorian.jpeg"
-          alt={title || "Kategorien"}
-          width={500}
-          height={100}
-          className="object-contain"
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Kategorien.jpg"
+          imageAlt="Kategorien"
         />
       </div>
-
-      {/* Checkbox */}
-      {/* <div className="flex items-center justify-end mb-4">
-        <Checkbox
-          color="red"
-          checked={onlyHeadings}
-          onChange={(e) => setOnlyHeadings(e.target.checked)}
-          label="ausschließlich Überschriften anzeigen"
-          crossOrigin={undefined} // needed for React strict mode
-        />
-      </div> */}
-
       {/* Description */}
       <Typography
         variant="paragraph"

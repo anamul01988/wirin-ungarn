@@ -60,26 +60,9 @@ export default function Wissenswert() {
         )}
 
         <DialogBody className="overflow-auto custom__modal_area flex-1 border-0 mr-1 p-[30px]">
-          {/* Breadcrumb */}
-          {/* <div className="mb-2 px-0 pt-0">
-            <Breadcrumb className="text-sm" />
-          </div> */}
-
-          {/* <div className=""> */}
           <WissenswertPage />
-          {/* </div> */}
         </DialogBody>
       </Dialog>
-      <div className="min-h-screen flex items-center justify-center">
-        {/* <Button
-          onClick={navigateToHome}
-          color="blue"
-          size="lg"
-          className="px-6 py-3 capitalize"
-        >
-          Navigate to Home
-        </Button> */}
-      </div>
     </>
   );
 }

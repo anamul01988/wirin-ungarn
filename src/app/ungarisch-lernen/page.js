@@ -53,16 +53,6 @@ export default function UngarischLenenModal() {
           <UngarischLernenPage />
         </DialogBody>
       </Dialog>
-      <div className="min-h-screen flex items-center justify-center">
-               {/* <Button
-          onClick={navigateToHome}
-          color="blue"
-          size="lg"
-          className="px-6 py-3 capitalize"
-        >
-          Navigate to Home
-        </Button> */}
-      </div>
     </>
   );
 }

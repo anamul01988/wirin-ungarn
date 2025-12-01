@@ -8,6 +8,7 @@ import { setRoutePrefix } from "@/lib/store/routeSlice";
 import algoliasearch from "algoliasearch/lite";
 import Image from "next/image";
 import "./WissenwertPost.css";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
 // Algolia Search Class for Wissenswert
 class WissenwertAlgoliaSearch {
@@ -318,18 +319,9 @@ const WissenwertPostGrid = ({
       {/* Header */}
       {/* <div className="mb-4 rounded-[18px] h-[50px] bg-[#CC2233] flex items-center justify-center"> */}
       <div className="w-full relative flex items-center justify-center mb-3">
-        {/* <Image
-          src="/wessenwert.jpeg"
-          alt={title || "Wissenwert"}
-          fill
-          className="w-full h-auto object-contain"
-        /> */}
-        <Image
-          src="/wessenwert.jpeg"
-          alt={title || "Wissenwert"}
-          width={500}
-          height={100}
-          className="object-contain"
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Wissenswertes.jpg"
+          imageAlt="Wissenwertes"
         />
       </div>
       {/* </div> */}

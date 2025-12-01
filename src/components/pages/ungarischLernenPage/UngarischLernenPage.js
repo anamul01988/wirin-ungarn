@@ -2,6 +2,7 @@
 import React from "react";
 import { Typography } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
+import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 const UngarischLernenPage = () => {
   // Fake data for Hungarian learning content
   const fakeData = {
@@ -171,13 +172,11 @@ const UngarischLernenPage = () => {
   return (
     <div className="mx-auto">
       {/* Header */}
-      <div className="bg-[#CC2233] mb-4 rounded-[18px] h-[50px] bg-[#D02C3C] flex items-center justify-center text-[#fff]">
-        <Typography
-          variant="h4"
-          className="archive__page_title font-bold text-center text-[#FFF]"
-        >
-          {fakeData.title}
-        </Typography>
+      <div className="w-full relative flex items-center justify-center mb-3">
+        <ArchivePageHeaderImage
+          imageUrl="/headlineImages/Ungarisch-lernen.jpg"
+          imageAlt="UngarischLernen"
+        />
       </div>
 
       {/* Description */}
