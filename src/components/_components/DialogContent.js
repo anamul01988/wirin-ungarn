@@ -189,7 +189,13 @@ export default function DialogContent({
         />
 
         {/* Dialog Body */}
-        <DialogBody className="overflow-auto custom__modal_area flex-1 mr-1 p-[30px]">
+        <DialogBody
+          className={`overflow-auto ${
+            routePrefix === "kurz-und-knapp"
+              ? "custom__modal_area_special"
+              : "custom__modal_area"
+          } flex-1 mr-1 p-[30px]`}
+        >
           <div className="single__page-content">
             {/* Breadcrumb */}
             {title &&
@@ -765,8 +771,8 @@ export default function DialogContent({
                   className=" text-base leading-relaxed text-[#56646f] text-left mb-2"
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
-                <div className="flex gap-5 justify-end">
-                  <div className="flex gap-3 flex-col">
+                <div className="flex gap-5 justify-end mt-6">
+                  <div className="flex gap-3">
                     <button
                       onClick={() => route.push("/kurz-und-knapp/")}
                       className="bg-[#436f4d] hover:bg-[#5a7a5e] text-white text-sm font-medium px-4 py-2 rounded transition-colors"
