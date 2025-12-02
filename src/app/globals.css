@@ -1551,7 +1551,7 @@ div[class*="Toastify"] {
 .custom__modal_area_special {
   /* scrollbar-width: thin; */
   scrollbar-gutter: stable;
-  padding: 60px !important;
+  padding: 20px 60px;
   /* padding-right: 36px !important; Reserve space for scrollbar (30px + 6px) to prevent overflow */
   overflow: auto;
   overflow-x: hidden;

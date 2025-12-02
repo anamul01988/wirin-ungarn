@@ -195,13 +195,7 @@ export default function DialogContent({
         />
 
         {/* Dialog Body */}
-        <DialogBody
-          className={`overflow-auto ${
-            routePrefix === "kurz-und-knapp"
-              ? "custom__modal_area_special"
-              : "custom__modal_area"
-          } flex-1 mr-1 p-[30px]`}
-        >
+        <DialogBody className="overflow-auto custom__modal_area flex-1 mr-1 p-[30px]">
           <div className="single__page-content">
             {/* Breadcrumb */}
             {title &&
@@ -238,10 +232,23 @@ export default function DialogContent({
                 />
               </div>
             )}
+            {routePrefix === "kurz-und-knapp" && (
+              <div className="w-full relative flex items-center justify-center pt-3 mb-3">
+                <ArchivePageHeaderImage
+                  imageUrl="/headlineImages/kurz-knapp.jpg"
+                  imageAlt="kurz und knapp"
+                />
+              </div>
+            )}
             {routePrefix !== "einfach-lesen" &&
               !isContactPage &&
               pathname !== "/wie-spaet-ist-es/" && (
-                <h1 className="single__page_title text-[#494158]">{title}</h1>
+                <h1
+                  className={`single__page_title  text-[#494158]
+                  ${routePrefix === "kurz-und-knapp" ? "px-[60px]" : ""}`}
+                >
+                  {title}
+                </h1>
               )}
             {contentType === "wissenswert" && content?.introText && (
               <div className="mb-6 pt-4 rounded-lg">
@@ -772,7 +779,10 @@ export default function DialogContent({
               </div>
             )}
             {contentType === "kurz-und-knapp" && (
-              <div>
+              <div
+                className="custom__modal_area_special"
+                style={{ paddingTop: "0px" }}
+              >
                 <p
                   className=" text-base leading-relaxed text-[#56646f] text-left mb-2"
                   dangerouslySetInnerHTML={{ __html: content }}
