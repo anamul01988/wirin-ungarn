@@ -176,7 +176,13 @@ export default function DialogContent({
             onLayers={() => console.log("Layers clicked")}
             onShare={() => console.log("Share clicked")}
             onLearningBox={() => setLearningBoxOpen(true)}
-            showLearningBox={routePrefix === "einfach-lesen"}
+            showLearningBox={
+              routePrefix === "einfach-lesen" ||
+              routePrefix === "sprachkurs" ||
+              routePrefix === "liedtexte" ||
+              routePrefix === "kreuzwortraetsel" ||
+              routePrefix === "aus-dem-leben"
+            }
           />
         )}
 
