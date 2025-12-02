@@ -288,10 +288,10 @@ const SprachkursPage = () => {
         variant="paragraph"
         className="archive__page_description leading-relaxed font-bold mb-6"
       >
-        Auf dieser Übersichtsseite findest du alle Artikel, die die
-        verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
-        durch die Beiträge stöbern oder die Filterfunktion nutzen, um gezielt
-        nach bestimmten Inhalten zu suchen.
+        In unsere etwas anderen Ungarisch-Kurs lernst du die Grundlagen und
+        Feinheiten der ungarischen Sprache, von den ersten Schritten bis hin zu
+        fortgeschrittenen Themen. Beginne deine Reise durch die Welt des
+        Ungarischen und entdecke die Schönheit dieser faszinierenden Sprache.
       </Typography>
 
       {/* Search Box */}

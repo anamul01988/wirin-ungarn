@@ -116,12 +116,14 @@ const sliderModalStyles = `
   }
 
   .slider-arrow.prev {
-    left: 12%;
+    left: 18%;
   }
 
+
   .slider-arrow.next {
-    right: 12%;
+    right: 18%;
   }
+
 
   .slider-arrow::before {
     content: '';

@@ -280,7 +280,7 @@ const EinFachPage = () => {
       </div>
 
       {/* Description */}
-      <Typography
+      {/* <Typography
         variant="paragraph"
         className="archive__page_description leading-relaxed font-bold mb-6"
       >
@@ -288,6 +288,27 @@ const EinFachPage = () => {
         verschiedenen Auswanderer-Themen im Detail behandeln. Du kannst gerne
         durch die Beiträge stöbern oder die Filterfunktion nutzen, um gezielt
         nach bestimmten Inhalten zu suchen.
+      </Typography> */}
+      <Typography
+        variant="paragraph"
+        className="archive__page_description leading-relaxed font-bold mb-6"
+      >
+        Unsere Texte sind ideal, um durch die clevere Kombination von Lesen und
+        Hören effektiv eine neue Sprache zu lernen. Das Besondere an unserer
+        Methode ist die einzigartige, direkt integrierte Übersetzungshilfe:
+        Unter jedem Satz findest du eine Wort-für-Wort-Übersetzung, die dir
+        hilft, den Satzbau und die Grammatik der Fremdsprache sofort zu
+        entschlüsseln. Direkt darunter steht die korrekte und natürliche
+        Übersetzung, mit der du die tatsächliche Bedeutung im Kontext erfasst.
+        Dieser direkte Vergleich ist ein unschätzbarer Vorteil, da du nicht nur
+        Vokabeln lernst, sondern ein tiefes Verständnis für die Struktur der
+        Sprache entwickelst. Damit du auf deinem individuellen Niveau einsteigen
+        kannst, bieten wir verschiedene Schwierigkeitsstufen an – von
+        A1-Beginner für absolute Anfänger bis hin zu B1 für Fortgeschrittene.
+        Für den größten Lernerfolg empfehlen wir, die Texte mehrmals anzuhören
+        und dabei auch mal laut mitzusprechen. So verbesserst du gleichzeitig
+        dein Hörverständnis, erweiterst deinen Wortschatz und trainierst deine
+        Aussprache.
       </Typography>
 
       {/* Search Box */}

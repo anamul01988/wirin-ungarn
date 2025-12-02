@@ -101,7 +101,10 @@ export function GetLiedTextePages(first = 1000, after = null) {
         }
       }
 
-      liedtexte(first: $first, after: $after) {
+      liedtexte(first: $first, after: $after, where: {
+          orderby: { field: DATE, order: ASC }
+        }
+      ) {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -706,6 +709,9 @@ export function GetKreuzwortratsel(first = 1000, after = null) {
   crosswords(
     first: $first
     after: $after
+    where: {
+      orderby: { field: DATE, order: ASC }
+    }
   ) {
     pageInfo {
       hasNextPage

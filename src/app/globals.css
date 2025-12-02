@@ -3425,3 +3425,470 @@ blockquote:before {
   margin: -24px 0 0 -55px;
   font-size: 4em;
 }
+
+/* Shahin's code */
+/* Single page shorts and wissenswert */
+
+.wissenswert_single-page .single__page_description p {
+  margin-bottom: 0.5em;
+  line-height: 25px;
+}
+
+.wissenswert_single-page .single__page_description p a {
+  color: #cc2233;
+}
+
+.wissenswert_single-page .mb-6.py-4.rounded-lg {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.wissenswert_single-page .mb-6.py-4.rounded-lg p {
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.wissenswert_single-page .single__page_description h3 {
+  line-height: 1.3em;
+  padding: 0.5em 0;
+  margin: 0 0 0 -0.05em;
+  font-style: normal;
+  letter-spacing: -0.01em;
+  color: #436f4d;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.wissenswert_single-page .single__page_description h4 {
+  margin-bottom: 0.2em;
+  padding-bottom: 0px;
+  color: #436f4d;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.wissenswert_single-page .single__page_description h5 {
+  margin-bottom: 0.2em;
+  padding-bottom: 0px;
+  color: #436f4d;
+  font-size: 15px;
+  font-weight: 600;
+  padding-top: 7px;
+}
+
+.wissenswert_single-page .single__page_description ul {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.wissenswert_single-page .single__page_description ul li {
+  line-height: 26px;
+}
+
+.wissenswert_single-page .single__page_description ul li b {
+  font-weight: bold;
+}
+
+.wissenswert_single-page .single__page_description p.ai-optimize-15 {
+  font-size: 14px;
+  line-height: 25x;
+  font-weight: 300;
+}
+
+/* Kategorien page */
+
+.kategorien_single-page .single__page_title {
+  font-size: 30px;
+  font-weight: 500;
+  padding-bottom: 9px;
+  color: #436f4d;
+  margin: 17px 0px 0px 0px;
+}
+
+.kategorien_single-page .kategorian__singlePost p {
+  margin-bottom: 0.5em;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.dialog-kategorien .archive__page_content {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  /* Number of lines to display before truncating */
+  -webkit-box-orient: vertical;
+  text-align: left;
+}
+
+.dialog-kategorien a {
+  color: #cc2233;
+  font-weight: 500;
+  padding-top: 10px;
+}
+
+.dialog-kategorien .pb-6 {
+  padding-bottom: 0px;
+}
+
+/* kurz und knapp styles */
+
+.dialog-kurz-und-knapp .knowledge-list__item {
+  margin-bottom: 12px;
+  line-height: 18px;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.kurz-und-knapp_single-page .single__page-content .text-base p {
+  margin-bottom: 17px;
+}
+
+.kurz-und-knapp_single-page .single__page-content p strong {
+  font-weight: bold;
+}
+
+.sprachkurs_single-page .leading-relaxed p {
+  margin-bottom: 0.5em;
+  font-size: 14px;
+  margin: 0 0 1em 0;
+  padding: 0;
+}
+
+.sprachkurs_single-page .leading-relaxed p {
+  margin-bottom: 0.5em;
+  font-size: 14px;
+  margin: 0 0 1em 0;
+  padding: 0;
+}
+
+.sprachkurs_single-page .leading-relaxed p strong {
+  font-weight: 500;
+}
+
+.sprachkurs_single-page .leading-relaxed h3 {
+  letter-spacing: -0.01em;
+  font-size: 19px;
+  font-weight: 600;
+  color: #494158;
+}
+
+.sprachkurs_single-page .leading-relaxed ol {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.sprachkurs_single-page .leading-relaxed ol li {
+  line-height: 26px;
+}
+
+.sprachkurs_single-page .leading-relaxed ol li.ai-optimize-15 {
+  font-size: 14px;
+  line-height: 25px;
+  font-weight: normal;
+}
+
+/* Crossword overview page */
+
+.dialog-kreuzwortraetsel .archive__page_content {
+  font-weight: 400;
+  line-height: 25px;
+}
+
+/* sprachkurs single page */
+
+.sprachkurs_single-page ul {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.sprachkurs_single-page ul li {
+  line-height: 26px;
+}
+
+.sprachkurs_single-page ul li b {
+  font-weight: bold;
+}
+
+.sprachkurs_single-page ul li p {
+  margin: 0 0 0.5em 0 !important;
+}
+
+/* aus dem leben single page */
+
+.aus-dem-leben_single-page .single__page-content img {
+  position: absolute;
+  height: 100%;
+  width: auto !important;
+  inset: 0px;
+  color: transparent;
+  display: block;
+  margin: 0 auto;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+  margin-bottom: 0.5em;
+  color: #444;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed h5 {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 0 0 -0.05em;
+  color: #436f4d;
+  line-height: 1.3em;
+  padding: 0.5em 0;
+  margin: 0 0 0 -0.05em;
+  font-style: normal;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed h5 span {
+  color: #008000;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed blockquote {
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+  margin: 0 0 0 35px;
+  padding: 0 0 0 15px;
+  background: url(https://wir-in-ungarn.hu/wiucontent/themes/Grimag/assets/images/line.png)
+    top left repeat-y;
+}
+
+.aus-dem-leben_single-page
+  .single__page-content
+  .leading-relaxed
+  blockquote:before {
+  margin: -31px 0 0 -58px;
+  font-size: 4em;
+  content: "\201C";
+  position: absolute;
+  font-size: 5em;
+  opacity: 0.35;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed blockquote p {
+  margin-bottom: 9px;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed ul {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed ul li {
+  line-height: 26px;
+  color: #444;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed ul li b {
+  font-weight: bold;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed ul li p {
+  margin: 0 0 0.5em 0 !important;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed ol {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed ol li {
+  line-height: 26px;
+  color: #444;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed ol li b {
+  font-weight: bold;
+}
+
+.aus-dem-leben_single-page .single__page-content .leading-relaxed ol li p {
+  margin: 0 0 0.5em 0 !important;
+}
+
+.leading-relaxed ol li strong,
+.leading-relaxed ul li strong {
+  font-weight: bold;
+}
+
+/* Ungarisch impulse page */
+
+.dialog-ungarisch-impulse .impulse-lesson img {
+  position: absolute;
+  height: 100%;
+  width: auto !important;
+  inset: 0px;
+  color: transparent;
+  display: block;
+  margin: 0 auto;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+  margin-bottom: 0.5em;
+  color: #444;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson h5 {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 0 0 -0.05em;
+  color: #436f4d;
+  line-height: 1.3em;
+  padding: 0.5em 0;
+  margin: 0 0 0 -0.05em;
+  font-style: normal;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson h3 {
+  margin-top: 20px;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson h5 span {
+  color: #008000;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson blockquote {
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+  margin: 0 0 0 35px;
+  padding: 0 0 0 15px;
+  background: url(https://wir-in-ungarn.hu/wiucontent/themes/Grimag/assets/images/line.png)
+    top left repeat-y;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson blockquote:before {
+  margin: -31px 0 0 -58px;
+  font-size: 4em;
+  content: "\201C";
+  position: absolute;
+  font-size: 5em;
+  opacity: 0.35;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson blockquote p {
+  margin-bottom: 9px;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson ul {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson ul li {
+  line-height: 26px;
+  color: #444;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson ul li b {
+  font-weight: bold;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson ul li p {
+  margin: 0 0 0.5em 0 !important;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson ol {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson ol li {
+  line-height: 26px;
+  color: #444;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson ol li b {
+  font-weight: bold;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson ol li p {
+  margin: 0 0 0.5em 0 !important;
+}
+
+.dialog-ungarisch-impulse .impulse-lesson .ai-optimize-15 {
+  font-size: 14px;
+  line-height: 25px;
+  font-weight: normal;
+}
+
+.dialog-ungarisch-impulse .impulse-page h2,
+.dialog-ungarisch-impulse h3.impulse_subhdline {
+  font-weight: 500;
+}
+
+/* Einfach lessen styles */
+
+.dialog-einfach-lesen .pb-6 {
+  padding-bottom: 0px;
+}
+
+.dialog-einfach-lesen a {
+  color: #cc2233;
+  font-weight: 500;
+  padding-top: 10px;
+}
+
+.einfach-lesen_single-page .single__page_postTitle {
+  font-size: 24px;
+  margin: 8px 0;
+  color: #333;
+}
+
+.einfach-lesen_single-page h2.text-lg {
+  font-size: 18px;
+  color: #666;
+  margin: 8px 0;
+}
+
+.einfach-lesen_single-page .sentence_block .hu_text {
+  font-weight: bold;
+  margin-bottom: 5px !important;
+  font-size: 16px;
+  margin-top: 5px !important;
+}
+
+.einfach-lesen_single-page .sentence_block .de_correct_text {
+  margin-bottom: 5px !important;
+  margin-top: 5px !important;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.einfach-lesen_single-page .sentence_block .de_direct_text {
+  margin-bottom: 5px !important;
+  margin-top: 5px !important;
+  font-size: 16px;
+  font-style: italic;
+  color: #436f4d;
+}
