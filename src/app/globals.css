@@ -3517,6 +3517,9 @@ blockquote:before {
   margin: 0 0 1em 0;
   padding: 0;
 }
+.sprachkurs_single-page .leading-relaxed li p {
+  margin-bottom: 0px;
+}
 
 .sprachkurs_single-page .leading-relaxed p {
   margin-bottom: 0.5em;

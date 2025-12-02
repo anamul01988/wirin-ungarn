@@ -25,6 +25,7 @@ export default async function kreuzwortraetselSinglePage({ params }) {
             content={postContentCrosswords?.excerpt}
             imageFeature={imageUrl}
             contentType="kreuzwortraetsel"
+            routePrefix="kreuzwortraetsel"
           />
         </div>
       );
