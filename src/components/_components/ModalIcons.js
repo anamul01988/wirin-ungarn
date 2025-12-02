@@ -39,13 +39,7 @@ export default function ModalIcons({
   };
 
   return (
-    <div
-      className="absolute flex flex-col z-50 gap-3"
-      style={{
-        top: "0rem",
-        right: "-4.5rem",
-      }}
-    >
+    <div className="absolute flex flex-col z-50 gap-3 modal-icons-position">
       {/* Cross Icon */}
       <div
         onClick={onClose}

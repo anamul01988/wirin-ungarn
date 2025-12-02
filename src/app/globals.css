@@ -1620,85 +1620,44 @@ div[class*="Toastify"] {
 /* General Dialog/Modal Responsive Styles - Applied to all dialogs */
 
 /* Reduce padding and adjust width for smaller devices */
-@media screen and (max-width: 792px) {
+@media screen and (max-width: 1350px) {
   [role="dialog"] {
-    max-width: 70% !important;
+    max-width: 60% !important;
+    width: 60% !important;
     min-width: 30% !important;
   }
+}
+@media screen and (max-width: 992px) {
+  [role="dialog"] {
+    max-width: 60% !important;
+    width: 60% !important;
+    min-width: 30% !important;
+  }
+}
+@media screen and (max-width: 792px) {
   [role="dialog"] .custom__modal_area {
     padding: 15px !important;
   }
 }
 
 /* Move dialog to the left for very small screens */
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 576px) {
   [role="dialog"] {
+    max-width: 70% !important;
+    width: 70% !important;
     transform: translateX(-20px) !important;
   }
 }
 
-/* Fixed modal width for Sprachkurs page - above 1160px screen size */
-@media screen and (min-width: 1200px) {
-  [role="dialog"]:not([data-dialog="impressum-modal"]):not(
-      [data-dialog="learning-box-modal"]
-    ) {
-    max-width: 900px !important;
-    min-width: 900px !important;
-    width: 100% !important;
-  }
-
-  /* Learning Box Modal - 650px max width */
-  [role="dialog"][data-dialog="learning-box-modal"] {
-    max-width: 650px !important;
-    width: 100% !important;
-  }
-
-  /* Learning Box List Modal - 900px max width */
-  [role="dialog"][data-dialog="learning-box-list-modal"] {
-    max-width: 900px !important;
-    width: 100% !important;
-  }
+/* Modal Icons Positioning */
+.modal-icons-position {
+  top: 0rem;
+  right: -4.5rem;
 }
 
-@media screen and (max-width: 1199px) and (min-width: 920px) {
-  [role="dialog"]:not([data-dialog="impressum-modal"]):not(
-      [data-dialog="learning-box-modal"]
-    ) {
-    min-width: 80% !important;
-  }
-
-  /* Learning Box Modal - 650px max width */
-  [role="dialog"][data-dialog="learning-box-modal"] {
-    max-width: 650px !important;
-    width: 100% !important;
-  }
-
-  /* Learning Box List Modal - 900px max width */
-  [role="dialog"][data-dialog="learning-box-list-modal"] {
-    max-width: 900px !important;
-    width: 100% !important;
-  }
-}
-
-@media screen and (max-width: 919px) and (min-width: 768px) {
-  [role="dialog"]:not([data-dialog="impressum-modal"]):not(
-      [data-dialog="learning-box-modal"]
-    ) {
-    max-width: 612px !important;
-    min-width: 612px !important;
-    width: 100% !important;
-  }
-
-  /* Learning Box Modal - 650px max width */
-  [role="dialog"][data-dialog="learning-box-modal"] {
-    max-width: 650px !important;
-    width: 100% !important;
-  }
-
-  /* Learning Box List Modal - 900px max width */
-  [role="dialog"][data-dialog="learning-box-list-modal"] {
-    max-width: 900px !important;
-    width: 100% !important;
+@media screen and (max-width: 576px) {
+  .modal-icons-position {
+    right: -3.5rem;
   }
 }
 
