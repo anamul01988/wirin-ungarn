@@ -259,99 +259,108 @@ function VocabGame() {
           imageAlt="Vokabelentdecker"
         />
       </div>
-      <div style={styles.instructBox}>
-        <div
-          style={styles.instructHeader}
-          onClick={() => setInstructionsOpen(!instructionsOpen)}
-        >
-          <span style={styles.instructTitle}>
-            Wie spielt man Vokabel-Entdecker?
-          </span>
-          <span style={styles.instructToggle}>
-            {instructionsOpen ? "▲" : "▼"}
-          </span>
+
+      <p class="block px-[60px] antialiased mt-5 font-sans text-base text-inherit archive__page_description leading-relaxed font-bold mb-6">
+        Entdecke die Vielfalt Ungarns! Ob Zoos, Freizeitparks, Museen oder
+        Schwimmbäder – hier findest du 840 spannende Ausflugsziele, die nur
+        darauf warten, von dir erkundet zu werden. Stöbere, plane und lass dich
+        inspirieren für dein nächstes Abenteuer in Ungarn!
+      </p>
+      <div className="px-[60px]">
+        <div style={styles.instructBox}>
+          <div
+            style={styles.instructHeader}
+            onClick={() => setInstructionsOpen(!instructionsOpen)}
+          >
+            <span style={styles.instructTitle}>
+              Wie spielt man Vokabel-Entdecker?
+            </span>
+            <span style={styles.instructToggle}>
+              {instructionsOpen ? "▲" : "▼"}
+            </span>
+          </div>
+          {instructionsOpen && (
+            <div style={styles.instructContent}>
+              <p>
+                In diesem Spiel kannst du ganz einfach neue Vokabeln lernen!
+                Wähle zunächst ein Thema aus dem Dropdown-Menü, z. B. "Obst und
+                Gemüse". Auf der Oberfläche siehst du Vokabelkarten in zwei
+                Sprachen, wobei einige Wörter unscharf dargestellt sind. Klicke
+                auf eine solche Karte, um das Wort aufzudecken – dabei wird eine
+                andere Karte unscharf.
+              </p>
+              <p>
+                Besonders praktisch: Wenn du auf die ungarischen Karten klickst,
+                hörst du die richtige Aussprache der Wörter. Versuche, dir die
+                Übersetzungen zu merken, bevor du sie aufdeckst, und trainiere
+                so dein Gedächtnis und deine Sprachkenntnisse.
+              </p>
+              <p>Viel Spaß beim Lernen!</p>
+            </div>
+          )}
         </div>
-        {instructionsOpen && (
-          <div style={styles.instructContent}>
+
+        <div style={styles.themeSelector}>
+          <label style={styles.label}>Wähle ein Thema aus</label>
+          <select
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            style={styles.select}
+          >
+            {themes.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {!hasVocabulary && (
+          <div style={styles.noDataMessage}>
             <p>
-              In diesem Spiel kannst du ganz einfach neue Vokabeln lernen! Wähle
-              zunächst ein Thema aus dem Dropdown-Menü, z. B. "Obst und Gemüse".
-              Auf der Oberfläche siehst du Vokabelkarten in zwei Sprachen, wobei
-              einige Wörter unscharf dargestellt sind. Klicke auf eine solche
-              Karte, um das Wort aufzudecken – dabei wird eine andere Karte
-              unscharf.
+              Vocabulary data for this theme is not yet available. Please select
+              another theme.
             </p>
-            <p>
-              Besonders praktisch: Wenn du auf die ungarischen Karten klickst,
-              hörst du die richtige Aussprache der Wörter. Versuche, dir die
-              Übersetzungen zu merken, bevor du sie aufdeckst, und trainiere so
-              dein Gedächtnis und deine Sprachkenntnisse.
+            <p style={styles.noDataSubtext}>
+              Die Vokabeldaten für dieses Thema sind noch nicht verfügbar. Bitte
+              wähle ein anderes Thema.
             </p>
-            <p>Viel Spaß beim Lernen!</p>
           </div>
         )}
-      </div>
 
-      <div style={styles.themeSelector}>
-        <label style={styles.label}>Wähle ein Thema aus</label>
-        <select
-          value={theme}
-          onChange={(e) => setTheme(e.target.value)}
-          style={styles.select}
-        >
-          {themes.map((t) => (
-            <option key={t.value} value={t.value}>
-              {t.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {!hasVocabulary && (
-        <div style={styles.noDataMessage}>
-          <p>
-            Vocabulary data for this theme is not yet available. Please select
-            another theme.
-          </p>
-          <p style={styles.noDataSubtext}>
-            Die Vokabeldaten für dieses Thema sind noch nicht verfügbar. Bitte
-            wähle ein anderes Thema.
-          </p>
-        </div>
-      )}
-
-      {hasVocabulary && (
-        <>
-          <div style={styles.grid}>
-            {cards.map((card) => (
-              <div
-                key={card.id}
-                onClick={() => handleClick(card.id)}
-                style={{
-                  ...styles.card,
-                  ...(card.lang === "hun" ? styles.cardHun : styles.cardGer),
-                  ...(card.flash ? styles.cardFlash : {}),
-                }}
-              >
-                <span
+        {hasVocabulary && (
+          <>
+            <div style={styles.grid}>
+              {cards.map((card) => (
+                <div
+                  key={card.id}
+                  onClick={() => handleClick(card.id)}
                   style={{
-                    filter: card.blur ? "blur(5px)" : "none",
-                    userSelect: card.blur ? "none" : "auto",
+                    ...styles.card,
+                    ...(card.lang === "hun" ? styles.cardHun : styles.cardGer),
+                    ...(card.flash ? styles.cardFlash : {}),
                   }}
                 >
-                  {card.text}
-                </span>
-              </div>
-            ))}
-          </div>
+                  <span
+                    style={{
+                      filter: card.blur ? "blur(5px)" : "none",
+                      userSelect: card.blur ? "none" : "auto",
+                    }}
+                  >
+                    {card.text}
+                  </span>
+                </div>
+              ))}
+            </div>
 
-          <div style={styles.stats}>
-            Revealed words: <strong style={styles.statsNum}>{revealed}</strong>{" "}
-            | Words left to reveal:{" "}
-            <strong style={styles.statsNum}>{blurredCount}</strong>
-          </div>
-        </>
-      )}
+            <div style={styles.stats}>
+              Revealed words:{" "}
+              <strong style={styles.statsNum}>{revealed}</strong> | Words left
+              to reveal: <strong style={styles.statsNum}>{blurredCount}</strong>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -365,7 +374,8 @@ const styles = {
   },
   instructBox: {
     border: "3px solid #436f4d",
-    marginBottom: "20px",
+    marginBottom: "33px",
+    borderRadius: "5px",
   },
   instructHeader: {
     backgroundColor: "#436f4d",
@@ -374,9 +384,11 @@ const styles = {
     justifyContent: "space-between",
     cursor: "pointer",
     color: "white",
+    fontSize: "14px",
   },
   instructTitle: {
-    fontWeight: "bold",
+    fontWeight: "600",
+    paddingLeft: "10px",
     margin: 0,
   },
   instructToggle: {
