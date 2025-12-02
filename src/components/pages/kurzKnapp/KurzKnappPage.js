@@ -102,7 +102,7 @@ const KurzKnappPage = () => {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("currentKnowledgeSlug", slug);
     }
-    router.push(`/kurz-und-knapp/${slug}`);
+    router.push(`/knowledge/${slug}`);
   };
 
   if (loading) {
@@ -122,12 +122,6 @@ const KurzKnappPage = () => {
 
   return (
     <div className="knowledge-page">
-      {/* Page Title */}
-      {/* {title && (
-        <p className="text-[30px] font-medium text-[#494158] leading-[1.9em] py-2 -ml-[0.05em] -mt-2 not-italic tracking-[-0.04em]">
-          {title}
-        </p>
-      )} */}
       <div className="w-full relative flex items-center justify-center mb-3">
         <ArchivePageHeaderImage
           imageUrl="/headlineImages/kurz-knapp.jpg"
@@ -187,7 +181,7 @@ const KurzKnappPage = () => {
                 onClick={() => handleKnowledgeClick(knowledge.slug)}
               >
                 <a
-                  href={`/kurz-und-knapp/${knowledge.slug}`}
+                  href={`/knowledge/${knowledge.slug}`}
                   className="knowledge-list__link"
                   onClick={(e) => {
                     e.preventDefault();

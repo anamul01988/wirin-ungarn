@@ -137,7 +137,7 @@ export default function DialogContent({
             setLoaded(false);
           }}
           className={`
-            object-cover rounded-[28px]
+            object-contain rounded-[28px]
             ${loaded && !error ? "opacity-100" : "opacity-0"}
             transition-opacity duration-300
           `}
@@ -238,7 +238,7 @@ export default function DialogContent({
                 <h1 className="single__page_title text-[#494158]">{title}</h1>
               )}
             {contentType === "wissenswert" && content?.introText && (
-              <div className="mb-6 py-4 rounded-lg">
+              <div className="mb-6 pt-4 rounded-lg">
                 <p
                   className="single__page_description"
                   dangerouslySetInnerHTML={{ __html: content?.introText }}
