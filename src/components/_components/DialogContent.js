@@ -137,7 +137,7 @@ export default function DialogContent({
             setLoaded(false);
           }}
           className={`
-            object-contain rounded-[28px]
+            object-cover rounded-[28px]
             ${loaded && !error ? "opacity-100" : "opacity-0"}
             transition-opacity duration-300
           `}
@@ -901,77 +901,79 @@ export default function DialogContent({
               </>
             )}
 
-            {imageFeature && contentType !== "kulinarische-seele" && (
-              <div className="w-full mx-auto py-6">
-                {(prevPostSlug || nextPostSlug) && (
-                  <div className="flex justify-between items-center gap-4">
-                    {/* Previous Button */}
-                    {prevPostSlug ? (
-                      <button
-                        onClick={handlePrevPost}
-                        className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
-                        title={prevPostTitle || "Previous post"}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-4 h-4 text-[#436f4d] mr-2"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
+            {imageFeature &&
+              contentType !== "kulinarische-seele" &&
+              (prevPostSlug || nextPostSlug) && (
+                <div className="w-full mx-auto py-6">
+                  {(prevPostSlug || nextPostSlug) && (
+                    <div className="flex justify-between items-center gap-4">
+                      {/* Previous Button */}
+                      {prevPostSlug ? (
+                        <button
+                          onClick={handlePrevPost}
+                          className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
+                          title={prevPostTitle || "Previous post"}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 19l-7-7 7-7"
-                          />
-                        </svg>
-                        <span className="text-sm font-semibold">
-                          {truncateTitle(prevPostTitle, 25)}
-                        </span>
-                      </button>
-                    ) : (
-                      <div></div>
-                    )}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-4 h-4 text-[#436f4d] mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 19l-7-7 7-7"
+                            />
+                          </svg>
+                          <span className="text-sm font-semibold">
+                            {truncateTitle(prevPostTitle, 25)}
+                          </span>
+                        </button>
+                      ) : (
+                        <div></div>
+                      )}
 
-                    {/* Next Button */}
-                    {nextPostSlug && (
-                      <button
-                        onClick={handleNextPost}
-                        className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
-                        title={nextPostTitle || "Next post"}
-                      >
-                        <span className="mr-2 text-sm font-semibold">
-                          {truncateTitle(nextPostTitle, 25)}
-                        </span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-4 h-4 text-[#436f4d]"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
+                      {/* Next Button */}
+                      {nextPostSlug && (
+                        <button
+                          onClick={handleNextPost}
+                          className="flex items-center justify-between border border-[#436f4d] text-[#436f4d] px-4 py-2 hover:bg-green-50 transition"
+                          title={nextPostTitle || "Next post"}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </button>
-                    )}
-                  </div>
-                )}
-                {contentType !== "kategorien" && (
-                  <>
-                    {" "}
-                    <div className="border-t-2 border-[#436f4d] my-6"></div>
-                    {/* Collapsible Comment Component */}
-                    <CollapsibleComment postId={postId} />
-                  </>
-                )}
-              </div>
-            )}
+                          <span className="mr-2 text-sm font-semibold">
+                            {truncateTitle(nextPostTitle, 25)}
+                          </span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-4 h-4 text-[#436f4d]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  {contentType !== "kategorien" && (
+                    <>
+                      {" "}
+                      <div className="border-t-2 border-[#436f4d] my-6"></div>
+                      {/* Collapsible Comment Component */}
+                      <CollapsibleComment postId={postId} />
+                    </>
+                  )}
+                </div>
+              )}
             {/* --------------------------------------------------------------------------------------- */}
             {customFields &&
               contentType === "kategorien" &&
