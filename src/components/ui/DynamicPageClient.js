@@ -18,6 +18,7 @@ export default function DynamicPageClient({ slug }) {
   const pathName = usePathname();
   // Get routePrefix from Redux
   const routePrefix = useSelector((state) => state.route.routePrefix);
+  // console.log("routePrefix routePrefix routePrefix", routePrefix, pathName);
   useEffect(() => {
     async function fetchContent() {
       try {
@@ -47,6 +48,7 @@ export default function DynamicPageClient({ slug }) {
             : routePrefix;
 
         setDetectedPrefix(currentPrefix);
+        console.log("currentPrefix 2222", currentPrefix);
 
         if (
           [
@@ -88,10 +90,11 @@ export default function DynamicPageClient({ slug }) {
 
   // Handle post content
   if (contentData.type === "post") {
-    const { title, content, featuredImage, postContent } =
+    const { title, content, featuredImage, postContent, imageLong } =
       contentData.data.data.post;
     const imageUrl = featuredImage?.node?.sourceUrl || null;
-
+    const imageLongUrl =
+      imageLong?.featuredImageMobile?.node?.sourceUrl || null;
     // Pass the custom type if available
     const contentType = contentData.customType || "post";
     console.log("Rendering content of type:", contentType, contentData);
@@ -147,6 +150,7 @@ export default function DynamicPageClient({ slug }) {
 
     // Special handling for wissenswert content
     if (contentType === "wissenswert") {
+      // console.log("wissenwert api data 222", contentData);
       return (
         <>
           <HistoryTracker />
@@ -154,17 +158,16 @@ export default function DynamicPageClient({ slug }) {
             <DialogContent
               postId={contentData.data.data.post.postId}
               title={title}
-              content={content === null ? postContent?.introText : content}
-              imageFeature={imageUrl}
+              content={postContent || content || "<p>No content available.</p>"}
+              imageFeature={imageLongUrl ?? imageUrl}
               singlePostContent={
                 postContent?.postContent?.length > 0
                   ? postContent?.postContent
                   : []
               }
               contentType="wissenswert"
-              routePrefix={routePrefix || detectedPrefix}
+              routePrefix="wissenswert"
               isSinglePage={true}
-              // isSinglePost={true}
             />
           </div>
         </>

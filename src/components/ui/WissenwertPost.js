@@ -132,8 +132,11 @@ const WissenwertPost = ({
 
   const handleClick = () => {
     dispatch(setRoutePrefix(routePrefix));
+    // setTimeout(() => {
+    //   router.push(`/${routePrefix}/${slug}`);
+    // }, 10);
     setTimeout(() => {
-      router.push(`/${routePrefix}/${slug}`);
+      router.push(`/${slug}`);
     }, 10);
   };
 

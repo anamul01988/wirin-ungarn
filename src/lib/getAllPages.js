@@ -1792,7 +1792,6 @@ export async function GetDynamicContentV2(slug, routePrefix) {
           id
           title
           slug
-          postId
           link
           date
           content
@@ -1813,6 +1812,15 @@ export async function GetDynamicContentV2(slug, routePrefix) {
               altText
               title
               uri
+            }
+          }
+        imageLong {
+          featuredImageMobile {
+              node {
+                id
+                sourceUrl
+                altText
+              }
             }
           }
         }
