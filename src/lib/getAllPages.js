@@ -548,25 +548,7 @@ export function GetEinFachPages(first = 1000, after = null) {
 }
 
 export function GetAusflugszielePages(first = 1000, after = null) {
-  const SEARCH_QUERY = `
-    query GetAusflugsziele($first: Int = 1000, $after: String) {
-      # Get the ausflugsziele Page
-      pages(where: { title: "ausflugsziele" }) {
-        nodes {
-          id
-          title
-          isContentNode
-          slug
-          content
-          status
-          seo {
-            title
-            metaDesc
-            opengraphTitle
-            opengraphDescription
-          }
-        }
-      }
+  const SEARCH_QUERY = `query GetAusflugsziele($first: Int = 1000, $after: String) {
 
       # Get Listings CPT
       listings(
@@ -593,6 +575,9 @@ export function GetAusflugszielePages(first = 1000, after = null) {
               subtitle
               description
               subcategory
+              zip
+              city
+              street
             }
             seo {
               title
@@ -602,10 +587,12 @@ export function GetAusflugszielePages(first = 1000, after = null) {
             }
           }
 
+
         }
       }
     }
-  `;
+
+`;
 
   return fetchPage(SEARCH_QUERY, { first, after });
 }
