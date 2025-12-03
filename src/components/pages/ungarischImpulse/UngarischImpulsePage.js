@@ -469,11 +469,7 @@ const UngarischImpulsePage = () => {
           className="bg-[#006400] text-white px-4 py-2 rounded font-medium hover:bg-green-700 transition-colors"
           title="Copy lesson ID"
         >
-          {currentLesson?.databaseId
-            ? `#${selectedLevel}-${currentLesson.databaseId}`
-            : currentLesson?.impulsesFields?.impulseCode
-            ? `#${selectedLevel}-${currentLesson.impulsesFields.impulseCode}`
-            : "id"}
+          {currentLesson.impulsesFields.impulseCode}
         </button>
         <button
           className="bg-[#006400] text-white w-10 h-10 rounded flex items-center justify-center hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
