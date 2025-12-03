@@ -69,6 +69,38 @@ const CustomPostForEvent = ({
 
   const dateInfo = formatDate(date);
 
+  // Format date string (DD.MM.YYYY format) for display
+  const formatDateString = (dateString) => {
+    if (!dateString) return null;
+    
+    // Parse DD.MM.YYYY format
+    const ddmmyyyyPattern = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
+    const match = dateString.match(ddmmyyyyPattern);
+    
+    if (match) {
+      const day = match[1];
+      const month = parseInt(match[2], 10) - 1; // Month is 0-indexed
+      const months = [
+        "JAN", "FEB", "MÄR", "APR", "MAI", "JUN",
+        "JUL", "AUG", "SEP", "OKT", "NOV", "DEZ"
+      ];
+      const monthShort = [
+        "Jan", "Feb", "Mär", "Apr", "Mai", "Jun",
+        "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"
+      ];
+      return {
+        month: months[month] || match[2],
+        monthShort: monthShort[month] || match[2],
+        day: day
+      };
+    }
+    
+    return null;
+  };
+
+  const timeFromInfo = formatDateString(timefrom);
+  const timeToInfo = formatDateString(timeto);
+
   // Color definitions
   const colors =
     accentColor === "green"
@@ -109,13 +141,13 @@ const CustomPostForEvent = ({
       <div className="flex-start align-center justify-center text-center w-20">
         <div className="">
           <div className="text-md font-normal" style={{ color: colors.light }}>
-            {dateInfo.month}
+            {timeFromInfo ? timeFromInfo.month : dateInfo.month}
           </div>
           <div
             className="text-2xl font-bold leading-none mt-1"
             style={{ color: colors.primary }}
           >
-            {dateInfo.day}
+            {timeFromInfo ? timeFromInfo.day : dateInfo.day}
           </div>
           <div className="flex justify-center my-2">
             <div
@@ -124,7 +156,7 @@ const CustomPostForEvent = ({
             ></div>
           </div>
           <div className="text-md font-normal" style={{ color: colors.light }}>
-            {dateInfo.dateRange}
+            {timeToInfo ? `${timeToInfo.monthShort} ${timeToInfo.day}` : (timeto || dateInfo.dateRange)}
           </div>
         </div>
       </div>

@@ -3,9 +3,40 @@ import React, { useEffect, useState } from "react";
 import { GetListingsVeranstaltungen } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
-import CustomPost from "@/components/ui/CustomPost";
 import CustomPostForEvent from "../CustomPostForEvent";
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
+
+// Helper function to parse DD.MM.YYYY format
+const parseDateString = (dateString) => {
+  if (!dateString) return null;
+  
+  // If it's already a Date object, return it
+  if (dateString instanceof Date) {
+    return dateString;
+  }
+  
+  // Handle DD.MM.YYYY format (e.g., "28.06.2025")
+  if (typeof dateString === 'string') {
+    // Check if it matches DD.MM.YYYY format
+    const ddmmyyyyPattern = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
+    const match = dateString.match(ddmmyyyyPattern);
+    
+    if (match) {
+      const day = parseInt(match[1], 10);
+      const month = parseInt(match[2], 10) - 1; // Month is 0-indexed in JavaScript
+      const year = parseInt(match[3], 10);
+      return new Date(year, month, day);
+    }
+    
+    // Try standard Date parsing as fallback
+    const parsed = new Date(dateString);
+    if (!isNaN(parsed.getTime())) {
+      return parsed;
+    }
+  }
+  
+  return null;
+};
 
 // Filter events to show only those within next 15 days from today
 const filterEventsByDate = (events) => {
@@ -22,18 +53,11 @@ const filterEventsByDate = (events) => {
     const timefrom = edge.node?.listingFieldGroup?.timefrom;
     if (!timefrom) return false;
     
-    // Parse the date - handle different formats
-    let eventDate;
-    if (typeof timefrom === 'string') {
-      eventDate = new Date(timefrom);
-    } else if (timefrom instanceof Date) {
-      eventDate = timefrom;
-    } else {
-      return false;
-    }
+    // Parse the date string (DD.MM.YYYY format)
+    const eventDate = parseDateString(timefrom);
     
     // Check if date is valid
-    if (isNaN(eventDate.getTime())) return false;
+    if (!eventDate || isNaN(eventDate.getTime())) return false;
     
     // Set to start of day for comparison
     eventDate.setHours(0, 0, 0, 0);
@@ -44,9 +68,11 @@ const filterEventsByDate = (events) => {
   
   // Sort by timefrom (earliest first)
   filtered.sort((a, b) => {
-    const dateA = new Date(a.node?.listingFieldGroup?.timefrom || 0);
-    const dateB = new Date(b.node?.listingFieldGroup?.timefrom || 0);
-    return dateA - dateB;
+    const dateA = parseDateString(a.node?.listingFieldGroup?.timefrom);
+    const dateB = parseDateString(b.node?.listingFieldGroup?.timefrom);
+    
+    if (!dateA || !dateB) return 0;
+    return dateA.getTime() - dateB.getTime();
   });
   
   return filtered;
@@ -184,6 +210,8 @@ const VenastaltusngskalendarPage = () => {
         // Filter events to show only next 15 days and sort by timefrom
         const allEvents = apiData.data.listings.edges || [];
         const filteredEvents = filterEventsByDate(allEvents);
+        console.log("allEvents 222222222", allEvents);
+        console.log("filteredEvents 222222222", filteredEvents);
         // Store filtered listings in state
         setAllListings(filteredEvents);
         setCurrentPage(1);
