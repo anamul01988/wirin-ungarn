@@ -1,11 +1,57 @@
 // venastaltusngskalendar.js"use client";
 import React, { useEffect, useState } from "react";
-import { SearchAllPosts, GetListingsVeranstaltungen } from "@/lib/getAllPages";
+import { GetListingsVeranstaltungen } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
 import CustomPost from "@/components/ui/CustomPost";
 import CustomPostForEvent from "../CustomPostForEvent";
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
+
+// Filter events to show only those within next 15 days from today
+const filterEventsByDate = (events) => {
+  if (!events || !Array.isArray(events)) return [];
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Start of today
+  
+  const fifteenDaysLater = new Date(today);
+  fifteenDaysLater.setDate(today.getDate() + 15);
+  fifteenDaysLater.setHours(23, 59, 59, 999); // End of 15th day
+  
+  const filtered = events.filter((edge) => {
+    const timefrom = edge.node?.listingFieldGroup?.timefrom;
+    if (!timefrom) return false;
+    
+    // Parse the date - handle different formats
+    let eventDate;
+    if (typeof timefrom === 'string') {
+      eventDate = new Date(timefrom);
+    } else if (timefrom instanceof Date) {
+      eventDate = timefrom;
+    } else {
+      return false;
+    }
+    
+    // Check if date is valid
+    if (isNaN(eventDate.getTime())) return false;
+    
+    // Set to start of day for comparison
+    eventDate.setHours(0, 0, 0, 0);
+    
+    // Event must be today or later, and within 15 days
+    return eventDate >= today && eventDate <= fifteenDaysLater;
+  });
+  
+  // Sort by timefrom (earliest first)
+  filtered.sort((a, b) => {
+    const dateA = new Date(a.node?.listingFieldGroup?.timefrom || 0);
+    const dateB = new Date(b.node?.listingFieldGroup?.timefrom || 0);
+    return dateA - dateB;
+  });
+  
+  return filtered;
+};
+
 const VenastaltusngskalendarPage = () => {
   const [cookieData, setCookieData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -85,7 +131,7 @@ const VenastaltusngskalendarPage = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (!search.trim()) {
       // If search is empty, clear search and show original data
       clearSearch();
@@ -94,15 +140,32 @@ const VenastaltusngskalendarPage = () => {
 
     setFiltering(true);
     setIsSearching(true);
-    try {
-      const apiData = await SearchAllPosts(search, 1000);
-      setSearchResults(apiData.data.posts);
-      setSearchCurrentPage(1);
-    } catch (err) {
-      setError("Fehler beim Suchen.");
-    } finally {
-      setFiltering(false);
-    }
+    
+    // Filter allListings based on search term
+    const searchTerm = search.toLowerCase().trim();
+    const filtered = allListings.filter((edge) => {
+      const node = edge.node;
+      const title = node?.title?.toLowerCase() || "";
+      const description = node?.listingFieldGroup?.description?.toLowerCase() || "";
+      const subtitle = node?.listingFieldGroup?.subtitle?.toLowerCase() || "";
+      const street = node?.listingFieldGroup?.street?.toLowerCase() || "";
+      const category = node?.listingFieldGroup?.category?.toLowerCase() || "";
+      const subcategory = node?.listingFieldGroup?.subcategory?.toLowerCase() || "";
+      
+      return (
+        title.includes(searchTerm) ||
+        description.includes(searchTerm) ||
+        subtitle.includes(searchTerm) ||
+        street.includes(searchTerm) ||
+        category.includes(searchTerm) ||
+        subcategory.includes(searchTerm)
+      );
+    });
+    
+    // Set search results in the same format as API response
+    setSearchResults({ edges: filtered });
+    setSearchCurrentPage(1);
+    setFiltering(false);
   };
 
   const clearSearch = () => {
@@ -118,8 +181,11 @@ const VenastaltusngskalendarPage = () => {
         const apiData = await GetListingsVeranstaltungen();
         // console.log("apiData 2221122222222111", apiData);
         setCookieData(apiData);
-        // Store all listings in state
-        setAllListings(apiData.data.listings.edges || []);
+        // Filter events to show only next 15 days and sort by timefrom
+        const allEvents = apiData.data.listings.edges || [];
+        const filteredEvents = filterEventsByDate(allEvents);
+        // Store filtered listings in state
+        setAllListings(filteredEvents);
         setCurrentPage(1);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");

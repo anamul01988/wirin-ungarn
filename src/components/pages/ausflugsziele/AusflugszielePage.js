@@ -1,9 +1,8 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
-import { SearchAllPosts, GetAusflugszielePages } from "@/lib/getAllPages";
+import React, { useEffect, useState } from "react";
+import { GetAusflugszielePages } from "@/lib/getAllPages";
 import { DefaultSpinner } from "@/components/_components/Spinners";
 import { Typography, Input, Checkbox, Button } from "@material-tailwind/react";
-import algoliasearch from "algoliasearch/lite";
 import CustomPost from "@/components/ui/CustomPost";
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 
@@ -12,23 +11,43 @@ const AusflugszielePage = () => {
   const [loading, setLoading] = useState(true);
   const [filtering, setFiltering] = useState(false);
   const [allListings, setAllListings] = useState([]); // Store all listings
-  const [searchResults, setSearchResults] = useState({});
+  const [searchResults, setSearchResults] = useState([]); // Store filtered search results
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
   const [onlyHeadings, setOnlyHeadings] = useState(false);
   const [search, setSearch] = useState("");
 
-  // Algolia search client
-  const algoliaClient = useRef(null);
-  const searchIndex = useRef(null);
-  const [algoliaResults, setAlgoliaResults] = useState([]);
-  const [algoliaSearching, setAlgoliaSearching] = useState(false);
-  const [searchDebounce, setSearchDebounce] = useState(null);
-
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchCurrentPage, setSearchCurrentPage] = useState(1);
   const listingsPerPage = 10;
+
+  // Sort listings by zip code
+  const sortListingsByZip = (listings) => {
+    return [...listings].sort((a, b) => {
+      const zipA = a.node?.listingFieldGroup?.zip || "";
+      const zipB = b.node?.listingFieldGroup?.zip || "";
+
+      // If both are empty, keep original order
+      if (!zipA && !zipB) return 0;
+      // If only A is empty, put it at the end
+      if (!zipA) return 1;
+      // If only B is empty, put it at the end
+      if (!zipB) return -1;
+
+      // Convert to numbers if possible for numeric sorting
+      const numA = parseInt(zipA, 10);
+      const numB = parseInt(zipB, 10);
+
+      // If both are valid numbers, sort numerically
+      if (!isNaN(numA) && !isNaN(numB)) {
+        return numA - numB;
+      }
+
+      // Otherwise, sort alphabetically
+      return zipA.localeCompare(zipB);
+    });
+  };
 
   // Get current listings to display based on pagination
   const getCurrentListings = () => {
@@ -44,10 +63,10 @@ const AusflugszielePage = () => {
 
   // Get current search results to display based on pagination
   const getCurrentSearchResults = () => {
-    if (!searchResults?.edges) return [];
+    if (!searchResults || searchResults.length === 0) return [];
     const startIndex = (searchCurrentPage - 1) * listingsPerPage;
     const endIndex = startIndex + listingsPerPage;
-    return searchResults.edges.slice(startIndex, endIndex);
+    return searchResults.slice(startIndex, endIndex);
   };
 
   // Handle page change
@@ -60,7 +79,8 @@ const AusflugszielePage = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSearch = async () => {
+  // Search function to filter listings locally
+  const handleSearch = () => {
     if (!search.trim()) {
       // If search is empty, clear search and show original data
       clearSearch();
@@ -71,43 +91,37 @@ const AusflugszielePage = () => {
     setIsSearching(true);
 
     try {
-      // If we already have Algolia results, use them
-      if (algoliaResults.length > 0) {
-        // Filter results to include only Listings items
-        const filteredResults = algoliaResults.filter(
-          (hit) => hit.post_type_label === window.ausflugszielePostTypeFilter
+      const searchTerm = search.toLowerCase().trim();
+
+      // Filter listings based on search term
+      const filteredListings = allListings.filter((edge) => {
+        const node = edge.node;
+        const listingFieldGroup = node.listingFieldGroup || {};
+
+        // Search in multiple fields
+        const title = (node.title || "").toLowerCase();
+        const subtitle = (listingFieldGroup.subtitle || "").toLowerCase();
+        const description = (listingFieldGroup.description || "").toLowerCase();
+        const subcategory = (listingFieldGroup.subcategory || "").toLowerCase();
+        const city = (listingFieldGroup.city || "").toLowerCase();
+        const zip = (listingFieldGroup.zip || "").toLowerCase();
+        const street = (listingFieldGroup.street || "").toLowerCase();
+
+        // Check if search term matches any field
+        return (
+          title.includes(searchTerm) ||
+          subtitle.includes(searchTerm) ||
+          description.includes(searchTerm) ||
+          subcategory.includes(searchTerm) ||
+          city.includes(searchTerm) ||
+          zip.includes(searchTerm) ||
+          street.includes(searchTerm)
         );
+      });
 
-        // Create a structure compatible with your existing code
-        const processedResults = {
-          edges: filteredResults.map((hit) => ({
-            node: {
-              id: hit.objectID,
-              title: hit.post_title,
-              slug: hit.permalink
-                ? hit.permalink.split("/").filter(Boolean).pop()
-                : "",
-              listingFieldGroup: {
-                subtitle: hit.subtitle || "",
-                description: hit.post_excerpt || "",
-                subcategory: hit.subcategory || "",
-              },
-            },
-          })),
-        };
-
-        setSearchResults(processedResults);
-      } else {
-        // Fall back to the original search method with post type filter
-        const apiData = await SearchAllPosts(
-          search,
-          1000,
-          null,
-          window.ausflugszielePostTypeFilter
-        );
-        setSearchResults(apiData.data.posts);
-      }
-
+      // Sort filtered results by zip code
+      const sortedResults = sortListingsByZip(filteredListings);
+      setSearchResults(sortedResults);
       setSearchCurrentPage(1);
     } catch (err) {
       console.error("Search error:", err);
@@ -120,88 +134,9 @@ const AusflugszielePage = () => {
   const clearSearch = () => {
     setSearch("");
     setIsSearching(false);
-    setSearchResults({});
+    setSearchResults([]);
     setSearchCurrentPage(1);
-    setAlgoliaResults([]);
   };
-
-  // Algolia search with debouncing
-  useEffect(() => {
-    // Clear previous debounce timeout
-    if (searchDebounce) {
-      clearTimeout(searchDebounce);
-    }
-
-    // Skip if search is empty or search index not initialized
-    if (!search.trim() || !searchIndex.current) {
-      setAlgoliaResults([]);
-      return;
-    }
-
-    // Set debounce timeout
-    const debounceTimer = setTimeout(async () => {
-      setAlgoliaSearching(true);
-
-      try {
-        const searchParams = {
-          hitsPerPage: 10,
-          attributesToRetrieve: [
-            "objectID",
-            "post_title",
-            "permalink",
-            "post_excerpt",
-            "post_type",
-            "post_type_label",
-            "subtitle",
-            "subcategory",
-          ],
-          attributesToHighlight: ["post_title", "post_excerpt"],
-          highlightPreTag: "<strong>",
-          highlightPostTag: "</strong>",
-          filters: window.ausflugszielePostTypeFilter
-            ? `post_type_label:"${window.ausflugszielePostTypeFilter}"`
-            : "",
-        };
-
-        const response = await searchIndex.current.search(search, searchParams);
-        console.log("Algolia search results:", response);
-        setAlgoliaResults(response.hits);
-
-        // Also use hits for the main search results when appropriate
-        if (response.hits.length > 0) {
-          setIsSearching(true);
-        }
-      } catch (error) {
-        console.error("Algolia search error:", error);
-      } finally {
-        setAlgoliaSearching(false);
-      }
-    }, 300); // 300ms debounce
-
-    setSearchDebounce(debounceTimer);
-
-    // Cleanup timeout on component unmount
-    return () => {
-      if (searchDebounce) {
-        clearTimeout(searchDebounce);
-      }
-    };
-  }, [search]);
-
-  // Initialize Algolia client with post type filter
-  useEffect(() => {
-    // Initialize Algolia client
-    algoliaClient.current = algoliasearch(
-      "4BNRIJHLXZ",
-      "0707974c58f2e7c53a70e1e58eeec381"
-    );
-    searchIndex.current = algoliaClient.current.initIndex(
-      "wp_searchable_posts"
-    );
-
-    // Store the post type filter for use in search
-    window.ausflugszielePostTypeFilter = "Listings";
-  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -209,8 +144,10 @@ const AusflugszielePage = () => {
         const apiData = await GetAusflugszielePages();
         console.log("apiData 222222222", apiData);
         setCookieData(apiData);
-        // Store all listings in state
-        setAllListings(apiData.data.listings.edges || []);
+        // Store all listings in state, sorted by zip code
+        const listings = apiData.data.listings.edges || [];
+        const sortedListings = sortListingsByZip(listings);
+        setAllListings(sortedListings);
         setCurrentPage(1);
       } catch (err) {
         setError("Fehler beim Laden der Cookie-Daten.");
@@ -236,11 +173,11 @@ const AusflugszielePage = () => {
     ? getCurrentSearchResults()
     : getCurrentListings();
   const totalPages = isSearching
-    ? Math.ceil((searchResults?.edges?.length || 0) / listingsPerPage)
+    ? Math.ceil((searchResults?.length || 0) / listingsPerPage)
     : getTotalPages();
   const activePage = isSearching ? searchCurrentPage : currentPage;
   const totalListings = isSearching
-    ? searchResults?.edges?.length || 0
+    ? searchResults?.length || 0
     : allListings.length;
 
   return (
@@ -293,15 +230,16 @@ const AusflugszielePage = () => {
             label="Suche..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
             crossOrigin={undefined}
-            className={algoliaSearching ? "opacity-70" : ""}
+            className={filtering ? "opacity-70" : ""}
           />
-          <Button
-            color="red"
-            onClick={handleSearch}
-            disabled={filtering || algoliaSearching}
-          >
-            {filtering || algoliaSearching ? "Suche..." : "SUCHE"}
+          <Button color="red" onClick={handleSearch} disabled={filtering}>
+            {filtering ? "Suche..." : "SUCHE"}
           </Button>
           {isSearching && (
             <Button color="gray" onClick={clearSearch} className="px-4 py-2">
@@ -311,58 +249,18 @@ const AusflugszielePage = () => {
         </div>
       </div>
 
-      {/* Algolia search results preview */}
-      {search && algoliaResults.length > 0 && (
-        <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <Typography variant="small" className="font-semibold mb-2">
-            {algoliaResults.length} schnelle Suchergebnisse gefunden
-          </Typography>
-          <div className="space-y-2">
-            {algoliaResults.slice(0, 5).map((hit) => (
-              <div
-                key={hit.objectID}
-                className="p-2 hover:bg-gray-100 rounded cursor-pointer"
-                onClick={() => {
-                  const slug = hit.permalink
-                    ? hit.permalink.split("/").filter(Boolean).pop()
-                    : "";
-                  if (slug) {
-                    window.location.href = `/ausflugsziele/${slug}`;
-                  }
-                }}
-              >
-                <Typography
-                  variant="small"
-                  className="font-medium text-blue-600 hover:text-blue-800"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      hit._highlightResult?.post_title?.value || hit.post_title,
-                  }}
-                />
-                {hit._highlightResult?.post_excerpt?.value && (
-                  <Typography
-                    variant="small"
-                    className="text-gray-600 text-xs mt-1"
-                    dangerouslySetInnerHTML={{
-                      __html: hit._highlightResult.post_excerpt.value,
-                    }}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-          {algoliaResults.length > 5 && (
-            <Typography variant="small" className="text-gray-500 mt-2">
-              Weitere {algoliaResults.length - 5} Ergebnisse verfügbar
-            </Typography>
-          )}
-        </div>
+      {/* Search results info */}
+      {isSearching && searchResults.length > 0 && (
+        <Typography variant="small" className="text-gray-600 mb-4">
+          {searchResults.length} Ergebnis
+          {searchResults.length !== 1 ? "se" : ""} gefunden
+        </Typography>
       )}
 
-      {search && algoliaResults.length === 0 && !algoliaSearching && (
+      {isSearching && searchResults.length === 0 && !filtering && (
         <Typography variant="small" className="text-gray-500 mb-4">
-          Keine schnellen Suchergebnisse gefunden. Klicken Sie auf "SUCHE" für
-          eine vollständige Suche.
+          Keine Ergebnisse gefunden. Bitte versuchen Sie einen anderen
+          Suchbegriff.
         </Typography>
       )}
 
@@ -387,8 +285,7 @@ const AusflugszielePage = () => {
           </div>
         ) : (
           <>
-            {isSearching &&
-            (!searchResults?.edges || searchResults.edges.length === 0) ? (
+            {isSearching && (!searchResults || searchResults.length === 0) ? (
               <div className="text-center py-8"></div>
             ) : (
               displayListings?.map((edge, idx) => {
@@ -399,6 +296,7 @@ const AusflugszielePage = () => {
                       subtitle={edge.node.listingFieldGroup?.subtitle}
                       subcategory={edge.node.listingFieldGroup?.subcategory}
                       description={edge.node.listingFieldGroup?.description}
+                      listingFieldGroup={edge.node.listingFieldGroup}
                       onlyHeadings={onlyHeadings}
                       slug={edge.node.slug}
                       routePrefix="ausflugsziele"
@@ -413,10 +311,7 @@ const AusflugszielePage = () => {
             )}
 
             {/* Numbered Pagination - Only show if not searching with empty results and more than 1 page */}
-            {!(
-              isSearching &&
-              (!searchResults?.edges || searchResults.edges.length === 0)
-            ) &&
+            {!(isSearching && (!searchResults || searchResults.length === 0)) &&
               totalPages > 1 && (
                 <div className="flex justify-center items-center gap-2 mt-8 mb-4 flex-wrap">
                   {/* Previous button */}
