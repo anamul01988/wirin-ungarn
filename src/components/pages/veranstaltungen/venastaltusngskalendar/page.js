@@ -116,7 +116,6 @@ const VenastaltusngskalendarPage = () => {
     async function fetchData() {
       try {
         const apiData = await GetListingsVeranstaltungen();
-        // console.log("apiData 2221122222222111", apiData);
         setCookieData(apiData);
         // Store all listings in state
         setAllListings(apiData.data.listings.edges || []);
@@ -157,7 +156,7 @@ const VenastaltusngskalendarPage = () => {
     <div className="mx-auto">
       <div className="w-full relative flex items-center justify-center mb-3">
         <ArchivePageHeaderImage
-          imageUrl="/headlineImages/veranstaltungen.jpg"
+          imageUrl="/headlineImages/Veranstaltungen.jpg"
           imageAlt="veranstaltungen"
         />
       </div>

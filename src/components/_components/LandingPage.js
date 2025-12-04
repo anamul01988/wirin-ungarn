@@ -2605,6 +2605,10 @@ const LandingPage = () => {
                   menuName: "Veranstaltungskalender",
                   menuRoute: "/veranstaltungen",
                 },
+                {
+                  menuName: "Karte",
+                  menuRoute: "/karte",
+                },
               ],
             },
             {
