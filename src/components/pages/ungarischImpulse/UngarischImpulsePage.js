@@ -134,22 +134,19 @@ const UngarischImpulsePage = () => {
   const handlePlayPause = useCallback(
     (audioId, audioUrl) => {
       if (!audioUrl) return;
-
-      // Pause any currently playing audio
-      pauseAllAudio();
-
+  
       // Get or create audio object
       let audio = audioObjects[audioId];
-
+  
       if (!audio) {
         audio = new Audio(audioUrl);
         setAudioObjects((prev) => ({ ...prev, [audioId]: audio }));
-
+  
         // Reset playing state when audio ends
         audio.addEventListener("ended", () => {
           setPlayingAudioId(null);
         });
-
+  
         // Error handling
         audio.addEventListener("error", () => {
           console.error("Error loading audio file:", audioUrl);
@@ -157,18 +154,26 @@ const UngarischImpulsePage = () => {
           setPlayingAudioId(null);
         });
       }
-
-      // Toggle play/pause
-      if (audio.paused) {
+  
+      // Check if THIS audio is currently playing
+      if (playingAudioId === audioId && !audio.paused) {
+        // If this audio is playing, pause it
+        audio.pause();
+        setPlayingAudioId(null);
+      } else {
+        // Pause all other audio first
+        Object.entries(audioObjects).forEach(([id, audioObj]) => {
+          if (audioObj && !audioObj.paused && id !== audioId) {
+            audioObj.pause();
+          }
+        });
+        
+        // Play this audio
         audio.play();
         setPlayingAudioId(audioId);
-      } else {
-        audio.pause();
-
-        setPlayingAudioId(null);
       }
     },
-    [audioObjects]
+    [audioObjects, playingAudioId]
   );
 
   const handleRewind = useCallback(
