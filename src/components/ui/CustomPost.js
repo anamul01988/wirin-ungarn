@@ -71,6 +71,7 @@ const CustomPost = ({
   routePrefix = "liedtexte",
   subtitle,
   subcategory = "",
+  listingFieldGroup,
 }) => {
   const route = useRouter();
   const dispatch = useDispatch();
@@ -112,10 +113,12 @@ const CustomPost = ({
   const renderDescription = () => {
     if (routePrefix === "ausflugsziele") {
       return (
-        <div className="space-y-4">
-          <div className="text-[14px] text-[#56646F] text-justify">
-            {subtitle}
-          </div>
+        <div className="space-y-2">
+          <p className="text-[16px] mb-1 text-[#494158]">
+            {listingFieldGroup?.zip} {listingFieldGroup?.city} |{" "}
+            {listingFieldGroup?.street}
+          </p>
+          <p className="text-[14px] text-[#56646F] text-justify">{subtitle}</p>
           <div
             className="archive__page_content text-justify"
             {...(isHTML(description)

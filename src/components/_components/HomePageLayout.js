@@ -133,7 +133,7 @@ export default function HomePageLayout() {
           </div>
 
           <div className="calendar-item">
-            <button className="header-btn">
+            <button className="header-btn pb-[2px]">
               <span className="ht_text">meine Seiten-Historie</span> 📅
             </button>
             <PageHistoryMenu />
