@@ -306,7 +306,7 @@ const HungarianNumberGame = () => {
     >
       <audio ref={audioRef} preload="auto" />
 
-      <div className="w-full relative flex items-center justify-center mb-3">
+      <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
         <ArchivePageHeaderImage
           imageUrl="/headlineImages/Zahlentrainer.jpg"
           imageAlt="Zahlentrainer"

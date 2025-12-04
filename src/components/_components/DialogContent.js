@@ -208,7 +208,7 @@ export default function DialogContent({
               )}
 
             {pathname === "/wie-spaet-ist-es/" && (
-              <div className="w-full relative flex items-center justify-center mb-3">
+              <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
                 <ArchivePageHeaderImage
                   imageUrl="/headlineImages/wie-spaet-ist-es.jpg"
                   imageAlt="wie-spaet-ist-es"
