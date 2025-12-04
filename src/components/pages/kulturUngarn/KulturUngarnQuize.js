@@ -161,6 +161,14 @@ const HungarianQuiz = () => {
         />
       </div>
 
+      <p className="archive__page_description leading-relaxed font-semibold mb-6">
+        Manchmal sieht man den Wald vor lauter Bäumen nicht. Und ein anderes Mal
+        hat man etwas 5 x geprüft (und auch prüfen lassen) und es ist dennoch
+        was falsch. So sind auch wir sicher nicht davor verschont, dass sich in
+        unseren Schulungsunterlagen ein Fehler eingeschlichen haben könnte. Aber
+        wir als Gemeinschaft schaffen es sicher das immer weiter zu optimieren.
+      </p>
+
       <div style={styles.container}>
         {/* Settings Panel */}
         <div style={styles.settings}>
@@ -364,6 +372,7 @@ const styles = {
   container: {
     maxWidth: "800px",
     margin: "0 auto",
+    padding: "0px 60px",
   },
   settings: {
     border: "3px solid #436f4d",
@@ -375,7 +384,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "12px 20px",
+    padding: "1px 20px",
     backgroundColor: "#436f4d",
     cursor: "pointer",
     borderRadius: "2px 2px 0 0",
@@ -383,7 +392,7 @@ const styles = {
   settingsTitle: {
     color: "#fff",
     margin: 0,
-    fontSize: "18px",
+    fontSize: "16px",
     fontWeight: "normal",
     display: "flex",
     alignItems: "center",
@@ -396,7 +405,7 @@ const styles = {
     background: "none",
     border: "none",
     color: "#fff",
-    fontSize: "18px",
+    fontSize: "16px",
     cursor: "pointer",
     padding: "0",
     fontFamily: "inherit",
@@ -410,7 +419,7 @@ const styles = {
   label: {
     fontWeight: "600",
     marginBottom: "10px",
-    fontSize: "15px",
+    fontSize: "13px",
     color: "#555",
   },
   buttonGroup: {
@@ -420,7 +429,7 @@ const styles = {
   },
   button: {
     fontSize: "16px",
-    padding: "8px 24px",
+    padding: "4px 24px",
     border: "1px solid #ccc",
     background: "white",
     cursor: "pointer",
@@ -451,7 +460,7 @@ const styles = {
     backgroundColor: "white",
   },
   questionInner: {
-    padding: "20px",
+    padding: "16px",
     textAlign: "center",
   },
   questionHU: {
