@@ -253,7 +253,7 @@ function VocabGame() {
 
   return (
     <div style={styles.container}>
-      <div className="w-full relative flex items-center justify-center mb-3">
+      <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
         <ArchivePageHeaderImage
           imageUrl="/headlineImages/Vokabelentdecker.jpg"
           imageAlt="Vokabelentdecker"
@@ -399,20 +399,25 @@ const styles = {
     lineHeight: "1.6",
   },
   themeSelector: {
-    textAlign: "center",
+    display: "flex",
+    gap: "10px",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: "25px",
   },
   label: {
     display: "block",
     marginBottom: "8px",
-    fontWeight: "bold",
+    fontWeight: "500",
+    fontSize: "14px",
+    marginTop: "8px",
   },
   select: {
     padding: "10px",
     fontSize: "16px",
     borderRadius: "4px",
     border: "1px solid #ddd",
-    minWidth: "300px",
+    minWidth: "150px",
   },
   noDataMessage: {
     textAlign: "center",
@@ -434,7 +439,7 @@ const styles = {
     marginBottom: "20px",
   },
   card: {
-    padding: "15px",
+    padding: "8px",
     textAlign: "center",
     borderRadius: "5px",
     cursor: "pointer",
@@ -448,11 +453,11 @@ const styles = {
   },
   cardHun: {
     border: "2px solid #436f4d",
-    backgroundColor: "#e8f5e9",
+    backgroundColor: "#f9f9f9",
   },
   cardGer: {
     border: "2px solid #cc2233",
-    backgroundColor: "#ffebee",
+    backgroundColor: "#f9f9f9",
   },
   cardFlash: {
     backgroundColor: "#64b5f6",

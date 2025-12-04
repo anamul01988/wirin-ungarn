@@ -9,72 +9,72 @@ import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 // Helper function to parse DD.MM.YYYY format
 const parseDateString = (dateString) => {
   if (!dateString) return null;
-  
+
   // If it's already a Date object, return it
   if (dateString instanceof Date) {
     return dateString;
   }
-  
+
   // Handle DD.MM.YYYY format (e.g., "28.06.2025")
-  if (typeof dateString === 'string') {
+  if (typeof dateString === "string") {
     // Check if it matches DD.MM.YYYY format
     const ddmmyyyyPattern = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
     const match = dateString.match(ddmmyyyyPattern);
-    
+
     if (match) {
       const day = parseInt(match[1], 10);
       const month = parseInt(match[2], 10) - 1; // Month is 0-indexed in JavaScript
       const year = parseInt(match[3], 10);
       return new Date(year, month, day);
     }
-    
+
     // Try standard Date parsing as fallback
     const parsed = new Date(dateString);
     if (!isNaN(parsed.getTime())) {
       return parsed;
     }
   }
-  
+
   return null;
 };
 
 // Filter events to show only those within next 15 days from today
 const filterEventsByDate = (events) => {
   if (!events || !Array.isArray(events)) return [];
-  
+
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Start of today
-  
+
   const fifteenDaysLater = new Date(today);
   fifteenDaysLater.setDate(today.getDate() + 15);
   fifteenDaysLater.setHours(23, 59, 59, 999); // End of 15th day
-  
+
   const filtered = events.filter((edge) => {
     const timefrom = edge.node?.listingFieldGroup?.timefrom;
     if (!timefrom) return false;
-    
+
     // Parse the date string (DD.MM.YYYY format)
     const eventDate = parseDateString(timefrom);
-    
+
     // Check if date is valid
     if (!eventDate || isNaN(eventDate.getTime())) return false;
-    
+
     // Set to start of day for comparison
     eventDate.setHours(0, 0, 0, 0);
-    
+
     // Event must be today or later, and within 15 days
     return eventDate >= today && eventDate <= fifteenDaysLater;
   });
-  
+
   // Sort by timefrom (earliest first)
   filtered.sort((a, b) => {
     const dateA = parseDateString(a.node?.listingFieldGroup?.timefrom);
     const dateB = parseDateString(b.node?.listingFieldGroup?.timefrom);
-    
+
     if (!dateA || !dateB) return 0;
     return dateA.getTime() - dateB.getTime();
   });
-  
+
   return filtered;
 };
 
@@ -166,18 +166,20 @@ const VenastaltusngskalendarPage = () => {
 
     setFiltering(true);
     setIsSearching(true);
-    
+
     // Filter allListings based on search term
     const searchTerm = search.toLowerCase().trim();
     const filtered = allListings.filter((edge) => {
       const node = edge.node;
       const title = node?.title?.toLowerCase() || "";
-      const description = node?.listingFieldGroup?.description?.toLowerCase() || "";
+      const description =
+        node?.listingFieldGroup?.description?.toLowerCase() || "";
       const subtitle = node?.listingFieldGroup?.subtitle?.toLowerCase() || "";
       const street = node?.listingFieldGroup?.street?.toLowerCase() || "";
       const category = node?.listingFieldGroup?.category?.toLowerCase() || "";
-      const subcategory = node?.listingFieldGroup?.subcategory?.toLowerCase() || "";
-      
+      const subcategory =
+        node?.listingFieldGroup?.subcategory?.toLowerCase() || "";
+
       return (
         title.includes(searchTerm) ||
         description.includes(searchTerm) ||
@@ -187,7 +189,7 @@ const VenastaltusngskalendarPage = () => {
         subcategory.includes(searchTerm)
       );
     });
-    
+
     // Set search results in the same format as API response
     setSearchResults({ edges: filtered });
     setSearchCurrentPage(1);
@@ -265,18 +267,24 @@ const VenastaltusngskalendarPage = () => {
         />
       </div>
 
-      {/* Description */}
-      <Typography
-        variant="paragraph"
-        className="archive__page_description leading-relaxed font-bold mb-6"
-        dangerouslySetInnerHTML={{
-          __html: truncateText(content),
-        }}
-      />
+      <p className="text-sm text-[#56646F]">
+        Diese Seite bietet dir einen Überblick über die Veranstaltungen in
+        Ungarn, die innerhalb der nächsten 2 Wochen auf dem Plan stehen. Du
+        kannst das nach Art der Veranstaltung und nach Region (per Postleitzahl)
+        filtern. Wenn Du weiter in die Zukunft planen möchtest, findest Du alle{" "}
+        <span className=" text-red-600">
+          {" "}
+          Events und Märkte in unserer Karte.
+        </span>
+        <br />
+        <br />
+        Du möchtest uns über weitere Termine informieren, dann schreib uns gerne
+        über das <span className=" text-red-600">Kontaktformular</span>.
+      </p>
 
       {/* Search Box */}
       <div className="mb-6">
-        <Typography variant="small" className="font-medium mb-2">
+        <Typography variant="small" className="font-medium mt-2 mb-2">
           Diese Seite durchsuchen
         </Typography>
         <div className="flex lg:flex-nowrap md:flex-wrap gap-5">

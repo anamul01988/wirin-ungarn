@@ -391,7 +391,7 @@ const AusDemLebenPage = () => {
       {/* <div className="ool-page-header">
         <h1 className="ool-page-title">{title || "aus dem Leben"}</h1>
       </div> */}
-      <div className="w-full relative flex items-center justify-center mb-3">
+      <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
         <ArchivePageHeaderImage
           imageUrl="/headlineImages/aus-dem-Leben.jpg"
           imageAlt="aus dem Leben"

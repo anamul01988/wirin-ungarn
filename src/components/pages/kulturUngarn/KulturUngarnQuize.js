@@ -154,14 +154,14 @@ const HungarianQuiz = () => {
   return (
     <div style={styles.wrapper}>
       {/* <h1 style={styles.mainTitle}>KulTour Ungarn</h1> */}
-      <div className="w-full relative flex items-center justify-center mb-3">
+      <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
         <ArchivePageHeaderImage
           imageUrl="/headlineImages/Kultour-Ungarn.jpg"
           imageAlt="kultour Ungarn"
         />
       </div>
 
-      <p className="archive__page_description leading-relaxed font-semibold mb-6">
+      <p className="archive__page_description leading-relaxed font-semibold mb-3">
         Manchmal sieht man den Wald vor lauter Bäumen nicht. Und ein anderes Mal
         hat man etwas 5 x geprüft (und auch prüfen lassen) und es ist dennoch
         was falsch. So sind auch wir sicher nicht davor verschont, dass sich in
@@ -411,7 +411,7 @@ const styles = {
     fontFamily: "inherit",
   },
   settingsContent: {
-    padding: "20px",
+    padding: "10px 20px 0px",
   },
   section: {
     marginBottom: "20px",
@@ -460,7 +460,7 @@ const styles = {
     backgroundColor: "white",
   },
   questionInner: {
-    padding: "16px",
+    padding: "5px",
     textAlign: "center",
   },
   questionHU: {
@@ -498,7 +498,7 @@ const styles = {
   },
   answer: {
     flex: 1,
-    padding: "12px 20px",
+    padding: "4px 20px",
     border: "2px solid #436f4d",
     borderRadius: "5px",
     textAlign: "center",
