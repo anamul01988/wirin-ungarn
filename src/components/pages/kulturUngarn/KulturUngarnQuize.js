@@ -12,6 +12,7 @@ const HungarianQuiz = () => {
   const [shownQuestionIds, setShownQuestionIds] = useState(new Set());
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [hideIntroText, setHideIntroText] = useState(false);
 
   // Get unique categories
   const categories = [...new Set(quizData.map((q) => q.category))].sort();
@@ -122,6 +123,7 @@ const HungarianQuiz = () => {
 
   // Handle next question
   const handleNextQuestion = () => {
+    setHideIntroText(true);
     loadNextQuestion();
   };
 
@@ -161,13 +163,16 @@ const HungarianQuiz = () => {
         />
       </div>
 
-      <p className="archive__page_description leading-relaxed font-semibold mb-3">
-        Manchmal sieht man den Wald vor lauter Bäumen nicht. Und ein anderes Mal
-        hat man etwas 5 x geprüft (und auch prüfen lassen) und es ist dennoch
-        was falsch. So sind auch wir sicher nicht davor verschont, dass sich in
-        unseren Schulungsunterlagen ein Fehler eingeschlichen haben könnte. Aber
-        wir als Gemeinschaft schaffen es sicher das immer weiter zu optimieren.
-      </p>
+      {!hideIntroText && (
+        <p className="archive__page_description leading-relaxed font-semibold mb-3">
+          Manchmal sieht man den Wald vor lauter Bäumen nicht. Und ein anderes
+          Mal hat man etwas 5 x geprüft (und auch prüfen lassen) und es ist
+          dennoch was falsch. So sind auch wir sicher nicht davor verschont,
+          dass sich in unseren Schulungsunterlagen ein Fehler eingeschlichen
+          haben könnte. Aber wir als Gemeinschaft schaffen es sicher das immer
+          weiter zu optimieren.
+        </p>
+      )}
 
       <div style={styles.container}>
         {/* Settings Panel */}

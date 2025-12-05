@@ -39,7 +39,7 @@ const ImpressumDetails = () => {
       {/* <h1 className="single__page_title mb-3 text-2xl font-bold text-gray-800 pr-12 leading-snug">
         {title}
       </h1> */}
-      <div className="w-full relative flex items-center justify-center mb-3">
+      <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
         <ArchivePageHeaderImage
           imageUrl="/headlineImages/Impressum.jpg"
           imageAlt="Impressum"

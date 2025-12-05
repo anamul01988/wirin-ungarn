@@ -218,7 +218,7 @@ const UngarnInsiderPage = () => {
 
       {/* Page Title */}
       {/* <h1 className="insider-page__title">{title || "Ungarn-Insider"}</h1> */}
-      <div className="w-full relative flex items-center justify-center mb-3">
+      <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
         <ArchivePageHeaderImage
           imageUrl="/headlineImages/Ungarn-Insider.jpg"
           imageAlt="Ungarn Insider"

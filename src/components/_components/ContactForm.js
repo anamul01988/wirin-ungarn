@@ -142,7 +142,7 @@ export default function ContactForm({ formHtml }) {
             style={{
               margin: "0 0 1em 0",
               padding: "0",
-              fontSize: "13px",
+              fontSize: "14px",
               fontWeight: "400",
               color: "#56646f !important",
             }}
@@ -159,7 +159,7 @@ export default function ContactForm({ formHtml }) {
             style={{
               margin: "0 0 1em 0",
               padding: "0",
-              fontSize: "13px",
+              fontSize: "14px",
               fontWeight: "400",
               color: "#56646f !important",
             }}

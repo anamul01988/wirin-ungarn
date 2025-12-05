@@ -220,7 +220,7 @@ export default function DialogContent({
             )}
 
             {title && title.toLowerCase().includes("kontakt") && (
-              <div className="w-full relative flex items-center justify-center mb-3">
+              <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
                 <ArchivePageHeaderImage
                   imageUrl="/headlineImages/Kontakt.jpg"
                   imageAlt="kontakt"
@@ -228,7 +228,7 @@ export default function DialogContent({
               </div>
             )}
             {routePrefix === "philosophie" && (
-              <div className="w-full relative flex items-center justify-center mb-3">
+              <div className="w-full relative flex items-center justify-center mb-[1.6rem]">
                 <ArchivePageHeaderImage
                   imageUrl="/headlineImages/Philosophie.jpg"
                   imageAlt="philosophie"
@@ -244,6 +244,7 @@ export default function DialogContent({
               </div>
             )}
             {routePrefix !== "einfach-lesen" &&
+              routePrefix !== "philosophie" &&
               !isContactPage &&
               pathname !== "/wie-spaet-ist-es/" && (
                 <h1
@@ -904,26 +905,24 @@ export default function DialogContent({
             ) : (
               <>
                 {" "}
-                {routePrefix == null &&
-                  contentType === "page" &&
-                  !hasContactForm && (
-                    <div
-                      className={`prose prose-p-strong prose-p max-w-none ${
-                        pathname === "/uber-uns" ||
-                        pathname === "/uber-uns/" ||
-                        pathname === "/wiu-muenzen" ||
-                        pathname === "/wiu-muenzen/" ||
-                        pathname === "/philosophie" ||
-                        pathname === "/philosophie/" ||
-                        pathname === "/karriere" ||
-                        pathname === "/karriere/"
-                          ? "ueber-uns-prose"
-                          : ""
-                      }`}
-                    >
-                      <div dangerouslySetInnerHTML={{ __html: content }} />
-                    </div>
-                  )}
+                {contentType === "page" && !hasContactForm && (
+                  <div
+                    className={`prose prose-p-strong prose-p max-w-none ${
+                      pathname === "/uber-uns" ||
+                      pathname === "/uber-uns/" ||
+                      pathname === "/wiu-muenzen" ||
+                      pathname === "/wiu-muenzen/" ||
+                      pathname === "/philosophie" ||
+                      pathname === "/philosophie/" ||
+                      pathname === "/karriere" ||
+                      pathname === "/karriere/"
+                        ? "ueber-uns-prose"
+                        : ""
+                    }`}
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: content }} />
+                  </div>
+                )}
               </>
             )}
 
