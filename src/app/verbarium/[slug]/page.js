@@ -62,7 +62,7 @@ export default function SingleVerbariumPage() {
         dismiss={{
           enabled: false,
         }}
-        className="dialog-verbarium bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="common_diallog__area dialog-verbarium bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross Icon */}
         {open && (

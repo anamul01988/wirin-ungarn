@@ -46,7 +46,7 @@ export default function ShortsComponent() {
         dismiss={{
           enabled: false,
         }}
-        className="dialog-shorts bg-white outline-none relative border-2 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="common_diallog__area dialog-shorts bg-white outline-none relative border-2 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (

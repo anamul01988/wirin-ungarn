@@ -45,7 +45,7 @@ export default function KarteComponent() {
         dismiss={{
           enabled: false,
         }}
-        className="dialog-veranstaltungen bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="common_diallog__area dialog-veranstaltungen bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (

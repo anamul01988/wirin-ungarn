@@ -46,7 +46,7 @@ export default function Wissenswert() {
         dismiss={{
           enabled: false,
         }}
-        className="dialog-wissenswert bg-white outline-none relative border-2 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="common_diallog__area dialog-wissenswert bg-white outline-none relative border-2 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (
