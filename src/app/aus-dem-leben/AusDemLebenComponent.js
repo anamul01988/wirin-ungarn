@@ -59,23 +59,9 @@ export default function AusDemLebenComponent() {
         )}
 
         <DialogBody className="overflow-auto mr-1 custom__modal_area flex-1">
-          {/* Breadcrumb */}
-          {/* <div className="mb-2 px-0 pt-0">
-            <Breadcrumb className="text-sm" />
-          </div> */}
           <AusDemLebenPage />
         </DialogBody>
       </Dialog>
-      <div className="min-h-screen flex items-center justify-center">
-        {/* <Button
-          onClick={navigateToHome}
-          color="blue"
-          size="lg"
-          className="px-6 py-3 capitalize"
-        >
-          Navigate to Home
-        </Button> */}
-      </div>
     </>
   );
 }
