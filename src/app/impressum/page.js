@@ -41,7 +41,7 @@ export default function ImpsModal() {
       <Dialog
         open={open}
         handler={handleOpen}
-        size={"lg"}
+        // size={"lg"}
         dismiss={{
           enabled: false,
         }}
@@ -64,7 +64,7 @@ export default function ImpsModal() {
         </DialogBody>
       </Dialog>
       <div className="min-h-screen flex items-center justify-center">
-               {/* <Button
+        {/* <Button
           onClick={navigateToHome}
           color="blue"
           size="lg"

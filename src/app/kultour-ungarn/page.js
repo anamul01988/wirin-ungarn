@@ -42,7 +42,7 @@ export default function KultourUngarnModal() {
       <Dialog
         open={open}
         handler={handleOpen}
-        size={"lg"}
+        // size={"lg"}
         dismiss={{
           enabled: false,
         }}
@@ -62,8 +62,7 @@ export default function KultourUngarnModal() {
           <HungarianQuiz />
         </DialogBody>
       </Dialog>
-      <div className="min-h-screen flex items-center justify-center">
-      </div>
+      <div className="min-h-screen flex items-center justify-center"></div>
     </>
   );
 }

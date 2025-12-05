@@ -42,7 +42,7 @@ export default function VeranstaltungenComponent() {
       <Dialog
         open={open}
         handler={handleOpen}
-        size={"lg"}
+        // size={"lg"}
         dismiss={{
           enabled: false,
         }}
