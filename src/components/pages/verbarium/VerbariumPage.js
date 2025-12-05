@@ -20,26 +20,47 @@ const VerbariumPage = () => {
   const suggestionsRef = useRef(null);
   const searchTimeoutRef = useRef(null);
 
-  // Fetch data
+  // Fetch data with pagination
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
-        const apiData = await GetAllVerbariums(500, null);
-        console.log("Verbarium data:", apiData);
+        let allVerbs = [];
+        let hasNextPage = true;
+        let cursor = null;
 
-        if (apiData?.data) {
-          // Set page data
-          if (apiData.data.pages?.nodes?.length > 0) {
-            setPageData(apiData.data.pages.nodes[0]);
-          }
+        // Fetch all verbs using pagination
+        while (hasNextPage) {
+          const apiData = await GetAllVerbariums(100, cursor);
+          console.log("Verbarium data batch:", apiData);
 
-          // Set verbariums data
-          if (apiData.data.verbariums?.nodes?.length > 0) {
-            setVerbariums(apiData.data.verbariums.nodes);
-            setFilteredVerbs(apiData.data.verbariums.nodes);
+          if (apiData?.data) {
+            // Set page data (only once)
+            if (!pageData && apiData.data.pages?.nodes?.length > 0) {
+              setPageData(apiData.data.pages.nodes[0]);
+            }
+
+            // Collect verbs
+            if (apiData.data.verbariums?.nodes?.length > 0) {
+              allVerbs = [...allVerbs, ...apiData.data.verbariums.nodes];
+            }
+
+            // Check if there are more pages
+            hasNextPage =
+              apiData.data.verbariums?.pageInfo?.hasNextPage || false;
+            cursor = apiData.data.verbariums?.pageInfo?.endCursor || null;
+
+            console.log(
+              `Fetched ${allVerbs.length} verbs so far, hasNextPage: ${hasNextPage}`
+            );
+          } else {
+            hasNextPage = false;
           }
         }
+
+        console.log(`Total verbs fetched: ${allVerbs.length}`);
+        setVerbariums(allVerbs);
+        setFilteredVerbs(allVerbs);
       } catch (err) {
         console.error("Error fetching Verbarium data:", err);
         setError("Fehler beim Laden der Daten.");
@@ -71,7 +92,7 @@ const VerbariumPage = () => {
           return;
         }
 
-        // Filter verbs
+        // Filter verbs by title
         const filtered = verbariums.filter((verb) =>
           verb.title.toLowerCase().includes(normalizedQuery)
         );
@@ -171,9 +192,6 @@ const VerbariumPage = () => {
             <div className="content-inner">
               {/* Page Header */}
               <div id="term">
-                {/* <div className="term-title">
-                  <h1>{title || "Verbarium"}</h1>
-                </div> */}
                 <div className="w-full relative flex items-center justify-center mb-3">
                   <ArchivePageHeaderImage
                     imageUrl="/headlineImages/Verbarium.jpg"
@@ -260,13 +278,12 @@ const VerbariumPage = () => {
                   filteredVerbs.map((verb) => (
                     <a
                       key={verb.id}
-                      href={``}
-                      // href={`/verbarium/${verb.slug}`}
+                      href={`/verbarium/${verb.slug}`}
                       className="verbarium_link"
-                      // onClick={(e) => {
-                      //   e.preventDefault();
-                      //   router.push(`/verbarium/${verb.slug}`);
-                      // }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.push(`/verbarium/${verb.slug}`);
+                      }}
                     >
                       <div className="verbarium_item">{verb.title}</div>
                     </a>

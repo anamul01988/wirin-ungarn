@@ -147,7 +147,7 @@ td {
 
   .header-btn {
     padding: 4px 16px;
-     /* padding-bottom: 2px !important; */
+    /* padding-bottom: 2px !important; */
     /* padding-bottom: 7px !important; */
   }
 
@@ -3881,4 +3881,107 @@ blockquote:before {
   font-size: 16px;
   font-style: italic;
   color: #436f4d;
+}
+
+/* --------------------------------- kurz und knapp single page styles  ----------------- */
+/* kurz and knapp single page styles */
+
+.kurz-und-knapp_single-page .custom__modal_area_special p,
+.knowledge-page p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+  margin-bottom: 0.5em;
+  color: #444;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special h5 {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 0 0 -0.05em;
+  color: #436f4d;
+  line-height: 1.3em;
+  padding: 0.5em 0;
+  margin: 0 0 0 -0.05em;
+  font-style: normal;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special h3 {
+  margin-top: 0px;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special h5 span {
+  color: #008000;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special blockquote {
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+  margin: 0 0 0 35px;
+  padding: 0 0 0 15px;
+  background: url(https://wir-in-ungarn.hu/wiucontent/themes/Grimag/assets/images/line.png)
+    top left repeat-y;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special blockquote:before {
+  margin: -31px 0 0 -58px;
+  font-size: 4em;
+  content: "\201C";
+  position: absolute;
+  font-size: 5em;
+  opacity: 0.35;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special blockquote p {
+  margin-bottom: 9px;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special ul {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special ul li {
+  line-height: 26px;
+  color: #444;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special ul li b {
+  font-weight: bold;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special ul li p {
+  margin: 0 0 0.5em 0 !important;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special ol {
+  margin: 0 0 0 1.5em;
+  font-size: 14px;
+  list-style-type: disc;
+  margin-top: -5px !important;
+  margin-bottom: 0px !important;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special ol li {
+  line-height: 26px;
+  color: #444;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special ol li b {
+  font-weight: bold;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special ol li p {
+  margin: 0 0 0.5em 0 !important;
+}
+
+.kurz-und-knapp_single-page .custom__modal_area_special .ai-optimize-15 {
+  font-size: 14px;
+  line-height: 25px;
+  font-weight: normal;
 }

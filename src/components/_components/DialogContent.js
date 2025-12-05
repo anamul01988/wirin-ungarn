@@ -21,6 +21,7 @@ import Link from "next/link";
 import LearningBoxModal from "./LearningBoxModal";
 import { ArchivePageHeaderImage } from "@/lib/utils/utils";
 import KurzKnappRelatedItem from "./KurzKnappRelatedItem";
+import CrosswordGameWrapper from "./CrosswordGameWrapper";
 export default function DialogContent({
   title,
   content,
@@ -154,6 +155,8 @@ export default function DialogContent({
 
   // Generate dynamic route-based className from pathname
 
+  console.log("pathname", pathname);
+
   return (
     <>
       <Dialog
@@ -258,6 +261,13 @@ export default function DialogContent({
                 />
               </div>
             )}
+            {contentType === "kreuzwortraetsel" &&
+              pathname ===
+                "/kreuzwortraetsel/tutti-frutti-der-ungarische-obstkorb/" && (
+                <div className="crossword-game-container">
+                  <CrosswordGameWrapper />
+                </div>
+              )}
             {/* {contentType === "aus-dem-leben" && (
               <div className="mb-6 p-0 mt-4">
                 <div

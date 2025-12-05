@@ -11,7 +11,8 @@
 }
 
 .verbarium-page {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
   line-height: 1.6;
   color: #333;
   background-color: #f5f5f5;
@@ -48,7 +49,6 @@
 #term {
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 3px solid #436f4d;
 }
 
 .term-title h1 {
@@ -67,8 +67,6 @@
   color: #555;
   margin-bottom: 30px;
   padding: 15px;
-  background-color: #f9f9f9;
-  border-left: 4px solid #436f4d;
   border-radius: 4px;
 }
 
@@ -204,9 +202,8 @@
   font-weight: 500;
   display: block;
   padding: 10px;
-  background-color: #f9f9f9;
   border-radius: 4px;
-  border-left: 3px solid #436f4d;
+  border-bottom: 1px solid #ccc;
 }
 
 /* -----------------------------------------------
@@ -222,7 +219,8 @@
 .verbarium_link {
   position: relative;
   text-decoration: none;
-  flex: 0 0 calc(20% - 10px); /* 5 items per row */
+  flex: 0 0 calc(20% - 10px);
+  /* 5 items per row */
   display: flex;
 }
 
@@ -315,19 +313,21 @@
 /* Tablets (768px - 1024px) */
 @media screen and (max-width: 1024px) {
   .verbarium_link {
-    flex: 0 0 calc(25% - 10px); /* 4 items per row */
+    flex: 0 0 calc(25% - 10px);
+    /* 4 items per row */
   }
 }
 
 @media screen and (max-width: 768px) {
   .verbarium_link {
-    flex: 0 0 calc(33.333% - 10px); /* 3 items per row */
+    flex: 0 0 calc(33.333% - 10px);
+    /* 3 items per row */
   }
-  
+
   #verbarium_input {
     width: 85%;
   }
-  
+
   .all_word_container {
     width: 85%;
   }
@@ -338,11 +338,12 @@
   .term-title h1 {
     font-size: 2rem;
   }
-  
+
   .verbarium_link {
-    flex: 0 0 calc(50% - 10px); /* 2 items per row */
+    flex: 0 0 calc(50% - 10px);
+    /* 2 items per row */
   }
-  
+
   .verbarium_item {
     padding: 10px 12px;
     font-size: 0.95rem;
@@ -354,29 +355,29 @@
   #content-holder {
     padding: 15px;
   }
-  
+
   .term-title h1 {
     font-size: 1.75rem;
   }
-  
+
   #verbarium_input {
     width: 100%;
     font-size: 0.95rem;
   }
-  
+
   .all_word_container {
     width: 100%;
   }
-  
+
   .verbarium_link {
     flex: 0 0 calc(50% - 10px);
   }
-  
+
   .verbarium_item {
     padding: 8px 10px;
     font-size: 0.9rem;
   }
-  
+
   .wissenswert_description {
     font-size: 0.95rem;
     padding: 12px;
@@ -386,9 +387,10 @@
 /* Extra Small Mobile (360px) */
 @media screen and (max-width: 360px) {
   .verbarium_link {
-    flex: 0 0 100%; /* 1 item per row */
+    flex: 0 0 100%;
+    /* 1 item per row */
   }
-  
+
   .verbarium_item {
     min-height: 45px;
   }
@@ -414,4 +416,3 @@
 .all_word_container::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
