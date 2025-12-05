@@ -119,8 +119,7 @@ td {
 }
 
 .header {
-  /* position: sticky; */
-  position: fixed;
+  position: sticky;
   top: 0;
   z-index: 1000;
   padding: 10px 20px;
@@ -129,6 +128,10 @@ td {
   align-items: center;
 }
 
+body:has(.common_diallog__area) .header {
+  position: fixed !important;
+  z-index: 9999 !important;
+}
 .header-buttons {
   display: flex;
   gap: 25px;

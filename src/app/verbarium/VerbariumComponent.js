@@ -42,11 +42,11 @@ export default function VerbariumComponent() {
       <Dialog
         open={open}
         handler={handleOpen}
-        size={"lg"}
+        // size={"lg"}
         dismiss={{
           enabled: false,
         }}
-        className="dialog-verbarium bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
+        className="common_diallog__area dialog-verbarium bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (

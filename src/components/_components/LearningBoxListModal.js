@@ -147,7 +147,7 @@ export default function LearningBoxListModal({ open, onClose }) {
       size="lg"
       // dismiss={{ enabled: false }}
       // data-dialog="learning-box-list-modal"
-      className="dialog-learning-box-list bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
+      className="common_diallog__area dialog-learning-box-list bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
     >
       {/* Floating Cross Icon - outside DialogBody */}
       {open && (

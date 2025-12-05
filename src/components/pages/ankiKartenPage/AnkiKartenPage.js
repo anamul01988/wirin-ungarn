@@ -37,11 +37,11 @@ export default function AnkiKartenPage() {
       <Dialog
         open={open}
         handler={handleOpen}
-        size={"lg"}
+        // size={"lg"}
         dismiss={{
           enabled: false,
         }}
-        className="dialog-anki-karten bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
+        className="common_diallog__area dialog-anki-karten bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (

@@ -204,7 +204,7 @@ const AusDemLebenPage = () => {
       }
 
       // Navigate to single page using id
-      router.push(`/aus-dem-leben/${imageData.id}`);
+      router.push(`/aus-dem-leben/${imageData.slug}`);
     },
     [getImageData, router]
   );

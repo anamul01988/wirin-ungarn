@@ -43,11 +43,11 @@ export default function SprachkursComponent() {
       <Dialog
         open={open}
         handler={handleOpen}
-        size={"lg"}
+        // size={"lg"}
         dismiss={{
           enabled: false,
         }}
-        className="dialog-sprachkurs sprachkurs-modal bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col outline-none"
+        className="common_diallog__area dialog-sprachkurs sprachkurs-modal bg-white relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col outline-none"
       >
         {open && (
           <ModalIcons
