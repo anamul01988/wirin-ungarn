@@ -1625,41 +1625,30 @@ div[class*="Toastify"] {
 /* Base rule: Ensure dialogs never exceed 900px on any device */
 [role="dialog"] {
   max-width: 900px !important;
-  width: 900px !important;
+  width: calc(100vw - 40px) !important;
 }
-
-/* Override Material Tailwind's size for dialog-wissenswert */
-/* .dialog-wissenswert {
-  max-width: 900px !important;
-  width: 900px !important;
-} */
 
 /* Reduce padding and adjust width for smaller devices */
 @media screen and (max-width: 1350px) {
   [role="dialog"] {
-    max-width: min(60%, 900px) !important;
-    width: 60% !important;
-    min-width: 30% !important;
+    max-width: 900px !important;
+    width: calc(100vw - 100px) !important;
   }
-
-  /* .dialog-wissenswert {
-    max-width: min(60%, 900px) !important;
-    width: 60% !important;
-  } */
 }
+
 @media screen and (max-width: 992px) {
   [role="dialog"] {
-    max-width: min(60%, 900px) !important;
-    width: 60% !important;
-    min-width: 30% !important;
+    max-width: 900px !important;
+    width: calc(100vw - 80px) !important;
+  }
+}
+
+@media screen and (max-width: 792px) {
+  [role="dialog"] {
+    max-width: 900px !important;
+    width: calc(100vw - 60px) !important;
   }
 
-  /* .dialog-wissenswert {
-    max-width: min(60%, 900px) !important;
-    width: 60% !important;
-  } */
-}
-@media screen and (max-width: 792px) {
   [role="dialog"] .custom__modal_area {
     padding: 15px !important;
   }
@@ -1668,16 +1657,10 @@ div[class*="Toastify"] {
 /* Move dialog to the left for very small screens */
 @media screen and (max-width: 576px) {
   [role="dialog"] {
-    max-width: min(70%, 900px) !important;
-    width: 70% !important;
+    max-width: 900px !important;
+    width: calc(100vw - 40px) !important;
     transform: translateX(-20px) !important;
   }
-
-  /* .dialog-wissenswert {
-    max-width: min(70%, 900px) !important;
-    width: 70% !important;
-    transform: translateX(-20px) !important;
-  } */
 }
 
 /* Modal Icons Positioning */
