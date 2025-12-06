@@ -6,10 +6,6 @@ export default async function kreuzwortraetselSinglePage({ params }) {
 
   try {
     const contentData = await GetkreuzwortraetselSinglePostBySlug(slug);
-    console.log(
-      "contentData 111111111 for kreuzwortraetselSinglePage",
-      contentData
-    );
     if (!contentData) {
       console.log("No content data, calling notFound()");
       notFound();
