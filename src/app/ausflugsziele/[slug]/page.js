@@ -6,7 +6,6 @@ export default async function AusflugszieleDynamicPage({ params }) {
 
   try {
     const contentData = await GetAusflugszielePostBySlug(slug);
-    console.log("contentData 222222222", contentData);
     if (!contentData) {
       console.log("No content data, calling notFound()");
       notFound();

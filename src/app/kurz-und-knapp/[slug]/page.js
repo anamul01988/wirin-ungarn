@@ -6,7 +6,6 @@ export default async function kulinarischeSinglePage({ params }) {
 
   try {
     const contentData = await GetkurzUndKnappPostBySlug(slug);
-    console.log("contentData 222222222", contentData);
     if (!contentData) {
       console.log("No content data, calling notFound()");
       notFound();
