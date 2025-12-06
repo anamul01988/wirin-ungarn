@@ -5,7 +5,7 @@ import { Dialog, DialogBody, Button } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import KategorienPage from "@/components/pages/kategorien/kategorienPage";
 import ModalIcons from "@/components/_components/ModalIcons";
-import Breadcrumb from "@/components/_components/Breadcrumb";
+// import Breadcrumb from "@/components/_components/Breadcrumb";
 
 export default function KategorienComponent() {
   const [open, setOpen] = useState(false);
