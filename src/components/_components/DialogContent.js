@@ -270,21 +270,21 @@ export default function DialogContent({
                 />
               </div>
             )}
-            {/* {contentType === "kreuzwortraetsel" && (
+            {contentType === "kreuzwortraetsel" && (
               <div className="crossword-game-container">
                 <CrosswordGameWrapper
                   slug={pathname.split("/").filter(Boolean).pop()}
                 />
               </div>
-            )} */}
-            {/* {contentType === "aus-dem-leben" && (
+            )}
+            {contentType === "aus-dem-leben" && (
               <div className="mb-6 p-0 mt-4">
                 <div
                   className="text-sm leading-relaxed text-left mb-2"
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
               </div>
-            )} */}
+            )}
 
             {!contentType === "page" && (
               <>
