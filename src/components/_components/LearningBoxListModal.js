@@ -139,7 +139,6 @@ export default function LearningBoxListModal({ open, onClose }) {
     return date || "-";
   };
 
-  console.log("Rendering LearningBoxListModal with cards:", cards);
   return (
     <Dialog
       open={open}

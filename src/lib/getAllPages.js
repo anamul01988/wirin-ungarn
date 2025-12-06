@@ -22,6 +22,7 @@ export async function fetchPage(query, variables = {}) {
         variables,
       }),
       next: { revalidate: 60 },
+      // cache: "no-store", // Disable caching to avoid 2MB limit issues
       signal: controller.signal,
     });
 
@@ -1292,7 +1293,6 @@ export function GetAllImpulses(first = 50, after = null) {
 }
 
 export function GetAllImpulse(first = 220, after = null, level = "A1") {
-  console.log("GetAllImpulse called with level:", level);
   const SEARCH_QUERY = `
     query AllUimpulseMeta{
   ungarischImpulses(
@@ -1325,7 +1325,6 @@ export function GetAllImpulse(first = 220, after = null, level = "A1") {
 }
   `;
 
-  console.log("GetAllImpulse query executed with level:", level);
   return fetchPage(SEARCH_QUERY, { first, after });
 }
 

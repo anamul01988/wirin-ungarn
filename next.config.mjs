@@ -23,6 +23,12 @@ const nextConfig = {
       },
     ],
   },
+  // Suppress build warnings for large cache items
+  // logging: {
+  //   fetches: {
+  //     fullUrl: false,
+  //   },
+  // },
   webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
