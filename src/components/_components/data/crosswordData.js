@@ -6,20 +6,20 @@
 const CROSSWORD_LOADERS = {
   "tutti-frutti-der-ungarische-obstkorb": () =>
     import("./crosswords/TUTTI_FRUTTI_XML").then((m) => m.TUTTI_FRUTTI_XML),
-  "die-wichtigsten-verben-1": () =>
-    import("./crosswords/DieWichtigstenVerben").then(
-      (m) => m.DieWichtigstenVerben
-    ),
-  "zahlen-bis-100": () =>
-    import("./crosswords/ZahlenBis100").then((m) => m.ZahlenBis100),
-  "einfache-hauptwoerter-0003": () =>
-    import("./crosswords/EinfacheHauptwoerter").then(
-      (m) => m.EinfacheHauptwoerter
-    ),
-  "die-wichtigsten-verben-2": () =>
-    import("./crosswords/dieWichtigstenVerben2").then(
-      (m) => m.dieWichtigstenVerben2
-    ),
+  // "die-wichtigsten-verben-1": () =>
+  //   import("./crosswords/DieWichtigstenVerben").then(
+  //     (m) => m.DieWichtigstenVerben
+  //   ),
+  // "zahlen-bis-100": () =>
+  //   import("./crosswords/ZahlenBis100").then((m) => m.ZahlenBis100),
+  // "einfache-hauptwoerter-0003": () =>
+  //   import("./crosswords/EinfacheHauptwoerter").then(
+  //     (m) => m.EinfacheHauptwoerter
+  //   ),
+  // "die-wichtigsten-verben-2": () =>
+  //   import("./crosswords/dieWichtigstenVerben2").then(
+  //     (m) => m.dieWichtigstenVerben2
+  //   ),
   // "die-wichtigsten-verben-3": () =>
   //   import("./crosswords/DieWichtigstenVerben3").then(
   //     (m) => m.DieWichtigstenVerben3
