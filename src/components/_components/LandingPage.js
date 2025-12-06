@@ -2103,8 +2103,8 @@ const LandingPage = () => {
         .scrollbar-container {
             position: fixed;
             right: 20px;
-            top: 28%;
-            bottom: 12%;
+            top: 22%;
+            bottom: 10%;
             width: 30px;
             display: flex;
             flex-direction: column;

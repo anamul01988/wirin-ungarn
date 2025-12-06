@@ -86,7 +86,7 @@ export default function FavoritenListModal({ open, onClose }) {
     <Dialog
       open={open}
       handler={onClose}
-      size="lg"
+      // size="lg"
       className="common_diallog__area dialog-favoriten-list bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
     >
       {/* Floating Cross Icon */}

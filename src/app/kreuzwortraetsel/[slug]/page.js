@@ -6,7 +6,10 @@ export default async function kreuzwortraetselSinglePage({ params }) {
 
   try {
     const contentData = await GetkreuzwortraetselSinglePostBySlug(slug);
-    console.log("contentData 222222222", contentData);
+    console.log(
+      "contentData 111111111 for kreuzwortraetselSinglePage",
+      contentData
+    );
     if (!contentData) {
       console.log("No content data, calling notFound()");
       notFound();
@@ -16,6 +19,7 @@ export default async function kreuzwortraetselSinglePage({ params }) {
     if (contentData?.type === "post") {
       console.log("Processing as post type");
       const { title, postContentCrosswords } = contentData?.data.data.crossword;
+      // console.log("postContentCrosswords", postContentCrosswords);
       const imageUrl = null; // No featuredImage in listing query
 
       return (

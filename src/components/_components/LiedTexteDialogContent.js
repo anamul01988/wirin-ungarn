@@ -71,9 +71,9 @@ export default function LiedTexteDialogContent({
       <Dialog
         open={open}
         handler={handleOpen}
-        size="lg"
+        // size="lg"
         dismiss={{ enabled: false }}
-        className={`dialog-liedtexte-content ${
+        className={`common_diallog__area dialog-content dialog-liedtexte-content ${
           isSinglePage ? `${routePrefix}_single-page` : "archive__page"
         } bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col`}
       >

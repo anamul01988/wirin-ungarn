@@ -58,7 +58,7 @@ export default function SingleVerbariumPage() {
       <Dialog
         open={open}
         handler={() => {}}
-        size="lg"
+        // size="lg"
         dismiss={{
           enabled: false,
         }}

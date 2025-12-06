@@ -3988,3 +3988,41 @@ blockquote:before {
   line-height: 25px;
   font-weight: normal;
 }
+
+/*-----------------------------------   Time telling game css ------------------------------------------------------------------------- */
+
+.single__page-content .game-container {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 0px;
+}
+
+.game-container .options-section {
+  gap: 9px;
+}
+
+.game-container .options-section .option-btn {
+  padding: 8px 12px;
+  min-height: 42px;
+}
+
+.game-container .options-section .digital-time {
+  font-size: 50px;
+  margin-bottom: 0px;
+}
+
+@media screen and (max-width: 900px) {
+  .game-container {
+    flex-direction: column;
+  }
+
+  .options-section {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .game-container .clock-section {
+    width: 72%;
+    margin: 0 auto;
+  }
+}

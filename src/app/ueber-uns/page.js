@@ -38,7 +38,7 @@ export default function PhilosophieModal() {
         dismiss={{
           enabled: false,
         }}
-        className="overflow-auto bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
+        className="common_diallog__area dialog-content overflow-auto bg-white relative border-4 border-green-700 rounded-2xl h-[96vh] flex flex-col"
       >
         {/* Floating Cross + Love Icons */}
         {open && (

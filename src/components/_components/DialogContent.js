@@ -162,9 +162,9 @@ export default function DialogContent({
       <Dialog
         open={open}
         handler={handleOpen}
-        size="lg"
+        // size="lg"
         dismiss={{ enabled: false }}
-        className={`dialog-content ${
+        className={`common_diallog__area dialog-content ${
           isSinglePage ? `${routePrefix}_single-page` : "archive__page"
         } bg-white outline-none relative border-4 border-[#406c4d] rounded-2xl h-[96vh] flex flex-col`.trim()}
       >
@@ -262,13 +262,21 @@ export default function DialogContent({
                 />
               </div>
             )}
-            {contentType === "kreuzwortraetsel" &&
-              pathname ===
-                "/kreuzwortraetsel/tutti-frutti-der-ungarische-obstkorb/" && (
-                <div className="crossword-game-container">
-                  <CrosswordGameWrapper />
-                </div>
-              )}
+            {contentType === "kreuzwortraetsel" && (
+              <div className="rounded-lg">
+                <p
+                  className="single__page_description"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              </div>
+            )}
+            {contentType === "kreuzwortraetsel" && (
+              <div className="crossword-game-container">
+                <CrosswordGameWrapper
+                  slug={pathname.split("/").filter(Boolean).pop()}
+                />
+              </div>
+            )}
             {/* {contentType === "aus-dem-leben" && (
               <div className="mb-6 p-0 mt-4">
                 <div
@@ -504,7 +512,7 @@ export default function DialogContent({
                     {content?.postContent?.map((item, index) => (
                       <div key={index} className="mb-2">
                         <div className="flex pt-0 items-start justify-start mb-2">
-                          <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
+                          <div className="flex-shrink-0 basis-[70px] flex items-start mr-3">
                             <div
                               className="w-full h-full cursor-pointer"
                               // style={{
@@ -586,7 +594,7 @@ export default function DialogContent({
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
                     <div className="flex pt-0 items-start justify-start mb-2">
-                      <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
+                      <div className="flex-shrink-0 basis-[70px] flex items-start mr-3">
                         <div
                           className="w-full h-full cursor-pointer"
                           // style={{
@@ -600,8 +608,8 @@ export default function DialogContent({
                                 src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
                                 alt={item.icon[0]}
                                 loading="lazy"
-                                width={70}
-                                height={70}
+                                width={50}
+                                height={50}
                                 className="w-full h-auto"
                               />
                             ) : (
@@ -656,7 +664,7 @@ export default function DialogContent({
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
                     <div className="flex pt-0 items-start justify-start mb-2">
-                      <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
+                      <div className="flex-shrink-0 basis-[50px] flex items-start mr-3">
                         <div
                           className="w-full h-full cursor-pointer"
                           // style={{
@@ -670,8 +678,8 @@ export default function DialogContent({
                                 src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/${item.icon[0]}.png`}
                                 alt={item.icon[0]}
                                 loading="lazy"
-                                width={70}
-                                height={70}
+                                width={50}
+                                height={50}
                                 className="w-full h-auto"
                               />
                             ) : (
@@ -729,7 +737,7 @@ export default function DialogContent({
                 {content?.postContent?.map((item, index) => (
                   <div key={index} className="mb-2">
                     <div className="flex pt-10 items-start justify-start mb-2">
-                      <div className="flex-shrink-0 basis-[70px] h-[70px] w-[70px] flex items-start mr-3">
+                      <div className="flex-shrink-0 basis-[70px]flex items-start mr-3">
                         <div
                           className="w-full h-full cursor-pointer"
                           // style={{
@@ -743,8 +751,8 @@ export default function DialogContent({
                                 src={`https://wir-in-ungarn.hu/wiucontent/themes/grimag-child-theme/assets/images/recipe/${item.icon[0]}.png`}
                                 alt={item.icon[0]}
                                 loading="lazy"
-                                width={70}
-                                height={70}
+                                width={50}
+                                height={50}
                                 className="w-full h-auto"
                               />
                             ) : (
