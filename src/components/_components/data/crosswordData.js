@@ -20,40 +20,40 @@ const CROSSWORD_LOADERS = {
     import("./crosswords/dieWichtigstenVerben2").then(
       (m) => m.dieWichtigstenVerben2
     ),
-  "die-wichtigsten-verben-3": () =>
-    import("./crosswords/DieWichtigstenVerben3").then(
-      (m) => m.DieWichtigstenVerben3
-    ),
-  "ein-raetsel-in-a2-b1": () =>
-    import("./crosswords/EinRaetselInA2B1").then((m) => m.EinRaetselInA2B1),
-  "heiteres-berufe-raten": () =>
-    import("./crosswords/HeiteresBerufeRaten").then(
-      (m) => m.HeiteresBerufeRaten
-    ),
-  "xl-raetsel-in-a1-b2": () =>
-    import("./crosswords/xlRaetselInA1B2").then((m) => m.xlRaetselInA1B2),
-  "groesser-schneller-weiter": () =>
-    import("./crosswords/GroesserSchnellerWeiter").then(
-      (m) => m.GroesserSchnellerWeiter
-    ),
-  "abstrakte-woerter-mit-sag-seg": () =>
-    import("./crosswords/AbstrakteWorterMitSagSeg").then(
-      (m) => m.AbstrakteWorterMitSagSeg
-    ),
-  "grosse-und-kleine-tiere": () =>
-    import("./crosswords/GroesserUndKleineTiere").then(
-      (m) => m.GroesserUndKleineTiere
-    ),
-  "riesenraetsel-a1-b1": () =>
-    import("./crosswords/RiesenraetselA1B1").then((m) => m.RiesenraetselA1B1),
-  "mega-raetsel-fuer-fortgeschrittene": () =>
-    import("./crosswords/MegaRaetselFuerFortgeschrittene").then(
-      (m) => m.MegaRaetselFuerFortgeschrittene
-    ),
-  "alltaegliche-begriffe": () =>
-    import("./crosswords/AlltaeglicheBegriffe").then(
-      (m) => m.AlltaeglicheBegriffe
-    ),
+  // "die-wichtigsten-verben-3": () =>
+  //   import("./crosswords/DieWichtigstenVerben3").then(
+  //     (m) => m.DieWichtigstenVerben3
+  //   ),
+  // "ein-raetsel-in-a2-b1": () =>
+  //   import("./crosswords/EinRaetselInA2B1").then((m) => m.EinRaetselInA2B1),
+  // "heiteres-berufe-raten": () =>
+  //   import("./crosswords/HeiteresBerufeRaten").then(
+  //     (m) => m.HeiteresBerufeRaten
+  //   ),
+  // "xl-raetsel-in-a1-b2": () =>
+  //   import("./crosswords/xlRaetselInA1B2").then((m) => m.xlRaetselInA1B2),
+  // "groesser-schneller-weiter": () =>
+  //   import("./crosswords/GroesserSchnellerWeiter").then(
+  //     (m) => m.GroesserSchnellerWeiter
+  //   ),
+  // "abstrakte-woerter-mit-sag-seg": () =>
+  //   import("./crosswords/AbstrakteWorterMitSagSeg").then(
+  //     (m) => m.AbstrakteWorterMitSagSeg
+  //   ),
+  // "grosse-und-kleine-tiere": () =>
+  //   import("./crosswords/GroesserUndKleineTiere").then(
+  //     (m) => m.GroesserUndKleineTiere
+  //   ),
+  // "riesenraetsel-a1-b1": () =>
+  //   import("./crosswords/RiesenraetselA1B1").then((m) => m.RiesenraetselA1B1),
+  // "mega-raetsel-fuer-fortgeschrittene": () =>
+  //   import("./crosswords/MegaRaetselFuerFortgeschrittene").then(
+  //     (m) => m.MegaRaetselFuerFortgeschrittene
+  //   ),
+  // "alltaegliche-begriffe": () =>
+  //   import("./crosswords/AlltaeglicheBegriffe").then(
+  //     (m) => m.AlltaeglicheBegriffe
+  //   ),
 };
 
 // Async function to load crossword data by slug
